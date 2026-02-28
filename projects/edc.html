@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EDC · Project · rolandoluis</title>
+  <meta name="description" content="EDC (Eurodat Deployment Console): Windows deployment automation with phase-based protocols, offline installs and standardized user environments." />
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/components.css" />
+  <script defer src="/assets/js/main.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="/"><span class="brand-mark">RM</span><span class="brand-text">rolandoluis</span></a>
+      <nav class="nav">
+        <a class="nav-link" href="/">Home</a>
+        <a class="nav-link" href="/pages/engineering.html">Engineering</a>
+        <a class="nav-link" href="/pages/projects.html">Projects</a>
+        <a class="nav-link" href="/pages/articles.html">Articles</a>
+        <a class="nav-link" href="/pages/lab.html">Lab</a>
+        <a class="nav-link" href="/pages/about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>EDC</h1>
+      <p class="subtitle">Eurodat Deployment Console</p>
+      <p class="lede">
+        Automation toolkit for provisioning Windows devices with a repeatable, phase-based workflow:
+        offline installs, profile standardization, desktop/network policies and structured reporting.
+      </p>
+
+      <div class="cta-row">
+        <a class="btn" href="/pages/projects.html">← Back to Projects</a>
+        <a class="btn btn-ghost" href="https://github.com/rolandoluis" target="_blank" rel="noopener">GitHub profile</a>
+      </div>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h2>Scope</h2>
+        <p>Windows 10→11 migrations, provisioning flows, repeatable base user environment, technician-driven execution.</p>
+      </article>
+      <article class="card">
+        <h2>Core Idea</h2>
+        <p>Deterministic steps with policies (STOP/CONTINUE), logs, state tracking and clean handoffs across phases.</p>
+      </article>
+      <article class="card">
+        <h2>Output</h2>
+        <p>Consistent workstation setups + technical reports + reduced variance between technicians and machines.</p>
+      </article>
+    </section>
+
+    <section class="hero" style="padding-top:10px">
+      <h2 style="margin:0 0 8px">Problem</h2>
+      <p class="lede">
+        Manual deployments are slow and inconsistent: different technicians produce different outcomes, updates break flows,
+        offline environments require special handling, and troubleshooting lacks traceability.
+      </p>
+    </section>
+
+    <section class="hero" style="padding-top:0">
+      <h2 style="margin:0 0 8px">Solution</h2>
+      <p class="lede">
+        EDC structures provisioning into phases (Fase 1/2/3) with explicit steps, predictable side-effects, and reusable modules
+        for installation, configuration and auditing. Execution is logged and reportable.
+      </p>
+    </section>
+
+    <section class="hero" style="padding-top:0">
+      <h2 style="margin:0 0 8px">Architecture</h2>
+      <p class="lede">
+        Modular PowerShell architecture (core utilities, dispatcher/menu, app install, desktop, update, express flows).
+        State and logs stored per-run for traceability.
+      </p>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h2>Workflow engine</h2>
+        <p>Step results, policies, structured logging, and predictable error handling.</p>
+      </article>
+      <article class="card">
+        <h2>Offline-first</h2>
+        <p>Curated repositories for apps and MSU packages to accelerate deployments.</p>
+      </article>
+      <article class="card">
+        <h2>Standardization</h2>
+        <p>UserDefault → Tec → Usuario profile replication and desktop normalization.</p>
+      </article>
+    </section>
+
+    <section class="hero" style="padding-top:0">
+      <h2 style="margin:0 0 8px">Tech Stack</h2>
+      <p class="lede">PowerShell · Windows 11 · Offline repositories · Deterministic workflows · Logging/Reporting</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <small>© <span id="year"></span> rolandoluis</small>
+      <div class="footer-links">
+        <a class="link" href="/pages/projects.html">Projects</a>
+        <a class="link" href="https://github.com/rolandoluis" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
