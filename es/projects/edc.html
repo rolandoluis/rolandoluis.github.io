@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EDC · Project · rolandoluis</title>
+  <meta name="description" content="EDC (Eurodat Deployment Console): Windows deployment automation with phase-based protocols, offline installs and standardized user environments." />
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/components.css" />
+  <script defer src="/assets/js/main.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="/"><span class="brand-mark">RM</span><span class="brand-text">rolandoluis</span></a>
+      <nav class="nav">
+        <a class="nav-link" href="/es/">Home</a>
+        <a class="nav-link" href="/es/pages/engineering.html">Ingeniería</a>
+        <a class="nav-link" href="/es/pages/projects.html">Proyectos</a>
+        <a class="nav-link" href="/es/pages/articles.html">Artículos</a>
+        <a class="nav-link" href="/es/pages/lab.html">Lab</a>
+        <a class="nav-link" href="/es/pages/about.html">Sobre mí</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>EDC</h1>
+      <p class="subtitle">Eurodat Deployment Console</p>
+      <p class="lede">
+        Herramienta de automatización para el aprovisionamiento de equipos Windows mediante
+        un flujo de trabajo repetible basado en fases: instalaciones offline, estandarización
+        de perfiles de usuario, aplicación de políticas de escritorio y red, y generación de
+        informes técnicos estructurados.
+      </p>
+
+      <div class="cta-row">
+        <a class="btn" href="/pages/projects.html">← Volver a Proyectos</a>
+        <a class="btn btn-ghost" href="https://github.com/rolandoluis" target="_blank" rel="noopener">Perfil en GitHub</a>
+      </div>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h2>Alcance</h2>
+        <p>Migraciones Windows 10→11, flujos de aprovisionamiento, creación de entornos base de usuario reproducibles y ejecución guiada por técnicos.</p>
+      </article>
+      <article class="card">
+        <h2>Concepto central</h2>
+        <p>Pasos deterministas con políticas de ejecución (STOP/CONTINUE), registro de eventos, seguimiento de estado y transiciones limpias entre fases.</p>
+      </article>
+      <article class="card">
+        <h2>Resultado</h2>
+        <p>Configuraciones de estaciones de trabajo consistentes, informes técnicos automatizados y reducción de la variabilidad entre técnicos y equipos.</p>
+      </article>
+    </section>
+
+    <section class="hero" style="padding-top:10px">
+      <h2 style="margin:0 0 8px">Problem</h2>
+      <p class="lede">
+        Los despliegues manuales suelen ser lentos e inconsistentes: distintos técnicos
+        producen resultados diferentes, las actualizaciones pueden romper los flujos
+        de instalación, los entornos sin conexión requieren tratamiento especial y la
+        resolución de incidencias carece de trazabilidad.
+      </p>
+    </section>
+
+    <section class="hero" style="padding-top:0">
+      <h2 style="margin:0 0 8px">Solución</h2>
+      <p class="lede">
+        EDC estructura el proceso de aprovisionamiento en fases (Fase 1/2/3) con pasos
+        explícitos, efectos previsibles y módulos reutilizables para instalación,
+        configuración y auditoría. Toda la ejecución queda registrada y es susceptible
+        de ser reportada.
+      </p>
+    </section>
+
+    <section class="hero" style="padding-top:0">
+      <h2 style="margin:0 0 8px">Arquitectura</h2>
+      <p class="lede">
+        Arquitectura modular basada en PowerShell (utilidades núcleo, dispatcher/menú,
+        instalación de aplicaciones, configuración de escritorio, actualizaciones y
+        flujos Express). El estado de ejecución y los registros se almacenan por
+        ejecución para garantizar trazabilidad.
+      </p>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h2>Motor de workflow</h2>
+        <p>Resultados por paso, políticas de ejecución, registro estructurado y gestión predecible de errores.</p>
+      </article>
+      <article class="card">
+        <h2>Enfoque offline-first</h2>
+        <p>Repositorios curados de aplicaciones y paquetes MSU para acelerar despliegues en entornos desconectados.</p>
+      </article>
+      <article class="card">
+        <h2>Estandarización</h2>
+        <p>Replicación de perfiles UserDefault → Tec → Usuario y normalización del entorno de escritorio.</p>
+      </article>
+    </section>
+
+    <section class="hero" style="padding-top:0">
+      <h2 style="margin:0 0 8px">Tech Stack</h2>
+      <p class="lede">PowerShell · Windows 11 · Repositorios offline · Flujos deterministas · Registro y generación de informes</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <small>© <span id="year"></span> rolandoluis</small>
+      <div class="footer-links">
+        <a class="link" href="/pages/projects.html">Proyectos</a>
+        <a class="link" href="https://github.com/rolandoluis" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

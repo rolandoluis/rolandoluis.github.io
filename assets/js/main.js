@@ -12,3 +12,12 @@
     else if (href !== "/" && path.endsWith(href)) a.classList.add("is-active");
   });
 })();
+
+  // Language preference
+  document.querySelectorAll("[data-lang]").forEach(el => {
+    el.addEventListener("click", () => {
+      localStorage.setItem("site_lang", el.getAttribute("data-lang"));
+    });
+  });
+
+  
