@@ -135,7 +135,7 @@
           const radius = 320; // área de influencia (más grande = se nota más)
           if (dist < radius && dist > 0.001) {
             const pull = 1 - (dist / radius); // 0..1
-            const strength = 0.014;           // sube/baja si quieres más/menos efecto
+            const strength = 0.010;           // sube/baja si quieres más/menos efecto
           
             n.x += dx * strength * pull;
             n.y += dy * strength * pull;

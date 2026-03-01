@@ -166,6 +166,7 @@
 .hero-canvas{
   position: relative;
   overflow: hidden;
+  border-radius: 20px;
 }
 
 .hero-canvas #heroNet{
