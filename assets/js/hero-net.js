@@ -13,7 +13,7 @@
   let w = 0, h = 0;
 
   const N = 34;
-  const R = 140;
+  const R = 220;
   const V = 0.22;
 
   const nodes = [];
@@ -91,7 +91,7 @@
   function drawFrame(move = false) {
     ctx.clearRect(0, 0, w, h);
 
-    const lineAlphaBase = 0.055;
+    const lineAlphaBase = 0.14;
     const dotAlpha = 0.62;
 
     if (move) {
@@ -122,6 +122,8 @@
 
           ctx.strokeStyle = `rgba(${accent.r},${accent.g},${accent.b},${lineAlphaBase * t})`;
           ctx.lineWidth = 1;
+          ctx.lineCap = "round";
+          ctx.lineWidth = 1.15;
           ctx.beginPath();
           ctx.moveTo(a.x, a.y);
           ctx.lineTo(b.x, b.y);
