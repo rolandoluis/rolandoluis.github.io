@@ -103,7 +103,8 @@
   function drawFrame(move = false) {
     ctx.clearRect(0, 0, w, h);
     // DEBUG: línea forzada (si no se ve, hay un problema de render/capas)
-    ctx.strokeStyle = `rgba(${accent.r},${accent.g},${accent.b},${lineAlphaBase * t})`;
+    ctx.strokeStyle = "rgba(0,255,0,0.45)"; // verde visible, ignora accent
+    // ctx.strokeStyle = `rgba(${accent.r},${accent.g},${accent.b},${lineAlphaBase * t})`;
     ctx.lineWidth = 1.35;
     ctx.beginPath();
     ctx.moveTo(20, 20);
@@ -139,8 +140,8 @@
           const d = Math.sqrt(d2);
           const t = 1 - d / R;
 
-        //  ctx.strokeStyle = `rgba(${accent.r},${accent.g},${accent.b},${lineAlphaBase * t})`;
-          ctx.strokeStyle = "rgba(0,255,0,0.45)"; // verde visible, ignora accent
+          ctx.strokeStyle = `rgba(${accent.r},${accent.g},${accent.b},${lineAlphaBase * t})`;
+        //  ctx.strokeStyle = "rgba(0,255,0,0.45)"; // verde visible, ignora accent
           ctx.lineWidth = 1.35;
           ctx.lineCap = "round";
           ctx.beginPath();
