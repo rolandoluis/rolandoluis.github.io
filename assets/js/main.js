@@ -97,23 +97,98 @@
   const bc = document.getElementById("breadcrumb");
   if (!bc) return;
 
-  const path = window.location.pathname.replace(/\/(es|en)\//,"/").replace(/\.html$/,"");
-  const parts = path.split("/").filter(Boolean);
+  const fullPath = window.location.pathname;
+  const lang = fullPath.startsWith("/en/") ? "en" : "es";
 
-  const lang = window.location.pathname.startsWith("/en/") ? "en" : "es";
+  const path = fullPath
+    .replace(/^\/(es|en)\//,"")
+    .replace(/\.html$/,"");
+
+  const parts = path.split("/").filter(Boolean);
 
   const labels = {
     es:{ "":"Inicio","pages":"Secciones","projects":"Proyectos","articles":"Artículos","lab":"Lab","about":"Sobre mí"},
     en:{ "":"Home","pages":"Sections","projects":"Projects","articles":"Articles","lab":"Lab","about":"About"}
   };
 
+  const sectionPages = {
+    pages:"pages/projects.html",
+    projects:"pages/projects.html",
+    articles:"pages/articles.html",
+    lab:"pages/lab.html",
+    about:"pages/about.html"
+  };
+
   let url = `/${lang}/`;
   bc.innerHTML = `<a href="${url}">${labels[lang][""]}</a>`;
 
   parts.forEach((p,i)=>{
-    url += p + "/";
+
+    if(sectionPages[p]){
+      url = `/${lang}/${sectionPages[p]}`;
+    } else {
+      url += p + "/";
+    }
+
     const label = labels[lang][p] || p.toUpperCase();
     bc.innerHTML += `<span>/</span><a href="${url}">${label}</a>`;
+
+  });
+
+})();
+
+// --- Simple static search -------------------------------------
+(() => {
+
+  const box = document.getElementById("searchBox");
+  const results = document.getElementById("searchResults");
+  if(!box || !results) return;
+
+  const lang = window.location.pathname.startsWith("/en/") ? "en" : "es";
+
+  let index = [];
+
+  fetch("/assets/data/search.json")
+    .then(r => r.json())
+    .then(data => {
+      index = data.filter(p => p.lang === lang);
+    });
+
+  box.addEventListener("input", () => {
+
+    const q = box.value.toLowerCase().trim();
+
+    if(q.length < 2){
+      results.style.display = "none";
+      return;
+    }
+
+    const hits = index.filter(p =>
+      p.title.toLowerCase().includes(q) ||
+      p.excerpt.toLowerCase().includes(q) ||
+      p.tags.join(" ").includes(q)
+    ).slice(0,8);
+
+    if(!hits.length){
+      results.innerHTML = `<div style="padding:8px 10px">Sin resultados</div>`;
+      results.style.display = "block";
+      return;
+    }
+
+    results.innerHTML = hits.map(p =>
+      `<a href="/${lang}/${p.url}">
+         <strong>${p.title}</strong><br>
+         <small>${p.excerpt}</small>
+       </a>`
+    ).join("");
+
+    results.style.display = "block";
+  });
+
+  document.addEventListener("click", e=>{
+    if(!results.contains(e.target) && e.target!==box){
+      results.style.display="none";
+    }
   });
 
 })();

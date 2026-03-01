@@ -1,0 +1,31 @@
+[
+  {
+    "title": "EDC — Eurodat Deployment Console",
+    "url": "projects/edc.html",
+    "lang": "es",
+    "tags": ["powershell","deployment","windows","automation"],
+    "excerpt": "Herramienta de automatización para el aprovisionamiento de equipos Windows con flujos por fases, instalaciones offline y reporting."
+  },
+  {
+    "title": "BDC — Build Deployment Console",
+    "url": "projects/bdc.html",
+    "lang": "es",
+    "tags": ["powershell","workflow","deployment"],
+    "excerpt": "Motor de workflows para build/deployment con políticas de paso, logging estructurado e informes."
+  },
+  {
+    "title": "OKEurodat — Plataforma de conocimiento",
+    "url": "projects/ok-eurodat.html",
+    "lang": "es",
+    "tags": ["knowledge","it-ops","documentation"],
+    "excerpt": "Plataforma para almacenar y consultar conocimiento operativo del soporte IT."
+  },
+
+  {
+    "title": "EDC — Eurodat Deployment Console",
+    "url": "projects/edc.html",
+    "lang": "en",
+    "tags": ["powershell","deployment","windows","automation"],
+    "excerpt": "Automation toolkit for provisioning Windows devices with phase-based workflows and structured reporting."
+  }
+]
