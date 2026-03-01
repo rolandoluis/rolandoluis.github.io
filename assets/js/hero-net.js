@@ -26,13 +26,14 @@
   // Mouse (FUERA del drawFrame)
   const mouse = { x: null, y: null };
 
-  canvas.addEventListener("mousemove", (e) => {
+  const host = canvas.closest(".hero-canvas") || canvas.parentElement;
+  host.addEventListener("mousemove", (e) => {
     const rect = canvas.getBoundingClientRect();
     mouse.x = e.clientX - rect.left;
     mouse.y = e.clientY - rect.top;
   }, { passive: true });
 
-  canvas.addEventListener("mouseleave", () => {
+  host.addEventListener("mouseleave", () => {
     mouse.x = null;
     mouse.y = null;
   }, { passive: true });
@@ -131,10 +132,10 @@
           const dy = mouse.y - n.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
       
-          const radius = 260; // área de influencia (más grande = se nota más)
+          const radius = 320; // área de influencia (más grande = se nota más)
           if (dist < radius && dist > 0.001) {
             const pull = 1 - (dist / radius); // 0..1
-            const strength = 0.008;           // sube/baja si quieres más/menos efecto
+            const strength = 0.014;           // sube/baja si quieres más/menos efecto
           
             n.x += dx * strength * pull;
             n.y += dy * strength * pull;
@@ -191,6 +192,14 @@
     g.addColorStop(1, "rgba(0,0,0,0.26)");
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, w, h);
+  }
+
+  // DEBUG mouse marker (temporal)
+  if (mouse.x !== null) {
+    ctx.fillStyle = "rgba(255,255,255,0.6)";
+    ctx.beginPath();
+    ctx.arc(mouse.x, mouse.y, 3, 0, Math.PI * 2);
+    ctx.fill();
   }
 
   // Resize observers
