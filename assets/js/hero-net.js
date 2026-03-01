@@ -60,10 +60,17 @@
     return rgb;
   } */
   function getAccentRgb() {
-    const raw = getComputedStyle(document.documentElement).getPropertyValue("--accent-net").trim()
-             || getComputedStyle(document.documentElement).getPropertyValue("--accent").trim();
+    const rootStyle = getComputedStyle(document.documentElement);
+  
+    const raw =
+      rootStyle.getPropertyValue("--accent-net").trim() ||
+      rootStyle.getPropertyValue("--accent").trim();
+  
     const rgb = parseCssColorToRgb(raw);
-    if (!rgb || [rgb.r, rgb.g, rgb.b].some(n => Number.isNaN(n))) return { r: 225, g: 29, b: 72 };
+  
+    if (!rgb || [rgb.r, rgb.g, rgb.b].some(n => Number.isNaN(n))) {
+      return { r: 225, g: 29, b: 72 };
+    }
     return rgb;
   }
 
@@ -107,10 +114,10 @@
   }
 
   function drawFrame(move = false) {
-    const lineAlphaBase = 0.28;  // para que sea visible con #531515
+    const lineAlphaBase = 0.14;  // para que sea visible con #531515
     const dotAlpha = 0.62;
     const rawAccent = getComputedStyle(document.documentElement).getPropertyValue("--accent");
-    console.log("[accent raw]", JSON.stringify(rawAccent), "parsed:", accent);
+    // console.log("[accent raw]", JSON.stringify(rawAccent), "parsed:", accent);
     ctx.clearRect(0, 0, w, h);
     // DEBUG: línea forzada (si no se ve, hay un problema de render/capas)
     // ctx.strokeStyle = "rgba(0,255,0,0.45)"; // verde visible, ignora accent
@@ -148,8 +155,8 @@
           const d = Math.sqrt(d2);
           const t = 1 - d / R;
 
-        //  ctx.strokeStyle = `rgba(${accent.r},${accent.g},${accent.b},${lineAlphaBase * t})`;
-          ctx.strokeStyle = "rgba(0,255,0,0.45)"; // verde visible, ignora accent
+          ctx.strokeStyle = `rgba(${accent.r},${accent.g},${accent.b},${lineAlphaBase * t})`;
+        //  ctx.strokeStyle = "rgba(0,255,0,0.45)"; // verde visible, ignora accent
           ctx.lineWidth = 1.35;
           ctx.lineCap = "round";
           ctx.beginPath();
