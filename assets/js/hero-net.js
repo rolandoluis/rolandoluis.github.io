@@ -104,6 +104,8 @@
         nodes.push({
           x: Math.random() * w,
           y: Math.random() * h,
+          ox: null,
+          oy: null,
           vx: (Math.random() - 0.5) * V,
           vy: (Math.random() - 0.5) * V,
           r: 1.2 + Math.random() * 1.6,
@@ -116,48 +118,53 @@
 
   function drawFrame(move = false) {
     ctx.clearRect(0, 0, w, h);
-
+  
     if (move) {
       for (const n of nodes) {
-        // movimiento base
+        // Movimiento base
         n.x += n.vx;
         n.y += n.vy;
-
-        // interacción sutil con cursor
+      
+        // Interacción sutil con el cursor (más visible, con caída suave)
         if (mouse.x !== null) {
           const dx = mouse.x - n.x;
           const dy = mouse.y - n.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-
-          if (dist < 160) {
-            n.x += dx * 0.002;
-            n.y += dy * 0.002;
+      
+          const radius = 260; // área de influencia (más grande = se nota más)
+          if (dist < radius && dist > 0.001) {
+            const pull = 1 - (dist / radius); // 0..1
+            const strength = 0.008;           // sube/baja si quieres más/menos efecto
+          
+            n.x += dx * strength * pull;
+            n.y += dy * strength * pull;
           }
         }
-
-        // rebote
+      
+        // Rebote en bordes
         if (n.x < 0 || n.x > w) n.vx *= -1;
         if (n.y < 0 || n.y > h) n.vy *= -1;
-
+      
+        // Clamp dentro del canvas
         n.x = Math.max(0, Math.min(w, n.x));
         n.y = Math.max(0, Math.min(h, n.y));
       }
     }
-
-    // links
+  
+    // Links
     ctx.lineCap = "round";
     ctx.lineWidth = 1.25;
-
+  
     for (let i = 0; i < nodes.length; i++) {
       for (let j = i + 1; j < nodes.length; j++) {
         const a = nodes[i], b = nodes[j];
         const dx = a.x - b.x, dy = a.y - b.y;
         const d2 = dx * dx + dy * dy;
-
+      
         if (d2 < R * R) {
           const d = Math.sqrt(d2);
           const t = 1 - d / R;
-
+      
           ctx.strokeStyle = `rgba(${accent.r},${accent.g},${accent.b},${LINE_ALPHA_BASE * t})`;
           ctx.beginPath();
           ctx.moveTo(a.x, a.y);
@@ -166,16 +173,16 @@
         }
       }
     }
-
-    // nodes
+  
+    // Nodes (tenues y teñidos)
     for (const n of nodes) {
       ctx.fillStyle = `rgba(${accent.r},${accent.g},${accent.b},${DOT_ALPHA})`;
       ctx.beginPath();
       ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
       ctx.fill();
     }
-
-    // vignette
+  
+    // Vignette suave (mejora contraste del texto)
     const g = ctx.createRadialGradient(
       w * 0.35, h * 0.30, 40,
       w * 0.5, h * 0.5, Math.max(w, h)
@@ -206,7 +213,7 @@
 
   // Pause when tab hidden
   let running = true;
-  
+
   document.addEventListener("visibilitychange", () => {
     running = !document.hidden;
   });
