@@ -5,6 +5,7 @@
   --muted: #9ca3af;
   --line: rgba(255,255,255,.10);
   --accent: #531515;
+  --accent-net: #e11d48; /* accent para la red (más visible) */
   --radius: 14px;
   --max: 1060px;
 }
@@ -17,6 +18,7 @@
   --muted: #a1a1aa;
   --line: rgba(255,255,255,.10);
   --accent: #22c55e; /* verde sobrio */
+  --accent-net: #22c55e;
 }
 
 /* Theme: solar (claro, minimal “product”) */
@@ -27,6 +29,7 @@
   --muted: #475569;
   --line: rgba(2,6,23,.12);
   --accent: #e11d48;
+  --accent-net: #e11d48;
   opacity: .18;
 }
 
