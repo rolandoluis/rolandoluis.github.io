@@ -1,3 +1,4 @@
+:root[data-theme="solar"] .hero-canvas #heroNet{ opacity: .20; }
 .grid{
   display:grid;
   grid-template-columns: repeat(12, 1fr);
