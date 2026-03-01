@@ -39,15 +39,27 @@
 
   function parseCssColorToRgb(value) {
     const v = (value || "").trim();
+  
+    // #rgb or #rrggbb
     if (v.startsWith("#")) return hexToRgb(v);
+  
+    // rgb(r,g,b) or rgba(r,g,b,a)
     const m = v.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/i);
     if (m) return { r: +m[1], g: +m[2], b: +m[3] };
+  
+    // fallback
     return { r: 225, g: 29, b: 72 };
   }
 
   function getAccentRgb() {
-    const v = getComputedStyle(document.documentElement).getPropertyValue("--accent");
-    return parseCssColorToRgb(v);
+    const raw = getComputedStyle(document.documentElement).getPropertyValue("--accent");
+    const rgb = parseCssColorToRgb(raw);
+  
+    // hard guard
+    if (!rgb || [rgb.r, rgb.g, rgb.b].some(n => Number.isNaN(n))) {
+      return { r: 225, g: 29, b: 72 };
+    }
+    return rgb;
   }
 
   let accent = getAccentRgb();
@@ -91,14 +103,14 @@
   function drawFrame(move = false) {
     ctx.clearRect(0, 0, w, h);
     // DEBUG: línea forzada (si no se ve, hay un problema de render/capas)
-    ctx.strokeStyle = "rgba(0,255,0,1)";
-    ctx.lineWidth = 3;
+    ctx.strokeStyle = `rgba(${accent.r},${accent.g},${accent.b},${lineAlphaBase * t})`;
+    ctx.lineWidth = 1.35;
     ctx.beginPath();
     ctx.moveTo(20, 20);
     ctx.lineTo(w - 20, 20);
     ctx.stroke();
 
-    const lineAlphaBase = 0.14;
+    const lineAlphaBase = 0.22;
     const dotAlpha = 0.62;
 
     if (move) {
@@ -127,11 +139,10 @@
           const d = Math.sqrt(d2);
           const t = 1 - d / R;
 
-        //   ctx.strokeStyle = `rgba(${accent.r},${accent.g},${accent.b},${lineAlphaBase * t})`;
-          ctx.strokeStyle = "rgba(0,255,0,0.45)"; // verde visible, ignora accent
-          ctx.lineWidth = 1;
+          ctx.strokeStyle = `rgba(${accent.r},${accent.g},${accent.b},${lineAlphaBase * t})`;
+        //  ctx.strokeStyle = "rgba(0,255,0,0.45)"; // verde visible, ignora accent
+          ctx.lineWidth = 1.35;
           ctx.lineCap = "round";
-          ctx.lineWidth = 1.6;
           ctx.beginPath();
           ctx.moveTo(a.x, a.y);
           ctx.lineTo(b.x, b.y);
