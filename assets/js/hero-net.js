@@ -18,6 +18,9 @@
   const nodes = [];
   let raf = 0;
 
+  ctx.fillStyle = "red";
+  ctx.fillRect(10,10,100,100);
+
   // --- Color utilities: read CSS --accent and convert to RGB -------------
   function hexToRgb(hex) {
     const s = hex.replace("#", "").trim();
