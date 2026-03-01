@@ -175,7 +175,7 @@
   width: calc(100% + 40px);
   height: calc(100% + 40px);
   z-index: 0;
-  opacity: .85;        /* sutil */
+  opacity: .05;        /* sutil */
   pointer-events: none;
 }
 
