@@ -14,9 +14,9 @@
   let w = 0, h = 0;
 
   // Ajustes visuales (tenue y elegante)
-  const N = 52;
+  const N = 32;
   const R = 240;
-  const V = 0.32;
+  const V = 0.18;
 
   const LINE_ALPHA_BASE = 0.16;
   const DOT_ALPHA = 0.22;
@@ -131,10 +131,10 @@
           const dy = mouse.y - n.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
       
-          const radius = 460; // área de influencia (más grande = se nota más)
+          const radius = 260; // área de influencia (más grande = se nota más)
           if (dist < radius && dist > 0.001) {
             const pull = 1 - (dist / radius); // 0..1
-            const strength = 0.5;           // sube/baja si quieres más/menos efecto
+            const strength = 0.008;           // sube/baja si quieres más/menos efecto
           
             n.x += dx * strength * pull;
             n.y += dy * strength * pull;
