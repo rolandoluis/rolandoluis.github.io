@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="/assets/css/main.css" />
   <link rel="stylesheet" href="/assets/css/components.css" />
   <script defer src="/assets/js/main.js"></script>
+  <script defer src="/assets/js/hero-net.js"></script>
 </head>
 
 <body>
@@ -44,13 +45,19 @@
         />
         <div id="searchResults" class="search-results"></div>
       </div>
+      <div class="theme">
+        <button class="theme-btn" type="button" data-set-theme="classic" title="Classic">●</button>
+        <button class="theme-btn" type="button" data-set-theme="graphite" title="Graphite">●</button>
+        <button class="theme-btn" type="button" data-set-theme="solar" title="Solar">●</button>
+      </div>
     </div>
   </header>
 
   <nav class="breadcrumb" id="breadcrumb"></nav>
 
   <main class="container">
-    <section class="hero">
+    <section class="hero hero-canvas">
+      <canvas id="heroNet" aria-hidden="true"></canvas>
       <h1>Rolando Luis Martín</h1>
       <p class="subtitle">Ingeniero en Automatización de Sistemas</p>
       <p class="lede">Implementación en Windows · Automatización con PowerShell · Infraestructura · Ingeniería de Conocimiento Operacional</p>

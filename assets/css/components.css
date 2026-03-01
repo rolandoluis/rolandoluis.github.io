@@ -157,3 +157,24 @@
 .search-results a:hover{
   background:rgba(255,255,255,.06);
 }
+
+.hero-canvas{
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-canvas #heroNet{
+  position:absolute;
+  inset: -20px;              /* un poco más grande para que no se vean bordes */
+  width: calc(100% + 40px);
+  height: calc(100% + 40px);
+  z-index: 0;
+  opacity: .55;              /* sutil */
+  pointer-events: none;
+}
+
+/* asegúrate de que el texto quede encima */
+.hero-canvas > *:not(canvas){
+  position: relative;
+  z-index: 1;
+}

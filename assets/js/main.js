@@ -191,4 +191,43 @@
     }
   });
 
+  box.addEventListener("keydown", e=>{
+    if(e.key==="Enter"){
+        const q = box.value.trim();
+        if(q.length>1){
+          const lang = window.location.pathname.startsWith("/en/") ? "en" : "es";
+          window.location.href = `/${lang}/pages/search.html?q=` + encodeURIComponent(q);
+        }
+    }
+  });
+
+})();
+
+// Theme switcher (persist)
+(() => {
+  const KEY = "site_theme";
+  const saved = localStorage.getItem(KEY);
+
+  if (saved) {
+    document.documentElement.dataset.theme = saved;
+  } else {
+    document.documentElement.dataset.theme = "classic";
+  }
+
+  document.querySelectorAll("[data-set-theme]").forEach(btn => {
+    const theme = btn.getAttribute("data-set-theme");
+    btn.classList.toggle("is-active", theme === document.documentElement.dataset.theme);
+
+    if (btn.dataset.boundTheme === "1") return;
+    btn.dataset.boundTheme = "1";
+
+    btn.addEventListener("click", () => {
+      document.documentElement.dataset.theme = theme;
+      localStorage.setItem(KEY, theme);
+
+      document.querySelectorAll("[data-set-theme]").forEach(b => {
+        b.classList.toggle("is-active", b.getAttribute("data-set-theme") === theme);
+      });
+    });
+  });
 })();

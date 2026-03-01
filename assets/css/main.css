@@ -4,9 +4,36 @@
   --text: #e5e7eb;
   --muted: #9ca3af;
   --line: rgba(255,255,255,.10);
-  --accent: #e11d48;
+  --accent: #531515;
   --radius: 14px;
   --max: 1060px;
+}
+
+/* Theme: graphite (más sobrio, casi “enterprise”) */
+:root[data-theme="graphite"]{
+  --bg: #070a12;
+  --panel: #0b1020;
+  --text: #eef2ff;
+  --muted: #a1a1aa;
+  --line: rgba(255,255,255,.10);
+  --accent: #22c55e; /* verde sobrio */
+}
+
+/* Theme: solar (claro, minimal “product”) */
+:root[data-theme="solar"]{
+  --bg: #f8fafc;
+  --panel: #ffffff;
+  --text: #0f172a;
+  --muted: #475569;
+  --line: rgba(2,6,23,.12);
+  --accent: #e11d48;
+}
+
+/* Ajustes específicos cuando fondo es claro */
+:root[data-theme="solar"] body{
+  background: radial-gradient(900px 500px at 20% 0%, rgba(225,29,72,.10), transparent 55%),
+              radial-gradient(700px 450px at 90% 10%, rgba(99,102,241,.08), transparent 60%),
+              var(--bg);
 }
 
 *{ box-sizing:border-box; }
@@ -152,4 +179,23 @@ main{ padding: 34px 0 50px; }
   color: var(--text);
   border-color: rgba(225,29,72,.35);
   background: rgba(225,29,72,.14);
+}
+
+.theme{ display:flex; align-items:center; gap:8px; }
+.theme-btn{
+  width:14px;
+  height:14px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.22);
+  background: rgba(255,255,255,.10);
+  cursor:pointer;
+  padding:0;
+}
+:root[data-theme="solar"] .theme-btn{
+  border:1px solid rgba(2,6,23,.18);
+  background: rgba(2,6,23,.06);
+}
+.theme-btn.is-active{
+  outline:2px solid rgba(225,29,72,.45);
+  outline-offset:2px;
 }

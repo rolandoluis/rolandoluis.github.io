@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Búsqueda</title>
+
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/components.css">
+
+    <script defer src="/assets/js/main.js"></script>
+    <script defer src="/assets/js/search.js"></script>
+    <script defer src="/assets/js/hero-net.js"></script>
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="container header-inner">
+
+            <a class="brand" data-i18n-link="">
+                <span class="brand-mark">RM</span>
+                <span class="brand-text">rolandoluis</span>
+            </a>
+
+            <nav class="nav">
+                <a class="nav-link" data-i18n-link="">Home</a>
+                <a class="nav-link" data-i18n-link="pages/engineering.html">Engineering</a>
+                <a class="nav-link" data-i18n-link="pages/projects.html">Projects</a>
+                <a class="nav-link" data-i18n-link="pages/articles.html">Articles</a>
+                <a class="nav-link" data-i18n-link="pages/lab.html">Lab</a>
+                <a class="nav-link" data-i18n-link="pages/about.html">About</a>
+            </nav>
+            <div class="search">
+              <input
+                id="searchBox"
+                type="search"
+                placeholder="Buscar… / Search…"
+                autocomplete="off"
+              />
+              <div id="searchResults" class="search-results"></div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="breadcrumb" id="breadcrumb"></nav>
+
+    <main class="container">
+
+        <section class="hero">
+            <h1>Buscar</h1>
+            <p class="lede">Resultados en todo el sitio</p>
+
+            <input id="searchPageInput" type="search" placeholder="Buscar..." style="width:100%;max-width:500px">
+        </section>
+
+        <section id="searchPageResults" class="grid"></section>
+
+    </main>
+
+</body>
+
+</html>

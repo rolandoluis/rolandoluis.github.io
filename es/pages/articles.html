@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="/assets/css/main.css" />
   <link rel="stylesheet" href="/assets/css/components.css" />
   <script defer src="/assets/js/main.js"></script>
+  <script defer src="/assets/js/hero-net.js"></script>
 </head>
 <body>
   <header class="site-header">
@@ -26,13 +27,23 @@
         <span class="lang-sep">·</span>
         <button class="lang-btn" type="button" data-set-lang="en">EN</button>
       </div>
+      <div class="search">
+        <input
+          id="searchBox"
+          type="search"
+          placeholder="Buscar… / Search…"
+          autocomplete="off"
+        />
+        <div id="searchResults" class="search-results"></div>
+      </div>
     </div>
   </header>
 
   <nav class="breadcrumb" id="breadcrumb"></nav>
   
   <main class="container">
-    <section class="hero">
+    <section class="hero hero-canvas">
+      <canvas id="heroNet" aria-hidden="true"></canvas>
       <h1>Artículos</h1>
       <p class="lede">Tutoriales y notas de ingeniería.</p>
     </section>
