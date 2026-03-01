@@ -11,8 +11,8 @@
   let w = 0, h = 0;
 
   // Network parameters (sutiles y seguros)
-  const N = 42;      // nodos
-  const R = 120;     // radio conexión
+  const N = 34;      // nodos
+  const R = 140;     // radio conexión
   const V = 0.22;    // velocidad
 
   const nodes = [];

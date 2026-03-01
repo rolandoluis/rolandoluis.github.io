@@ -27,6 +27,7 @@
   --muted: #475569;
   --line: rgba(2,6,23,.12);
   --accent: #e11d48;
+  opacity: .18;
 }
 
 /* Ajustes específicos cuando fondo es claro */
