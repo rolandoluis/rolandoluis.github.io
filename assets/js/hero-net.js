@@ -99,6 +99,8 @@
   }
 
   function drawFrame(move = false) {
+    const rawAccent = getComputedStyle(document.documentElement).getPropertyValue("--accent");
+    console.log("[accent raw]", JSON.stringify(rawAccent), "parsed:", accent);
     ctx.clearRect(0, 0, w, h);
     // DEBUG: línea forzada (si no se ve, hay un problema de render/capas)
     ctx.strokeStyle = "rgba(0,255,0,0.45)"; // verde visible, ignora accent
