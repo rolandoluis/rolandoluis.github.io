@@ -4,7 +4,7 @@
 
   const prefersReduceMotion =
     window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  
+
   const forceAnimate = localStorage.getItem("hero_anim") === "on";
   const animate = forceAnimate ? true : !prefersReduceMotion;
 
@@ -14,14 +14,28 @@
   let w = 0, h = 0;
 
   // Ajustes visuales (tenue y elegante)
-  const N = 32;      // nodos
-  const R = 240;     // radio enlaces
-  const V = 0.18;    // velocidad
+  const N = 32;
+  const R = 240;
+  const V = 0.18;
 
-  const LINE_ALPHA_BASE = 0.16; // tenue
-  const DOT_ALPHA = 0.22;       // más tenue que líneas
+  const LINE_ALPHA_BASE = 0.16;
+  const DOT_ALPHA = 0.22;
 
   const nodes = [];
+
+  // Mouse (FUERA del drawFrame)
+  const mouse = { x: null, y: null };
+
+  canvas.addEventListener("mousemove", (e) => {
+    const rect = canvas.getBoundingClientRect();
+    mouse.x = e.clientX - rect.left;
+    mouse.y = e.clientY - rect.top;
+  }, { passive: true });
+
+  canvas.addEventListener("mouseleave", () => {
+    mouse.x = null;
+    mouse.y = null;
+  }, { passive: true });
 
   function hexToRgb(hex) {
     const s = hex.replace("#", "").trim();
@@ -65,7 +79,6 @@
 
   let accent = getAccentRgb();
 
-  // actualiza color cuando cambie el tema
   const themeObserver = new MutationObserver(() => {
     accent = getAccentRgb();
     drawFrame(false);
@@ -106,19 +119,28 @@
 
     if (move) {
       for (const n of nodes) {
+        // movimiento base
         n.x += n.vx;
         n.y += n.vy;
 
+        // interacción sutil con cursor
         if (mouse.x !== null) {
           const dx = mouse.x - n.x;
           const dy = mouse.y - n.y;
-          const dist = Math.sqrt(dx*dx + dy*dy);
-            
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
           if (dist < 160) {
             n.x += dx * 0.002;
             n.y += dy * 0.002;
           }
         }
+
+        // rebote
+        if (n.x < 0 || n.x > w) n.vx *= -1;
+        if (n.y < 0 || n.y > h) n.vy *= -1;
+
+        n.x = Math.max(0, Math.min(w, n.x));
+        n.y = Math.max(0, Math.min(h, n.y));
       }
     }
 
@@ -145,7 +167,7 @@
       }
     }
 
-    // nodes (tenues y teñidos)
+    // nodes
     for (const n of nodes) {
       ctx.fillStyle = `rgba(${accent.r},${accent.g},${accent.b},${DOT_ALPHA})`;
       ctx.beginPath();
@@ -153,39 +175,15 @@
       ctx.fill();
     }
 
-    // Atrae nodos cercanos a la posición del cursor
-    let mouse = { x: null, y: null };
-
-    canvas.addEventListener("mousemove", (e) => {
-      const rect = canvas.getBoundingClientRect();
-      mouse.x = e.clientX - rect.left;
-      mouse.y = e.clientY - rect.top;
-    });
-
-    canvas.addEventListener("mouseleave", () => {
-      mouse.x = null;
-      mouse.y = null;
-    });
-
-
-    // vignette suave para que el texto destaque
+    // vignette
     const g = ctx.createRadialGradient(
-      w * 0.35,
-      h * 0.30,
-      40,
-      w * 0.5,
-      h * 0.5,
-      Math.max(w, h)
+      w * 0.35, h * 0.30, 40,
+      w * 0.5, h * 0.5, Math.max(w, h)
     );
     g.addColorStop(0, "rgba(0,0,0,0)");
     g.addColorStop(1, "rgba(0,0,0,0.26)");
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, w, h);
-  }
-
-  function loop() {
-    drawFrame(true);
-    requestAnimationFrame(loop);
   }
 
   // Resize observers
@@ -194,13 +192,9 @@
   });
   ro.observe(canvas);
 
-  window.addEventListener(
-    "resize",
-    () => {
-      if (resize()) drawFrame(false);
-    },
-    { passive: true }
-  );
+  window.addEventListener("resize", () => {
+    if (resize()) drawFrame(false);
+  }, { passive: true });
 
   if (!resize()) return;
 
@@ -210,19 +204,17 @@
     return;
   }
 
+  // Pause when tab hidden
   let running = true;
-
+  
   document.addEventListener("visibilitychange", () => {
     running = !document.hidden;
   });
-  
+
   function loop() {
-    if (running) {
-      drawFrame(true);
-    }
+    if (running) drawFrame(true);
     requestAnimationFrame(loop);
   }
 
   loop();
-
 })();
