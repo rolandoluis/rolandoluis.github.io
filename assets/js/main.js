@@ -41,3 +41,29 @@
   
   })();
 
+    (() => {
+      const path = window.location.pathname;
+    
+      // Detect current language from URL (/es/ or /en/)
+      const currentLang = path.startsWith("/en/") ? "en" : (path.startsWith("/es/") ? "es" : null);
+    
+      // If we are not in /es or /en, do nothing (root router handles it)
+      if (!currentLang) return;
+    
+      // Mark active language button
+      document.querySelectorAll("[data-set-lang]").forEach(btn => {
+        const lang = btn.getAttribute("data-set-lang");
+        if (lang === currentLang) btn.classList.add("is-active");
+    
+        btn.addEventListener("click", () => {
+          const targetLang = lang;
+          localStorage.setItem("site_lang", targetLang);
+        
+          // Swap /es/ <-> /en/ while preserving the rest of the path
+          const rest = path.replace(/^\/(es|en)\//, "");
+          const next = `/${targetLang}/${rest}${window.location.search}${window.location.hash}`;
+        
+          window.location.assign(next);
+        });
+      });
+    })();

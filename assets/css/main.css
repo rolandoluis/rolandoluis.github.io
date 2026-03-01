@@ -133,3 +133,23 @@ main{ padding: 34px 0 50px; }
 .lang-link{ color: var(--muted); font-size:13px; padding:6px 8px; border-radius:10px; }
 .lang-link:hover{ color: var(--text); background: rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.08); }
 .lang-sep{ color: rgba(255,255,255,.25); }
+
+.lang-btn{
+  appearance:none;
+  border:1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.04);
+  color: var(--muted);
+  font-size:12px;
+  padding:6px 10px;
+  border-radius: 10px;
+  cursor:pointer;
+}
+.lang-btn:hover{
+  color: var(--text);
+  background: rgba(255,255,255,.07);
+}
+.lang-btn.is-active{
+  color: var(--text);
+  border-color: rgba(225,29,72,.35);
+  background: rgba(225,29,72,.14);
+}
