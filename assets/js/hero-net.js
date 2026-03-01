@@ -131,10 +131,10 @@
           const dy = mouse.y - n.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
       
-          const radius = 260; // área de influencia (más grande = se nota más)
+          const radius = 460; // área de influencia (más grande = se nota más)
           if (dist < radius && dist > 0.001) {
             const pull = 1 - (dist / radius); // 0..1
-            const strength = 0.05;           // sube/baja si quieres más/menos efecto
+            const strength = 0.5;           // sube/baja si quieres más/menos efecto
           
             n.x += dx * strength * pull;
             n.y += dy * strength * pull;
