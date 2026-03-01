@@ -97,7 +97,7 @@
     ctx.moveTo(20, 20);
     ctx.lineTo(w - 20, 20);
     ctx.stroke();
-    
+
     const lineAlphaBase = 0.14;
     const dotAlpha = 0.62;
 
@@ -114,23 +114,23 @@
       }
     }
 
+    let links = 0;
     // links
     for (let i = 0; i < nodes.length; i++) {
       for (let j = i + 1; j < nodes.length; j++) {
-        const a = nodes[i],
-          b = nodes[j];
-        const dx = a.x - b.x,
-          dy = a.y - b.y;
+        const a = nodes[i], b = nodes[j];
+        const dx = a.x - b.x, dy = a.y - b.y;
         const d2 = dx * dx + dy * dy;
 
         if (d2 < R * R) {
+          links++;
           const d = Math.sqrt(d2);
           const t = 1 - d / R;
 
           ctx.strokeStyle = `rgba(${accent.r},${accent.g},${accent.b},${lineAlphaBase * t})`;
           ctx.lineWidth = 1;
           ctx.lineCap = "round";
-          ctx.lineWidth = 1.15;
+          ctx.lineWidth = 1.25;
           ctx.beginPath();
           ctx.moveTo(a.x, a.y);
           ctx.lineTo(b.x, b.y);
@@ -139,6 +139,7 @@
       }
     }
 
+    console.log("[hero-net] links:", links, "accent:", accent, "R:", R, "w/h:", w, h);
     // nodes
     for (const n of nodes) {
       ctx.fillStyle = `rgba(229,231,235,${dotAlpha})`;
