@@ -16,7 +16,7 @@
   // Ajustes visuales (tenue y elegante)
   const N = 32;
   const R = 240;
-  const V = 0.18;
+  const V = 0.32;
 
   const LINE_ALPHA_BASE = 0.16;
   const DOT_ALPHA = 0.22;
