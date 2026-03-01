@@ -52,11 +52,9 @@
   }
 
   function getAccentRgb() {
-    const raw = getComputedStyle(document.documentElement).getPropertyValue("--accent");
-    const rgb = parseCssColorToRgb(raw);
-  
-    // hard guard
-    if (!rgb || [rgb.r, rgb.g, rgb.b].some(n => Number.isNaN(n))) {
+    const v = getComputedStyle(document.documentElement).getPropertyValue("--accent").trim();
+    const rgb = parseCssColorToRgb(v);
+    if (!rgb || Number.isNaN(rgb.r) || Number.isNaN(rgb.g) || Number.isNaN(rgb.b)) {
       return { r: 225, g: 29, b: 72 };
     }
     return rgb;
@@ -127,8 +125,8 @@
       }
     }
 
-    let links = 0;
     // links
+    let links = 0;
     for (let i = 0; i < nodes.length; i++) {
       for (let j = i + 1; j < nodes.length; j++) {
         const a = nodes[i], b = nodes[j];
@@ -140,8 +138,8 @@
           const d = Math.sqrt(d2);
           const t = 1 - d / R;
 
-          ctx.strokeStyle = `rgba(${accent.r},${accent.g},${accent.b},${lineAlphaBase * t})`;
-        //  ctx.strokeStyle = "rgba(0,255,0,0.45)"; // verde visible, ignora accent
+        //  ctx.strokeStyle = `rgba(${accent.r},${accent.g},${accent.b},${lineAlphaBase * t})`;
+          ctx.strokeStyle = "rgba(0,255,0,0.45)"; // verde visible, ignora accent
           ctx.lineWidth = 1.35;
           ctx.lineCap = "round";
           ctx.beginPath();
