@@ -139,8 +139,8 @@
           const d = Math.sqrt(d2);
           const t = 1 - d / R;
 
-          ctx.strokeStyle = `rgba(${accent.r},${accent.g},${accent.b},${lineAlphaBase * t})`;
-        //  ctx.strokeStyle = "rgba(0,255,0,0.45)"; // verde visible, ignora accent
+        //  ctx.strokeStyle = `rgba(${accent.r},${accent.g},${accent.b},${lineAlphaBase * t})`;
+          ctx.strokeStyle = "rgba(0,255,0,0.45)"; // verde visible, ignora accent
           ctx.lineWidth = 1.35;
           ctx.lineCap = "round";
           ctx.beginPath();
