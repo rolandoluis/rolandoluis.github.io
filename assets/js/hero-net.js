@@ -14,7 +14,7 @@
   let w = 0, h = 0;
 
   // Ajustes visuales (tenue y elegante)
-  const N = 32;
+  const N = 52;
   const R = 240;
   const V = 0.32;
 
