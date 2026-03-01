@@ -231,3 +231,18 @@
     });
   });
 })();
+
+(() => {
+  const btn = document.getElementById("toggleAnim");
+  if (!btn) return;
+
+  const key = "hero_anim";
+  const cur = localStorage.getItem(key) || "off";
+  btn.textContent = cur === "on" ? "Animación: ON" : "Animación: OFF";
+
+  btn.addEventListener("click", () => {
+    const next = (localStorage.getItem(key) === "on") ? "off" : "on";
+    localStorage.setItem(key, next);
+    location.reload();
+  });
+})();

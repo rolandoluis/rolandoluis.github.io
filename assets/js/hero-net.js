@@ -4,6 +4,9 @@
 
   const prefersReduceMotion =
     window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  
+  const forceAnimate = localStorage.getItem("hero_anim") === "on";
+  const animate = forceAnimate ? true : !prefersReduceMotion;
 
   const ctx = canvas.getContext("2d", { alpha: true });
 
@@ -182,10 +185,10 @@
   if (!resize()) return;
 
   // reduce motion: render 1 frame estático
-  if (prefersReduceMotion) {
+  if (!animate) {
     drawFrame(false);
     return;
   }
-
+  
   loop();
 })();
