@@ -1,69 +1,119 @@
 (() => {
-  // Footer year
+  const DEBUG = false;
+
+  const path = window.location.pathname;
+
+  const getLangFromPath = (p) => {
+    if (p.startsWith("/en/")) return "en";
+    if (p.startsWith("/es/")) return "es";
+    return null;
+  };
+
+  const currentLang = getLangFromPath(path); // "es" | "en" | null
+
+  const log = (...args) => {
+    if (DEBUG) console.log(...args);
+  };
+
+  // 1) Footer year
   const yearEl = document.getElementById("year");
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-  // Active nav link
-  const path = window.location.pathname;
-  document.querySelectorAll(".nav-link").forEach(a => {
-      const href = a.getAttribute("href");
-      if (!href) return;
-      if (href === "/" && path === "/") a.classList.add("is-active");
-      else if (href !== "/" && path.endsWith(href)) a.classList.add("is-active");
+  // 2) Language-aware links (optional but useful)
+  // Use: <a data-i18n-link="pages/projects.html">...</a>
+  // It becomes: /es/pages/projects.html or /en/pages/projects.html
+  if (currentLang) {
+    document.querySelectorAll("[data-i18n-link]").forEach(el => {
+      const target = (el.getAttribute("data-i18n-link") || "").replace(/^\/+/, "");
+      const href = `/${currentLang}/${target}`;
+      el.setAttribute("href", href);
+      log("[i18n-link]", { target, href });
     });
-  })();
+  }
 
-  // Language preference
-  document.querySelectorAll("[data-lang]").forEach(el => {
-    el.addEventListener("click", () => {
-      localStorage.setItem("site_lang", el.getAttribute("data-lang"));
-    });
+  // 3) Active nav link (works with bilingual prefixes)
+  // Strategy:
+  // - Compare "logical" paths with language stripped: /es/pages/projects.html -> /pages/projects.html
+  // - Mark active if current logical path equals link logical path OR starts with it (for sections)
+  const logicalPath = currentLang ? path.replace(/^\/(es|en)/, "") : path; // remove language prefix only
+  document.querySelectorAll(".nav-link").forEach(a => {
+    const href = a.getAttribute("href");
+    if (!href) return;
+
+    // If nav uses data-i18n-link, it might have no href at load time; it will be set above.
+    const resolved = a.getAttribute("href");
+    if (!resolved) return;
+
+    const linkLogical = currentLang ? resolved.replace(/^\/(es|en)/, "") : resolved;
+
+    // Normalize: remove trailing slash (except root)
+    const norm = (p) => (p.length > 1 ? p.replace(/\/+$/, "") : p);
+
+    const cur = norm(logicalPath);
+    const lnk = norm(linkLogical);
+
+    // Exact match, or section match (e.g., /projects/... should keep Projects active)
+    const isActive =
+      (lnk === "/" && cur === "/") ||
+      (lnk !== "/" && (cur === lnk || cur.startsWith(lnk.replace(/\.html$/, "")) || cur.startsWith(lnk.replace(/\/index\.html$/, ""))));
+
+    if (isActive) a.classList.add("is-active");
   });
 
-  // --- Language-aware links -----------------------------------
-  (function () {
-  
-    const path = window.location.pathname;
-  
-    let lang = "es";
-  
-    if (path.startsWith("/en/")) {
-      lang = "en";
-    }
-  
-    document.querySelectorAll("[data-i18n-link]").forEach(el => {
-  
-      const target = el.getAttribute("data-i18n-link");
-  
-      el.setAttribute("href", "/" + lang + "/" + target);
-  
-    });
-  
-  })();
+  // 4) Language switcher (preserve path, one implementation)
+  // HTML: <button data-set-lang="es">ES</button> <button data-set-lang="en">EN</button>
+  if (currentLang) {
+    document.querySelectorAll("[data-set-lang]").forEach(btn => {
+      const lang = btn.getAttribute("data-set-lang");
+      btn.classList.toggle("is-active", lang === currentLang);
 
-    (() => {
-      const path = window.location.pathname;
-    
-      // Detect current language from URL (/es/ or /en/)
-      const currentLang = path.startsWith("/en/") ? "en" : (path.startsWith("/es/") ? "es" : null);
-    
-      // If we are not in /es or /en, do nothing (root router handles it)
-      if (!currentLang) return;
-    
-      // Mark active language button
-      document.querySelectorAll("[data-set-lang]").forEach(btn => {
-        const lang = btn.getAttribute("data-set-lang");
-        if (lang === currentLang) btn.classList.add("is-active");
-    
-        btn.addEventListener("click", () => {
-          const targetLang = lang;
-          localStorage.setItem("site_lang", targetLang);
-        
-          // Swap /es/ <-> /en/ while preserving the rest of the path
-          const rest = path.replace(/^\/(es|en)\//, "");
-          const next = `/${targetLang}/${rest}${window.location.search}${window.location.hash}`;
-        
-          window.location.assign(next);
-        });
+      // avoid double-binding if JS re-runs for any reason
+      if (btn.dataset.bound === "1") return;
+      btn.dataset.bound = "1";
+
+      btn.addEventListener("click", () => {
+        const targetLang = btn.getAttribute("data-set-lang");
+        localStorage.setItem("site_lang", targetLang);
+
+        const p = window.location.pathname;
+        const rest = p.replace(/^\/(es|en)\//, ""); // remove current lang prefix
+        const next = `/${targetLang}/${rest}${window.location.search}${window.location.hash}`;
+
+        log("[lang-switch]", { from: currentLang, to: targetLang, rest, next });
+        window.location.assign(next);
       });
-    })();
+    });
+  }
+  document.querySelectorAll("[data-i18n-link]").forEach(el => {
+    if (!el.getAttribute("href")) {
+      el.setAttribute("href", "#");
+    }
+  });
+})();
+
+// --- Breadcrumb ------------------------------------------------
+(() => {
+
+  const bc = document.getElementById("breadcrumb");
+  if (!bc) return;
+
+  const path = window.location.pathname.replace(/\/(es|en)\//,"/").replace(/\.html$/,"");
+  const parts = path.split("/").filter(Boolean);
+
+  const lang = window.location.pathname.startsWith("/en/") ? "en" : "es";
+
+  const labels = {
+    es:{ "":"Inicio","pages":"Secciones","projects":"Proyectos","articles":"Artículos","lab":"Lab","about":"Sobre mí"},
+    en:{ "":"Home","pages":"Sections","projects":"Projects","articles":"Articles","lab":"Lab","about":"About"}
+  };
+
+  let url = `/${lang}/`;
+  bc.innerHTML = `<a href="${url}">${labels[lang][""]}</a>`;
+
+  parts.forEach((p,i)=>{
+    url += p + "/";
+    const label = labels[lang][p] || p.toUpperCase();
+    bc.innerHTML += `<span>/</span><a href="${url}">${label}</a>`;
+  });
+
+})();
