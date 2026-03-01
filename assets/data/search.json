@@ -1,31 +1,128 @@
 [
   {
-    "title": "EDC — Eurodat Deployment Console",
-    "url": "projects/edc.html",
+    "title": "Rolando Luis Martín · Automatización de Sistemas",
+    "tags": [],
     "lang": "es",
-    "tags": ["powershell","deployment","windows","automation"],
-    "excerpt": "Herramienta de automatización para el aprovisionamiento de equipos Windows con flujos por fases, instalaciones offline y reporting."
+    "excerpt": "Laboratorio de ingeniería: implementación de Windows, automatización con PowerShell, infraestructura y sistemas de conocimiento operacional.",
+    "url": "index.html"
   },
   {
-    "title": "BDC — Build Deployment Console",
-    "url": "projects/bdc.html",
+    "title": "About · rolandoluis",
+    "tags": [],
     "lang": "es",
-    "tags": ["powershell","workflow","deployment"],
-    "excerpt": "Motor de workflows para build/deployment con políticas de paso, logging estructurado e informes."
+    "excerpt": "Acerca de Rolando Luis Martín y su enfoque en la ingeniería de sistemas.",
+    "url": "pages/about.html"
   },
   {
-    "title": "OKEurodat — Plataforma de conocimiento",
-    "url": "projects/ok-eurodat.html",
+    "title": "Articles · rolandoluis",
+    "tags": [],
     "lang": "es",
-    "tags": ["knowledge","it-ops","documentation"],
-    "excerpt": "Plataforma para almacenar y consultar conocimiento operativo del soporte IT."
+    "excerpt": "Technical articles, tutorials and engineering writeups.",
+    "url": "pages/articles.html"
   },
-
   {
-    "title": "EDC — Eurodat Deployment Console",
-    "url": "projects/edc.html",
+    "title": "Engineering · rolandoluis",
+    "tags": [],
+    "lang": "es",
+    "excerpt": "Engineering focus, skills and technical capabilities.",
+    "url": "pages/engineering.html"
+  },
+  {
+    "title": "Lab · rolandoluis",
+    "tags": [],
+    "lang": "es",
+    "excerpt": "Experiments, prototypes, scripts and field notes.",
+    "url": "pages/lab.html"
+  },
+  {
+    "title": "Projects · rolandoluis",
+    "tags": [],
+    "lang": "es",
+    "excerpt": "Selected engineering projects and case studies.",
+    "url": "pages/projects.html"
+  },
+  {
+    "title": "BDC · Project · rolandoluis",
+    "tags": [],
+    "lang": "es",
+    "excerpt": "EDC (Eurodat Deployment Console): Windows deployment automation with phase-based protocols, offline installs and standardized user environments.",
+    "url": "projects/bdc.html"
+  },
+  {
+    "title": "EDC · Project · rolandoluis",
+    "tags": [],
+    "lang": "es",
+    "excerpt": "EDC (Eurodat Deployment Console): Windows deployment automation with phase-based protocols, offline installs and standardized user environments.",
+    "url": "projects/edc.html"
+  },
+  {
+    "title": "EDC · Project · rolandoluis",
+    "tags": [],
+    "lang": "es",
+    "excerpt": "EDC (Eurodat Deployment Console): Windows deployment automation with phase-based protocols, offline installs and standardized user environments.",
+    "url": "projects/ok-eurodat.html"
+  },
+  {
+    "title": "Rolando Luis Martín · Systems Automation",
+    "tags": [],
     "lang": "en",
-    "tags": ["powershell","deployment","windows","automation"],
-    "excerpt": "Automation toolkit for provisioning Windows devices with phase-based workflows and structured reporting."
+    "excerpt": "Engineering lab: Windows deployment, PowerShell automation, infrastructure, and operational knowledge systems.",
+    "url": "index.html"
+  },
+  {
+    "title": "About · rolandoluis",
+    "tags": [],
+    "lang": "en",
+    "excerpt": "About Rolando Luis Martín and his engineering focus.",
+    "url": "pages/about.html"
+  },
+  {
+    "title": "Articles · rolandoluis",
+    "tags": [],
+    "lang": "en",
+    "excerpt": "Technical articles, tutorials and engineering writeups.",
+    "url": "pages/articles.html"
+  },
+  {
+    "title": "Engineering · rolandoluis",
+    "tags": [],
+    "lang": "en",
+    "excerpt": "Engineering focus, skills and technical capabilities.",
+    "url": "pages/engineering.html"
+  },
+  {
+    "title": "Lab · rolandoluis",
+    "tags": [],
+    "lang": "en",
+    "excerpt": "Experiments, prototypes, scripts and field notes.",
+    "url": "pages/lab.html"
+  },
+  {
+    "title": "Projects · rolandoluis",
+    "tags": [],
+    "lang": "en",
+    "excerpt": "Selected engineering projects and case studies.",
+    "url": "pages/projects.html"
+  },
+  {
+    "title": "BDC · Project · rolandoluis",
+    "tags": [],
+    "lang": "en",
+    "excerpt": "EDC (Eurodat Deployment Console): Windows deployment automation with phase-based protocols, offline installs and standardized user environments.",
+    "url": "projects/bdc.html"
+  },
+  {
+    "title": "EDC · Project · rolandoluis",
+    "tags": [],
+    "lang": "en",
+    "excerpt": "EDC (Eurodat Deployment Console): Windows deployment automation with phase-based protocols, offline installs and standardized user environments.",
+    "url": "projects/edc.html"
+  },
+  {
+    "title": "EDC · Project · rolandoluis",
+    "tags": [],
+    "lang": "en",
+    "excerpt": "EDC (Eurodat Deployment Console): Windows deployment automation with phase-based protocols, offline installs and standardized user environments.",
+    "url": "projects/ok-eurodat.html"
   }
 ]
