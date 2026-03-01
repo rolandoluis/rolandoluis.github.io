@@ -183,3 +183,7 @@
   position: relative;
   z-index: 1;
 }
+
+.hero-canvas canvas{
+  will-change: transform;
+}

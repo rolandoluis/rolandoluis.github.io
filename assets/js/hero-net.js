@@ -14,9 +14,9 @@
   let w = 0, h = 0;
 
   // Ajustes visuales (tenue y elegante)
-  const N = 34;      // nodos
-  const R = 220;     // radio enlaces
-  const V = 0.22;    // velocidad
+  const N = 32;      // nodos
+  const R = 240;     // radio enlaces
+  const V = 0.18;    // velocidad
 
   const LINE_ALPHA_BASE = 0.16; // tenue
   const DOT_ALPHA = 0.22;       // más tenue que líneas
@@ -109,11 +109,16 @@
         n.x += n.vx;
         n.y += n.vy;
 
-        if (n.x < 0 || n.x > w) n.vx *= -1;
-        if (n.y < 0 || n.y > h) n.vy *= -1;
-
-        n.x = Math.max(0, Math.min(w, n.x));
-        n.y = Math.max(0, Math.min(h, n.y));
+        if (mouse.x !== null) {
+          const dx = mouse.x - n.x;
+          const dy = mouse.y - n.y;
+          const dist = Math.sqrt(dx*dx + dy*dy);
+            
+          if (dist < 160) {
+            n.x += dx * 0.002;
+            n.y += dy * 0.002;
+          }
+        }
       }
     }
 
@@ -147,6 +152,21 @@
       ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
       ctx.fill();
     }
+
+    // Atrae nodos cercanos a la posición del cursor
+    let mouse = { x: null, y: null };
+
+    canvas.addEventListener("mousemove", (e) => {
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+    });
+
+    canvas.addEventListener("mouseleave", () => {
+      mouse.x = null;
+      mouse.y = null;
+    });
+
 
     // vignette suave para que el texto destaque
     const g = ctx.createRadialGradient(
@@ -189,6 +209,20 @@
     drawFrame(false);
     return;
   }
+
+  let running = true;
+
+  document.addEventListener("visibilitychange", () => {
+    running = !document.hidden;
+  });
   
+  function loop() {
+    if (running) {
+      drawFrame(true);
+    }
+    requestAnimationFrame(loop);
+  }
+
   loop();
+
 })();
