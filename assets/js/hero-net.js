@@ -90,7 +90,14 @@
 
   function drawFrame(move = false) {
     ctx.clearRect(0, 0, w, h);
-
+    // DEBUG: línea forzada (si no se ve, hay un problema de render/capas)
+    ctx.strokeStyle = "rgba(0,255,0,1)";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(20, 20);
+    ctx.lineTo(w - 20, 20);
+    ctx.stroke();
+    
     const lineAlphaBase = 0.14;
     const dotAlpha = 0.62;
 
