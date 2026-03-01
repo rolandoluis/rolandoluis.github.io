@@ -127,10 +127,11 @@
           const d = Math.sqrt(d2);
           const t = 1 - d / R;
 
-          ctx.strokeStyle = `rgba(${accent.r},${accent.g},${accent.b},${lineAlphaBase * t})`;
+        //   ctx.strokeStyle = `rgba(${accent.r},${accent.g},${accent.b},${lineAlphaBase * t})`;
+          ctx.strokeStyle = "rgba(0,255,0,0.45)"; // verde visible, ignora accent
           ctx.lineWidth = 1;
           ctx.lineCap = "round";
-          ctx.lineWidth = 1.25;
+          ctx.lineWidth = 1.6;
           ctx.beginPath();
           ctx.moveTo(a.x, a.y);
           ctx.lineTo(b.x, b.y);
