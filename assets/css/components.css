@@ -67,6 +67,10 @@
   );
 }
 
+:root[data-theme="solar"] .brand-mark{
+  box-shadow: 0 0 18px rgba(255,140,40,.35);
+}
+
 .card::after{
   content:"";
   position:absolute;
@@ -90,6 +94,7 @@
   opacity:1;
 }
 
+
 .cta-row{
   display:flex;
   gap:10px;
@@ -104,9 +109,9 @@
   border-width: 2px;
 }
 
-/*.card:hover h2{
-  color: rgba(192, 95, 95, 0.836)var(--accent);
-}*/
+.card:hover h2{
+  color: var(--accent);
+}
 
 .btn{
   display:inline-flex;
@@ -346,4 +351,64 @@
   .theme{ display:none; }     /* oculta theme en desktop */
 
   .nav-toggle{ display:flex; } /* muestra hamburger */
+}
+
+/* Estilos de la esfera y los nodos */
+.sphere {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 400px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.1);
+    animation: rotateSphere 15s linear infinite; /* Rotación continua */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.node {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: var(--accent); /* Color basado en el tema */
+    position: absolute;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+}
+
+.node:hover {
+    transform: scale(1.2); /* Efecto de hover */
+}
+
+@keyframes rotateSphere {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Ventana emergente con información de la red social */
+.social-info {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    display: none; /* Oculto por defecto */
+}
+
+.btn {
+    padding: 10px 15px;
+    border-radius: 5px;
+    background-color: var(--accent); /* Color basado en el tema */
+    color: white;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+}
+
+.btn:hover {
+    background-color: var(--accent-net); /* Cambio de color al hacer hover */
 }

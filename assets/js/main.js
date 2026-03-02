@@ -347,3 +347,34 @@
   });
 
 })();
+
+// Interactividad de la esfera y nodos
+const nodes = document.querySelectorAll('.node');
+const socialInfo = document.getElementById('social-info');
+const socialName = document.getElementById('social-name');
+const socialLink = document.getElementById('social-link');
+const cancelBtn = document.getElementById('cancel-btn');
+
+// Información de las redes sociales
+const socialData = {
+    facebook: 'https://facebook.com/your-profile',
+    twitter: 'https://twitter.com/your-profile',
+    linkedin: 'https://linkedin.com/in/your-profile',
+};
+
+nodes.forEach(node => {
+    node.addEventListener('click', (e) => {
+        const social = e.target.dataset.social;
+        socialName.textContent = social.charAt(0).toUpperCase() + social.slice(1); // Capitaliza el nombre
+        socialLink.href = socialData[social];
+        
+        // Detener animación y mostrar información
+        socialInfo.style.display = 'block';
+        document.querySelector('.sphere').style.animationPlayState = 'paused';
+    });
+});
+
+cancelBtn.addEventListener('click', () => {
+    socialInfo.style.display = 'none';
+    document.querySelector('.sphere').style.animationPlayState = 'running';
+});

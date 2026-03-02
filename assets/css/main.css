@@ -77,6 +77,11 @@
 
 *{ box-sizing:border-box; }
 html,body{ height:100%; }
+
+html{
+  transition: background .35s ease, color .25s ease;
+}
+
 body{
   margin:0;
   background: 
