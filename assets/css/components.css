@@ -10,7 +10,7 @@
   position:relative;
   overflow:hidden;
   grid-column: span 4;
-  background: rgba(15,23,42,.66);
+  background: color-mix(in srgb, var(--panel) 72%, transparent);
   border: 1px solid rgba(255,255,255,.10);
   border-radius: var(--radius);
   padding: 16px 16px 14px;
@@ -48,6 +48,23 @@
   opacity:0;
   transition:opacity .25s ease;
   pointer-events:none;
+}
+
+:root[data-theme="solar"] .card::before{
+  background: radial-gradient(
+    circle 160px at var(--x,50%) var(--y,50%),
+    rgba(255, 176, 32, 0.14),
+    transparent 60%
+  );
+}
+
+:root[data-theme="solar"] .card::after{
+  background: linear-gradient(
+    120deg,
+    transparent 30%,
+    rgba(255, 210, 120, 0.10),
+    transparent 70%
+  );
 }
 
 .card::after{
