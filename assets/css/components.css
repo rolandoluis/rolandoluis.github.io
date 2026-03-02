@@ -40,7 +40,7 @@
   inset:0;
 
   background:radial-gradient(
-    circle 200px at var(--x,50%) var(--y,50%),
+    circle 120px at var(--x,50%) var(--y,50%),
     rgba(255,255,255,0.08),
     transparent 60%
   );
