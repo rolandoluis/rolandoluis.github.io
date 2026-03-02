@@ -137,14 +137,18 @@
 
 })();
 
-// --- Simple static search -------------------------------------
+// --- Simple static search (desktop + mobile) -------------------
 (() => {
-
-  const box = document.getElementById("searchBox");
-  const results = document.getElementById("searchResults");
-  if(!box || !results) return;
-
   const lang = window.location.pathname.startsWith("/en/") ? "en" : "es";
+
+  const pairs = [
+    { box: document.getElementById("searchBox"),        results: document.getElementById("searchResults") },
+    { box: document.getElementById("searchBoxMobile"),  results: document.getElementById("searchResultsMobile") },
+  ].filter(p => p.box && p.results);
+
+  if (!pairs.length) return;
+
+  const emptyMsg = lang === "en" ? "No results" : "Sin resultados";
 
   let index = [];
 
@@ -152,55 +156,93 @@
     .then(r => r.json())
     .then(data => {
       index = data.filter(p => p.lang === lang);
+    })
+    .catch(() => {
+      // si falla la carga, no rompemos la UI
+      pairs.forEach(({ results }) => {
+        results.innerHTML = `<div style="padding:8px 10px">${emptyMsg}</div>`;
+      });
     });
 
-  box.addEventListener("input", () => {
+  const closeMobileNavIfOpen = () => {
+    const panel = document.getElementById("mobileNav");
+    const btn = document.querySelector(".nav-toggle");
+    if (!panel || !btn) return;
+    if (panel.hidden) return;
 
-    const q = box.value.toLowerCase().trim();
+    panel.hidden = true;
+    btn.setAttribute("aria-expanded", "false");
+    document.body.style.overflow = "";
+  };
 
-    if(q.length < 2){
-      results.style.display = "none";
+  const render = (q, resultsEl) => {
+    const query = q.toLowerCase().trim();
+
+    if (query.length < 2) {
+      resultsEl.style.display = "none";
+      resultsEl.innerHTML = "";
       return;
     }
 
-    const hits = index.filter(p =>
-      p.title.toLowerCase().includes(q) ||
-      p.excerpt.toLowerCase().includes(q) ||
-      p.tags.join(" ").includes(q)
-    ).slice(0,8);
+    const hits = index
+      .filter(p =>
+        (p.title || "").toLowerCase().includes(query) ||
+        (p.excerpt || "").toLowerCase().includes(query) ||
+        ((p.tags || []).join(" ").toLowerCase().includes(query))
+      )
+      .slice(0, 8);
 
-    if(!hits.length){
-      results.innerHTML = `<div style="padding:8px 10px">Sin resultados</div>`;
-      results.style.display = "block";
+    if (!hits.length) {
+      resultsEl.innerHTML = `<div style="padding:8px 10px">${emptyMsg}</div>`;
+      resultsEl.style.display = "block";
       return;
     }
 
-    results.innerHTML = hits.map(p =>
+    resultsEl.innerHTML = hits.map(p =>
       `<a href="/${lang}/${p.url}">
          <strong>${p.title}</strong><br>
          <small>${p.excerpt}</small>
        </a>`
     ).join("");
 
-    results.style.display = "block";
-  });
+    resultsEl.style.display = "block";
+  };
 
-  document.addEventListener("click", e=>{
-    if(!results.contains(e.target) && e.target!==box){
-      results.style.display="none";
-    }
-  });
+  pairs.forEach(({ box, results }) => {
+    // input
+    box.addEventListener("input", () => {
+      render(box.value, results);
+    });
 
-  box.addEventListener("keydown", e=>{
-    if(e.key==="Enter"){
+    // enter => results page
+    box.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        results.style.display = "none";
+        return;
+      }
+
+      if (e.key === "Enter") {
         const q = box.value.trim();
-        if(q.length>1){
-          const lang = window.location.pathname.startsWith("/en/") ? "en" : "es";
+        if (q.length > 1) {
+          closeMobileNavIfOpen();
           window.location.href = `/${lang}/pages/search.html?q=` + encodeURIComponent(q);
         }
-    }
-  });
+      }
+    });
 
+    // click a result => close drawer
+    results.addEventListener("click", (e) => {
+      const a = e.target.closest("a");
+      if (a) closeMobileNavIfOpen();
+    });
+
+    // click outside => close results
+    document.addEventListener("click", (e) => {
+      if (!results.contains(e.target) && e.target !== box) {
+        results.style.display = "none";
+      }
+    });
+  });
 })();
 
 // Theme switcher (persist)
@@ -244,5 +286,43 @@
     const next = (localStorage.getItem(key) === "on") ? "off" : "on";
     localStorage.setItem(key, next);
     location.reload();
+  });
+})();
+
+(() => {
+  const btn = document.querySelector(".nav-toggle");
+  const panel = document.getElementById("mobileNav");
+  if (!btn || !panel) return;
+
+  const open = () => {
+    panel.hidden = false;
+    btn.setAttribute("aria-expanded", "true");
+    document.body.style.overflow = "hidden";
+  };
+
+  const close = () => {
+    panel.hidden = true;
+    btn.setAttribute("aria-expanded", "false");
+    document.body.style.overflow = "";
+  };
+
+  btn.addEventListener("click", () => {
+    const expanded = btn.getAttribute("aria-expanded") === "true";
+    expanded ? close() : open();
+  });
+
+  // cerrar al tocar fuera del panel
+  panel.addEventListener("click", (e) => {
+    if (e.target === panel) close();
+  });
+
+  // cerrar con Escape
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !panel.hidden) close();
+  });
+
+  // cerrar al navegar (clic en link)
+  panel.querySelectorAll("a").forEach(a => {
+    a.addEventListener("click", () => close());
   });
 })();
