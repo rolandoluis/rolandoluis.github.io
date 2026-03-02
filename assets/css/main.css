@@ -10,6 +10,8 @@
   --max: 1060px;
   --brand-mrk-color: #e11d48;
   --brand-mrk-bkgnd: #5c0000;
+  --btn-act-bkgnd: rgba(225,29,72,.14);
+  --btn-act-brd: rgba(225,29,72,.35);
 }
 
 /* Theme: graphite (más sobrio, casi “enterprise”) */
@@ -23,6 +25,8 @@
   --accent-net: #22c55e;
   --brand-mrk-color: #005c23;
   --brand-mrk-bkgnd: #01200e;
+  --btn-act-bkgnd: #003a189a;
+  --btn-act-brd: #005825;
 }
 
 /* Theme: solar (claro, minimal “product”) */
@@ -34,8 +38,8 @@
   --line: rgba(2,6,23,.12);
   --accent: #e11d48;
   --accent-net: #e11d48;
-  --brand-mrk-color: #9c9c9c;
-  --brand-mrk-bkgnd: #161616;
+  --btn-act-bkgnd: #3a3a3ad7;
+  --btn-act-brd: #a1a1a1;
   opacity: .20;
 }
 
@@ -164,8 +168,8 @@ main{ padding: 34px 0 50px; }
 
 .nav-link.is-active{
   color: var(--text);
-  background: rgba(225,29,72,.14);
-  border:1px solid rgba(225,29,72,.20);
+  background: var(--btn-act-bkgnd);
+  border:1px solid var(--btn-act-brd);
 }
 
 .lang{ display:flex; align-items:center; gap:8px; }
@@ -189,8 +193,8 @@ main{ padding: 34px 0 50px; }
 }
 .lang-btn.is-active{
   color: var(--text);
-  border-color: rgba(225,29,72,.35);
-  background: rgba(225,29,72,.14);
+  border-color: var(--btn-act-brd);
+  background: var(--btn-act-bkgnd);
 }
 
 .theme{ display:flex; align-items:center; gap:8px; }
