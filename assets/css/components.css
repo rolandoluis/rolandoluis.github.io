@@ -62,7 +62,7 @@
 .card:hover{
   transform:translateY(-4px);
   box-shadow:0 10px 28px rgba(255, 255, 255, 0.068);
-  border-color:var(--accent);
+  border-color: rgba(255, 255, 255, 0.068);   /*var(--accent)*/
 }
 
 .card:hover h2{
