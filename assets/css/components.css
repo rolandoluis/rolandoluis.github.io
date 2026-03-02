@@ -88,7 +88,7 @@
 }
 
 .card:hover h2{
-  color: rgba(141, 85, 0, 0.836)/*var(--accent)*/;
+  color: rgba(192, 95, 95, 0.836)/*var(--accent)*/;
 }
 
 .btn{
