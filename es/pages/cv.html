@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CV · Rolando Luis Martín</title>
+  <meta name="description" content="Currículum de Rolando Luis Martín — automatización, PowerShell, implementación de Windows y tooling operativo." />
+
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/components.css" />
+  <link rel="stylesheet" href="/assets/css/cv.css" />
+
+  <script defer src="/assets/js/main.js"></script>
+  <script defer src="/assets/js/hero-net.js"></script>
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="/es/">
+        <span class="brand-mark">RM</span>
+        <span class="brand-text">rolandoluis</span>
+      </a>
+
+      <nav class="nav">
+        <a class="nav-link" data-i18n-link="">Home</a>
+        <a class="nav-link" data-i18n-link="pages/engineering.html">Ingeniería</a>
+        <a class="nav-link" data-i18n-link="pages/projects.html">Proyectos</a>
+        <a class="nav-link" data-i18n-link="pages/articles.html">Artículos</a>
+        <a class="nav-link" data-i18n-link="pages/lab.html">Lab</a>
+        <a class="nav-link" data-i18n-link="pages/about.html">Sobre mí</a>
+      </nav>
+
+      <div class="lang">
+        <button class="lang-btn" type="button" data-set-lang="es">ES</button>
+        <span class="lang-sep">·</span>
+        <button class="lang-btn" type="button" data-set-lang="en">EN</button>
+      </div>
+
+      <div class="search">
+        <input id="searchBox" type="search" placeholder="Buscar… / Search…" autocomplete="off" />
+        <div id="searchResults" class="search-results"></div>
+      </div>
+
+      <!-- Si ya tienes menú mobile (hamburger + drawer), cópialo aquí también -->
+    </div>
+  </header>
+
+  <nav class="breadcrumb" id="breadcrumb"></nav>
+
+  <main class="container cv">
+    <section class="hero hero-canvas cv-hero">
+      <canvas id="heroNet" aria-hidden="true"></canvas>
+
+      <div class="cv-head">
+        <div class="cv-title">
+          <h1 style="margin:0">Rolando Luis Martín</h1>
+          <p class="subtitle" style="margin:6px 0 0">Automatización de Sistemas · PowerShell · Windows Deployment</p>
+          <p class="lede" style="margin:10px 0 0">
+            Perfil técnico orientado a construir <strong>flujos repetibles</strong> para aprovisionamiento, estandarización de entornos,
+            repositorios offline y <strong>reporting trazable</strong>.
+          </p>
+        </div>
+
+        <div class="cv-actions">
+          <a class="btn" href="/assets/cv/Rolando_Luis_Martin_CV.pdf">Descargar PDF</a>
+          <button class="btn btn-ghost" type="button" onclick="window.print()">Imprimir / Guardar PDF</button>
+        </div>
+      </div>
+
+      <div class="cv-meta">
+        <span class="chip">Tenerife, España</span>
+        <a class="chip chip-link" href="mailto:rollmartin66@gmail.com">rollmartin66@gmail.com</a>
+        <a class="chip chip-link" href="https://www.linkedin.com/in/rolando-luis-mart%C3%ADn-262494165/" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="chip chip-link" href="https://github.com/rolandoluis" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-title">
+        <h2>Resumen</h2>
+        <p class="hint">Enfoque y valor</p>
+      </div>
+
+      <div class="grid">
+        <article class="card">
+          <h3>Automatización</h3>
+          <p>Tooling para reducir tareas manuales y acelerar despliegues con resultados consistentes.</p>
+        </article>
+        <article class="card">
+          <h3>Workflows deterministas</h3>
+          <p>Steps con políticas (STOP/CONTINUE), trazabilidad por ejecución y handoffs limpios por fases.</p>
+        </article>
+        <article class="card">
+          <h3>Operación y soporte</h3>
+          <p>Observabilidad, troubleshooting y estandarización de estaciones de trabajo.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-title">
+        <h2>Habilidades</h2>
+        <p class="hint">Stack principal</p>
+      </div>
+
+      <div class="cv-skill-grid">
+        <div class="card">
+          <h3>PowerShell</h3>
+          <p class="hint">Avanzado</p>
+          <div class="chips">
+            <span class="chip">Módulos</span>
+            <span class="chip">Logging</span>
+            <span class="chip">Workflows</span>
+            <span class="chip">Offline installs</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Windows</h3>
+          <p class="hint">Avanzado</p>
+          <div class="chips">
+            <span class="chip">Provisioning</span>
+            <span class="chip">Perfiles</span>
+            <span class="chip">Políticas</span>
+            <span class="chip">Update strategy</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Web</h3>
+          <p class="hint">Intermedio</p>
+          <div class="chips">
+            <span class="chip">HTML</span>
+            <span class="chip">CSS</span>
+            <span class="chip">JS</span>
+            <span class="chip">GitHub Pages</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Datos</h3>
+          <p class="hint">Intermedio</p>
+          <div class="chips">
+            <span class="chip">SQL Server</span>
+            <span class="chip">MySQL</span>
+            <span class="chip">Modelado</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-title">
+        <h2>Experiencia</h2>
+        <p class="hint">Timeline</p>
+      </div>
+
+      <div class="cv-timeline">
+        <article class="cv-role card">
+          <div class="cv-role-top">
+            <h3 style="margin:0">IT Support Technician / Automatización (Eurodat Lab IT)</h3>
+            <span class="cv-date">09/2025–Actualidad</span>
+          </div>
+          <p class="hint" style="margin:6px 0 0">Windows deployment · PowerShell · Tooling</p>
+          <ul class="cv-bullets">
+            <li>Automatización del aprovisionamiento de estaciones Windows con flujos por fases y ejecución repetible.</li>
+            <li>Gestión de repositorios offline (apps/paquetes) y estandarización de perfiles y políticas.</li>
+            <li>Logging estructurado e informes técnicos para trazabilidad y troubleshooting.</li>
+          </ul>
+        </article>
+
+        <article class="cv-role card">
+          <div class="cv-role-top">
+            <h3 style="margin:0">Desarrollador Web / Freelance</h3>
+            <span class="cv-date">2018–2024</span>
+          </div>
+          <p class="hint" style="margin:6px 0 0">Web · Front-end · Contenido</p>
+          <ul class="cv-bullets">
+            <li>Diseño y maquetación HTML/CSS; sitios estáticos y proyectos web.</li>
+            <li>Soporte y mejoras iterativas orientadas a negocio.</li>
+          </ul>
+        </article>
+
+        <article class="cv-role card">
+          <div class="cv-role-top">
+            <h3 style="margin:0">Informático / Administración de red y sistemas</h3>
+            <span class="cv-date">2008–2015</span>
+          </div>
+          <p class="hint" style="margin:6px 0 0">Soporte · Redes · Bases de datos</p>
+          <ul class="cv-bullets">
+            <li>Administración de red y soporte a usuarios y clientes.</li>
+            <li>SQL Server / MySQL; mantenimiento de hardware y operación.</li>
+          </ul>
+        </article>
+
+        <article class="cv-role card">
+          <div class="cv-role-top">
+            <h3 style="margin:0">Técnico informático / Liderazgo de equipo</h3>
+            <span class="cv-date">1998–2008</span>
+          </div>
+          <p class="hint" style="margin:6px 0 0">Infraestructura · Automatización · Operación</p>
+          <ul class="cv-bullets">
+            <li>Gestión de redes y automatización de procesos operativos.</li>
+            <li>Implementación de red corporativa y soporte.</li>
+          </ul>
+        </article>
+
+        <article class="cv-role card">
+          <div class="cv-role-top">
+            <h3 style="margin:0">Formador TI</h3>
+            <span class="cv-date">1995–1998</span>
+          </div>
+          <p class="hint" style="margin:6px 0 0">Docencia · Sistemas · Programación</p>
+          <ul class="cv-bullets">
+            <li>Formación en sistemas operativos, ofimática y programación.</li>
+          </ul>
+        </article>
+      </div>
+
+      <p class="hint" style="margin-top:10px">
+        Nota: si quieres, ajusto los títulos exactos, empresas y logros cuantificados cuando me confirmes los datos.
+      </p>
+    </section>
+
+    <section class="section">
+      <div class="section-title">
+        <h2>Formación</h2>
+        <p class="hint">Académica y certificaciones</p>
+      </div>
+
+      <div class="grid">
+        <article class="card">
+          <h3>Certificación / Hardware de ordenadores III</h3>
+          <p class="hint">2009 — Instituto Superior Politécnico Industrial</p>
+        </article>
+        <article class="card">
+          <h3>Maestría / Aplicación de las TIC en enseñanza</h3>
+          <p class="hint">2007 — UNICA (Ciego de Ávila)</p>
+        </article>
+        <article class="card">
+          <h3>Diplomados</h3>
+          <p class="hint">1996–1998 — Redes (OSI), POO, Diseño Gráfico Digital</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-title">
+        <h2>Idiomas</h2>
+        <p class="hint">Nivel orientativo</p>
+      </div>
+
+      <div class="grid">
+        <article class="card">
+          <h3>Español</h3>
+          <p class="hint">Nativo</p>
+        </article>
+        <article class="card">
+          <h3>Inglés</h3>
+          <p class="hint">Avanzado (orientativo)</p>
+        </article>
+      </div>
+    </section>
+    <section class="section">
+      <div class="section-title">
+        <h2>Contacto</h2>
+        <p class="hint">Enlaces directos</p>
+      </div>
+  
+      <div class="grid">
+        <article class="card">
+          <h3>Email</h3>
+          <p><a class="link" href="mailto:rollmartin66@gmail.com">rollmartin66@gmail.com</a></p>
+        </article>
+    
+        <article class="card">
+          <h3>LinkedIn</h3>
+          <p><a class="link" href="https://www.linkedin.com/in/rolando-luis-mart%C3%ADn-262494165/" target="_blank" rel="noopener">Ver perfil →</a></p>
+        </article>
+    
+        <article class="card">
+          <h3>GitHub</h3>
+          <p><a class="link" href="https://github.com/rolandoluis" target="_blank" rel="noopener">Ver repos →</a></p>
+        </article>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <small>© <span id="year"></span> rolandoluis</small>
+      <div class="footer-links">
+        <a class="link" data-i18n-link="pages/about.html">Sobre mí</a>
+        <a class="link" href="https://github.com/rolandoluis" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
