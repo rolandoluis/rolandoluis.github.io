@@ -43,7 +43,7 @@
 
 /* Theme: solar (claro, minimal “product”) */
 :root[data-theme="solar"]{
-  --bg: #d6eaff;
+  --bg: #b6d8fc;
   --panel: #ffffffcb;
   --text: #0c0c20;
   --muted: #475569;
@@ -52,21 +52,21 @@
   --accent-net: #3a1de1;
   --brand-mrk-color: #799cb9;
   --brand-mrk-bkgnd: #446fa0ce;
-  --btn-act-bkgnd: #3a3a3ad7;
-  --btn-act-brd: #a1a1a1;
+  --btn-act-bkgnd: #262836d7;
+  --btn-act-brd: #71809c;
   --btn-brd: #a1a1a18f;
   --btn-bkg: #3a3a3a9a;
   --btn-hov-brd: rgba(148, 148, 148, 0.911);
   --btn-hov-bkg: rgba(58, 58, 58, 0.75);
   --lnk-brd: #6e6e6e;
   --lnk-hov: #b9b9b9;
-  opacity: .20;
+  /* opacity: .20; */
 }
 
 /* Ajustes específicos cuando fondo es claro */
 :root[data-theme="solar"] body{
-  background: radial-gradient(900px 500px at 20% 0%, rgba(225,29,72,.10), transparent 55%),
-              radial-gradient(700px 450px at 90% 10%, rgba(99,102,241,.08), transparent 60%),
+  background: radial-gradient(900px 500px at 20% 0%, rgba(236, 229, 230, 0.1), transparent 55%),
+              radial-gradient(700px 450px at 90% 10%, rgba(67, 69, 177, 0.205), transparent 60%),
               var(--bg);
 }
 
