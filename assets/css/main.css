@@ -19,6 +19,7 @@
   --line: rgba(255,255,255,.10);
   --accent: #003012; /* verde sobrio */
   --accent-net: #22c55e;
+  --brand-mrk-color: #003012;
 }
 
 /* Theme: solar (claro, minimal “product”) */
@@ -89,7 +90,7 @@ a{ color:inherit; text-decoration:none; }
   width:32px;
   height:32px;
   border-radius:10px;
-  background: linear-gradient(135deg, rgba(225,29,72,.95), rgba(225,29,72,.55));
+  background: linear-gradient(135deg, rgba(225,29,72,.95), rgba(104, 11, 31, 0.55));
   color:white;
   font-size:13px;
 }
