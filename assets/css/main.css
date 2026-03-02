@@ -8,6 +8,8 @@
   --accent-net: #e11d48; /* accent para la red (más visible) */
   --radius: 14px;
   --max: 1060px;
+  --brand-mrk-color: #e11d48;
+  --brand-mrk-bkgnd: #5c0000;
 }
 
 /* Theme: graphite (más sobrio, casi “enterprise”) */
@@ -20,7 +22,7 @@
   --accent: #003012; /* verde sobrio */
   --accent-net: #22c55e;
   --brand-mrk-color: #005c23;
-  --brand-mrk-bkgnd: #063619;
+  --brand-mrk-bkgnd: #01200e;
 }
 
 /* Theme: solar (claro, minimal “product”) */
@@ -32,6 +34,8 @@
   --line: rgba(2,6,23,.12);
   --accent: #e11d48;
   --accent-net: #e11d48;
+  --brand-mrk-color: #9c9c9c;
+  --brand-mrk-bkgnd: #161616;
   opacity: .20;
 }
 
