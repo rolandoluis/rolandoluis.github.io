@@ -43,7 +43,7 @@
 
 /* Theme: solar (claro, minimal “product”) */
 :root[data-theme="solar"]{
-  --bg: #b6d8fc;
+  --bg: #cde5ff;
   --panel: #ffffffcb;
   --text: #0c0c20;
   --muted: #475569;
@@ -60,7 +60,7 @@
   --btn-hov-bkg: rgba(58, 58, 58, 0.75);
   --lnk-brd: #6e6e6e;
   --lnk-hov: #b9b9b9;
-  /* opacity: .20; */
+  opacity: .20;
 }
 
 /* Ajustes específicos cuando fondo es claro */
