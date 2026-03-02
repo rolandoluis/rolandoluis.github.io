@@ -8,6 +8,7 @@
 
 .card{
   position:relative;
+  overflow:hidden;
   grid-column: span 4;
   background: rgba(15,23,42,.66);
   border: 1px solid rgba(255,255,255,.10);
@@ -33,6 +34,22 @@
   font-size: 14px;
 }
 
+.card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+
+  background:radial-gradient(
+    circle 200px at var(--x,50%) var(--y,50%),
+    rgba(255,255,255,0.08),
+    transparent 60%
+  );
+
+  opacity:0;
+  transition:opacity .25s ease;
+  pointer-events:none;
+}
+
 .card::after{
   content:"";
   position:absolute;
@@ -46,6 +63,10 @@
   opacity:0;
   transition:opacity .25s ease;
   pointer-events:none;
+}
+
+.card:hover::before{
+  opacity:1;
 }
 
 .card:hover::after{
@@ -62,7 +83,7 @@
 .card:hover{
   transform:translateY(-4px);
   box-shadow:0 10px 28px rgba(255, 255, 255, 0.068);
-  border-color: rgba(255, 255, 255, 0.705);   /*var(--accent)*/
+  border-color: var(--accent);
   border-width: 2px;
 }
 
