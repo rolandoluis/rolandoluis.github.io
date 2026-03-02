@@ -104,8 +104,8 @@
   font-size: 14px;
 }
 .btn:hover{
-  background: rgba(225,29,72,.26);
-  border-color: rgba(225,29,72,.65);
+  background: var(--btn-hov-bkg);
+  border-color: var(--btn-hov-brd);
 }
 
 .btn-ghost{

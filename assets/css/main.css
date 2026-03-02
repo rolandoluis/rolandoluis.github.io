@@ -14,6 +14,8 @@
   --btn-act-brd: rgba(225,29,72,.35);
   --btn-brd: rgba(225,29,72,.45);
   --btn-bkg: rgba(225,29,72,.18);
+  --btn-hov-brd: rgba(225,29,72,.75);
+  --btn-hov-bkg: rgba(225,29,72,.41);
 }
 
 /* Theme: graphite (más sobrio, casi “enterprise”) */
@@ -31,6 +33,8 @@
   --btn-act-brd: rgba(0, 88, 37, .65);
   --btn-brd: rgba(0, 58, 24, .75);
   --btn-bkg: rgba(0, 88, 37, .18);
+  --btn-hov-brd: rgba(13, 82, 41, 0.829);
+  --btn-hov-bkg: rgba(4, 65, 29, 0.75);
 }
 
 /* Theme: solar (claro, minimal “product”) */
@@ -48,6 +52,8 @@
   --btn-act-brd: #a1a1a1;
   --btn-brd: #a1a1a18f;
   --btn-bkg: #3a3a3a9a;
+  --btn-hov-brd: rgba(148, 148, 148, 0.911);
+  --btn-hov-bkg: rgba(58, 58, 58, 0.75);
   opacity: .20;
 }
 
