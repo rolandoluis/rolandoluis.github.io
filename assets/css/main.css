@@ -12,6 +12,8 @@
   --brand-mrk-bkgnd: #5c0000;
   --btn-act-bkgnd: rgba(225,29,72,.14);
   --btn-act-brd: rgba(225,29,72,.35);
+  --btn-brd: rgba(225,29,72,.45);
+  --btn-bkg: rgba(225,29,72,.18);
 }
 
 /* Theme: graphite (más sobrio, casi “enterprise”) */
@@ -25,8 +27,10 @@
   --accent-net: #22c55e;
   --brand-mrk-color: #005c23;
   --brand-mrk-bkgnd: #01200e;
-  --btn-act-bkgnd: #003a189a;
-  --btn-act-brd: #005825;
+  --btn-act-bkgnd: rgba(0, 58, 24, .34);
+  --btn-act-brd: rgba(0, 88, 37, .65);
+  --btn-brd: rgba(0, 58, 24, .75);
+  --btn-bkg: rgba(0, 88, 37, .18);
 }
 
 /* Theme: solar (claro, minimal “product”) */
@@ -38,8 +42,12 @@
   --line: rgba(2,6,23,.12);
   --accent: #e11d48;
   --accent-net: #e11d48;
+  --brand-mrk-color: #a3a3a3;
+  --brand-mrk-bkgnd: #7a7a7a;
   --btn-act-bkgnd: #3a3a3ad7;
   --btn-act-brd: #a1a1a1;
+  --btn-brd: #a1a1a18f;
+  --btn-bkg: #3a3a3a9a;
   opacity: .20;
 }
 
@@ -215,6 +223,6 @@ main{ padding: 34px 0 50px; }
 :root[data-theme="solar"] .hero-canvas #heroNet{ opacity: .22; }
 
 .theme-btn.is-active{
-  outline:2px solid rgba(225,29,72,.45);
+  outline:2px solid var(--btn-act-brd);
   outline-offset:2px;
 }
