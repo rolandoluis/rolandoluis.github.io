@@ -7,18 +7,25 @@
 }
 
 .card{
+  position:relative;
   grid-column: span 4;
   background: rgba(15,23,42,.66);
   border: 1px solid rgba(255,255,255,.10);
   border-radius: var(--radius);
   padding: 16px 16px 14px;
   box-shadow: 0 8px 24px rgba(0,0,0,.25);
+  transition:
+    transform .25s ease,
+    box-shadow .25s ease,
+    border-color .25s ease;
+  will-change:transform;
 }
 
 .card h2{
   margin:0 0 6px;
   font-size: 16px;
   letter-spacing:.1px;
+  transition:color .2s ease;
 }
 .card p{
   margin:0 0 10px;
@@ -26,11 +33,40 @@
   font-size: 14px;
 }
 
+.card::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(
+    120deg,
+    transparent 30%,
+    rgba(255,255,255,0.06),
+    transparent 70%
+  );
+  opacity:0;
+  transition:opacity .25s ease;
+  pointer-events:none;
+}
+
+.card:hover::after{
+  opacity:1;
+}
+
 .cta-row{
   display:flex;
   gap:10px;
   flex-wrap:wrap;
   margin-top: 10px;
+}
+
+.card:hover{
+  transform:translateY(-6px);
+  box-shadow:0 10px 28px rgba(0,0,0,0.25);
+  border-color:var(--accent);
+}
+
+.card:hover h2{
+  color:var(--accent);
 }
 
 .btn{
@@ -186,6 +222,17 @@
 
 .hero-canvas canvas{
   will-change: transform;
+}
+ 
+/* Ligera luz central detrás del hero*/
+.hero::before{
+  content:"";
+  position:absolute;
+  inset:-200px;
+  background:radial-gradient(circle at center,
+      rgba(255,255,255,0.04),
+      transparent 60%);
+  pointer-events:none;
 }
 
 /* --- Header responsive --- */
