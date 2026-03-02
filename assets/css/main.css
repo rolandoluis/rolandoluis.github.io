@@ -43,15 +43,15 @@
 
 /* Theme: solar (claro, minimal “product”) */
 :root[data-theme="solar"]{
-  --bg: #f8fafc;
-  --panel: #ffffff;
-  --text: #0f172a;
+  --bg: #d6eaff;
+  --panel: #ffffffcb;
+  --text: #0c0c20;
   --muted: #475569;
   --line: rgba(2,6,23,.12);
-  --accent: #e11d48;
-  --accent-net: #e11d48;
-  --brand-mrk-color: #a3a3a3;
-  --brand-mrk-bkgnd: #7a7a7a;
+  --accent: #311de1;
+  --accent-net: #3a1de1;
+  --brand-mrk-color: #799cb9;
+  --brand-mrk-bkgnd: #446fa0ce;
   --btn-act-bkgnd: #3a3a3ad7;
   --btn-act-brd: #a1a1a1;
   --btn-brd: #a1a1a18f;
@@ -228,11 +228,11 @@ main{ padding: 34px 0 50px; }
   padding:0;
 }
 :root[data-theme="solar"] .theme-btn{
-  border:1px solid rgba(2,6,23,.18);
-  background: rgba(2,6,23,.06);
+  border:1px solid rgba(2,6,23,.68);
+  background: rgba(2,6,23,.36);
 }
 
-:root[data-theme="solar"] .hero-canvas #heroNet{ opacity: .87; }
+:root[data-theme="solar"] .hero-canvas #heroNet{ opacity: .22; }
 
 .theme-btn.is-active{
   outline:2px solid var(--btn-act-brd);
