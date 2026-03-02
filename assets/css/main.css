@@ -12,12 +12,12 @@
 
 /* Theme: graphite (más sobrio, casi “enterprise”) */
 :root[data-theme="graphite"]{
-  --bg: #070a12;
+  --bg: #022404;
   --panel: #0b1020;
   --text: #eef2ff;
   --muted: #a1a1aa;
   --line: rgba(255,255,255,.10);
-  --accent: #22c55e; /* verde sobrio */
+  --accent: #014119; /* verde sobrio */
   --accent-net: #22c55e;
 }
 
