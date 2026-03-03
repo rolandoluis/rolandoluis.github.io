@@ -356,10 +356,11 @@
 /* Estilos de la esfera y los nodos */
 .sphere {
     position: absolute;
-    right: 0;
-    top: 0;
-    height: 100%;
-    width: 400px;
+    top: 50%;
+    right: 20px;  /* Ajustamos para moverla al lado derecho */
+    transform: translateY(-50%);  /* Centrado verticalmente */
+    height: 250px;  /* Aumentamos el tamaño de la esfera */
+    width: 250px;  /* Aumentamos el tamaño de la esfera */
     border-radius: 50%;
     background: rgba(0, 0, 0, 0.1);
     animation: rotateSphere 15s linear infinite; /* Rotación continua */
