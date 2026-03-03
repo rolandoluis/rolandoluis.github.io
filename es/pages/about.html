@@ -10,6 +10,59 @@
   <link rel="stylesheet" href="/assets/css/components.css" />
   <script defer src="/assets/js/main.js"></script>
   <script defer src="/assets/js/hero-net.js"></script>
+  <style>
+        body { margin: 0; overflow: hidden; background: radial-gradient(circle, #001020 0%, #000 100%); font-family: 'Courier New', Courier, monospace; color: #00f7ff; }
+        canvas { display: block; }
+        
+        /* Panel de Información Central */
+        #ui-panel {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 300px;
+            padding: 20px;
+            background: rgba(0, 30, 60, 0.7);
+            border: 2px solid #00f7ff;
+            box-shadow: 0 0 20px rgba(0, 247, 255, 0.4);
+            backdrop-filter: blur(10px);
+            text-align: center;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none;
+            opacity: 0;
+            z-index: 100;
+        }
+        #ui-panel.active { transform: translate(-50%, -50%) scale(1); opacity: 1; pointer-events: all; }
+        
+        button {
+            background: transparent;
+            border: 1px solid #00f7ff;
+            color: #00f7ff;
+            padding: 8px 15px;
+            cursor: pointer;
+            margin-top: 15px;
+            text-transform: uppercase;
+        }
+        button:hover { background: #00f7ff; color: #000; }
+        
+        #hud-status {
+            position: absolute; top: 20px; left: 20px; font-size: 12px;
+        }
+
+	/* Añadimos un pequeño detalle al botón para que se vea más 'Clickable' */
+    	#access-btn {
+        	background: rgba(0, 247, 255, 0.2);
+        	border: 1px solid #00f7ff;
+        	color: #00f7ff;
+        	padding: 10px 20px;
+        	cursor: pointer;
+        	margin-top: 15px;
+        	font-weight: bold;
+        	transition: 0.3s;
+    	}
+    	#access-btn:hover { background: #00f7ff; color: #000; box-shadow: 0 0 15px #00f7ff; }
+
+    </style>
+
 </head>
 
 <body>
@@ -268,18 +321,18 @@
     function openPanel(item) {
         document.getElementById('panel-title').innerText = item.label;
         document.getElementById('panel-desc').innerText = item.desc;
-        
+
         // Configuramos el evento click del botón dinámicamente
         const btn = document.getElementById('access-btn');
         btn.onclick = () => {
             window.open(item.url, '_blank'); // Abre en pestaña nueva
         };
-        
+
         panel.classList.add('active');
         isExpanded = true;
     }
-    
-    
+
+
     function init() {
         width = canvas.width = window.innerWidth;
         height = canvas.height = window.innerHeight;
@@ -297,7 +350,7 @@
             });
         }
     }
-    
+
     function rotate(x, y, z, ax, ay) {
         let cY = Math.cos(ay), sY = Math.sin(ay), cX = Math.cos(ax), sX = Math.sin(ax);
         let rx = x * cY - z * sY;
@@ -306,19 +359,19 @@
         rz = y * sX + rz * cX;
         return { x: rx, y: ry, z: rz };
     }
-    
+
     function openPanel(item) {
         document.getElementById('panel-title').innerText = item.label;
         document.getElementById('panel-desc').innerText = item.desc;
         panel.classList.add('active');
         isExpanded = true;
     }
-    
+
     function closePanel() {
         panel.classList.remove('active');
         isExpanded = false;
     }
-    
+
     function animate() {
         ctx.fillStyle = 'rgba(0, 5, 15, 0.3)';
         ctx.fillRect(0, 0, width, height);
@@ -328,7 +381,7 @@
         currentRadius += (target - currentRadius) * 0.1;
     
         if (!isDragging && !isExpanded) { rotY += 0.003; rotX += 0.001; }
-        
+
         let currentHover = null;
     
         const projected = points.map(p => {
@@ -364,7 +417,7 @@
         projected.forEach(p => {
             const isNear = p.sz > 0;
             const dist = Math.hypot(p.sx - mouseX, p.sy - mouseY);
-            
+
             if (p.item && isNear && dist < 20 && !isExpanded) {
                 currentHover = p;
                 document.body.style.cursor = 'pointer';
@@ -392,7 +445,7 @@
         hoveredNode = currentHover;
         requestAnimationFrame(animate);
     }
-    
+
     window.addEventListener('mousemove', e => {
         mouseX = e.clientX; mouseY = e.clientY;
         if(isDragging) {
@@ -401,7 +454,7 @@
         }
         lastMouseX = e.clientX; lastMouseY = e.clientY;
     });
-    
+
     window.addEventListener('mousedown', () => {
         if (hoveredNode && hoveredNode.item) {
             openPanel(hoveredNode.item);
@@ -409,11 +462,11 @@
             isDragging = true;
         }
     });
-    
+
     window.addEventListener('mouseup', () => isDragging = false);
     window.addEventListener('resize', init);
     init(); animate();
-    
+
   </script>
 </body>
 </html>
