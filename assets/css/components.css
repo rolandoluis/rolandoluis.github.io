@@ -356,19 +356,21 @@
 /* Estilos de la esfera y los nodos */
 .sphere {
     position: absolute;
-    top: 50%;
-    right: 20px;  /* Ajustamos para moverla al lado derecho */
-    transform: translateY(-50%);  /* Centrado verticalmente */
-    height: 250px;  /* Aumentamos el tamaño de la esfera */
-    width: 250px;  /* Aumentamos el tamaño de la esfera */
-    border-radius: 50%;
+    top: 50%;                     /* Centrada verticalmente */
+    right: 20px;                  /* Alineada a la derecha */
+    transform: translateY(-50%);  /* Centrada completamente */
+    height: 200px;                /* Tamaño de la esfera */
+    width: 200px;                 /* Tamaño de la esfera */
+    border-radius: 50%;           /* Forma redonda */
     background: rgba(0, 0, 0, 0.1);
     animation: rotateSphere 15s linear infinite; /* Rotación continua */
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 10;                  /* Aseguramos que quede encima del contenido */
 }
 
+/* Estilo de los nodos de la esfera */
 .node {
     width: 30px;
     height: 30px;
@@ -383,12 +385,13 @@
     transform: scale(1.2); /* Efecto de hover */
 }
 
+/* Animación de rotación de la esfera */
 @keyframes rotateSphere {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
 
-/* Ventana emergente con información de la red social */
+/* Estilo de la ventana flotante emergente con información de la red social */
 .social-info {
     position: absolute;
     top: 50%;
@@ -398,8 +401,18 @@
     padding: 20px;
     border-radius: 10px;
     display: none; /* Oculto por defecto */
+    z-index: 20; /* Asegura que esté encima de la esfera */
 }
 
+.social-info h2 {
+    margin-bottom: 10px;
+}
+
+.social-info a {
+    margin-top: 10px;
+}
+
+/* Estilo del botón */
 .btn {
     padding: 10px 15px;
     border-radius: 5px;
@@ -412,4 +425,40 @@
 
 .btn:hover {
     background-color: var(--accent-net); /* Cambio de color al hacer hover */
+}
+
+/* Aseguramos que los iconos de redes sociales estén dentro de la esfera */
+.node {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Estilos de la barra flotante de navegación */
+.mobile-nav {
+    position: fixed;
+    top: 10%;
+    right: 0;
+    z-index: 9999;
+    width: 300px;
+    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    display: none; /* Se oculta por defecto */
+    transition: transform 0.3s ease-in-out;
+}
+
+.mobile-nav.show {
+    display: block;
+    transform: translateX(0); /* Se muestra desde la derecha */
+}
+
+/* Ajustes para móviles */
+@media (max-width: 820px) {
+  .sphere {
+    height: 150px;        /* Reducimos el tamaño en dispositivos pequeños */
+    width: 150px;
+  }
 }
