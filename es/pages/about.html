@@ -17,7 +17,7 @@
         /* Panel de Información Central */
         #ui-panel {
             position: absolute;
-            top: 50%; left: 50%;
+            top: 50%; /*left: 50%*/;
             transform: translate(-50%, -50%) scale(0);
             width: 300px;
             padding: 20px;
@@ -159,7 +159,18 @@
         <a class="btn btn-ghost" href="/assets/cv/Rolando_Luis_Martin_CV.pdf">Descargar CV (PDF)</a>
       </div>
       <!-- Esfera que contiene los nodos (dentro del Hero) -->
-      <div id="neural-sphere"></div>
+       <div id="hud-status">SYSTEM_STATUS: ACTIVE<br>CORE_TEMP: OPTIMAL</div>
+
+      <div id="ui-panel">
+          <h2 id="panel-title">SERVICIO</h2>
+          <p id="panel-desc">Cargando...</p>
+          <!-- El botón de acción real -->
+          <button id="access-btn">EJECUTAR ENLACE</button> 
+          <br>
+          <button onclick="closePanel()" style="border:none; font-size:10px; opacity:0.6;">[ Cancelar ]</button>
+      </div>
+
+      <div id="neural-sphere"><canvas id="sphereCanvas"></canvas></div>
 
       <!-- Ventana emergente que aparece cuando se hace clic en un nodo -->
       <div class="social-info" id="social-info">
