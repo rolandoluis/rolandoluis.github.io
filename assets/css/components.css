@@ -462,3 +462,14 @@
     width: 150px;
   }
 }
+
+/* Estilo del contenedor de la esfera en el About.html */
+#neural-sphere {
+  position: absolute;
+  right: 20px;  /* Asegúrate de que esté a la derecha del hero */
+  top: 50%;     /* Centrado verticalmente */
+  transform: translateY(-50%);
+  width: 350px; /* Ajusta según el tamaño de la esfera */
+  height: 350px;
+  z-index: 10;
+}
