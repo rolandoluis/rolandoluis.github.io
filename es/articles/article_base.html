@@ -1,73 +1,198 @@
-<!-- <!doctype html>
+<!doctype html>
 <html lang="es">
+
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Artículo · [Título del Artículo]</title>
-  <meta name="description" content="[Descripción corta del artículo]" />
-  <link rel="stylesheet" href="/assets/css/main.css" />
-  <script defer src="/assets/js/main.js"></script>
-</head> -->
-<base target="_parent">
-<body>
-  <header class="site-header">
-    <div class="container header-inner">
-      <a class="brand" href="/"><span class="brand-mark">RM</span><span class="brand-text">rolandoluis</span></a>
-      <nav class="nav">
-        <a class="nav-link" href="/">Home</a>
-        <a class="nav-link" href="/pages/articles.html">Artículos</a>
-        <a class="nav-link" href="/pages/about.html">Sobre mí</a>
-        <a class="nav-link" href="/pages/projects.html">Proyectos</a>
-      </nav>
-    </div>
-  </header>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Introducción a JavaScript</title>
+    <meta name="description" content="Fundamentos de JavaScript para empezar con bases sólidas.">
 
-  <nav class="breadcrumb" id="breadcrumb"></nav>
-  
-  <main class="container article-container">
-    <article class="article">
-      <header class="article-header">
-        <h1>[Título del Artículo]</h1>
-        <p class="article-meta">
-          <span class="article-author">Por Rolando Luis Martín</span> | 
-          <span class="article-date">[Fecha de Publicación]</span> | 
-          <span class="article-category">Categoría: [Categoría]</span>
-        </p>
-      </header>
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/components.css">
 
-      <section class="article-body">
-        <p>[Introducción del artículo]</p>
-        <h2>Introducción</h2>
-        <p>[Contenido introductorio del artículo]</p>
+    <!-- Asegura que los links salgan del iframe -->
+    <base target="_parent">
 
-        <h2>Desarrollo</h2>
-        <p>[Contenido del desarrollo del artículo]</p>
+    <!-- Opcional: estilo extra SOLO para artículos (si decides separarlo) -->
+    <!-- <link rel="stylesheet" href="/assets/css/article.css"> -->
 
-        <h2>Conclusión</h2>
-        <p>[Conclusión del artículo]</p>
-      </section>
+    <script defer>
+        // ===== Article Enhancements (TOC + Anchors) =====
+        document.addEventListener("DOMContentLoaded", () => {
+            const article = document.querySelector("[data-article]");
+            if (!article) return;
 
-      <section class="article-footer">
-        <div class="article-tags">
-          <strong>Etiquetas:</strong>
-          <span>[Etiqueta 1]</span>
-          <span>[Etiqueta 2]</span>
-          <span>[Etiqueta 3]</span>
+            const toc = article.querySelector("[data-toc]");
+            const headings = article.querySelectorAll("h2, h3");
+
+            // Genera slug estable
+            const slugify = (s) =>
+                s.toLowerCase()
+                    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")   // quita tildes
+                    .replace(/[^a-z0-9\s-]/g, "")
+                    .trim()
+                    .replace(/\s+/g, "-")
+                    .replace(/-+/g, "-");
+
+            // Si no hay TOC o no hay headings, oculta el bloque TOC
+            if (!toc || headings.length === 0) {
+                const tocWrap = article.querySelector(".article-toc");
+                if (tocWrap) tocWrap.hidden = true;
+                return;
+            }
+
+            const used = new Set();
+            const items = [];
+
+            headings.forEach(h => {
+                // crea id si no existe
+                let id = h.id ? h.id : slugify(h.textContent || "");
+                if (!id) return;
+
+                // evita duplicados
+                let base = id, i = 2;
+                while (used.has(id)) id = `${base}-${i++}`;
+                used.add(id);
+                h.id = id;
+
+                // añade anchor clickable
+                if (!h.querySelector(".h-anchor")) {
+                    const a = document.createElement("a");
+                    a.className = "h-anchor";
+                    a.href = `#${id}`;
+                    a.setAttribute("aria-label", "Enlace directo a esta sección");
+                    a.textContent = "¶";
+                    h.appendChild(a);
+                }
+
+                const level = h.tagName.toLowerCase(); // h2/h3
+                items.push({ id, text: h.textContent.replace("¶", "").trim(), level });
+            });
+
+            // Render TOC
+            toc.innerHTML = items.map(it => {
+                const cls = it.level === "h3" ? "toc-item toc-h3" : "toc-item";
+                return `<a class="${cls}" href="#${it.id}">${it.text}</a>`;
+            }).join("");
+
+            // UX: si llegas con hash, resalta y abre
+            const hash = (location.hash || "").slice(1);
+            if (hash) {
+                const target = document.getElementById(hash);
+                if (target) target.scrollIntoView({ block: "start" });
+            }
+        });
+    </script>
+</head>
+
+<body class="article-shell">
+
+    <main class="container article-container" data-article data-article-title="Introducción a JavaScript"
+        data-article-category="Programación" data-article-date="2026-03-04">
+
+        <header class="article-header">
+            <h1>Introducción a JavaScript</h1>
+
+            <p class="article-meta">
+                <span class="meta-item">Rolando Luis Martín</span>
+                <span class="meta-sep">·</span>
+                <time class="meta-item" datetime="2026-03-04">4 Mar 2026</time>
+                <span class="meta-sep">·</span>
+                <span class="meta-item">Programación</span>
+                <span class="meta-sep">·</span>
+                <span class="meta-item">Nivel: Base</span>
+            </p>
+
+            <p class="lede">
+                Fundamentos prácticos para empezar: variables, funciones, DOM y buenas prácticas.
+            </p>
+        </header>
+
+        <div class="article-layout">
+            <!-- TOC -->
+            <aside class="article-toc" aria-label="Tabla de contenidos">
+                <div class="toc-title">Contenido</div>
+                <nav data-toc class="toc-nav"></nav>
+            </aside>
+
+            <!-- Body -->
+            <article class="article-body">
+                <div class="callout callout-note">
+                    <div class="callout-title">Nota</div>
+                    <div class="callout-body">
+                        Este artículo está pensado para lectura rápida. Si buscas ejercicios, al final hay un mini-lab.
+                    </div>
+                </div>
+
+                <h2>Qué es JavaScript</h2>
+                <p>JavaScript es el lenguaje de scripting estándar para web...</p>
+
+                <h2>Variables y tipos</h2>
+                <p>En JS moderno, usa <code>const</code> y <code>let</code>...</p>
+
+                <pre><code class="language-js">const name = "Rolando";
+let count = 0;
+
+function inc() {
+  count += 1;
+  return count;
+}</code></pre>
+
+                <div class="callout callout-tip">
+                    <div class="callout-title">Tip</div>
+                    <div class="callout-body">
+                        Prefiere <code>const</code> por defecto; usa <code>let</code> solo cuando reasignes.
+                    </div>
+                </div>
+
+                <h2>DOM y eventos</h2>
+                <h3>Seleccionar elementos</h3>
+                <pre><code class="language-js">const btn = document.querySelector("#saveBtn");
+btn.addEventListener("click", () =&gt; alert("OK"));</code></pre>
+
+                <div class="callout callout-warn">
+                    <div class="callout-title">Advertencia</div>
+                    <div class="callout-body">
+                        No uses inline handlers (<code>onclick=""</code>). Mantén JS separado.
+                    </div>
+                </div>
+
+                <h2>Mini-lab</h2>
+                <ol>
+                    <li>Crea un botón y un contador.</li>
+                    <li>Incrementa el contador con un click.</li>
+                    <li>Persiste el valor con <code>localStorage</code>.</li>
+                </ol>
+
+                <hr class="article-divider">
+
+                <footer class="article-footer">
+                    <div class="article-tags">
+                        <span class="tag">#javascript</span>
+                        <span class="tag">#web</span>
+                        <span class="tag">#fundamentos</span>
+                    </div>
+
+                    <div class="article-actions">
+                        <a class="btn-link" href="#top">Volver arriba</a>
+                    </div>
+                </footer>
+            </article>
         </div>
 
-        <div class="article-share">
-          <strong>Comparte este artículo:</strong>
-          <a href="https://www.linkedin.com/sharing/share-offsite/?url=[URL del artículo]" target="_blank">Compartir en LinkedIn</a>
-          <a href="https://twitter.com/intent/tweet?url=[URL del artículo]&text=[Título del artículo]" target="_blank">Compartir en Twitter</a>
-        </div>
-      </section>
-    </article>
-  </main>
-
-  <!-- <footer class="site-footer">
-    <div class="container footer-inner">
-      <small>© <span id="year"></span> rolandoluis · Construido con GitHub Pages</small>
-    </div>
-  </footer>
+    </main>
+    <script>
+      // Informa al parent de la altura del documento para auto-resize del iframe
+      function postHeight() {
+        const h = Math.max(
+          document.body.scrollHeight,
+          document.documentElement.scrollHeight
+        );
+        parent.postMessage({ type: "articleHeight", height: h }, "*");
+      }
+      window.addEventListener("load", postHeight);
+      window.addEventListener("resize", postHeight);
+    </script>
 </body>
-</html> -->
+
+</html>

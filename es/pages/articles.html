@@ -258,6 +258,13 @@
       if (initial) openArticle(initial);
       else closeArticle(); // asegura estado limpio si no hay hash
     })();
+    window.addEventListener("message", (e) => {
+      if (!e.data || e.data.type !== "articleHeight") return;
+      const iframe = document.getElementById("articleIframe");
+      if (!iframe) return;
+      // +20 para margen de seguridad
+      iframe.style.height = (e.data.height + 20) + "px";
+    });
   </script>
 </body>
 </html>
