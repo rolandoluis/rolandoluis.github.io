@@ -346,7 +346,7 @@ main{ padding: 34px 0 50px; }
   margin-bottom: 15px;
 }
 
-.category-btn {
+/* .category-btn {
   list-style: none;
   background: var(--btn-bkg);
   color: var(--text);
@@ -357,9 +357,9 @@ main{ padding: 34px 0 50px; }
   text-align: left;
   cursor: pointer;
   font-size: 16px;
-}
+} */
 
-/* Si acaso el de arriba no funciona
+/* Si acaso el de arriba no funciona */
 .category-btn{
   list-style: none;
   background: var(--btn-bkg);
@@ -369,7 +369,7 @@ main{ padding: 34px 0 50px; }
   border-radius: 12px;
   cursor: pointer;
 }
-*/
+
 details.category[open] .category-btn{
   background: var(--btn-act-bkgnd);
   border-color: var(--btn-act-brd);
