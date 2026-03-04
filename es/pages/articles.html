@@ -179,6 +179,7 @@
       const iframeSection = document.getElementById("iframeSection");
       const articlesContent = document.getElementById("articlesContent");
       const closeBtn = document.getElementById("backToArticles");
+      iframe.src = `${window.location.origin}/${lang}/articles/${articleId}.html`;
 
       // Si usas el wrapper de layout (recomendado), lo marcamos para estilos:
       const layout = document.getElementById("articlesLayout") || document.querySelector(".articles-layout");
@@ -188,7 +189,7 @@
         if (!articleId) return;
 
         // Abre el visor
-        iframe.src = `${window.location.origin}/${lang}/articles/${articleId}.html`;
+        
         iframeSection.hidden = false;               // mejor que display:none
         articlesContent.hidden = true;
 
