@@ -97,7 +97,7 @@
       <aside class="sidebar">
         <h2>Categorías</h2>
         <ul class="categories">
-          <details class="category">
+          <details class="category" name="acordeon">
             <summary class="category-btn">Programación</summary>
             <ul class="category-list">
               <li><a href="#" class="article-link" data-article="programacion1">Introducción a JavaScript</a></li>
@@ -105,7 +105,7 @@
               <li><a href="#" class="article-link" data-article="programacion3">Programación en PowerShell</a></li>
             </ul>
           </details>
-          <details class="category">
+          <details class="category" name="acordeon">
             <summary class="category-btn">Tutoriales</summary>
             <ul class="category-list">
               <li><a href="#" class="article-link" data-article="programacion1">JavaScript Paso a Paso</a></li>
@@ -113,7 +113,7 @@
               <li><a href="#" class="article-link" data-article="programacion3">Alerta!!! Buzón Lleno</a></li>
             </ul>
           </details>
-          <details class="category">
+          <details class="category" name="acordeon">
             <summary class="category-btn">Redes Informáticas</summary>
             <ul class="category-list">
               <li><a href="#" class="article-link" data-article="programacion1">Agregar PC al Dominio</a></li>
@@ -121,7 +121,7 @@
               <li><a href="#" class="article-link" data-article="programacion3">Políticas de Grupo</a></li>
             </ul>
           </details>
-          <details class="category">
+          <details class="category" name="acordeon">
             <summary class="category-btn">Instalación de Windows</summary>
             <ul class="category-list">
               <li><a href="#" class="article-link" data-article="programacion1">Paso a Paso Perfil Base</a></li>
@@ -192,6 +192,18 @@
       iframe.src = ""; // opcional: libera recursos
       document.getElementById('iframeSection').hidden = true;
       document.getElementById('articlesContent').hidden = false;
+    });
+
+    const categories = document.querySelectorAll('details[name="acordeon"]');
+
+    categories.forEach((detail) => {
+      detail.addEventListener('toggle', () => {
+        if (detail.open) {
+          categories.forEach((other) => {
+            if (other !== detail) other.removeAttribute('open');
+          });
+        }
+      });
     });
   </script>
 </body>

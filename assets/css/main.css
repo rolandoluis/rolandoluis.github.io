@@ -376,10 +376,22 @@ details.category[open] .category-btn{
   border-color: var(--btn-act-brd);
 }
 
+summary::after{
+  content:"▸";
+  float:right;
+  transition: transform .2s ease;
+}
+
+details[open] summary::after{
+  transform: rotate(90deg);
+}
+
 .category-list {
   /* list-style: none; */
   margin: 10px 0 0;
   padding-left: 14px;
+  overflow: hidden;
+  transition: max-height .25s ease;
   /* display: none; */ /* oculta inicialmente */
 }
 
@@ -400,6 +412,8 @@ details.category[open] .category-btn{
 .articles-content{
   min-width: 0; /* clave para evitar overflow raro en grid */
 }
+
+
 
 .article-card {
   background: color-mix(in srgb, var(--panel) 86%, transparent);
