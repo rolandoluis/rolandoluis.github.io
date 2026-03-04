@@ -378,3 +378,47 @@ cancelBtn.addEventListener('click', () => {
     socialInfo.style.display = 'none';
     document.querySelector('.sphere').style.animationPlayState = 'running';
 });
+
+(() => {
+  const menuContainer = document.querySelector('.categories'); // Contenedor de categorías
+  let categories = {};  // Objeto para almacenar las categorías y sus artículos
+
+  fetch('/assets/data/articles.json') // Ruta del archivo JSON
+    .then(response => response.json())
+    .then(data => {
+      // Organiza los artículos por categorías
+      data.forEach(article => {
+        if (!categories[article.category]) {
+          categories[article.category] = [];
+        }
+        categories[article.category].push(article);
+      });
+
+      // Crea el HTML para el menú lateral
+      for (let category in categories) {
+        const categorySection = document.createElement('li');
+        categorySection.classList.add('category');
+        categorySection.innerHTML = `<button class="category-btn">${category}</button><ul class="category-list"></ul>`;
+        const categoryList = categorySection.querySelector('.category-list');
+
+        categories[category].forEach(article => {
+          const articleLink = document.createElement('li');
+          articleLink.innerHTML = `<a href="#" class="article-link" data-article="${article.slug}">${article.title}</a>`;
+          categoryList.appendChild(articleLink);
+        });
+
+        menuContainer.appendChild(categorySection);
+      }
+
+      // Añadir eventos a los enlaces de los artículos
+      document.querySelectorAll('.article-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const articleSlug = e.target.getAttribute('data-article');
+          // Lógica para mostrar el artículo en el iframe
+          const iframe = document.getElementById('articleIframe');
+          iframe.src = `/articles/${articleSlug}.html`; // Asumiendo que el artículo está en la carpeta /articles/
+        });
+      });
+    });
+})();

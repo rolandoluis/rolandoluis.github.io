@@ -86,11 +86,42 @@
 
   <nav class="breadcrumb" id="breadcrumb"></nav>
   
-  <main class="container">
+  <main class="container articles-page">
     <section class="hero hero-canvas">
       <canvas id="heroNet" aria-hidden="true"></canvas>
       <h1>Artículos</h1>
       <p class="lede">Tutoriales y notas de ingeniería.</p>
+    </section>
+
+    <aside class="sidebar">
+      <h2>Categorías</h2>
+      <ul class="categories">
+        <li class="category">
+          <button class="category-btn">Programación</button>
+          <ul class="category-list">
+            <li><a href="#" class="article-link" data-article="programacion1">Introducción a JavaScript</a></li>
+            <li><a href="#" class="article-link" data-article="programacion2">Fundamentos de Python</a></li>
+            <li><a href="#" class="article-link" data-article="programacion3">Programación en PowerShell</a></li>
+          </ul>
+        </li>
+        <!-- Agregar más categorías aquí -->
+      </ul>
+    </aside>
+
+    <section class="articles-content" id="articlesContent">
+      <h1>Artículos</h1>
+      <p>Bienvenido a la página de artículos. Aquí encontrarás varios tutoriales y artículos sobre temas técnicos.</p>
+      <div class="articles-list">
+        <div class="article-card" id="programacion1">
+          <h3><a href="#" class="article-link" data-article="programacion1">Introducción a JavaScript</a></h3>
+          <p>Aprende los fundamentos de JavaScript para comenzar a programar.</p>
+        </div>
+        <div class="article-card" id="programacion2">
+          <h3><a href="#" class="article-link" data-article="programacion2">Fundamentos de Python</a></h3>
+          <p>Domina los fundamentos de Python y comienza a escribir tus propios scripts.</p>
+        </div>
+        <!-- Agregar más artículos aquí -->
+      </div>
     </section>
 
     <section class="grid">
@@ -110,6 +141,11 @@
         <a class="link" href="/articles/index.html">Abrir lista →</a>
       </article>
     </section>
+    <!-- Área de iframe -->
+    <section class="iframe-section" id="iframeSection" style="display:none;">
+      <iframe id="articleIframe" src="" width="100%" height="600px"></iframe>
+      <button id="backToArticles" class="btn">Volver a Artículos</button>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -120,5 +156,29 @@
       </div>
     </div>
   </footer>
+  <script>
+    // Lógica para cargar artículo en iframe
+    document.querySelectorAll('.article-link').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        
+        const articleId = e.target.getAttribute('data-article');
+        const iframe = document.getElementById('articleIframe');
+        const iframeSection = document.getElementById('iframeSection');
+        const articlesContent = document.getElementById('articlesContent');
+        
+        // Cambiar a la vista de iframe
+        iframe.src = `/articles/${articleId}.html`; // Cambiar esta ruta al archivo HTML específico del artículo
+        iframeSection.style.display = 'block';
+        articlesContent.style.display = 'none';
+      });
+    });
+
+    // Lógica para volver a la vista de artículos
+    document.getElementById('backToArticles').addEventListener('click', () => {
+      document.getElementById('iframeSection').style.display = 'none';
+      document.getElementById('articlesContent').style.display = 'block';
+    });
+  </script>
 </body>
 </html>
