@@ -312,16 +312,28 @@ main{ padding: 34px 0 50px; }
 }
 
 /* Estilo general */
-.articles-page {
+/* .articles-page {
   display: flex;
   gap: 30px;
   margin-top: 20px;
+} */
+
+.articles-layout{
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 24px;
+  margin-top: 20px;
+  align-items: start;
 }
 
 /* Barra lateral */
-.sidebar {
-  width: 240px;
-  flex-shrink: 0;
+.sidebar{
+  width: auto;
+  flex-shrink: initial;
+  background: color-mix(in srgb, var(--panel) 78%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px;
 }
 
 .categories {
@@ -334,37 +346,70 @@ main{ padding: 34px 0 50px; }
 }
 
 .category-btn {
-  background: var(--accent);
-  color: white;
-  padding: 10px;
+  list-style: none;
+  background: var(--btn-bkg);
+  color: var(--text);
+  padding: 10px 12px;
   width: 100%;
   border: none;
+  border-radius: 12px;
   text-align: left;
   cursor: pointer;
   font-size: 16px;
 }
 
+/* Si acaso el de arriba no funciona
+.category-btn{
+  list-style: none;
+  background: var(--btn-bkg);
+  border: 1px solid var(--btn-brd);
+  color: var(--text);
+  padding: 10px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+*/
+details.category[open] .category-btn{
+  background: var(--btn-act-bkgnd);
+  border-color: var(--btn-act-brd);
+}
+
 .category-list {
   list-style: none;
-  padding-left: 20px;
+  margin: 10px 0 0;
+  padding-left: 14px;
   display: none; /* oculta inicialmente */
 }
+
+/* Si el de arriba no funciona
+.category-list{
+  margin: 10px 0 0;
+  padding-left: 14px;
+}
+*/
 
 .category-btn:hover + .category-list {
   display: block; /* Muestra los artículos cuando el botón está activo */
 }
 
 /* Contenido de artículos */
-.articles-content {
-  flex-grow: 1;
+.articles-content{
+  min-width: 0; /* clave para evitar overflow raro en grid */
 }
 
 .article-card {
-  background: var(--panel);
-  border-radius: 10px;
-  padding: 15px;
-  margin-bottom: 15px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  background: color-mix(in srgb, var(--panel) 86%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 14px;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+
+.article-card:hover{
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--btn-hov-brd) 60%, var(--line));
+  box-shadow: 0 10px 22px rgba(0,0,0,.22);
 }
 
 .article-card h3 {
@@ -376,27 +421,73 @@ main{ padding: 34px 0 50px; }
   color: var(--muted);
 }
 
-/* Responsive */
-@media (max-width: 860px) {
-  .articles-page {
-    flex-direction: column;
+/* Sticky sidebar en desktop */
+@media (min-width: 980px){
+  .sidebar{
+    position: sticky;
+    top: 86px; /* ajusta si tu header cambia */
+    max-height: calc(100vh - 110px);
+    overflow: auto;
   }
+}
 
-  .sidebar {
-    width: 100%;
+/* Responsive */
+@media (max-width: 860px){
+  .articles-layout{
+    grid-template-columns: 1fr;
   }
 }
 
 .iframe-section {
   padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 10px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--panel) 82%, transparent);
+  overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 #articleIframe {
   border: none;
   border-radius: 10px;
+}
+
+.reader-bar{
+  display:flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.reader-title{ font-weight: 600; }
+.reader-meta{ color: var(--muted); font-size: 12px; }
+
+.reader-frameWrap{ position: relative; }
+
+#articleIframe{
+  width:100%;
+  height: min(78vh, 920px);
+  border:0;
+  display:block;
+}
+
+.reader-close{
+  position:absolute;
+  right: 14px;
+  bottom: 14px;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid var(--btn-brd);
+  background: rgba(0,0,0,.35);
+  color: var(--text);
+  cursor: pointer;
+}
+.reader-close:hover{
+  background: var(--btn-hov-bkg);
+  border-color: var(--btn-hov-brd);
 }
 
 #backToArticles {
@@ -412,16 +503,6 @@ main{ padding: 34px 0 50px; }
 
 #backToArticles:hover {
   background-color: var(--accent-net);
-}
-
-.article-card {
-  padding: 15px;
-  background-color: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 15px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .article-card:hover {
