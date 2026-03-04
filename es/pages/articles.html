@@ -173,10 +173,8 @@
   <script>
     (function () {
       // ------------- Config -------------
-      const lang = (typeof currentLang !== "undefined" && currentLang)
-        ? currentLang
-        : (document.documentElement.lang || "es");
-
+      const articleId = e.target.getAttribute('data-article');
+      const lang = currentLang || document.documentElement.lang || "es";
       const iframe = document.getElementById("articleIframe");
       const iframeSection = document.getElementById("iframeSection");
       const articlesContent = document.getElementById("articlesContent");
