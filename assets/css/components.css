@@ -242,6 +242,10 @@
   min-height: 340px;
 }
 
+.hero-articles {
+  max-height: 150px;
+}
+
 .hero-canvas{
   position: relative;
   overflow: hidden;

@@ -87,7 +87,7 @@
   <nav class="breadcrumb" id="breadcrumb"></nav>
   
   <main class="container">
-    <section class="hero hero-canvas">
+    <section class="hero hero-canvas hero-articles">
       <canvas id="heroNet" aria-hidden="true"></canvas>
       <h1>Artículos</h1>
       <p class="lede">Tutoriales y notas de ingeniería.</p>
@@ -162,7 +162,7 @@
         iframeSection.hidden = false;
       });
     });
-    
+
     document.getElementById('backToArticles').addEventListener('click', () => {
       const iframe = document.getElementById('articleIframe');
       iframe.src = ""; // opcional: libera recursos
