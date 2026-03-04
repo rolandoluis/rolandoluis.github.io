@@ -149,7 +149,7 @@
         </div>
       </section>
       <!-- Área de iframe -->
-      <section class="iframe-section" id="iframeSection" style="display:none;">
+      <section class="iframe-section" id="iframeSection" hidden>
         <div class="reader-bar">
           <div class="reader-title" id="readerTitle">Artículo</div>
           <div class="reader-meta" id="readerMeta"></div>
@@ -171,40 +171,95 @@
     </div>
   </footer>
   <script>
-    // Lógica para cargar artículo en iframe
-    document.querySelectorAll('.article-link').forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-      
-        const articleId = e.currentTarget.getAttribute('data-article');
-        const iframe = document.getElementById('articleIframe');
-        const iframeSection = document.getElementById('iframeSection');
-        const articlesContent = document.getElementById('articlesContent');
-      
-        iframe.src = `./articles/${articleId}.html`;
+    (function () {
+      // ------------- Config -------------
+      const lang = (typeof currentLang !== "undefined" && currentLang)
+        ? currentLang
+        : (document.documentElement.lang || "es");
+
+      const iframe = document.getElementById("articleIframe");
+      const iframeSection = document.getElementById("iframeSection");
+      const articlesContent = document.getElementById("articlesContent");
+      const closeBtn = document.getElementById("backToArticles");
+
+      // Si usas el wrapper de layout (recomendado), lo marcamos para estilos:
+      const layout = document.getElementById("articlesLayout") || document.querySelector(".articles-layout");
+
+      // ------------- Helpers -------------
+      function openArticle(articleId) {
+        if (!articleId) return;
+
+        // Abre el visor
+        iframe.src = `${window.location.origin}/${lang}/articles/${articleId}.html`;
+        iframeSection.hidden = false;               // mejor que display:none
         articlesContent.hidden = true;
-        iframeSection.hidden = false;
-      });
-    });
 
-    document.getElementById('backToArticles').addEventListener('click', () => {
-      const iframe = document.getElementById('articleIframe');
-      iframe.src = ""; // opcional: libera recursos
-      document.getElementById('iframeSection').hidden = true;
-      document.getElementById('articlesContent').hidden = false;
-    });
+        // Estado visual opcional
+        if (layout) layout.classList.add("is-reading");
 
-    const categories = document.querySelectorAll('details[name="acordeon"]');
+        // Marca link activo en sidebar/lista (opcional pero profesional)
+        document.querySelectorAll(".article-link.is-active").forEach(a => a.classList.remove("is-active"));
+        document.querySelectorAll(`.article-link[data-article="${CSS.escape(articleId)}"]`).forEach(a => a.classList.add("is-active"));
 
-    categories.forEach((detail) => {
-      detail.addEventListener('toggle', () => {
-        if (detail.open) {
-          categories.forEach((other) => {
-            if (other !== detail) other.removeAttribute('open');
-          });
+        // Actualiza hash sin recargar
+        if (location.hash !== `#${articleId}`) {
+          history.replaceState(null, "", `#${articleId}`);
         }
+      }
+
+      function closeArticle() {
+        // Cierra visor
+        iframeSection.hidden = true;
+        articlesContent.hidden = false;
+
+        // Libera recursos (opcional)
+        iframe.src = "";
+
+        // Estado visual opcional
+        if (layout) layout.classList.remove("is-reading");
+
+        // Limpia activo
+        document.querySelectorAll(".article-link.is-active").forEach(a => a.classList.remove("is-active"));
+
+        // Limpia hash sin recargar
+        if (location.hash) {
+          history.replaceState(null, "", location.pathname);
+        }
+      }
+
+      function getHashArticleId() {
+        return (location.hash || "").replace(/^#/, "").trim();
+      }
+
+      // ------------- Events -------------
+      // Click en enlaces de artículo (sidebar o cards)
+      document.addEventListener("click", (e) => {
+        const link = e.target.closest(".article-link[data-article]");
+        if (!link) return;
+
+        e.preventDefault();
+        const articleId = link.getAttribute("data-article");
+        openArticle(articleId);
       });
-    });
+
+      // Botón cerrar
+      if (closeBtn) {
+        closeBtn.addEventListener("click", () => closeArticle());
+      }
+
+      // Back/forward / cambios manuales del hash
+      window.addEventListener("hashchange", () => {
+        const articleId = getHashArticleId();
+        if (articleId) openArticle(articleId);
+        else closeArticle();
+      });
+
+      // ------------- Boot -------------
+      // Si se entra con hash, abre automáticamente
+      const initial = getHashArticleId();
+      if (initial) openArticle(initial);
+      else closeArticle(); // asegura estado limpio si no hay hash
+    })();
   </script>
 </body>
 </html>

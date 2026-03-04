@@ -283,6 +283,13 @@ main{ padding: 34px 0 50px; }
   color: var(--accent);
 }
 
+.article-link.is-active{
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: var(--lnk-hov);
+  text-underline-offset: 3px;
+}
+
 /* Pie de artículo */
 .article-footer {
   margin-top: 2rem;
