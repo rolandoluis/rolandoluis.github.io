@@ -374,11 +374,6 @@ nodes.forEach(node => {
     });
 });
 
-cancelBtn.addEventListener('click', () => {
-    socialInfo.style.display = 'none';
-    document.querySelector('.sphere').style.animationPlayState = 'running';
-});
-
 (() => {
   const menuContainer = document.querySelector('.categories'); // Contenedor de categorías
   let categories = {};  // Objeto para almacenar las categorías y sus artículos
