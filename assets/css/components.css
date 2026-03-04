@@ -120,7 +120,7 @@
   border-radius: 12px;
   border: 1px solid var(--btn-brd);
   background: var(--btn-bkg);
-  color: rgba(255,255,255,.95);
+  color: var(--text);
   font-weight: 600;
   font-size: 14px;
 }
