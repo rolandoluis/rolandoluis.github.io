@@ -14,7 +14,11 @@
 <body>
   <header class="site-header">
     <div class="container header-inner">
-      <a class="brand" href="/"><span class="brand-mark">RM</span><span class="brand-text">rolandoluis</span></a>
+      <a class="brand" href="/">
+        <span class="brand-mark">RM</span>
+        <span class="brand-text">rolandoluis</span>
+      </a>
+
       <nav class="nav">
         <a class="nav-link" data-i18n-link="">Home</a>
         <a class="nav-link" data-i18n-link="pages/engineering.html">Ingeniería</a>
@@ -23,19 +27,60 @@
         <a class="nav-link" data-i18n-link="pages/lab.html">Lab</a>
         <a class="nav-link" data-i18n-link="pages/about.html">Sobre mí</a>
       </nav>
+
       <div class="lang">
         <button class="lang-btn" type="button" data-set-lang="es">ES</button>
         <span class="lang-sep">·</span>
         <button class="lang-btn" type="button" data-set-lang="en">EN</button>
       </div>
+
       <div class="search">
-        <input
-          id="searchBox"
-          type="search"
-          placeholder="Buscar… / Search…"
-          autocomplete="off"
-        />
+        <input id="searchBox" type="search" placeholder="Buscar… / Search…" autocomplete="off"/>
         <div id="searchResults" class="search-results"></div>
+      </div>
+
+      <button class="nav-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobileNav">
+        <span></span><span></span><span></span>
+      </button>
+      
+      <div class="theme">
+        <button class="theme-btn" type="button" data-set-theme="classic" title="Classic">●</button>
+        <button class="theme-btn" type="button" data-set-theme="graphite" title="Graphite">●</button>
+        <button class="theme-btn" type="button" data-set-theme="solar" title="Solar">●</button>
+      </div>
+      <div id="mobileNav" class="mobile-nav" hidden>
+        <div class="mobile-nav-inner">
+          <nav class="mobile-nav-links">
+            <a class="nav-link" data-i18n-link="">Home</a>
+            <a class="nav-link" data-i18n-link="pages/engineering.html">Ingeniería</a>
+            <a class="nav-link" data-i18n-link="pages/projects.html">Proyectos</a>
+            <a class="nav-link" data-i18n-link="pages/articles.html">Artículos</a>
+            <a class="nav-link" data-i18n-link="pages/lab.html">Lab</a>
+            <a class="nav-link" data-i18n-link="pages/about.html">Sobre mí</a>
+          </nav>
+        
+          <div class="mobile-nav-tools">
+            <!-- Puedes mover aquí search/lang/theme para móvil -->
+            <div class="search">
+              <input id="searchBoxMobile" type="search" placeholder="Buscar…" autocomplete="off">
+              <div id="searchResultsMobile" class="search-results"></div>
+            </div>
+          
+            <div class="row">
+              <div class="lang">
+                <button class="lang-btn" type="button" data-set-lang="es">ES</button>
+                <span class="lang-sep">·</span>
+                <button class="lang-btn" type="button" data-set-lang="en">EN</button>
+              </div>  
+            </div>
+          
+            <div class="theme">
+              <button class="theme-btn" type="button" data-set-theme="classic" title="Classic">●</button>
+              <button class="theme-btn" type="button" data-set-theme="graphite" title="Graphite">●</button>
+              <button class="theme-btn" type="button" data-set-theme="solar" title="Solar">●</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </header>
