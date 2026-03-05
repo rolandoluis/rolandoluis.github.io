@@ -140,6 +140,13 @@
 
 @media (max-width: 860px){
   .card{ grid-column: span 12; }
+  .articles-layout{
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "hero"
+      "sidebar"
+      "content";
+  }
 }
 
 .section{
@@ -242,8 +249,10 @@
 }
 
 .hero-articles {
-  min-height: 150px;
-  width: 262px;
+  grid-area: hero;
+  min-height:140px;
+
+  padding:16px;
 }
 
 .hero-canvas{

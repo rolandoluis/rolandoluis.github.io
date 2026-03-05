@@ -330,19 +330,25 @@ main{ padding: 34px 0 50px; }
 .articles-layout{
   display: grid;
   grid-template-columns: 260px 1fr;
-  gap: 24px;
-  margin-top: 20px;
-  align-items: start;
+  grid-template-areas:
+    "hero content"
+    "sidebar content";
+  gap: 26px;
+  /* margin-top: 20px;
+  align-items: start; */
 }
 
 /* Barra lateral */
 .sidebar{
-  width: auto;
+  grid-area: sidebar;
+  position: sticky;
+  top: 90px;
+  /* width: auto;
   flex-shrink: initial;
   background: color-mix(in srgb, var(--panel) 78%, transparent);
   border: 1px solid var(--line);
   border-radius: 14px;
-  padding: 14px;
+  padding: 14px; */
 }
 
 .categories {
@@ -418,7 +424,8 @@ details[open] summary::after{
 
 /* Contenido de artículos */
 .articles-content{
-  min-width: 0; /* clave para evitar overflow raro en grid */
+  grid-area: content;
+  /*min-width: 0;  clave para evitar overflow raro en grid */
 }
 
 iframe{
