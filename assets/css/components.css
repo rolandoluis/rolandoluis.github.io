@@ -138,6 +138,7 @@
   background: rgba(255,255,255,.07);
 }
 
+/* Responsive */
 @media (max-width: 860px){
   .card{ grid-column: span 12; }
   .articles-layout{

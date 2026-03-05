@@ -467,11 +467,11 @@ iframe{
 }
 
 /* Responsive */
-@media (max-width: 860px){
+/* @media (max-width: 860px){
   .articles-layout{
     grid-template-columns: 1fr;
   }
-}
+} */
 
 .iframe-section {
   padding: 20px;
