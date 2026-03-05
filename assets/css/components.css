@@ -243,6 +243,7 @@
 
 .hero-articles {
   min-height: 150px;
+  width: auto;
 }
 
 .hero-canvas{
