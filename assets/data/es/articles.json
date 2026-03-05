@@ -1,0 +1,32 @@
+[
+  {
+    "title": "Introducción a JavaScript",
+    "category": "Programación",
+    "slug": "programacion1",
+    "description": "Fundamentos de JavaScript para empezar con bases sólidas.",
+    "date": "2026-03-03",
+    "updated": "2026-03-05",
+    "tags": [
+      "elements",
+      "script",
+      "maquetación",
+      "frontend"
+    ],
+    "featured": true
+  },
+  {
+    "title": "Qué ocurre en una conexión túnel con OpenVPN",
+    "category": "Redes Informáticas",
+    "slug": "openvpn-tunnel",
+    "description": "[Descripción corta del artículo]",
+    "date": "2025-11-28",
+    "updated": "2025-11-28",
+    "tags": [
+      "vpn",
+      "openvpn",
+      "redes",
+      "teletrabajo"
+    ],
+    "featured": true
+  }
+]
