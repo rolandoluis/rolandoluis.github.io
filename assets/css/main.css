@@ -729,22 +729,118 @@ iframe{
   margin: 18px 0;
 }
 
-.articles-section-title{
-  margin: 18px 0 10px;
-  font-size: 16px;
-  color: rgba(229,231,235,.92);
+/* -------------------------------
+   Título de sección de artículos
+--------------------------------*/
+.articles-section-title::before{
+  content:"▣";
+  margin-right:8px;
+  color:var(--accent-net);
 }
 
+.articles-section-title{
+  margin: 26px 0 12px;
+  padding-bottom: 6px;
+
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: .4px;
+  text-transform: uppercase;
+
+  color: var(--muted);
+
+  border-bottom: 1px solid var(--line);
+}
+
+
+/* -------------------------------
+   Grid de tarjetas
+--------------------------------*/
 .articles-cards{
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+
+  /* más flexible que repeat(2) */
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+
+  gap: 14px;
 }
 
+/* -------------------------------
+   Card de artículo
+--------------------------------*/
+.article-card{
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+
+  padding: 16px 18px;
+
+  transition:
+    transform .18s ease,
+    border-color .18s ease,
+    box-shadow .18s ease;
+}
+
+
+/* hover elegante */
+.article-card:hover{
+  transform: translateY(-3px);
+
+  border-color: rgba(255,255,255,.18);
+
+  box-shadow:
+    0 10px 22px rgba(0,0,0,.35),
+    inset 0 1px 0 rgba(255,255,255,.04);
+}
+
+
+/* -------------------------------
+   Título dentro de la card
+--------------------------------*/
+.article-card h3{
+  margin: 0 0 6px;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+
+/* -------------------------------
+   Descripción
+--------------------------------*/
+.article-card p{
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+
+/* -------------------------------
+   Link
+--------------------------------*/
+.article-card a{
+  color: var(--text);
+}
+
+.article-card a:hover{
+  color: var(--lnk-hov);
+}
+
+
+/* -------------------------------
+   Responsive
+--------------------------------*/
 @media (max-width: 860px){
+
+  .articles-section-title{
+    margin-top: 20px;
+  }
+
   .articles-cards{
     grid-template-columns: 1fr;
   }
+
 }
 
 .article-footer{

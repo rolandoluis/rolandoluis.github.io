@@ -1,6 +1,7 @@
 (() => {
-  const menuContainer = document.querySelector(".categories");
-  const listContainer = document.getElementById("articlesList");
+  // -------------------- DOM guards --------------------
+  const menu = document.getElementById("categoriesMenu");
+  const list = document.getElementById("articlesList");
 
   const iframe = document.getElementById("articleIframe");
   const iframeSection = document.getElementById("iframeSection");
@@ -8,13 +9,27 @@
   const closeBtn = document.getElementById("backToArticles");
   const layout = document.getElementById("articlesLayout") || document.querySelector(".articles-layout");
 
-  // Solo corre si estamos en Articles
-  if (!menuContainer || !listContainer || !iframe || !iframeSection || !articlesContent) return;
+  // Solo corre si estamos en la página Articles y existen los nodos clave
+  if (!menu || !list || !iframe || !iframeSection || !articlesContent) return;
 
-  const lang = window.siteLang || document.documentElement.lang || "es";
+  // -------------------- Lang + URLs --------------------
+  const getLangFromPath = (p) => {
+    if (p.startsWith("/en/")) return "en";
+    if (p.startsWith("/es/")) return "es";
+    return null;
+  };
+
+  const lang =
+    window.siteLang ||
+    getLangFromPath(window.location.pathname) ||
+    (document.documentElement.lang || "es");
+
   const ORIGIN = window.location.origin;
 
-  const qsa = (sel, root = document) => [...root.querySelectorAll(sel)];
+  const urlForArticle = (slug) => `${ORIGIN}/${lang}/articles/${slug}.html`;
+
+  // -------------------- Helpers --------------------
+  const qsa = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
   function escapeHtml(s) {
     return String(s)
@@ -25,15 +40,72 @@
       .replaceAll("'", "&#039;");
   }
 
-  function urlForArticle(slug) {
-    return `${ORIGIN}/${lang}/articles/${slug}.html`;
+  function normalizeArticle(a) {
+    const clean = (v) => (typeof v === "string" ? v.trim() : "");
+
+    return {
+      title: clean(a.title),
+      category: clean(a.category),
+      slug: clean(a.slug),
+      description: clean(a.description),
+      date: clean(a.date),
+      updated: clean(a.updated),
+      tags: Array.isArray(a.tags) ? a.tags.filter(Boolean) : [], // <- nunca null
+      featured: !!a.featured,
+    };
   }
 
+  function isPlaceholderArticle(a) {
+    if (!a.slug || !a.title || !a.category) return true;
+    if (a.slug.toLowerCase().includes("article_base")) return true;
+    if (a.title.includes("[") || a.category.includes("[")) return true;
+    return false;
+  }
+
+  function sortArticles(arr) {
+    // featured primero, luego updated/date desc, luego title asc
+    return [...arr].sort((x, y) => {
+      if (x.featured !== y.featured) return x.featured ? -1 : 1;
+
+      const dx = new Date(x.updated || x.date || "1900-01-01");
+      const dy = new Date(y.updated || y.date || "1900-01-01");
+      if (dx.getTime() !== dy.getTime()) return dy - dx;
+
+      return (x.title || "").localeCompare((y.title || ""), lang);
+    });
+  }
+
+  function groupByCategory(items) {
+    const map = new Map();
+    for (const it of items) {
+      const cat = it.category || (lang === "en" ? "General" : "General");
+      if (!map.has(cat)) map.set(cat, []);
+      map.get(cat).push(it);
+    }
+
+    // Orden de categorías (alfabético por ahora)
+    return new Map([...map.entries()].sort((a, b) => a[0].localeCompare(b[0], lang)));
+  }
+
+  async function loadArticlesJson() {
+    const res = await fetch(`/assets/data/${lang}/articles.json`, { cache: "no-store" });
+    if (!res.ok) throw new Error(`HTTP ${res.status} loading articles.json`);
+    const data = await res.json();
+    if (!Array.isArray(data)) throw new Error("articles.json must be an array");
+    return data;
+  }
+
+  // -------------------- UI: Active link + hash --------------------
   function markActive(slug) {
     qsa(".article-link.is-active").forEach(a => a.classList.remove("is-active"));
     qsa(`.article-link[data-article="${CSS.escape(slug)}"]`).forEach(a => a.classList.add("is-active"));
   }
 
+  function getHashSlug() {
+    return (location.hash || "").replace(/^#/, "").trim();
+  }
+
+  // -------------------- View: iframe open/close --------------------
   function openArticle(slug, { pushHash = true } = {}) {
     if (!slug) return;
 
@@ -53,6 +125,8 @@
   function closeArticle({ clearHash = true } = {}) {
     iframeSection.hidden = true;
     articlesContent.hidden = false;
+
+    // libera recursos
     iframe.src = "";
 
     if (layout) layout.classList.remove("is-reading");
@@ -64,33 +138,14 @@
     }
   }
 
-  function getHashSlug() {
-    return (location.hash || "").replace(/^#/, "").trim();
-  }
+  // -------------------- Render: Sidebar --------------------
+  function renderSidebar(categoriesMap) {
+    menu.innerHTML = "";
 
-  function sortArticles(list) {
-    // Por ahora: A→Z por título (estable y simple)
-    // Si luego añades date, lo cambiamos a "más reciente primero".
-    return [...list].sort((a, b) => (a.title || "").localeCompare(b.title || "", lang));
-  }
-
-  function groupByCategory(items) {
-    const grouped = new Map();
-    for (const a of items) {
-      const cat = a.category || (lang === "en" ? "General" : "General");
-      if (!grouped.has(cat)) grouped.set(cat, []);
-      grouped.get(cat).push(a);
-    }
-    return grouped;
-  }
-
-  function renderSidebar(grouped) {
-    menuContainer.innerHTML = "";
-
-    for (const [cat, list] of grouped.entries()) {
+    for (const [cat, items] of categoriesMap.entries()) {
       const details = document.createElement("details");
       details.className = "category";
-      details.setAttribute("name", "acordeon");
+      details.setAttribute("name", "acordeon"); // OK para Chromium, pero damos fallback
 
       const summary = document.createElement("summary");
       summary.className = "category-btn";
@@ -99,38 +154,42 @@
       const ul = document.createElement("ul");
       ul.className = "category-list";
 
-      sortArticles(list).forEach(a => {
+      sortArticles(items).forEach(it => {
         const li = document.createElement("li");
-        const desc = a.description ? ` title="${escapeHtml(a.description)}"` : "";
-        li.innerHTML = `<a href="#${a.slug}" class="article-link" data-article="${escapeHtml(a.slug)}"${desc}>${escapeHtml(a.title)}</a>`;
+
+        // tooltip opcional con description
+        const titleAttr = it.description ? ` title="${escapeHtml(it.description)}"` : "";
+
+        li.innerHTML =
+          `<a href="#${escapeHtml(it.slug)}" class="article-link" data-article="${escapeHtml(it.slug)}"${titleAttr}>` +
+          `${escapeHtml(it.title)}` +
+          `</a>`;
+
         ul.appendChild(li);
       });
 
       details.appendChild(summary);
       details.appendChild(ul);
-      menuContainer.appendChild(details);
+      menu.appendChild(details);
     }
 
-    // Fallback acordeón: solo uno abierto
-    const allDetails = qsa('details.category[name="acordeon"]', menuContainer);
-    allDetails.forEach(d => {
-      d.addEventListener("toggle", () => {
-        if (!d.open) return;
-        allDetails.forEach(other => { if (other !== d) other.removeAttribute("open"); });
+    // Acordeón real: solo 1 abierto (fallback + consistente)
+    menu.addEventListener("toggle", (e) => {
+      const opened = e.target;
+      if (!(opened instanceof HTMLDetailsElement)) return;
+      if (!opened.open) return;
+
+      menu.querySelectorAll("details.category[open]").forEach(d => {
+        if (d !== opened) d.open = false;
       });
-    });
+    }, { passive: true });
   }
 
-  function renderCards(items) {
-    // Cards: todas, ordenadas por categoría y título
-    // Si prefieres mostrar solo “destacados”, lo filtramos aquí.
-    const grouped = groupByCategory(items);
+  // -------------------- Render: Cards --------------------
+  function renderCards(categoriesMap) {
+    list.innerHTML = "";
 
-    // Puedes decidir si quieres separar por categoría con headers
-    // Te dejo con headers (queda muy pro y claro):
-    listContainer.innerHTML = "";
-
-    for (const [cat, list] of grouped.entries()) {
+    for (const [cat, items] of categoriesMap.entries()) {
       const h = document.createElement("h2");
       h.className = "articles-section-title";
       h.textContent = cat;
@@ -138,34 +197,26 @@
       const wrap = document.createElement("div");
       wrap.className = "articles-cards";
 
-      sortArticles(list).forEach(a => {
+      sortArticles(items).forEach(it => {
         const card = document.createElement("div");
         card.className = "article-card";
         card.innerHTML = `
           <h3>
-            <a href="#${escapeHtml(a.slug)}" class="article-link" data-article="${escapeHtml(a.slug)}">
-              ${escapeHtml(a.title)}
+            <a href="#${escapeHtml(it.slug)}" class="article-link" data-article="${escapeHtml(it.slug)}">
+              ${escapeHtml(it.title)}
             </a>
           </h3>
-          <p>${escapeHtml(a.description || "")}</p>
+          <p>${escapeHtml(it.description || "")}</p>
         `;
         wrap.appendChild(card);
       });
 
-      listContainer.appendChild(h);
-      listContainer.appendChild(wrap);
+      list.appendChild(h);
+      list.appendChild(wrap);
     }
   }
 
-  async function loadArticlesJson() {
-    const res = await fetch(`/assets/data/${lang}/articles.json`, { cache: "no-store" });
-    if (!res.ok) throw new Error(`HTTP ${res.status} loading articles.json`);
-    const data = await res.json();
-    if (!Array.isArray(data)) throw new Error("articles.json must be an array");
-    return data;
-  }
-
-  // Delegación para sidebar + cards
+  // -------------------- Events --------------------
   document.addEventListener("click", (e) => {
     const a = e.target.closest(".article-link[data-article]");
     if (!a) return;
@@ -183,28 +234,41 @@
     else closeArticle({ clearHash: false });
   });
 
-  // Auto-resize del iframe (si el artículo manda postMessage)
+  // Auto-resize del iframe
   window.addEventListener("message", (e) => {
     if (!e.data || e.data.type !== "articleHeight") return;
-    // Seguridad opcional:
-    // if (e.origin !== ORIGIN) return;
     iframe.style.height = (Number(e.data.height) + 20) + "px";
   });
 
-  // Boot
+  // -------------------- Boot --------------------
   (async () => {
     try {
-      const items = await loadArticlesJson();
-      const grouped = groupByCategory(items);
-      renderSidebar(grouped);
-      renderCards(items);
-    } catch (err) {
-      console.warn("[articles.js]", err);
-      listContainer.innerHTML = `<p style="color:var(--muted)">No se pudieron cargar los artículos.</p>`;
-    }
+      const raw = await loadArticlesJson();
 
-    const initial = getHashSlug();
-    if (initial) openArticle(initial, { pushHash: false });
-    else closeArticle({ clearHash: false });
+      const items = raw
+        .map(normalizeArticle)
+        .filter(a => !isPlaceholderArticle(a));
+
+      if (!items.length) {
+        menu.innerHTML = "";
+        list.innerHTML = `<div class="article-card"><h3>Sin artículos</h3><p>Aún no hay entradas publicadas en este idioma.</p></div>`;
+        closeArticle({ clearHash: false });
+        return;
+      }
+
+      const grouped = groupByCategory(items);
+
+      renderSidebar(grouped);
+      renderCards(grouped);
+
+      const initial = getHashSlug();
+      if (initial) openArticle(initial, { pushHash: false });
+      else closeArticle({ clearHash: false });
+
+    } catch (err) {
+      console.error("[articles.js]", err);
+      list.innerHTML = `<div class="article-card"><h3>Error</h3><p>No se pudieron cargar los artículos.</p></div>`;
+    }
   })();
+
 })();
