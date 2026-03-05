@@ -1,15 +1,14 @@
-[
-  {
-    "title": "Introducción a JavaScript",
-    "category": "Programación",
-    "slug": "introduccion-a-javascript",
-    "description": "Aprende los fundamentos de JavaScript"
-  },
-  {
-    "title": "Fundamentos de Python",
-    "category": "Programación",
-    "slug": "fundamentos-de-python",
-    "description": "Domina los fundamentos de Python"
-  }
-  
-]
+{
+  "title": "[Article Title]",
+  "category": "[Category]",
+  "slug": "article_base_en",
+  "description": "[Short article description]",
+  "date": "2026-03-05",
+  "updated": "2026-03-05",
+  "tags": [
+    "tag1",
+    "tag2",
+    "tag3"
+  ],
+  "featured": false
+}
