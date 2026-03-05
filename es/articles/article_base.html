@@ -4,17 +4,18 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Introducción a JavaScript</title>
-    <meta name="description" content="Fundamentos de JavaScript para empezar con bases sólidas.">
+
+    <title>[Título del Artículo]</title>
+    <meta name="description" content="[Descripción corta del artículo]">
 
     <link rel="stylesheet" href="/assets/css/main.css">
     <link rel="stylesheet" href="/assets/css/components.css">
+    <link rel="stylesheet" href="/assets/css/article.css">
+    <script defer src="/assets/js/article-code.js"></script>
+    <script defer src="/assets/js/article-figures.js"></script>
 
-    <!-- Asegura que los links salgan del iframe -->
+    <!-- Los enlaces del artículo navegan fuera del iframe -->
     <base target="_parent">
-
-    <!-- Opcional: estilo extra SOLO para artículos (si decides separarlo) -->
-    <!-- <link rel="stylesheet" href="/assets/css/article.css"> -->
 
     <script defer>
         // ===== Article Enhancements (TOC + Anchors) =====
@@ -25,16 +26,14 @@
             const toc = article.querySelector("[data-toc]");
             const headings = article.querySelectorAll("h2, h3");
 
-            // Genera slug estable
             const slugify = (s) =>
                 s.toLowerCase()
-                    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")   // quita tildes
+                    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
                     .replace(/[^a-z0-9\s-]/g, "")
                     .trim()
                     .replace(/\s+/g, "-")
                     .replace(/-+/g, "-");
 
-            // Si no hay TOC o no hay headings, oculta el bloque TOC
             if (!toc || headings.length === 0) {
                 const tocWrap = article.querySelector(".article-toc");
                 if (tocWrap) tocWrap.hidden = true;
@@ -45,17 +44,14 @@
             const items = [];
 
             headings.forEach(h => {
-                // crea id si no existe
                 let id = h.id ? h.id : slugify(h.textContent || "");
                 if (!id) return;
 
-                // evita duplicados
                 let base = id, i = 2;
                 while (used.has(id)) id = `${base}-${i++}`;
                 used.add(id);
                 h.id = id;
 
-                // añade anchor clickable
                 if (!h.querySelector(".h-anchor")) {
                     const a = document.createElement("a");
                     a.className = "h-anchor";
@@ -69,13 +65,12 @@
                 items.push({ id, text: h.textContent.replace("¶", "").trim(), level });
             });
 
-            // Render TOC
             toc.innerHTML = items.map(it => {
                 const cls = it.level === "h3" ? "toc-item toc-h3" : "toc-item";
                 return `<a class="${cls}" href="#${it.id}">${it.text}</a>`;
             }).join("");
 
-            // UX: si llegas con hash, resalta y abre
+            // Si llegas con hash, posiciona
             const hash = (location.hash || "").slice(1);
             if (hash) {
                 const target = document.getElementById(hash);
@@ -87,25 +82,24 @@
 
 <body class="article-shell">
 
-    <main class="container article-container" data-article data-article-title="Introducción a JavaScript"
-        data-article-category="Programación" data-article-date="2026-03-04">
+    <main class="container article-container" data-article data-article-title="[Título del Artículo]"
+        data-article-category="[Categoría]" data-article-date="2026-03-05" data-article-updated="2026-03-05"
+        data-article-tags="tag1,tag2,tag3" data-article-featured="false">
 
-        <header class="article-header">
-            <h1>Introducción a JavaScript</h1>
+        <header class="article-header" id="top">
+            <h1>[Título del Artículo]</h1>
 
             <p class="article-meta">
                 <span class="meta-item">Rolando Luis Martín</span>
                 <span class="meta-sep">·</span>
-                <time class="meta-item" datetime="2026-03-04">4 Mar 2026</time>
+                <time class="meta-item" datetime="2026-03-05">5 Mar 2026</time>
                 <span class="meta-sep">·</span>
-                <span class="meta-item">Programación</span>
+                <span class="meta-item">[Categoría]</span>
                 <span class="meta-sep">·</span>
-                <span class="meta-item">Nivel: Base</span>
+                <span class="meta-item">Nivel: [Base|Intermedio|Avanzado]</span>
             </p>
 
-            <p class="lede">
-                Fundamentos prácticos para empezar: variables, funciones, DOM y buenas prácticas.
-            </p>
+            <p class="lede">[Resumen corto / qué aprenderá el lector]</p>
         </header>
 
         <div class="article-layout">
@@ -113,86 +107,107 @@
             <aside class="article-toc" aria-label="Tabla de contenidos">
                 <div class="toc-title">Contenido</div>
                 <nav data-toc class="toc-nav"></nav>
+                <div class="figs-title">Figuras</div>
+                <nav data-figures class="figs-nav"></nav>
             </aside>
-
+            
             <!-- Body -->
             <article class="article-body">
+
                 <div class="callout callout-note">
                     <div class="callout-title">Nota</div>
                     <div class="callout-body">
-                        Este artículo está pensado para lectura rápida. Si buscas ejercicios, al final hay un mini-lab.
+                        [Contexto breve, prerequisitos, versión o alcance.]
                     </div>
                 </div>
 
-                <h2>Qué es JavaScript</h2>
-                <p>JavaScript es el lenguaje de scripting estándar para web...</p>
+                <h2>Objetivo</h2>
+                <p>[Qué se va a lograr, por qué importa.]</p>
 
-                <h2>Variables y tipos</h2>
-                <p>En JS moderno, usa <code>const</code> y <code>let</code>...</p>
+                <h2>Contexto</h2>
+                <p>[Contexto técnico.]</p>
 
-                <pre><code class="language-js">const name = "Rolando";
-let count = 0;
-
-function inc() {
-  count += 1;
-  return count;
-}</code></pre>
+                <h2>Desarrollo</h2>
+                <h3>Paso 1</h3>
+                <p>[Explicación.]</p>
+                <!-- Cómo escribir tus bloques de código en el artículo
+                    PowerShell
+                        <pre><code class="language-powershell">Get-ChildItem -Path C:\ -Force
+                        $env:Path
+                        # Comentario</code></pre>
+                    Bash
+                        <pre><code class="language-bash">#!/usr/bin/env bash
+                        echo "Hello"
+                        export PATH="$PATH:/opt/bin"</code></pre>
+                    JSON
+                        <pre><code class="language-json">{
+                          "name": "rolandoluis",
+                          "enabled": true,
+                          "count": 3,
+                          "tags": ["ps", "win", "net"]
+                        }</code></pre>
+                -->
+                <pre><code class="language-powershell"># Ejemplo
+Write-Host "Hola"</code></pre>
 
                 <div class="callout callout-tip">
                     <div class="callout-title">Tip</div>
                     <div class="callout-body">
-                        Prefiere <code>const</code> por defecto; usa <code>let</code> solo cuando reasignes.
+                        [Recomendación práctica o atajo.]
                     </div>
                 </div>
 
-                <h2>DOM y eventos</h2>
-                <h3>Seleccionar elementos</h3>
-                <pre><code class="language-js">const btn = document.querySelector("#saveBtn");
-btn.addEventListener("click", () =&gt; alert("OK"));</code></pre>
+                <h3>Paso 2</h3>
+                <p>[Explicación.]</p>
 
                 <div class="callout callout-warn">
                     <div class="callout-title">Advertencia</div>
                     <div class="callout-body">
-                        No uses inline handlers (<code>onclick=""</code>). Mantén JS separado.
+                        [Riesgos, compatibilidad, permisos, etc.]
                     </div>
                 </div>
 
-                <h2>Mini-lab</h2>
-                <ol>
-                    <li>Crea un botón y un contador.</li>
-                    <li>Incrementa el contador con un click.</li>
-                    <li>Persiste el valor con <code>localStorage</code>.</li>
-                </ol>
+                <h2>Validación</h2>
+                <ul>
+                    <li>[Check 1]</li>
+                    <li>[Check 2]</li>
+                </ul>
+
+                <h2>Conclusión</h2>
+                <p>[Cierre + próximos pasos.]</p>
 
                 <hr class="article-divider">
 
                 <footer class="article-footer">
                     <div class="article-tags">
-                        <span class="tag">#javascript</span>
-                        <span class="tag">#web</span>
-                        <span class="tag">#fundamentos</span>
+                        <span class="tag">#tag1</span>
+                        <span class="tag">#tag2</span>
+                        <span class="tag">#tag3</span>
                     </div>
 
                     <div class="article-actions">
                         <a class="btn-link" href="#top">Volver arriba</a>
                     </div>
                 </footer>
+
             </article>
         </div>
 
     </main>
+
     <script>
-      // Informa al parent de la altura del documento para auto-resize del iframe
-      function postHeight() {
-        const h = Math.max(
-          document.body.scrollHeight,
-          document.documentElement.scrollHeight
-        );
-        parent.postMessage({ type: "articleHeight", height: h }, "*");
-      }
-      window.addEventListener("load", postHeight);
-      window.addEventListener("resize", postHeight);
+        // Auto-height for iframe parent
+        function postHeight() {
+            const h = Math.max(
+                document.body.scrollHeight,
+                document.documentElement.scrollHeight
+            );
+            parent.postMessage({ type: "articleHeight", height: h }, "*");
+        }
+        window.addEventListener("load", postHeight);
+        window.addEventListener("resize", postHeight);
     </script>
+
 </body>
 
 </html>

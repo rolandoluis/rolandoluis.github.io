@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>[Article Title]</title>
+  <meta name="description" content="[Short article description]">
+
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+
+  <base target="_parent">
+
+  <script defer>
+    // ===== Article Enhancements (TOC + Anchors) =====
+    document.addEventListener("DOMContentLoaded", () => {
+      const article = document.querySelector("[data-article]");
+      if (!article) return;
+
+      const toc = article.querySelector("[data-toc]");
+      const headings = article.querySelectorAll("h2, h3");
+
+      const slugify = (s) =>
+        s.toLowerCase()
+         .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+         .replace(/[^a-z0-9\s-]/g, "")
+         .trim()
+         .replace(/\s+/g, "-")
+         .replace(/-+/g, "-");
+
+      if (!toc || headings.length === 0) {
+        const tocWrap = article.querySelector(".article-toc");
+        if (tocWrap) tocWrap.hidden = true;
+        return;
+      }
+
+      const used = new Set();
+      const items = [];
+
+      headings.forEach(h => {
+        let id = h.id ? h.id : slugify(h.textContent || "");
+        if (!id) return;
+
+        let base = id, i = 2;
+        while (used.has(id)) id = `${base}-${i++}`;
+        used.add(id);
+        h.id = id;
+
+        if (!h.querySelector(".h-anchor")) {
+          const a = document.createElement("a");
+          a.className = "h-anchor";
+          a.href = `#${id}`;
+          a.setAttribute("aria-label", "Direct link to this section");
+          a.textContent = "¶";
+          h.appendChild(a);
+        }
+
+        const level = h.tagName.toLowerCase();
+        items.push({ id, text: h.textContent.replace("¶","").trim(), level });
+      });
+
+      toc.innerHTML = items.map(it => {
+        const cls = it.level === "h3" ? "toc-item toc-h3" : "toc-item";
+        return `<a class="${cls}" href="#${it.id}">${it.text}</a>`;
+      }).join("");
+
+      const hash = (location.hash || "").slice(1);
+      if (hash) {
+        const target = document.getElementById(hash);
+        if (target) target.scrollIntoView({ block: "start" });
+      }
+    });
+  </script>
+</head>
+
+<body class="article-shell">
+
+<main class="container article-container"
+      data-article
+      data-article-title="[Article Title]"
+      data-article-category="[Category]"
+      data-article-date="2026-03-05"
+      data-article-updated="2026-03-05"
+      data-article-tags="tag1,tag2,tag3"
+      data-article-featured="false">
+
+  <header class="article-header" id="top">
+    <h1>[Article Title]</h1>
+
+    <p class="article-meta">
+      <span class="meta-item">Rolando Luis Martín</span>
+      <span class="meta-sep">·</span>
+      <time class="meta-item" datetime="2026-03-05">Mar 5, 2026</time>
+      <span class="meta-sep">·</span>
+      <span class="meta-item">[Category]</span>
+      <span class="meta-sep">·</span>
+      <span class="meta-item">Level: [Basic|Intermediate|Advanced]</span>
+    </p>
+
+    <p class="lede">[Short summary / what the reader will learn]</p>
+  </header>
+
+  <div class="article-layout">
+    <aside class="article-toc" aria-label="Table of contents">
+      <div class="toc-title">Contents</div>
+      <nav data-toc class="toc-nav"></nav>
+    </aside>
+
+    <article class="article-body">
+
+      <div class="callout callout-note">
+        <div class="callout-title">Note</div>
+        <div class="callout-body">
+          [Prereqs, scope, versions, etc.]
+        </div>
+      </div>
+
+      <h2>Goal</h2>
+      <p>[What you’ll achieve and why it matters.]</p>
+
+      <h2>Context</h2>
+      <p>[Technical background.]</p>
+
+      <h2>Implementation</h2>
+      <h3>Step 1</h3>
+      <p>[Explanation.]</p>
+
+      <pre><code class="language-powershell"># Example
+Write-Host "Hello"</code></pre>
+
+      <div class="callout callout-tip">
+        <div class="callout-title">Tip</div>
+        <div class="callout-body">
+          [Practical advice / shortcut.]
+        </div>
+      </div>
+
+      <h3>Step 2</h3>
+      <p>[Explanation.]</p>
+
+      <div class="callout callout-warn">
+        <div class="callout-title">Warning</div>
+        <div class="callout-body">
+          [Risks, compatibility, permissions, etc.]
+        </div>
+      </div>
+
+      <h2>Validation</h2>
+      <ul>
+        <li>[Check 1]</li>
+        <li>[Check 2]</li>
+      </ul>
+
+      <h2>Conclusion</h2>
+      <p>[Wrap-up + next steps.]</p>
+
+      <hr class="article-divider">
+
+      <footer class="article-footer">
+        <div class="article-tags">
+          <span class="tag">#tag1</span>
+          <span class="tag">#tag2</span>
+          <span class="tag">#tag3</span>
+        </div>
+
+        <div class="article-actions">
+          <a class="btn-link" href="#top">Back to top</a>
+        </div>
+      </footer>
+
+    </article>
+  </div>
+
+</main>
+
+<script>
+  function postHeight() {
+    const h = Math.max(
+      document.body.scrollHeight,
+      document.documentElement.scrollHeight
+    );
+    parent.postMessage({ type: "articleHeight", height: h }, "*");
+  }
+  window.addEventListener("load", postHeight);
+  window.addEventListener("resize", postHeight);
+</script>
+
+</body>
+</html>

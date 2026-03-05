@@ -1,0 +1,15 @@
+[
+  {
+    "title": "Introducción a JavaScript",
+    "category": "Programación",
+    "slug": "introduccion-a-javascript",
+    "description": "Aprende los fundamentos de JavaScript"
+  },
+  {
+    "title": "Fundamentos de Python",
+    "category": "Programación",
+    "slug": "fundamentos-de-python",
+    "description": "Domina los fundamentos de Python"
+  }
+  
+]

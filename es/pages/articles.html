@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="/assets/css/components.css" />
   <script defer src="/assets/js/main.js"></script>
   <script defer src="/assets/js/hero-net.js"></script>
+  <script defer src="/assets/js/articles.js"></script>
 </head>
 
 <body>
@@ -97,55 +98,15 @@
       <aside class="sidebar">
         <h2>Categorías</h2>
         <ul class="categories">
-          <details class="category" name="acordeon">
-            <summary class="category-btn">Programación</summary>
-            <ul class="category-list">
-              <li><a href="#" class="article-link" data-article="programacion1">Introducción a JavaScript</a></li>
-              <li><a href="#" class="article-link" data-article="programacion2">Fundamentos de Python</a></li>
-              <li><a href="#" class="article-link" data-article="programacion3">Programación en PowerShell</a></li>
-            </ul>
-          </details>
-          <details class="category" name="acordeon">
-            <summary class="category-btn">Tutoriales</summary>
-            <ul class="category-list">
-              <li><a href="#" class="article-link" data-article="programacion1">JavaScript Paso a Paso</a></li>
-              <li><a href="#" class="article-link" data-article="programacion2">Instalación de Arista</a></li>
-              <li><a href="#" class="article-link" data-article="programacion3">Alerta!!! Buzón Lleno</a></li>
-            </ul>
-          </details>
-          <details class="category" name="acordeon">
-            <summary class="category-btn">Redes Informáticas</summary>
-            <ul class="category-list">
-              <li><a href="#" class="article-link" data-article="programacion1">Agregar PC al Dominio</a></li>
-              <li><a href="#" class="article-link" data-article="programacion2">Conexión Tunel OpenVPN</a></li>
-              <li><a href="#" class="article-link" data-article="programacion3">Políticas de Grupo</a></li>
-            </ul>
-          </details>
-          <details class="category" name="acordeon">
-            <summary class="category-btn">Instalación de Windows</summary>
-            <ul class="category-list">
-              <li><a href="#" class="article-link" data-article="programacion1">Paso a Paso Perfil Base</a></li>
-              <li><a href="#" class="article-link" data-article="programacion2">Migración Windows 10 -> Windows 11</a></li>
-              <li><a href="#" class="article-link" data-article="programacion3">Configuración Impresora en Red</a></li>
-            </ul>
-          </details>
-          <!-- Agregar más categorías aquí -->
+          <!-- Se generan dinámicamente desde articles.json-->
         </ul>
       </aside>
 
       <section class="articles-content" id="articlesContent">
         <h1>Artículos</h1>
         <p>Bienvenido a la página de artículos. Aquí encontrarás varios tutoriales y artículos sobre temas técnicos.</p>
-        <div class="articles-list">
-          <div class="article-card" id="programacion1">
-            <h3><a href="#" class="article-link" data-article="programacion1">Introducción a JavaScript</a></h3>
-            <p>Aprende los fundamentos de JavaScript para comenzar a programar.</p>
-          </div>
-          <div class="article-card" id="programacion2">
-            <h3><a href="#" class="article-link" data-article="programacion2">Fundamentos de Python</a></h3>
-            <p>Domina los fundamentos de Python y comienza a escribir tus propios scripts.</p>
-          </div>
-          <!-- Agregar más artículos aquí -->
+        <div class="articles-list" id="articlesList">
+          <!-- Se generan dinámicamente desde articles.json -->
         </div>
       </section>
       <!-- Área de iframe -->
@@ -170,102 +131,5 @@
       </div>
     </div>
   </footer>
-  <script>
-    (function () {
-      // ------------- Config -------------
-      const articleId = e.target.getAttribute('data-article');
-      const lang = currentLang || document.documentElement.lang || "es";
-      const iframe = document.getElementById("articleIframe");
-      const iframeSection = document.getElementById("iframeSection");
-      const articlesContent = document.getElementById("articlesContent");
-      const closeBtn = document.getElementById("backToArticles");
-      iframe.src = `${window.location.origin}/${lang}/articles/${articleId}.html`;
-
-      // Si usas el wrapper de layout (recomendado), lo marcamos para estilos:
-      const layout = document.getElementById("articlesLayout") || document.querySelector(".articles-layout");
-
-      // ------------- Helpers -------------
-      function openArticle(articleId) {
-        if (!articleId) return;
-
-        // Abre el visor
-        
-        iframeSection.hidden = false;               // mejor que display:none
-        articlesContent.hidden = true;
-
-        // Estado visual opcional
-        if (layout) layout.classList.add("is-reading");
-
-        // Marca link activo en sidebar/lista (opcional pero profesional)
-        document.querySelectorAll(".article-link.is-active").forEach(a => a.classList.remove("is-active"));
-        document.querySelectorAll(`.article-link[data-article="${CSS.escape(articleId)}"]`).forEach(a => a.classList.add("is-active"));
-
-        // Actualiza hash sin recargar
-        if (location.hash !== `#${articleId}`) {
-          history.replaceState(null, "", `#${articleId}`);
-        }
-      }
-
-      function closeArticle() {
-        // Cierra visor
-        iframeSection.hidden = true;
-        articlesContent.hidden = false;
-
-        // Libera recursos (opcional)
-        iframe.src = "";
-
-        // Estado visual opcional
-        if (layout) layout.classList.remove("is-reading");
-
-        // Limpia activo
-        document.querySelectorAll(".article-link.is-active").forEach(a => a.classList.remove("is-active"));
-
-        // Limpia hash sin recargar
-        if (location.hash) {
-          history.replaceState(null, "", location.pathname);
-        }
-      }
-
-      function getHashArticleId() {
-        return (location.hash || "").replace(/^#/, "").trim();
-      }
-
-      // ------------- Events -------------
-      // Click en enlaces de artículo (sidebar o cards)
-      document.addEventListener("click", (e) => {
-        const link = e.target.closest(".article-link[data-article]");
-        if (!link) return;
-
-        e.preventDefault();
-        const articleId = link.getAttribute("data-article");
-        openArticle(articleId);
-      });
-
-      // Botón cerrar
-      if (closeBtn) {
-        closeBtn.addEventListener("click", () => closeArticle());
-      }
-
-      // Back/forward / cambios manuales del hash
-      window.addEventListener("hashchange", () => {
-        const articleId = getHashArticleId();
-        if (articleId) openArticle(articleId);
-        else closeArticle();
-      });
-
-      // ------------- Boot -------------
-      // Si se entra con hash, abre automáticamente
-      const initial = getHashArticleId();
-      if (initial) openArticle(initial);
-      else closeArticle(); // asegura estado limpio si no hay hash
-    })();
-    window.addEventListener("message", (e) => {
-      if (!e.data || e.data.type !== "articleHeight") return;
-      const iframe = document.getElementById("articleIframe");
-      if (!iframe) return;
-      // +20 para margen de seguridad
-      iframe.style.height = (e.data.height + 20) + "px";
-    });
-  </script>
 </body>
 </html>

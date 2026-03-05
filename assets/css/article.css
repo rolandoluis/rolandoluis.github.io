@@ -1,0 +1,481 @@
+/* =========================================================
+   Article Layout
+   ========================================================= */
+
+.article-container{
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 24px 0 40px;
+}
+
+.article-header{
+  margin-bottom: 28px;
+}
+
+.article-header h1{
+  font-size: clamp(28px, 4vw, 40px);
+  margin-bottom: 6px;
+}
+
+.article-meta{
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.meta-sep{
+  margin: 0 6px;
+  opacity: .6;
+}
+
+.lede{
+  margin-top: 12px;
+  font-size: 16px;
+  color: var(--text);
+  opacity: .9;
+}
+
+/* =========================================================
+   Layout with TOC
+   ========================================================= */
+
+.article-layout{
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 32px;
+}
+
+@media (max-width: 860px){
+  .article-layout{
+    grid-template-columns: 1fr;
+  }
+
+  .article-toc{
+    order: -1;
+  }
+}
+
+/* =========================================================
+   TOC
+   ========================================================= */
+
+.article-toc{
+  position: sticky;
+  top: 90px;
+  align-self: start;
+  font-size: 14px;
+}
+
+.toc-title{
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: var(--muted);
+}
+
+.toc-nav{
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.toc-item{
+  color: var(--muted);
+}
+
+.toc-item:hover{
+  color: var(--text);
+}
+
+.toc-h3{
+  padding-left: 14px;
+  font-size: 13px;
+}
+
+/* =========================================================
+   Body
+   ========================================================= */
+
+.article-body{
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.article-body h2{
+  margin-top: 32px;
+  margin-bottom: 10px;
+  font-size: 22px;
+}
+
+.article-body h3{
+  margin-top: 24px;
+  margin-bottom: 8px;
+  font-size: 18px;
+}
+
+.article-body p{
+  margin-bottom: 14px;
+}
+
+.article-body ul{
+  margin-bottom: 14px;
+  padding-left: 20px;
+}
+
+/* =========================================================
+   Anchors
+   ========================================================= */
+
+.h-anchor{
+  margin-left: 6px;
+  text-decoration: none;
+  opacity: 0;
+  font-size: 14px;
+}
+
+.article-body h2:hover .h-anchor,
+.article-body h3:hover .h-anchor{
+  opacity: .5;
+}
+
+/* =========================================================
+   Code blocks
+   ========================================================= */
+
+pre{
+  background: rgba(0,0,0,.4);
+  padding: 14px;
+  border-radius: 10px;
+  overflow-x: auto;
+  font-size: 14px;
+}
+
+code{
+  font-family: Consolas, monospace;
+}
+
+/* =========================================================
+   Callouts
+   ========================================================= */
+
+.callout{
+  border-left: 4px solid var(--accent);
+  background: rgba(255,255,255,.04);
+  padding: 12px 14px;
+  border-radius: 8px;
+  margin: 18px 0;
+}
+
+.callout-title{
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.callout-tip{
+  border-color: #22c55e;
+}
+
+.callout-warn{
+  border-color: #f59e0b;
+}
+
+.callout-danger{
+  border-color: #ef4444;
+}
+
+/* =========================================================
+   Footer
+   ========================================================= */
+
+.article-footer{
+  margin-top: 30px;
+}
+
+.article-tags{
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tag{
+  font-size: 12px;
+  background: rgba(255,255,255,.08);
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.article-divider{
+  margin: 30px 0;
+  border: none;
+  border-top: 1px solid var(--line);
+}
+
+/* =========================================================
+   Code blocks (Docs Pro)
+   ========================================================= */
+
+.article-body pre{
+  position: relative;
+  margin: 14px 0;
+  padding: 14px 14px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: rgba(0,0,0,.35);
+  overflow: auto;
+}
+
+.article-body pre code{
+  display: block;
+  white-space: pre;
+  tab-size: 2;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: rgba(229,231,235,.95);
+}
+
+.article-body :not(pre) > code{
+  padding: 2px 6px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.18);
+}
+
+/* Copy button */
+.code-copy{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border-radius: 10px;
+  padding: 6px 10px;
+  border: 1px solid var(--btn-brd);
+  background: var(--btn-bkg);
+  color: var(--text);
+  font-size: 12px;
+  cursor: pointer;
+  opacity: .92;
+}
+.code-copy:hover{
+  border-color: var(--btn-hov-brd);
+  background: var(--btn-hov-bkg);
+}
+.code-copy:active{ transform: translateY(1px); }
+
+/* =========================================================
+   Minimal syntax highlighting tokens
+   ========================================================= */
+
+.tok-comment { color: rgba(156,163,175,.95); font-style: italic; }
+.tok-string  { color: rgba(250,204,21,.95); }
+.tok-number  { color: rgba(56,189,248,.95); }
+.tok-keyword { color: rgba(167,139,250,.95); font-weight: 600; }
+.tok-fn      { color: rgba(34,197,94,.95); }
+.tok-var     { color: rgba(245,158,11,.95); }
+.tok-param   { color: rgba(99,102,241,.95); }
+.tok-type    { color: rgba(236,72,153,.95); }
+.tok-key     { color: rgba(248,113,113,.95); }
+.tok-bool    { color: rgba(52,211,153,.95); font-weight: 600; }
+.tok-null    { color: rgba(148,163,184,.95); font-weight: 600; }
+.tok-punct   { color: rgba(203,213,225,.75); }
+
+/* =========================================================
+   Figures + Table of Figures
+   ========================================================= */
+
+.article-figure{
+  margin: 28px 0;
+  text-align: center;
+}
+
+.article-figure img{
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+}
+
+.article-figure figcaption{
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.figs-title{
+  margin-top: 16px;
+  font-weight: 600;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.figs-nav{
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.figs-item{
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.figs-item:hover{
+  color: var(--text);
+}
+
+/* Locate highlight (cuando saltas a la figura) */
+.article-figure.is-highlight{
+  outline: 2px solid var(--btn-hov-brd);
+  outline-offset: 6px;
+  border-radius: 14px;
+}
+
+/* =========================================================
+   OpenVPN Flow Animation (SVG)
+   ========================================================= */
+
+.net-anim{
+  margin: 26px 0;
+  padding: 14px 14px 12px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(0,0,0,.18);
+}
+
+.net-anim-head{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.net-anim-sub{
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.net-anim-svg{
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 14px;
+  background:
+    radial-gradient(900px 360px at 15% 30%, rgba(225,29,72,.10), transparent 55%),
+    radial-gradient(760px 380px at 85% 70%, rgba(255,255,255,.06), transparent 60%),
+    linear-gradient(180deg, rgba(0,0,0,.16), rgba(0,0,0,.06));
+  border: 1px solid rgba(255,255,255,.06);
+}
+
+/* path */
+.net-path{
+  fill: none;
+  stroke: rgba(255,255,255,.14);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-dasharray: 7 10;
+  animation: netDash 4.2s linear infinite;
+}
+
+/* “internet cloud” */
+.net-cloud{
+  fill: rgba(255,255,255,.05);
+  stroke: rgba(255,255,255,.10);
+  stroke-width: 1.2;
+}
+
+/* nodes */
+.net-box{
+  fill: rgba(15,23,42,.50); /* panel-ish */
+  stroke: rgba(255,255,255,.10);
+  stroke-width: 1.2;
+}
+
+.net-title{
+  font-size: 16px;
+  font-weight: 700;
+  fill: rgba(229,231,235,.96);
+}
+
+.net-label{
+  font-size: 14px;
+  font-weight: 700;
+  fill: rgba(229,231,235,.88);
+}
+
+.net-mini{
+  font-size: 12.5px;
+  fill: rgba(156,163,175,.95);
+}
+
+.net-mini.muted{
+  fill: rgba(156,163,175,.78);
+}
+
+/* packets */
+.pkt{
+  fill: rgba(225,29,72,.96);
+  filter: drop-shadow(0 0 10px rgba(225,29,72,.25));
+}
+
+:root[data-theme="graphite"] .pkt{
+  fill: rgba(34,197,94,.96);
+  filter: drop-shadow(0 0 10px rgba(34,197,94,.25));
+}
+
+:root[data-theme="solar"] .pkt{
+  fill: rgba(255,176,32,.96);
+  filter: drop-shadow(0 0 10px rgba(255,176,32,.25));
+}
+
+/* Animación: el círculo recorre el path */
+.pkt-go{
+  offset-path: path("M80 140 C 210 60, 320 60, 430 140 S 650 220, 780 140 S 900 60, 930 140");
+  offset-distance: 0%;
+  animation: pktGo 3.4s ease-in-out infinite;
+}
+
+.pkt-back{
+  offset-path: path("M930 140 C 900 60, 780 60, 650 140 S 430 220, 320 140 S 210 60, 80 140");
+  offset-distance: 0%;
+  animation: pktBack 3.4s ease-in-out infinite;
+  animation-delay: 1.1s;
+  opacity: .75;
+}
+
+/* pills */
+.net-anim-foot{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top: 10px;
+}
+
+.pill{
+  font-size: 12px;
+  color: rgba(229,231,235,.92);
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(255,255,255,.04);
+  padding: 4px 8px;
+  border-radius: 999px;
+}
+
+@keyframes netDash{
+  to { stroke-dashoffset: -68; }
+}
+
+@keyframes pktGo{
+  0%   { offset-distance: 0%;   transform: scale(1); }
+  45%  { transform: scale(1.05); }
+  100% { offset-distance: 100%; transform: scale(1); }
+}
+
+@keyframes pktBack{
+  0%   { offset-distance: 0%;   transform: scale(1); }
+  45%  { transform: scale(1.05); }
+  100% { offset-distance: 100%; transform: scale(1); }
+}
+
+/* Accesibilidad: respeta “reduced motion” */
+@media (prefers-reduced-motion: reduce){
+  .net-path, .pkt-go, .pkt-back{ animation: none !important; }
+}
+

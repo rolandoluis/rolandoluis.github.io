@@ -11,6 +11,9 @@
 
   const currentLang = getLangFromPath(path); // "es" | "en" | null
 
+  // Exponer idioma para otros scripts (articles.js, etc.)
+  window.siteLang = currentLang || document.documentElement.lang || "es";
+
   const log = (...args) => {
     if (DEBUG) console.log(...args);
   };
@@ -19,9 +22,7 @@
   const yearEl = document.getElementById("year");
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-  // 2) Language-aware links (optional but useful)
-  // Use: <a data-i18n-link="pages/projects.html">...</a>
-  // It becomes: /es/pages/projects.html or /en/pages/projects.html
+  // 2) Language-aware links
   if (currentLang) {
     document.querySelectorAll("[data-i18n-link]").forEach(el => {
       const target = (el.getAttribute("data-i18n-link") || "").replace(/^\/+/, "");
@@ -31,28 +32,24 @@
     });
   }
 
-  // 3) Active nav link (works with bilingual prefixes)
-  // Strategy:
-  // - Compare "logical" paths with language stripped: /es/pages/projects.html -> /pages/projects.html
-  // - Mark active if current logical path equals link logical path OR starts with it (for sections)
-  const logicalPath = currentLang ? path.replace(/^\/(es|en)/, "") : path; // remove language prefix only
-  document.querySelectorAll(".nav-link").forEach(a => {
-    const href = a.getAttribute("href");
-    if (!href) return;
+  // fallback href
+  document.querySelectorAll("[data-i18n-link]").forEach(el => {
+    if (!el.getAttribute("href")) el.setAttribute("href", "#");
+  });
 
-    // If nav uses data-i18n-link, it might have no href at load time; it will be set above.
+  // 3) Active nav link (strip language prefix)
+  const logicalPath = currentLang ? path.replace(/^\/(es|en)/, "") : path;
+
+  document.querySelectorAll(".nav-link").forEach(a => {
     const resolved = a.getAttribute("href");
     if (!resolved) return;
 
     const linkLogical = currentLang ? resolved.replace(/^\/(es|en)/, "") : resolved;
 
-    // Normalize: remove trailing slash (except root)
     const norm = (p) => (p.length > 1 ? p.replace(/\/+$/, "") : p);
-
     const cur = norm(logicalPath);
     const lnk = norm(linkLogical);
 
-    // Exact match, or section match (e.g., /projects/... should keep Projects active)
     const isActive =
       (lnk === "/" && cur === "/") ||
       (lnk !== "/" && (cur === lnk || cur.startsWith(lnk.replace(/\.html$/, "")) || cur.startsWith(lnk.replace(/\/index\.html$/, ""))));
@@ -60,14 +57,12 @@
     if (isActive) a.classList.add("is-active");
   });
 
-  // 4) Language switcher (preserve path, one implementation)
-  // HTML: <button data-set-lang="es">ES</button> <button data-set-lang="en">EN</button>
+  // 4) Language switcher
   if (currentLang) {
     document.querySelectorAll("[data-set-lang]").forEach(btn => {
       const lang = btn.getAttribute("data-set-lang");
       btn.classList.toggle("is-active", lang === currentLang);
 
-      // avoid double-binding if JS re-runs for any reason
       if (btn.dataset.bound === "1") return;
       btn.dataset.bound = "1";
 
@@ -76,7 +71,7 @@
         localStorage.setItem("site_lang", targetLang);
 
         const p = window.location.pathname;
-        const rest = p.replace(/^\/(es|en)\//, ""); // remove current lang prefix
+        const rest = p.replace(/^\/(es|en)\//, "");
         const next = `/${targetLang}/${rest}${window.location.search}${window.location.hash}`;
 
         log("[lang-switch]", { from: currentLang, to: targetLang, rest, next });
@@ -84,16 +79,10 @@
       });
     });
   }
-  document.querySelectorAll("[data-i18n-link]").forEach(el => {
-    if (!el.getAttribute("href")) {
-      el.setAttribute("href", "#");
-    }
-  });
 })();
 
 // --- Breadcrumb ------------------------------------------------
 (() => {
-
   const bc = document.getElementById("breadcrumb");
   if (!bc) return;
 
@@ -101,40 +90,36 @@
   const lang = fullPath.startsWith("/en/") ? "en" : "es";
 
   const path = fullPath
-    .replace(/^\/(es|en)\//,"")
-    .replace(/\.html$/,"");
+    .replace(/^\/(es|en)\//, "")
+    .replace(/\.html$/, "");
 
   const parts = path.split("/").filter(Boolean);
 
   const labels = {
-    es:{ "":"Inicio","pages":"Secciones","projects":"Proyectos","articles":"Artículos","lab":"Lab","about":"Sobre mí"},
-    en:{ "":"Home","pages":"Sections","projects":"Projects","articles":"Articles","lab":"Lab","about":"About"}
+    es: { "": "Inicio", "pages": "Secciones", "projects": "Proyectos", "articles": "Artículos", "lab": "Lab", "about": "Sobre mí" },
+    en: { "": "Home", "pages": "Sections", "projects": "Projects", "articles": "Articles", "lab": "Lab", "about": "About" }
   };
 
   const sectionPages = {
-    pages:"pages/projects.html",
-    projects:"pages/projects.html",
-    articles:"pages/articles.html",
-    lab:"pages/lab.html",
-    about:"pages/about.html"
+    pages: "pages/projects.html",
+    projects: "pages/projects.html",
+    articles: "pages/articles.html",
+    lab: "pages/lab.html",
+    about: "pages/about.html"
   };
 
   let url = `/${lang}/`;
   bc.innerHTML = `<a href="${url}">${labels[lang][""]}</a>`;
 
-  parts.forEach((p,i)=>{
-
-    if(sectionPages[p]){
+  parts.forEach((p) => {
+    if (sectionPages[p]) {
       url = `/${lang}/${sectionPages[p]}`;
     } else {
       url += p + "/";
     }
-
     const label = labels[lang][p] || p.toUpperCase();
     bc.innerHTML += `<span>/</span><a href="${url}">${label}</a>`;
-
   });
-
 })();
 
 // --- Simple static search (desktop + mobile) -------------------
@@ -142,23 +127,19 @@
   const lang = window.location.pathname.startsWith("/en/") ? "en" : "es";
 
   const pairs = [
-    { box: document.getElementById("searchBox"),        results: document.getElementById("searchResults") },
-    { box: document.getElementById("searchBoxMobile"),  results: document.getElementById("searchResultsMobile") },
+    { box: document.getElementById("searchBox"),       results: document.getElementById("searchResults") },
+    { box: document.getElementById("searchBoxMobile"), results: document.getElementById("searchResultsMobile") },
   ].filter(p => p.box && p.results);
 
   if (!pairs.length) return;
 
   const emptyMsg = lang === "en" ? "No results" : "Sin resultados";
-
   let index = [];
 
   fetch("/assets/data/search.json")
     .then(r => r.json())
-    .then(data => {
-      index = data.filter(p => p.lang === lang);
-    })
+    .then(data => { index = data.filter(p => p.lang === lang); })
     .catch(() => {
-      // si falla la carga, no rompemos la UI
       pairs.forEach(({ results }) => {
         results.innerHTML = `<div style="padding:8px 10px">${emptyMsg}</div>`;
       });
@@ -209,17 +190,10 @@
   };
 
   pairs.forEach(({ box, results }) => {
-    // input
-    box.addEventListener("input", () => {
-      render(box.value, results);
-    });
+    box.addEventListener("input", () => render(box.value, results));
 
-    // enter => results page
     box.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") {
-        results.style.display = "none";
-        return;
-      }
+      if (e.key === "Escape") results.style.display = "none";
 
       if (e.key === "Enter") {
         const q = box.value.trim();
@@ -230,13 +204,11 @@
       }
     });
 
-    // click a result => close drawer
     results.addEventListener("click", (e) => {
       const a = e.target.closest("a");
       if (a) closeMobileNavIfOpen();
     });
 
-    // click outside => close results
     document.addEventListener("click", (e) => {
       if (!results.contains(e.target) && e.target !== box) {
         results.style.display = "none";
@@ -250,11 +222,7 @@
   const KEY = "site_theme";
   const saved = localStorage.getItem(KEY);
 
-  if (saved) {
-    document.documentElement.dataset.theme = saved;
-  } else {
-    document.documentElement.dataset.theme = "classic";
-  }
+  document.documentElement.dataset.theme = saved || "classic";
 
   document.querySelectorAll("[data-set-theme]").forEach(btn => {
     const theme = btn.getAttribute("data-set-theme");
@@ -274,6 +242,7 @@
   });
 })();
 
+// Hero anim toggle (if present)
 (() => {
   const btn = document.getElementById("toggleAnim");
   if (!btn) return;
@@ -289,6 +258,7 @@
   });
 })();
 
+// Mobile nav
 (() => {
   const btn = document.querySelector(".nav-toggle");
   const panel = document.getElementById("mobileNav");
@@ -311,109 +281,28 @@
     expanded ? close() : open();
   });
 
-  // cerrar al tocar fuera del panel
   panel.addEventListener("click", (e) => {
     if (e.target === panel) close();
   });
 
-  // cerrar con Escape
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && !panel.hidden) close();
   });
 
-  // cerrar al navegar (clic en link)
   panel.querySelectorAll("a").forEach(a => {
     a.addEventListener("click", () => close());
   });
 })();
 
-// --- Card spotlight ------------------------------------
+// Card spotlight
 (() => {
-
   document.querySelectorAll(".card").forEach(card => {
-
     card.addEventListener("mousemove", e => {
-
       const rect = card.getBoundingClientRect();
-
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
-
       card.style.setProperty("--x", x + "px");
       card.style.setProperty("--y", y + "px");
-
     });
-
   });
-
-})();
-
-// Interactividad de la esfera y nodos
-const nodes = document.querySelectorAll('.node');
-const socialInfo = document.getElementById('social-info');
-const socialName = document.getElementById('social-name');
-const socialLink = document.getElementById('social-link');
-const cancelBtn = document.getElementById('cancel-btn');
-
-// Información de las redes sociales
-const socialData = {
-    facebook: 'https://facebook.com/your-profile',
-    twitter: 'https://twitter.com/your-profile',
-    linkedin: 'https://linkedin.com/in/your-profile',
-};
-
-nodes.forEach(node => {
-    node.addEventListener('click', (e) => {
-        const social = e.target.dataset.social;
-        socialName.textContent = social.charAt(0).toUpperCase() + social.slice(1); // Capitaliza el nombre
-        socialLink.href = socialData[social];
-        
-        // Detener animación y mostrar información
-        socialInfo.style.display = 'block';
-        document.querySelector('.sphere').style.animationPlayState = 'paused';
-    });
-});
-
-(() => {
-  const menuContainer = document.querySelector('.categories'); // Contenedor de categorías
-  let categories = {};  // Objeto para almacenar las categorías y sus artículos
-
-  fetch('/assets/data/articles.json') // Ruta del archivo JSON
-    .then(response => response.json())
-    .then(data => {
-      // Organiza los artículos por categorías
-      data.forEach(article => {
-        if (!categories[article.category]) {
-          categories[article.category] = [];
-        }
-        categories[article.category].push(article);
-      });
-
-      // Crea el HTML para el menú lateral
-      for (let category in categories) {
-        const categorySection = document.createElement('li');
-        categorySection.classList.add('category');
-        categorySection.innerHTML = `<button class="category-btn">${category}</button><ul class="category-list"></ul>`;
-        const categoryList = categorySection.querySelector('.category-list');
-
-        categories[category].forEach(article => {
-          const articleLink = document.createElement('li');
-          articleLink.innerHTML = `<a href="#" class="article-link" data-article="${article.slug}">${article.title}</a>`;
-          categoryList.appendChild(articleLink);
-        });
-
-        menuContainer.appendChild(categorySection);
-      }
-
-      // Añadir eventos a los enlaces de los artículos
-      document.querySelectorAll('.article-link').forEach(link => {
-        link.addEventListener('click', (e) => {
-          e.preventDefault();
-          const articleSlug = e.target.getAttribute('data-article');
-          // Lógica para mostrar el artículo en el iframe
-          const iframe = document.getElementById('articleIframe');
-          iframe.src = `/articles/${articleSlug}.html`; // Asumiendo que el artículo está en la carpeta /articles/
-        });
-      });
-    });
 })();

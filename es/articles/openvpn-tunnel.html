@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <title>[Título del Artículo]</title>
+    <meta name="description" content="[Descripción corta del artículo]">
+
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/components.css">
+    <link rel="stylesheet" href="/assets/css/article.css">
+    <script defer src="/assets/js/article-code.js"></script>
+    <script defer src="/assets/js/article-figures.js"></script>
+
+    <!-- Los enlaces del artículo navegan fuera del iframe -->
+    <base target="_parent">
+
+    <script defer>
+        // ===== Article Enhancements (TOC + Anchors) =====
+        document.addEventListener("DOMContentLoaded", () => {
+            const article = document.querySelector("[data-article]");
+            if (!article) return;
+
+            const toc = article.querySelector("[data-toc]");
+            const headings = article.querySelectorAll("h2, h3");
+
+            const slugify = (s) =>
+                s.toLowerCase()
+                    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                    .replace(/[^a-z0-9\s-]/g, "")
+                    .trim()
+                    .replace(/\s+/g, "-")
+                    .replace(/-+/g, "-");
+
+            if (!toc || headings.length === 0) {
+                const tocWrap = article.querySelector(".article-toc");
+                if (tocWrap) tocWrap.hidden = true;
+                return;
+            }
+
+            const used = new Set();
+            const items = [];
+
+            headings.forEach(h => {
+                let id = h.id ? h.id : slugify(h.textContent || "");
+                if (!id) return;
+
+                let base = id, i = 2;
+                while (used.has(id)) id = `${base}-${i++}`;
+                used.add(id);
+                h.id = id;
+
+                if (!h.querySelector(".h-anchor")) {
+                    const a = document.createElement("a");
+                    a.className = "h-anchor";
+                    a.href = `#${id}`;
+                    a.setAttribute("aria-label", "Enlace directo a esta sección");
+                    a.textContent = "¶";
+                    h.appendChild(a);
+                }
+
+                const level = h.tagName.toLowerCase(); // h2/h3
+                items.push({ id, text: h.textContent.replace("¶", "").trim(), level });
+            });
+
+            toc.innerHTML = items.map(it => {
+                const cls = it.level === "h3" ? "toc-item toc-h3" : "toc-item";
+                return `<a class="${cls}" href="#${it.id}">${it.text}</a>`;
+            }).join("");
+
+            // Si llegas con hash, posiciona
+            const hash = (location.hash || "").slice(1);
+            if (hash) {
+                const target = document.getElementById(hash);
+                if (target) target.scrollIntoView({ block: "start" });
+            }
+        });
+    </script>
+</head>
+
+<body class="article-shell">
+
+    <main class="container article-container" data-article
+        data-article-title="Qué ocurre en una conexión túnel con OpenVPN" data-article-category="Redes Informáticas"
+        data-article-date="2025-11-28" data-article-updated="2025-11-28"
+        data-article-tags="vpn,openvpn,redes,teletrabajo" data-article-featured="true">
+
+        <header class="article-header">
+
+            <h1>Qué ocurre en una conexión túnel con OpenVPN</h1>
+
+            <p class="article-meta">
+                <span class="article-author">Rolando Luis Martín</span>
+                <span class="meta-sep">·</span>
+                <time datetime="2025-11-28">28 Nov 2025</time>
+                <span class="meta-sep">·</span>
+                <span class="article-category">Redes Informáticas</span>
+            </p>
+
+            <p class="lede">
+                En este artículo analizamos paso a paso qué ocurre cuando un usuario en teletrabajo establece una
+                conexión VPN mediante OpenVPN para acceder a su equipo en la red corporativa.
+            </p>
+
+        </header>
+
+        <div class="article-layout">
+
+            <aside class="article-toc">
+
+                <div class="toc-title">Contenido</div>
+                <nav data-toc class="toc-nav"></nav>
+
+                <div class="figs-title">Figuras</div>
+                <nav data-figures class="figs-nav"></nav>
+
+            </aside>
+
+            <article class="article-body">
+
+                <h2>1. Escenario general</h2>
+
+                <p>
+                    Veamos el caso más frecuente: un cliente en teletrabajo que desde su casa quiere trabajar
+                    en su sesión de usuario del ordenador de la oficina.
+                </p>
+
+                <figure class="article-figure" id="fig-openvpn-escenario">
+
+                    <img src="/assets/img/articles/openvpn-tunnel/escenario-general.png"
+                        alt="Escenario general de conexión OpenVPN" loading="lazy">
+
+                    <figcaption>
+                        Escenario general de conexión VPN entre cliente doméstico y red corporativa
+                    </figcaption>
+
+                </figure>
+
+                <p>
+                    En este escenario intervienen tres piezas fundamentales:
+                </p>
+
+                <ul>
+                    <li>Cliente OpenVPN en el ordenador del usuario en casa.</li>
+                    <li>Servidor OpenVPN en la red de la empresa.</li>
+                    <li>PC de trabajo dentro de la red corporativa.</li>
+                </ul>
+
+                <p>
+                    La idea principal es que, una vez establecido el túnel, el PC de casa se comporta
+                    como si estuviera dentro de la red de la empresa.
+                </p>
+
+                ---
+
+                <h2>2. Preparación previa (antes de conectar)</h2>
+
+                <h3>En casa (lado cliente)</h3>
+
+                <p>En el equipo del usuario se instala el cliente OpenVPN y se importa un fichero de configuración:</p>
+
+                <pre><code>empresa.ovpn</code></pre>
+
+                <p>Este fichero suele contener:</p>
+
+                <ul>
+                    <li>Dirección del servidor VPN</li>
+                    <li>Puerto y protocolo (por ejemplo UDP 1194)</li>
+                    <li>Parámetros de cifrado</li>
+                    <li>Certificados y claves</li>
+                </ul>
+
+                <p>Además el usuario puede necesitar:</p>
+
+                <ul>
+                    <li>Certificado personal</li>
+                    <li>Usuario y contraseña</li>
+                    <li>Segundo factor (OTP)</li>
+                </ul>
+
+                ---
+
+                <h3>En la empresa (lado servidor)</h3>
+
+                <p>
+                    En la empresa existe un servidor OpenVPN que escucha en un puerto determinado
+                    y gestiona las conexiones de los clientes remotos.
+                </p>
+
+                <p>El servidor dispone de:</p>
+
+                <ul>
+                    <li>Certificado del servidor</li>
+                    <li>Autoridad certificadora (CA)</li>
+                    <li>Rango de IP virtuales para los clientes VPN</li>
+                    <li>Rutas hacia la red corporativa</li>
+                </ul>
+
+                Ejemplo típico:
+
+                <pre><code>
+VPN network: 10.8.0.0/24
+LAN network: 192.168.10.0/24
+</code></pre>
+
+                ---
+
+                <h2>3. Proceso lado cliente</h2>
+
+                <h3>3.1 Inicio de la conexión</h3>
+
+                <p>
+                    El usuario abre el cliente OpenVPN y pulsa <strong>Connect</strong>.
+                </p>
+
+                El cliente:
+
+                <ul>
+                    <li>Lee la configuración</li>
+                    <li>Resuelve el nombre del servidor VPN</li>
+                    <li>Abre una conexión hacia el servidor</li>
+                </ul>
+
+                ---
+
+                <h3>3.2 Handshake y autenticación</h3>
+
+                <p>
+                    Se inicia un handshake TLS donde el cliente verifica el certificado del servidor.
+                </p>
+
+                <p>Si la verificación es correcta se realiza la autenticación:</p>
+
+                <ul>
+                    <li>Certificados de cliente</li>
+                    <li>Usuario y contraseña</li>
+                    <li>Segundo factor</li>
+                </ul>
+
+                <p>
+                    Una vez autenticado, cliente y servidor negocian las claves de cifrado que
+                    protegerán la sesión VPN.
+                </p>
+
+                ---
+
+                <h3>3.3 Creación del túnel VPN</h3>
+
+                <p>
+                    El cliente crea una interfaz de red virtual denominada normalmente:
+                </p>
+
+                <pre><code>tun0</code></pre>
+
+                <p>
+                    El servidor asigna una IP virtual dentro de la red VPN.
+                </p>
+
+                Ejemplo:
+
+                <pre><code>
+Cliente VPN: 10.8.0.10
+Servidor VPN: 10.8.0.1
+</code></pre>
+
+                ---
+
+                <h3>3.4 Flujo de un paquete</h3>
+
+                <p>
+                    Supongamos que el usuario abre Escritorio Remoto hacia su equipo de oficina:
+                </p>
+
+                <pre><code>
+Destino: 192.168.10.50
+Origen: 10.8.0.10
+</code></pre>
+
+                El paquete:
+
+                1. Sale de la aplicación RDP
+                2. Pasa a la interfaz virtual VPN
+                3. Se cifra
+                4. Se encapsula en un paquete UDP/TCP
+
+                Este paquete viaja por internet hasta el servidor VPN.
+
+                ---
+
+                <section class="net-anim" aria-label="Animación del flujo de paquete OpenVPN">
+                  <div class="net-anim-head">
+                    <strong>Flujo del paquete (animación)</strong>
+                    <span class="net-anim-sub">Cliente → Túnel → Servidor → LAN</span>
+                  </div>
+              
+                  <svg class="net-anim-svg" viewBox="0 0 980 260" role="img" aria-label="Flujo de paquete a través de OpenVPN">
+                    <!-- Ruta principal -->
+                    <path class="net-path" d="M80 140 C 210 60, 320 60, 430 140 S 650 220, 780 140 S 900 60, 930 140" />
+                
+                    <!-- Segmento de “Internet” (zona media) -->
+                    <rect class="net-cloud" x="430" y="86" width="120" height="108" rx="18" />
+                    <text class="net-label" x="490" y="146" text-anchor="middle">Internet</text>
+                
+                    <!-- Nodos / cajas -->
+                    <g class="net-node">
+                      <rect class="net-box" x="30" y="95" width="170" height="90" rx="16" />
+                      <text class="net-title" x="115" y="130" text-anchor="middle">PC Casa</text>
+                      <text class="net-mini" x="115" y="155" text-anchor="middle">Cliente OpenVPN</text>
+                    </g>
+                
+                    <g class="net-node">
+                      <rect class="net-box" x="270" y="22" width="190" height="90" rx="16" />
+                      <text class="net-title" x="365" y="57" text-anchor="middle">Encapsulación</text>
+                      <text class="net-mini" x="365" y="82" text-anchor="middle">IP → Cifrado → UDP/TCP</text>
+                    </g>
+                
+                    <g class="net-node">
+                      <rect class="net-box" x="600" y="148" width="190" height="90" rx="16" />
+                      <text class="net-title" x="695" y="183" text-anchor="middle">Servidor VPN</text>
+                      <text class="net-mini" x="695" y="208" text-anchor="middle">Descifrado + Routing</text>
+                    </g>
+                
+                    <g class="net-node">
+                      <rect class="net-box" x="820" y="22" width="140" height="90" rx="16" />
+                      <text class="net-title" x="890" y="57" text-anchor="middle">LAN</text>
+                      <text class="net-mini" x="890" y="82" text-anchor="middle">Empresa</text>
+                    </g>
+                
+                    <g class="net-node">
+                      <rect class="net-box" x="785" y="148" width="185" height="90" rx="16" />
+                      <text class="net-title" x="877" y="183" text-anchor="middle">PC Oficina</text>
+                      <text class="net-mini" x="877" y="208" text-anchor="middle">RDP / SMB / Apps</text>
+                    </g>
+                
+                    <!-- Paquete (ida) -->
+                    <circle class="pkt pkt-go" r="7" cx="80" cy="140"></circle>
+                
+                    <!-- Paquete (vuelta) -->
+                    <circle class="pkt pkt-back" r="6" cx="930" cy="140"></circle>
+                
+                    <!-- Etiquetas de redes (opcionales) -->
+                    <text class="net-mini muted" x="115" y="205" text-anchor="middle">10.8.0.x</text>
+                    <text class="net-mini muted" x="885" y="135" text-anchor="middle">192.168.10.x</text>
+                  </svg>
+              
+                  <div class="net-anim-foot">
+                    <span class="pill">IP original</span>
+                    <span class="pill">Cifrado</span>
+                    <span class="pill">Encapsulado</span>
+                    <span class="pill">Routing</span>
+                  </div>
+                </section>
+
+                <h2>4. Proceso lado servidor</h2>
+
+                <h3>4.1 Recepción del paquete</h3>
+
+                <p>
+                    El firewall de la empresa permite el tráfico entrante hacia el puerto OpenVPN.
+                </p>
+
+                El servidor VPN:
+
+                <ul>
+                    <li>Recibe el paquete cifrado</li>
+                    <li>Lo descifra</li>
+                    <li>Verifica su integridad</li>
+                </ul>
+
+                ---
+
+                <h3>4.2 Inyección en la red corporativa</h3>
+
+                <p>
+                    Una vez descifrado, el paquete vuelve a ser un paquete IP normal.
+                </p>
+
+                <pre><code>
+Origen: 10.8.0.10
+Destino: 192.168.10.50
+</code></pre>
+
+                El sistema operativo del servidor lo enruta hacia la LAN corporativa.
+
+                ---
+
+                <h3>4.3 En el PC de oficina</h3>
+
+                <p>
+                    El PC recibe el paquete como si proviniera de otro equipo dentro de la red.
+                </p>
+
+                Desde su perspectiva, el usuario ya está dentro de la infraestructura corporativa.
+
+                ---
+
+                <h2>5. Flujo de respuesta</h2>
+
+                <p>
+                    El PC de la empresa responde al cliente:
+                </p>
+
+                <pre><code>
+Origen: 192.168.10.50
+Destino: 10.8.0.10
+</code></pre>
+
+                El servidor OpenVPN:
+
+                1. encapsula el paquete
+                2. lo cifra
+                3. lo envía hacia el cliente
+
+                El cliente OpenVPN:
+
+                1. lo descifra
+                2. lo entrega a la aplicación (RDP)
+
+                Todo este proceso es completamente transparente para el usuario.
+
+                ---
+
+                <h2>6. Gestión de la sesión</h2>
+
+                Durante la conexión cliente y servidor intercambian mensajes de:
+
+                - keepalive
+                - renegociación de claves
+                - mantenimiento de sesión
+
+                Si la conexión se pierde el cliente puede reconectar automáticamente.
+
+                ---
+
+                <h2>7. Resumen final</h2>
+
+                <h3>Lado cliente</h3>
+
+                <ul>
+                    <li>Crea el túnel VPN</li>
+                    <li>Cifra el tráfico</li>
+                    <li>Encapsula paquetes hacia la red corporativa</li>
+                    <li>Descifra las respuestas</li>
+                </ul>
+
+                <h3>Lado servidor</h3>
+
+                <ul>
+                    <li>Autentica clientes</li>
+                    <li>Asigna IPs VPN</li>
+                    <li>Descifra tráfico entrante</li>
+                    <li>Enruta paquetes hacia la LAN</li>
+                </ul>
+
+                <p>
+                    Gracias a este mecanismo el usuario puede trabajar desde cualquier lugar
+                    como si estuviera físicamente dentro de la red corporativa.
+                </p>
+
+            </article>
+        </div>
+    </main>
+
+    <script>
+        // Auto-height for iframe parent
+        function postHeight() {
+            const h = Math.max(
+                document.body.scrollHeight,
+                document.documentElement.scrollHeight
+            );
+            parent.postMessage({ type: "articleHeight", height: h }, "*");
+        }
+        window.addEventListener("load", postHeight);
+        window.addEventListener("resize", postHeight);
+    </script>
+
+</body>
+
+</html>
