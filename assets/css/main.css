@@ -418,8 +418,6 @@ details[open] summary::after{
 
 /* Contenido de artículos */
 .articles-content{
-  position: absolute;
-  top: 20px;
   min-width: 0; /* clave para evitar overflow raro en grid */
 }
 
