@@ -15,6 +15,25 @@
     "featured": true
   },
   {
+    "title": "Instalación y Configuración de Servidor Arista (Untangle) como SUBSEDE para OpenVPN",
+    "category": "Redes Informáticas",
+    "slug": "arista-subsede-openvpn",
+    "description": "Guía paso a paso para instalar y configurar Arista NG Firewall (Untangle) como SUBSEDE y enlazarla con la SEDE mediante OpenVPN site-to-site.",
+    "date": "2025-11-29",
+    "updated": "2025-11-29",
+    "tags": [
+      "arista",
+      "untangle",
+      "openvpn",
+      "vpn",
+      "firewall",
+      "site-to-site",
+      "subsede",
+      "sede"
+    ],
+    "featured": true
+  },
+  {
     "title": "Qué ocurre en una conexión túnel con OpenVPN",
     "category": "Redes Informáticas",
     "slug": "openvpn-tunnel",
@@ -28,5 +47,19 @@
       "teletrabajo"
     ],
     "featured": true
+  },
+  {
+    "title": "[Título del Artículo]",
+    "category": "[Categoría]",
+    "slug": "article_base",
+    "description": "[Descripción corta del artículo]",
+    "date": "2026-03-05",
+    "updated": "2026-03-05",
+    "tags": [
+      "tag1",
+      "tag2",
+      "tag3"
+    ],
+    "featured": false
   }
 ]
