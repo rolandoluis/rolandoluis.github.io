@@ -254,7 +254,7 @@
 
 .hero-articles {
   grid-area: hero;
-  min-height:140px;
+  height:140px;
   width: auto;
   padding:16px;
 }
