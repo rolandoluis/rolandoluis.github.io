@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Instalación de Arista (Untangle) como SUBSEDE para OpenVPN</title>
+  <meta name="description" content="Guía paso a paso para instalar y configurar Arista NG Firewall (Untangle) como SUBSEDE y enlazarla con la SEDE mediante OpenVPN site-to-site." />
+
+  <link rel="icon" href="/assets/img/brand/favicon.png" />
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/components.css" />
+  <link rel="stylesheet" href="/assets/css/article.css" />
+
+  <script defer src="/assets/js/main.js"></script>
+  <script defer src="/assets/js/article-code.js"></script>
+  <script defer src="/assets/js/article-figures.js"></script>
+
+  <base target="_parent">
+</head>
+
+<body>
+
+  <main class="container article-container"
+        data-article
+        data-article-title="Instalación y Configuración de Servidor Arista (Untangle) como SUBSEDE para OpenVPN"
+        data-article-category="Redes Informáticas"
+        data-article-date="2025-11-29"
+        data-article-updated="2025-11-29"
+        data-article-tags="arista,untangle,openvpn,vpn,firewall,site-to-site,subsede,sede"
+        data-article-featured="true">
+
+    <header class="article-header">
+      <h1>Instalación y Configuración de Servidor Arista (Untangle) como SUBSEDE para OpenVPN</h1>
+
+      <p class="article-meta">
+        <span class="article-author">Documento interno – Empresarial IT</span>
+        <span class="meta-sep">·</span>
+        <time datetime="2025-11-29">29 Nov 2025</time>
+        <span class="meta-sep">·</span>
+        <span class="article-category">Redes Informáticas</span>
+      </p>
+
+      <p class="lede">
+        Guía estandarizada para instalar Arista NG Firewall (Untangle) como <strong>SUBSEDE</strong>,
+        integrarlo con la <strong>SEDE</strong> mediante OpenVPN <em>site-to-site</em>,
+        y aplicar buenas prácticas de aislamiento y verificación.
+      </p>
+    </header>
+
+    <div class="article-layout">
+      <aside class="article-toc" aria-label="Navegación del artículo">
+        <div class="toc-title">Contenido</div>
+        <nav data-toc class="toc-nav"></nav>
+
+        <div class="figs-title">Figuras</div>
+        <nav data-figures class="figs-nav"></nav>
+      </aside>
+
+      <article class="article-body">
+
+        <h2>1. Objetivo del documento</h2>
+        <p>
+          Este documento proporciona a los técnicos del Laboratorio Empresarial una guía paso a paso para:
+        </p>
+        <ul>
+          <li>Instalar y configurar un servidor Arista (Untangle) como SUBSEDE.</li>
+          <li>Integrarlo con la SEDE mediante OpenVPN <em>site-to-site</em>.</li>
+          <li>Garantizar aislamiento entre empresas, enrutamiento correcto y verificaciones.</li>
+        </ul>
+
+        <h2>2. Arquitectura del sistema Empresarial</h2>
+        <p>
+          La SEDE actúa como autoridad central (certificados, export de redes, control), y cada empresa
+          dispone de su SUBSEDE independiente para mantener aislamiento.
+        </p>
+
+        <figure class="article-figure" id="fig-arch-Empresarial">
+          <img src="/assets/img/articles/arista-subsede-openvpn/arch-Empresarial.png"
+               alt="Arquitectura Empresarial: SEDE, SUBSEDE y usuarios remotos"
+               loading="lazy">
+          <figcaption>Arquitectura simplificada SEDE/SUBSEDE con OpenVPN</figcaption>
+        </figure>
+
+        <h2>3. Requisitos previos</h2>
+
+        <h3>3.1 Hardware / VM</h3>
+        <ul>
+          <li>CPU x86_64</li>
+          <li>RAM ≥ 4 GB (ideal 8 GB)</li>
+          <li>Disco ≥ 40–80 GB</li>
+          <li>2 NIC mínimas: WAN / LAN</li>
+        </ul>
+
+        <h3>3.2 Recursos</h3>
+        <ul>
+          <li>ISO de Arista NG Firewall (Untangle)</li>
+          <li>USB booteable (si físico)</li>
+          <li>IPs WAN/LAN del cliente (o DHCP)</li>
+          <li>Datos del router: gateway, DNS, rango LAN</li>
+          <li>Acceso a la SEDE y permisos para crear <em>Remote Clients</em> tipo Network</li>
+        </ul>
+
+        <h2>4. Etapa 1 – Instalación y Setup Wizard Offline</h2>
+
+        <h3>4.1 Instalación base (ISO/USB)</h3>
+        <ul>
+          <li>No conectar el equipo a la red durante la instalación.</li>
+          <li>Arrancar desde ISO/USB.</li>
+          <li>Seleccionar disco e instalar (según procedimiento).</li>
+        </ul>
+
+        <figure class="article-figure" id="fig-install-iso">
+          <img src="/assets/img/articles/arista-subsede-openvpn/install-iso.png"
+               alt="Instalación base desde ISO/USB"
+               loading="lazy">
+          <figcaption>Instalación base: arranque desde ISO/USB y selección de disco</figcaption>
+        </figure>
+
+        <h3>4.2 Acceso al asistente Offline</h3>
+        <p>
+          Tras reinicio, el sistema ofrece acceso al wizard. Alternativamente, conectar un PC en LAN
+          y acceder a la consola web (IP por defecto del appliance).
+        </p>
+
+        <figure class="article-figure" id="fig-offline-wizard-access">
+          <img src="/assets/img/articles/arista-subsede-openvpn/offline-wizard-access.png"
+               alt="Acceso al Offline Setup Wizard"
+               loading="lazy">
+          <figcaption>Acceso al Offline Setup Wizard y aceptación de certificado</figcaption>
+        </figure>
+
+        <h3>4.3 Offline Setup Wizard – Paso a paso</h3>
+
+        <h4>Paso 1 – Configure the Server</h4>
+        <ul>
+          <li>Password admin (según política Empresarial)</li>
+          <li>Zona horaria: Atlantic/Canary</li>
+          <li>Tipo de servidor: Other</li>
+          <li>Admin Email (según política)</li>
+        </ul>
+
+        <figure class="article-figure" id="fig-wizard-step1">
+          <img src="/assets/img/articles/arista-subsede-openvpn/wizard-step1.png"
+               alt="Offline Wizard - Configure the Server"
+               loading="lazy">
+          <figcaption>Wizard paso 1: configuración inicial del servidor</figcaption>
+        </figure>
+
+        <h4>Modo de instalación</h4>
+        <ul>
+          <li><strong>Router mode</strong> (recomendado en clientes) — no aplica en este caso.</li>
+          <li><strong>Transparent bridge</strong> — caso SUBSEDE típico.</li>
+        </ul>
+
+        <figure class="article-figure" id="fig-wizard-step11">
+          <img src="/assets/img/articles/arista-subsede-openvpn/wizard-step11.png"
+               alt="Offline Wizard - Configure Bridge Mode"
+               loading="lazy">
+          <figcaption>Wizard paso 1: Configuración en Modo Bridge</figcaption>
+        </figure>
+
+        <h4>Paso 2 – Identify Network Cards</h4>
+        <p>Asignar interfaces:</p>
+        <ul>
+          <li>External (WAN)</li>
+          <li>Internal (LAN)</li>
+        </ul>
+
+        <figure class="article-figure" id="fig-wizard-step2">
+          <img src="/assets/img/articles/arista-subsede-openvpn/wizard-step2-nics.png"
+               alt="Wizard - Identify Network Cards (WAN/LAN)"
+               loading="lazy">
+          <figcaption>Wizard paso 2: identificación de NICs WAN/LAN</figcaption>
+        </figure>
+
+        <h4>Paso 3 – Configure WAN</h4>
+        <ul>
+          <li>DHCP (habitual)</li>
+          <li>IP estática (IP, máscara, gateway, DNS)</li>
+          <li>PPPoE (si aplica)</li>
+        </ul>
+
+        <figure class="article-figure" id="fig-wizard-step3">
+          <img src="/assets/img/articles/arista-subsede-openvpn/wizard-step3-wan.png"
+               alt="Wizard - Configure WAN"
+               loading="lazy">
+          <figcaption>Wizard paso 3: configuración WAN y prueba de conectividad</figcaption>
+        </figure>
+
+        <h4>Paso 4 – Configure LAN</h4>
+        <p>Recomendación SUBSEDE: <strong>Transparent bridge</strong> y parámetros LAN según cliente.</p>
+
+        <figure class="article-figure" id="fig-wizard-step4">
+          <img src="/assets/img/articles/arista-subsede-openvpn/wizard-step4-lan.png"
+               alt="Wizard - Configure LAN"
+               loading="lazy">
+          <figcaption>Wizard paso 4: configuración LAN (bridge / IP / DNS / NAT según caso)</figcaption>
+        </figure>
+
+        <h4>Configuración alternativa en Dashboard</h4>
+        <p>
+          En <strong>CONFIG → Network</strong> se definen hostname, domain, puerto de administración HTTPS y reglas de acceso.
+        </p>
+
+        <figure class="article-figure" id="fig-dashboard-config-network">
+          <img src="/assets/img/articles/arista-subsede-openvpn/dashboard-config-network.png"
+               alt="Dashboard CONFIG Network (hostname/domain/https)"
+               loading="lazy">
+          <figcaption>CONFIG → Network: hostname, domain y puerto de gestión</figcaption>
+        </figure>
+
+        <h4>Paso 5 – Automatic Updates</h4>
+        <ul>
+          <li>LAB: desactivar updates automáticos.</li>
+          <li>Cliente: según política Empresarial.</li>
+        </ul>
+
+        <figure class="article-figure" id="fig-update-automatic">
+          <img src="/assets/img/articles/arista-subsede-openvpn/update-automatic.png"
+               alt="Dashboard CONFIG Network (hostname/domain/https)"
+               loading="lazy">
+          <figcaption>Desactivar ETM y actualizaciones automáticas</figcaption>
+        </figure>
+
+        <h3>4.4 Verificaciones tras el Wizard</h3>
+        <p>Desde un PC en LAN:</p>
+        <pre><code class="language-bash">ping 8.8.8.8
+ping google.com</code></pre>
+
+        <p>Acceso web (ejemplo):</p>
+        <pre><code class="language-bash">https://192.168.0.240</code></pre>
+
+        <h3>4.5 Instalación de Apps (Reports y OpenVPN)</h3>
+        <ol>
+          <li>Conectar a ETM Dashboard (si procede).</li>
+          <li>Apps → Add → instalar <strong>Reports</strong>.</li>
+          <li>Apps → Add → instalar <strong>OpenVPN</strong>.</li>
+        </ol>
+
+        <figure class="article-figure" id="fig-apps-install">
+          <img src="/assets/img/articles/arista-subsede-openvpn/apps-install.png"
+               alt="Instalación de Apps Reports y OpenVPN"
+               loading="lazy">
+          <figcaption>Instalación de Apps: Reports y OpenVPN</figcaption>
+        </figure>
+
+        <h2>5. Etapa 2 – Configuración de OpenVPN como SUBSEDE (site-to-site)</h2>
+
+        <h3>5.1 Preparación en SEDE</h3>
+        <p>
+          En la SEDE (normalmente por técnico senior), validar servidor OpenVPN habilitado y configurar
+          <em>Exported Networks</em> y <em>Remote Clients</em> tipo Network.
+        </p>
+
+        <figure class="article-figure" id="fig-sede-exported-networks">
+          <img src="/assets/img/articles/arista-subsede-openvpn/sede-exported-networks.png"
+               alt="SEDE: Exported Networks y Remote Clients"
+               loading="lazy">
+          <figcaption>SEDE: configuración Exported Networks y creación Remote Client tipo Network</figcaption>
+        </figure>
+
+        <h3>5.2 Configurar SUBSEDE como cliente</h3>
+        <p>
+          En la SUBSEDE: Apps → OpenVPN → Client → subir el fichero descargado desde la SEDE.
+        </p>
+
+        <figure class="article-figure" id="fig-subsede-upload-client">
+          <img src="/assets/img/articles/arista-subsede-openvpn/subsede-upload-client.png"
+               alt="SUBSEDE: Upload Remote Server Configuration File"
+               loading="lazy">
+          <figcaption>SUBSEDE: carga del fichero de configuración remota descargado de la SEDE</figcaption>
+        </figure>
+
+        <h3>5.3 Pruebas y verificación del túnel</h3>
+        <ul>
+          <li>SUBSEDE: ping hacia red SEDE (desde Troubleshooting)</li>
+          <li>SEDE: ping hacia red SUBSEDE</li>
+        </ul>
+
+        <h2>6. Modelo de acceso de usuarios remotos (Empresarial)</h2>
+        <ul>
+          <li>Solo la SEDE genera certificados.</li>
+          <li>Usuarios remotos se conectan a SEDE con su certificado.</li>
+          <li>La SEDE enruta hacia la SUBSEDE correspondiente.</li>
+          <li>SUBSEDE no expide certificados.</li>
+        </ul>
+
+        <h2>7. Aislamiento entre empresas / buenas prácticas</h2>
+        <ul>
+          <li>Firewall rules en SEDE para limitar acceso por empresa/SUBSEDE.</li>
+          <li>Policy Manager si se integra con AD/LDAP.</li>
+          <li>En SUBSEDE aceptar tráfico solo de pools/rangos autorizados.</li>
+        </ul>
+
+        <h2>8. Checklist final del técnico</h2>
+
+        <h3>ETAPA 1 – Instalación</h3>
+        <ul>
+          <li>ISO grabada y hardware verificado</li>
+          <li>Instalación base completada</li>
+          <li>Wizard offline completado</li>
+          <li>WAN operativa</li>
+          <li>LAN accesible</li>
+          <li>Reports instalado</li>
+          <li>OpenVPN instalado</li>
+        </ul>
+
+        <h3>ETAPA 2 – OpenVPN</h3>
+        <ul>
+          <li>SEDE: Server habilitado</li>
+          <li>SEDE: Exported Networks configuradas</li>
+          <li>SEDE: Remote Client creado</li>
+          <li>SUBSEDE: fichero cargado</li>
+          <li>SUBSEDE: estado Connected</li>
+          <li>Ping SEDE → SUBSEDE</li>
+          <li>Ping SUBSEDE → SEDE</li>
+        </ul>
+
+        <h2>Anexo A – Capturas sugeridas</h2>
+        <p>
+          Este artículo contiene muchas capturas. Recomendación: exportarlas a PNG y nombrarlas de forma
+          consistente dentro de:
+        </p>
+        <pre><code class="language-bash">/assets/img/articles/arista-subsede-openvpn/</code></pre>
+
+      </article>
+    </div>
+  </main>
+
+</body>
+</html>
