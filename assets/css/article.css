@@ -8,7 +8,7 @@ body{
 }
 
 body.article-shell{
-  min-height: 0;
+  min-height: 0 !important;
 }
 
 .article-container{

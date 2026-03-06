@@ -237,7 +237,7 @@
   // Auto-resize del iframe
   window.addEventListener("message", (e) => {
     if (!e.data || e.data.type !== "articleHeight") return;
-    iframe.style.height = (Number(e.data.height) + 20) + "px";
+    //iframe.style.height = (Number(e.data.height) + 20) + "px";
   });
 
   // -------------------- Boot --------------------

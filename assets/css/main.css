@@ -490,11 +490,6 @@ iframe{
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-#articleIframe {
-  border: none;
-  border-radius: 10px;
-}
-
 .reader-bar{
   display:flex;
   align-items: center;
@@ -511,9 +506,10 @@ iframe{
 
 #articleIframe{
   width:100%;
-  height: min(78vh, 920px);
+  height: 900px;
   border:0;
   display:block;
+  border-radius: 10px;
 }
 
 .reader-close{
