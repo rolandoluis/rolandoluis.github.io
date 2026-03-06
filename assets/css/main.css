@@ -318,6 +318,7 @@ main{ padding: 34px 0 50px; }
   .article-body h2 {
     font-size: 1.3rem;
   }
+
 }
 
 /* Estilo general */
@@ -342,6 +343,7 @@ main{ padding: 34px 0 50px; }
 .sidebar{
   grid-area: sidebar;
   position: sticky;
+  align-self: start;
   top: 90px;
   /* width: auto;
   flex-shrink: initial;
@@ -423,9 +425,15 @@ details[open] summary::after{
 } */
 
 /* Contenido de artículos */
-.articles-content{
+.articles-content,
+.iframe-section{
   grid-area: content;
-  /*min-width: 0;  clave para evitar overflow raro en grid */
+  min-width: 0;  /*clave para evitar overflow raro en grid */
+  align-self: start;
+}
+
+[hidden]{
+  display: none !important;
 }
 
 iframe{
@@ -460,7 +468,7 @@ iframe{
 @media (min-width: 980px){
   .sidebar{
     position: sticky;
-    top: 86px; /* ajusta si tu header cambia */
+    top: 90px; /* ajusta si tu header cambia */
     max-height: calc(100vh - 110px);
     overflow: auto;
   }

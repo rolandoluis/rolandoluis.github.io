@@ -37,7 +37,7 @@
     "title": "Qué ocurre en una conexión túnel con OpenVPN",
     "category": "Redes Informáticas",
     "slug": "openvpn-tunnel",
-    "description": "[Descripción corta del artículo]",
+    "description": "Instructivo de las fases en que una conexión tunel VPN se establece exitosamente",
     "date": "2025-11-28",
     "updated": "2025-11-28",
     "tags": [
@@ -47,19 +47,5 @@
       "teletrabajo"
     ],
     "featured": true
-  },
-  {
-    "title": "[Título del Artículo]",
-    "category": "[Categoría]",
-    "slug": "article_base",
-    "description": "[Descripción corta del artículo]",
-    "date": "2026-03-05",
-    "updated": "2026-03-05",
-    "tags": [
-      "tag1",
-      "tag2",
-      "tag3"
-    ],
-    "featured": false
   }
 ]

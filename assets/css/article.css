@@ -1,11 +1,21 @@
 /* =========================================================
    Article Layout
    ========================================================= */
+html,
+body{
+  height: auto !important;
+  min-height: 0 !important;
+}
+
+body.article-shell{
+  min-height: 0;
+}
 
 .article-container{
   max-width: 980px;
   margin: 0 auto;
-  padding: 24px 0 40px;
+  padding-top: 22px;
+  padding-bottom: 34px;
 }
 
 .article-header{
