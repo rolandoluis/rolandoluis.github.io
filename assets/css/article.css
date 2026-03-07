@@ -76,7 +76,7 @@ body.article-shell{
    ========================================================= */
 
 .article-toc{
-  position: sticky;
+  /* position: sticky; */
   /* top: 90px; */
   top: 14px;
   align-self: start;
