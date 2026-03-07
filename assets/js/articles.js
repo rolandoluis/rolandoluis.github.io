@@ -110,6 +110,11 @@
     if (!slug) return;
 
     iframe.src = urlForArticle(slug);
+
+    iframe.onload = () => {
+      buildReaderNavigation();
+    };
+    
     iframeSection.hidden = false;
     articlesContent.hidden = true;
 
@@ -137,6 +142,98 @@
       history.replaceState(null, "", location.pathname);
     }
   }
+
+  let readerSections = [];
+  let readerCurrent = 0;
+
+  const readerProgress = document.getElementById("readerProgress");
+  const readerProgressBar = document.getElementById("readerProgressBar");
+  const readerProgressSteps = document.getElementById("readerProgressSteps");
+  const readerPrev = document.getElementById("readerPrev");
+  const readerNext = document.getElementById("readerNext");
+
+  function buildReaderNavigation() {
+    if (!iframe.contentDocument) return;
+
+    const doc = iframe.contentDocument;
+    readerSections = Array.from(doc.querySelectorAll(".article-body h2"));
+
+    if (!readerSections.length) {
+      readerProgress.hidden = true;
+      return;
+    }
+
+    readerProgress.hidden = false;
+    readerProgressSteps.innerHTML = "";
+    readerCurrent = 0;
+
+    readerSections.forEach((_, idx) => {
+      const step = document.createElement("button");
+      step.type = "button";
+      step.className = "progress-step";
+      step.textContent = String(idx + 1);
+
+      step.addEventListener("click", () => {
+        readerCurrent = idx;
+        goToReaderSection(readerCurrent);
+      });
+
+      readerProgressSteps.appendChild(step);
+    });
+
+    updateReaderNavigation();
+  }
+
+  function goToReaderSection(index) {
+    if (!iframe.contentDocument || !readerSections[index]) return;
+
+    readerCurrent = index;
+
+    readerSections[index].scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+
+    updateReaderNavigation();
+  }
+
+  function updateReaderNavigation() {
+    const steps = Array.from(readerProgressSteps.children);
+    const total = steps.length;
+
+    steps.forEach((step, idx) => {
+      step.classList.remove("active", "done");
+
+      if (idx < readerCurrent) step.classList.add("done");
+      if (idx === readerCurrent) step.classList.add("active");
+    });
+
+    const percent = total > 1
+      ? (readerCurrent / (total - 1)) * 100
+      : 0;
+
+    readerProgressBar.style.width = `${percent}%`;
+
+    readerPrev.disabled = readerCurrent <= 0;
+    readerNext.disabled = readerCurrent >= total - 1;
+  }
+
+  if (readerPrev) {
+    readerPrev.addEventListener("click", () => {
+      if (readerCurrent > 0) {
+        goToReaderSection(readerCurrent - 1);
+      }
+    });
+  }
+
+  if (readerNext) {
+    readerNext.addEventListener("click", () => {
+      if (readerCurrent < readerSections.length - 1) {
+        goToReaderSection(readerCurrent + 1);
+      }
+    });
+  }
+
 
   // -------------------- Render: Sidebar --------------------
   function renderSidebar(categoriesMap) {
