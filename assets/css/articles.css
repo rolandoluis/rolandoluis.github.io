@@ -1,0 +1,168 @@
+/* CSS Para la página articles.html */
+
+[hidden]{
+  display: none !important;
+}
+
+/* Contenido de artículos */
+.articles-content,
+.iframe-section{
+  grid-area: content;
+  min-width: 0;  /*clave para evitar overflow raro en grid */
+  align-self: start;
+}
+
+iframe{
+  background: transparent;
+}
+
+.iframe-section {
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--panel) 82%, transparent);
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.reader-bar{
+  display:flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.reader-title{ font-weight: 600; }
+.reader-meta{ color: var(--muted); font-size: 12px; }
+
+.reader-frameWrap{ position: relative; }
+
+#articleIframe{
+  width:100%;
+  height: 900px;
+  border:0;
+  display:block;
+  border-radius: 10px;
+}
+
+.reader-close{
+  position:absolute;
+  right: 14px;
+  bottom: 14px;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid var(--btn-brd);
+  background: rgba(0,0,0,.35);
+  color: var(--text);
+  cursor: pointer;
+}
+.reader-close:hover{
+  background: var(--btn-hov-bkg);
+  border-color: var(--btn-hov-brd);
+}
+
+#backToArticles {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 15px;
+  background-color: var(--accent);
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: center;
+}
+
+#backToArticles:hover {
+  background-color: var(--accent-net);
+}
+
+.articles-layout{
+  display: grid;
+  grid-template-areas:
+    "hero content"
+    "sidebar content";
+  grid-template-columns: 260px 1fr;
+  grid-template-rows: auto 1fr;
+  gap: 18px;
+  align-items: start;
+}
+
+/* Barra lateral */
+.sidebar{
+  grid-area: sidebar;
+  position: sticky;
+  align-self: start;
+  top: 90px;
+  /* width: auto;
+  flex-shrink: initial;
+  background: color-mix(in srgb, var(--panel) 78%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px; */
+}
+
+/* Sticky sidebar en desktop */
+@media (min-width: 980px){
+  .sidebar{
+    position: sticky;
+    top: 90px; /* ajusta si tu header cambia */
+    max-height: calc(100vh - 110px);
+    overflow: auto;
+  }
+}
+
+/* -------------------------------
+   Título de sección de artículos
+--------------------------------*/
+.articles-section-title::before{
+  content:"▣";
+  margin-right:8px;
+  color:var(--accent-net);
+}
+
+.articles-section-title{
+  margin: 26px 0 12px;
+  padding-bottom: 6px;
+
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: .4px;
+  text-transform: uppercase;
+
+  color: var(--muted);
+
+  border-bottom: 1px solid var(--line);
+}
+
+
+
+
+/* -------------------------------
+   Grid de tarjetas
+--------------------------------*/
+.articles-cards{
+  display: grid;
+
+  /* más flexible que repeat(2) */
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+
+  gap: 14px;
+}
+
+/* -------------------------------
+   Responsive
+--------------------------------*/
+@media (max-width: 860px){
+
+  .articles-section-title{
+    margin-top: 20px;
+  }
+
+  .articles-cards{
+    grid-template-columns: 1fr;
+  }
+
+}
