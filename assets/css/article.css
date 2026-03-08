@@ -275,18 +275,36 @@ code{
   font-family: Consolas, monospace;
 }
 
-kbd {
-    background-color: #eee;
-    border-radius: 3px;
-    border: 1px solid #b4b4b4;
-    box-shadow: 0 1px 1px rgba(0,0,0,0.2), 0 2px 0 0 rgba(255,255,255,0.7) inset;
-    color: #333;
-    display: inline-block;
-    font-size: 0.85em;
-    font-weight: 700;
-    line-height: 1;
-    padding: 2px 4px;
-    white-space: nowrap;
+/*Para cuando hacemos referencia a teclas*/
+.article-shell kbd{
+  display:inline-block;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.78em;
+  font-weight:600;
+  padding:3px 6px;
+  line-height:1;
+  color:var(--text);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,.05),
+      rgba(0,0,0,.2)
+    ),
+    var(--panel);
+  border:1px solid var(--line);
+  border-radius:6px;
+  box-shadow:
+    0 1px 0 rgba(0,0,0,.45),
+    inset 0 1px 0 rgba(255,255,255,.05);
+  white-space:nowrap;
+}
+
+.article-shell kbd + kbd{
+  margin-left:4px;
+}
+
+.article-shell kbd:hover{
+  border-color:var(--accent-net);
 }
 
 /* =========================================================
