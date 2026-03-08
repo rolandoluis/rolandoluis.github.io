@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <title>Activación del controlador StorNvme para clonación SATA a NVMe</title>
+    <meta name="description" content="Guía técnica para habilitar el controlador StorNvme y garantizar el arranque de Windows tras migrar de discos SATA a unidades NVMe.">
+
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/components.css">
+    <link rel="stylesheet" href="/assets/css/articles.css">
+    <link rel="stylesheet" href="/assets/css/article.css">
+    <script defer src="/assets/js/article-code.js"></script>
+    <script defer src="/assets/js/article-figures.js"></script>
+
+    <base target="_parent">
+
+    <script defer>
+        document.addEventListener("DOMContentLoaded", () => {
+            const article = document.querySelector("[data-article]");
+            if (!article) return;
+            const toc = article.querySelector("[data-toc]");
+            const headings = article.querySelectorAll("h2, h3");
+            const slugify = (s) => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9\s-]/g, "").trim().replace(/\s+/g, "-").replace(/-+/g, "-");
+            if (!toc || headings.length === 0) {
+                const tocWrap = article.querySelector(".article-toc");
+                if (tocWrap) tocWrap.hidden = true;
+                return;
+            }
+            const used = new Set();
+            const items = [];
+            headings.forEach(h => {
+                let id = h.id ? h.id : slugify(h.textContent || "");
+                if (!id) return;
+                let base = id, i = 2;
+                while (used.has(id)) id = `${base}-${i++}`;
+                used.add(id);
+                h.id = id;
+                if (!h.querySelector(".h-anchor")) {
+                    const a = document.createElement("a");
+                    a.className = "h-anchor";
+                    a.href = `#${id}`;
+                    a.setAttribute("aria-label", "Enlace directo a esta sección");
+                    a.textContent = "¶";
+                    h.appendChild(a);
+                }
+                const level = h.tagName.toLowerCase();
+                items.push({ id, text: h.textContent.replace("¶", "").trim(), level });
+            });
+            toc.innerHTML = items.map(it => {
+                const cls = it.level === "h3" ? "toc-item toc-h3" : "toc-item";
+                return `<a class="${cls}" href="#${it.id}">${it.text}</a>`;
+            }).join("");
+        });
+    </script>
+</head>
+
+<body class="article-shell">
+
+    <main class="container article-container" 
+        data-article 
+        data-article-title="Activación del controlador StorNvme para garantizar el arranque tras clonar un sistema desde SATA a NVMe"
+        data-article-category="Soporte IT" 
+        data-article-date="2026-03-08" 
+        data-article-updated="2026-03-08"
+        data-article-tags="NVMe,Clonación,SATA,Windows,Drivers" 
+        data-article-featured="true" 
+        data-article-draft="false">
+
+        <header class="article-header" id="top">
+            <h1>Activación del controlador StorNvme para garantizar el arranque tras clonar un sistema desde SATA a NVMe [cite: 1]</h1>
+
+            <p class="article-meta">
+                <span class="meta-item">Rolando Luis Martín</span>
+                <span class="meta-sep">·</span>
+                <time class="meta-item" datetime="2026-03-08">8 Mar 2026</time>
+                <span class="meta-sep">·</span>
+                <span class="meta-item">Soporte IT</span>
+                <span class="meta-sep">·</span>
+                <span class="meta-item">Nivel: Avanzado</span>
+            </p>
+
+            <p class="lede">Aprende a preparar Windows para migraciones exitosas de SATA a NVMe, evitando el error INACCESSIBLE_BOOT_DEVICE mediante la configuración del controlador nativo StorNvme[cite: 7].</p>
+        </header>
+
+        <div class="article-layout">
+            <aside class="article-toc" aria-label="Tabla de contenidos">
+                <div class="toc-title">Contenido</div>
+                <nav data-toc class="toc-nav"></nav>
+                <div class="figs-title">Figuras</div>
+                <nav data-figures class="figs-nav"></nav>
+            </aside>
+            
+            <article class="article-body">
+
+                <div class="callout callout-note">
+                    <div class="callout-title">Nota</div>
+                    <div class="callout-body">
+                        Esta guía es crucial cuando el sistema original se instaló en un disco SATA, ya que Windows no siempre tiene habilitado el controlador NVMe por defecto en esos casos[cite: 5].
+                    </div>
+                </div>
+
+                <h2>Objetivo</h2>
+                <p>Garantizar que Windows pueda arrancar correctamente en un nuevo dispositivo tras un proceso de clonación, utilizando comandos específicos para habilitar el controlador nativo de almacenamiento[cite: 5].</p>
+
+                <h2>Introducción</h2>
+                <p>Migrar de HDD o SATA SSD a unidades NVMe es cada vez más habitual en soporte IT por las mejoras en rendimiento[cite: 3]. Sin embargo, un problema crítico es que el sistema clonado a veces no arranca en el nuevo disco[cite: 4]. Esto sucede porque el controlador <strong>StorNvme</strong> puede estar configurado para iniciarse solo bajo demanda o estar desactivado si el sistema original no detectó unidades NVMe previamente[cite: 10, 11, 13].</p>
+
+                <h2>Comprensión del problema</h2>
+                <p>Cuando se intenta arrancar desde el NVMe clonado sin el controlador activo en la fase de BOOT, se producen errores como[cite: 15, 16]:</p>
+                <ul>
+                    <li>Pantalla azul (BSOD) <strong>INACCESSIBLE_BOOT_DEVICE</strong>[cite: 17].</li>
+                    <li>Reboot infinito[cite: 18].</li>
+                    <li>El BIOS detecta el disco, pero Windows no puede cargar el kernel[cite: 19].</li>
+                </ul>
+
+                <h2>¿Por qué "start= boot" es crucial?</h2>
+                <p>El parámetro <code>boot</code> indica que el controlador debe cargarse en la fase más temprana del arranque[cite: 22]. Como la unidad NVMe contiene el sistema operativo, si el controlador no se carga desde el inicio, Windows es incapaz de leer el volumen de arranque[cite: 24, 25].</p>
+
+                <h2>Guía práctica: Preparación y Clonación</h2>
+                
+                <h3>Paso 1 – Habilitar el controlador NVMe</h3>
+                <p>En el sistema original (SATA), abre una consola con privilegios de administrador y ejecuta[cite: 40, 41]:</p>
+                <pre><code class="language-powershell">sc config StorNvme start= boot</code></pre>
+                <p>Para verificar que el cambio se aplicó correctamente, usa el comando[cite: 42, 43]:</p>
+                <pre><code class="language-powershell">sc qc StorNvme</code></pre>
+                <p>Deberías ver en el resultado: <code>START_TYPE : 0 BOOT_START</code>[cite: 44].</p>
+
+                <figure class="article-figure" id="hdd_nvme">
+
+                    <img src="/assets/img/articles/clonacion_hdd-nvme/hdd_nvme.png"
+                        alt="Un teclado estándar" loading="lazy">
+
+                    <figcaption>
+                        Representación de un teclado normal. Distribución Estados Unidos Internacional
+                    </figcaption>
+
+                </figure>
+
+                <div class="callout callout-tip">
+                    <div class="callout-title">Tip</div>
+                    <div class="callout-body">
+                        Es vital realizar este paso <strong>antes</strong> de clonar para que la copia ya contenga la configuración necesaria para el primer arranque en el nuevo hardware[cite: 45, 46].
+                    </div>
+                </div>
+
+                <h3>Paso 2 – Configuración de energía y clonado</h3>
+                <p>Se recomienda desactivar el inicio rápido para evitar corrupción en la imagen[cite: 47, 48]:</p>
+                <pre><code class="language-powershell">powercfg -h off</code></pre>
+                <p>Al clonar, asegúrate de incluir todas las particiones críticas: EFI, MSR y la partición del sistema (C:)[cite: 52, 53, 54].</p>
+
+                <h2>Validación y Solución de problemas</h2>
+                <p>Tras el primer arranque, puedes verificar el funcionamiento del controlador con[cite: 67, 68]:</p>
+                <pre><code class="language-powershell">Get-WindowsDriver -Online | findstr /i nvme</code></pre>
+
+                <div class="callout callout-warn">
+                    <div class="callout-title">Advertencia: Si aparece BSOD</div>
+                    <div class="callout-body">
+                        Si el sistema falla con <strong>INACCESSIBLE_BOOT_DEVICE</strong>, puede deberse a que el BIOS está en modo Legacy o la partición EFI está corrupta[cite: 75, 76]. En caso de corrupción, intenta reparar con: <br>
+                        <code>bcdboot C:\Windows /f UEFI /l es-es</code>[cite: 78].
+                    </div>
+                </div>
+
+                <h2>Conclusión</h2>
+                <p>La migración exitosa a NVMe depende de que el sistema reconozca el disco desde la etapa de BOOT[cite: 88, 91]. Configurar el controlador <code>StorNvme</code> antes de la clonación asegura migraciones limpias y profesionales, minimizando el tiempo de inactividad por errores de configuración[cite: 92].</p>
+
+                <hr class="article-divider">
+
+                <footer class="article-footer">
+                    <div class="article-tags">
+                        <span class="tag">#NVMe</span>
+                        <span class="tag">#SoporteIT</span>
+                        <span class="tag">#WindowsDrivers</span>
+                    </div>
+
+                    <div class="article-actions">
+                        <a class="btn-link" href="#top">Volver arriba</a>
+                    </div>
+                </footer>
+
+            </article>
+        </div>
+    </main>
+</body>
+</html>

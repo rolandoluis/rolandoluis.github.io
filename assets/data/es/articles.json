@@ -1,5 +1,21 @@
 [
   {
+    "title": "Activación del controlador StorNvme para garantizar el arranque tras clonar un sistema desde SATA a NVMe",
+    "category": "Soporte IT",
+    "slug": "clonacion_hdd-nvme",
+    "description": "Guía técnica para habilitar el controlador StorNvme y garantizar el arranque de Windows tras migrar de discos SATA a unidades NVMe.",
+    "date": "2026-03-08",
+    "updated": "2026-03-08",
+    "tags": [
+      "NVMe",
+      "Clonación",
+      "SATA",
+      "Windows",
+      "Drivers"
+    ],
+    "featured": true
+  },
+  {
     "title": "Guía Maestra: Optimización de Outlook",
     "category": "Soporte IT",
     "slug": "optimice-outlook",
