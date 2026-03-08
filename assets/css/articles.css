@@ -242,8 +242,8 @@ iframe{
   .sidebar{
     position: sticky;
     top: 90px; /* ajusta si tu header cambia */
-    max-height: calc(100vh - 110px);
-    overflow: auto;
+    /* max-height: calc(100vh - 110px);
+    overflow: auto; */
   }
 }
 
