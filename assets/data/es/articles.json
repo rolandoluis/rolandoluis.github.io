@@ -16,6 +16,21 @@
     "featured": true
   },
   {
+    "title": "Preparación de PCs en Laboratorio: Unión a Dominio vía VPN",
+    "category": "Soporte IT",
+    "slug": "unir_pc_dominio",
+    "description": "Guía técnica para unir equipos de clientes a dominios corporativos desde el laboratorio mediante túneles VPN, permitiendo la pre-configuración de políticas, accesos y software.",
+    "date": "2026-03-08",
+    "updated": "2026-03-08",
+    "tags": [
+      "Dominio",
+      "VPN",
+      "Laboratorio",
+      "Despliegue"
+    ],
+    "featured": true
+  },
+  {
     "title": "Solución a firmas HTML en Outlook",
     "category": "Soporte IT",
     "slug": "outlook_firmas",

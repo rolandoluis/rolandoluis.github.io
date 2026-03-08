@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <title>Preparación de PCs en Laboratorio: Unión a Dominio vía VPN</title>
+    <meta name="description" content="Guía técnica para unir equipos de clientes a dominios corporativos desde el laboratorio mediante túneles VPN, permitiendo la pre-configuración de políticas, accesos y software.">
+
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/components.css">
+    <link rel="stylesheet" href="/assets/css/articles.css">
+    <link rel="stylesheet" href="/assets/css/article.css">
+    <script defer src="/assets/js/article-code.js"></script>
+    <script defer src="/assets/js/article-figures.js"></script>
+
+    <base target="_parent">
+
+    <script defer>
+        document.addEventListener("DOMContentLoaded", () => {
+            const article = document.querySelector("[data-article]");
+            if (!article) return;
+            const toc = article.querySelector("[data-toc]");
+            const headings = article.querySelectorAll("h2, h3");
+            const slugify = (s) => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9\s-]/g, "").trim().replace(/\s+/g, "-").replace(/-+/g, "-");
+            if (!toc || headings.length === 0) {
+                const tocWrap = article.querySelector(".article-toc");
+                if (tocWrap) tocWrap.hidden = true;
+                return;
+            }
+            const used = new Set();
+            const items = [];
+            headings.forEach(h => {
+                let id = h.id ? h.id : slugify(h.textContent || "");
+                if (!id) return;
+                let base = id, i = 2;
+                while (used.has(id)) id = `${base}-${i++}`;
+                used.add(id);
+                h.id = id;
+                if (!h.querySelector(".h-anchor")) {
+                    const a = document.createElement("a");
+                    a.className = "h-anchor";
+                    a.href = `#${id}`;
+                    a.setAttribute("aria-label", "Enlace directo a esta sección");
+                    a.textContent = "¶";
+                    h.appendChild(a);
+                }
+                const level = h.tagName.toLowerCase();
+                items.push({ id, text: h.textContent.replace("¶", "").trim(), level });
+            });
+            toc.innerHTML = items.map(it => {
+                const cls = it.level === "h3" ? "toc-item toc-h3" : "toc-item";
+                return `<a class="${cls}" href="#${it.id}">${it.text}</a>`;
+            }).join("");
+        });
+    </script>
+</head>
+
+<body class="article-shell">
+
+    <main class="container article-container" 
+        data-article 
+        data-article-title="Preparación de PCs en Laboratorio: Unión a Dominio vía VPN"
+        data-article-category="Soporte IT" 
+        data-article-date="2026-03-08" 
+        data-article-updated="2026-03-08"
+        data-article-tags="Dominio,VPN,Laboratorio,Despliegue" 
+        data-article-featured="true" 
+        data-article-draft="false">
+
+        <header class="article-header" id="top">
+            <h1>Preparación de PCs en Laboratorio: Unión a Dominio vía VPN</h1>
+
+            <p class="article-meta">
+                <span class="meta-item">Rolando Luis Martín</span>
+                <span class="meta-sep">·</span>
+                <time class="meta-item" datetime="2026-03-08">8 Mar 2026</time>
+                <span class="meta-sep">·</span>
+                <span class="meta-item">Soporte IT</span>
+                <span class="meta-sep">·</span>
+                <span class="meta-item">Nivel: Avanzado</span>
+            </p>
+
+            <p class="lede">Estrategia de pre-configuración técnica: maximiza la eficiencia uniendo equipos al dominio del cliente desde el laboratorio mediante un túnel VPN seguro.</p>
+        </header>
+
+        <div class="article-layout">
+            <aside class="article-toc" aria-label="Tabla de contenidos">
+                <div class="toc-title">Contenido</div>
+                <nav data-toc class="toc-nav"></nav>
+                <div class="figs-title">Figuras</div>
+                <nav data-figures class="figs-nav"></nav>
+            </aside>
+            
+            <article class="article-body">
+
+                <div class="callout callout-note">
+                    <div class="callout-title">Contexto operativo</div>
+                    <div class="callout-body">
+                        Esta metodología permite realizar despliegues completos (políticas de grupo, unidades compartidas, M365, impresoras, redirección de carpetas) antes de la instalación física en las oficinas del cliente.
+                    </div>
+                </div>
+
+                <h2>Objetivo</h2>
+                <p>Establecer un estándar de procedimiento para la integración de equipos nuevos al dominio del cliente desde el laboratorio, utilizando conectividad VPN para asegurar la gestión remota total.</p>
+
+                <h2>Requisitos previos</h2>
+                <p>Antes de comenzar, asegúrese de tener a mano la siguiente información:</p>
+                <ul>
+                    <li>Nombre del equipo (PC) y nombre del dominio a unirse.</li>
+                    <li>Dirección IP de la puerta de enlace (Gateway) del servidor VPN del cliente.</li>
+                    <li>Credenciales válidas (usuario y contraseña) de un administrador del dominio.</li>
+                </ul>
+
+                <h2>Procedimiento</h2>
+
+                <h3>1. Configuración inicial del cliente VPN</h3>
+                <p>Tras finalizar la instalación y habilitación del perfil base, proceda a instalar el software: </p>
+                <ul>
+                    <li>Descargue e instale la GUI del cliente desde <a href="https://openvpn.net/community/" target="_blank">OpenVPN Community</a>.</li>
+                    <li>Exporte el certificado de conexión desde el Servidor Sede e instálelo en el cliente.</li>
+                </ul>
+
+                <h3>2. Establecimiento del túnel y enrutamiento</h3>
+                <p>Establezca la conexión VPN hacia el servidor en la red local del cliente. Una vez conectado:</p>
+                <ul>
+                    <li>Acceda a las conexiones de red ejecutando <kbd>⊞ + R</kbd> y escribiendo <code>ncpa.cpl</code>.</li>
+                    <li>Localice la interfaz Ethernet correspondiente al enlace VPN.</li>
+                    <li>Edite sus propiedades e introduzca la puerta de enlace (Gateway) del servidor VPN del cliente para permitir el enrutamiento correcto hacia la red remota.</li>
+                </ul>
+
+                <h3>3. Unión al Dominio</h3>
+                <p>No utilice el asistente de "Configuración avanzada". En su lugar:</p>
+                <ul>
+                    <li>Acceda a las propiedades del sistema (<kbd>⊞ + R</kbd>, <code>sysdm.cpl</code>).</li>
+                    <li>Haga clic en el botón <strong>Cambiar</strong>.</li>
+                    <li>Marque la opción <strong>Dominio</strong> e introduzca el nombre del mismo (ej: <code>dominio.local\NombrePC</code>).</li>
+                </ul>
+
+                <h3>4. Inicio de sesión post-unión</h3>
+                <p>Reinicie el equipo como solicita el sistema. Una vez en la pantalla de inicio de sesión:</p>
+                <div class="callout callout-warn">
+                    <div class="callout-title">Atención</div>
+                    <div class="callout-body">
+                        Para entrar, seleccione "Otro usuario". En el campo de usuario, debe introducir <code>.\NombreUsuarioLocalAdmin</code>. Es fundamental usar el punto y la barra invertida para forzar la autenticación local con el usuario con el que preparó la PC.
+                    </div>
+                </div>
+
+                <h3>5. Gestión de usuarios del dominio</h3>
+                <p>Una vez iniciada la sesión local, levante nuevamente la conexión VPN. Para integrar al usuario del dominio:</p>
+                <ul>
+                    <li>Ejecute <kbd>⊞ + R</kbd> y escriba <code>netplwiz</code>.</li>
+                    <li>Agregue el usuario del dominio y asígnele privilegios de administrador local para garantizar la compatibilidad con las aplicaciones.</li>
+                </ul>
+
+                <h3>6. Validación de la sesión del dominio</h3>
+                <div class="callout callout-warn">
+                    <div class="callout-title">¡Muy Importante!</div>
+                    <div class="callout-body">
+                        <strong>NO cierre la sesión</strong>, ya que perderá el túnel VPN. Utilice la función "Cambiar usuario" o "Switch user" desde el menú inicio para ir al muro de sesiones.
+                    </div>
+                </div>
+                <p>Desde el muro, seleccione "Otro usuario" e introduzca las credenciales del usuario del dominio. Al iniciar, se creará el perfil y podrá verificar la aplicación de las directivas (redirección de carpetas, 365, unidades, etc.).</p>
+
+                <h2>Conclusión</h2>
+                <p>Este flujo de trabajo transforma la entrega de equipos: al asegurar que las políticas y recursos están operativos desde el laboratorio, se garantiza una experiencia de usuario final impecable y se minimizan las intervenciones presenciales tras la entrega.</p>
+
+                <hr class="article-divider">
+
+                <footer class="article-footer">
+                    <div class="article-tags">
+                        <span class="tag">#Laboratorio</span>
+                        <span class="tag">#SoporteIT</span>
+                        <span class="tag">#Despliegue</span>
+                    </div>
+
+                    <div class="article-actions">
+                        <a class="btn-link" href="#top">Volver arriba</a>
+                    </div>
+                </footer>
+
+            </article>
+        </div>
+    </main>
+</body>
+</html>
