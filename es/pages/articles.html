@@ -13,6 +13,65 @@
   <script defer src="/assets/js/main.js"></script>
   <script defer src="/assets/js/hero-net.js"></script>
   <script defer src="/assets/js/articles.js"></script>
+  <style>
+    body {
+        height: 100vh;
+        overflow: hidden; /* Esto bloquea el scroll de toda la página */
+        display: flex;
+        flex-direction: column;
+    }    
+    main {
+        flex-grow: 1;
+        overflow: hidden; /* Mantiene el contenido dentro */
+        display: flex;
+        flex-direction: column;
+    }
+
+    .articles-layout {
+        display: grid;
+        /* Ajustamos el grid para que content siempre ocupe el resto */
+        grid-template-areas: 
+            "hero hero"
+            "sidebar content";
+        grid-template-columns: 260px 1fr;
+        grid-template-rows: auto 1fr; /* 1fr obliga a que la fila de content llene el resto */
+        height: 100%;
+        gap: 18px;
+        align-items: start;
+        overflow: hidden; /* Importante para confinar el scroll */
+    }
+
+    .articles-content {
+        grid-area: content;
+        display: flex;
+        flex-direction: column;
+        height: 100%; /* Obliga a que ocupe toda la celda del grid */
+        overflow: hidden; /* El contenedor padre no debe tener scroll */
+    }
+
+    /* El contenedor interno que realmente se desplaza */
+    .articles-scroll-container {
+        flex-grow: 1;
+        overflow-y: auto; /* Aquí es donde ocurre la magia */
+        padding-right: 10px; /* Espacio para que no choque con el borde */
+    }
+
+    /* Ocultar barra de scroll estéticamente */
+    .articles-scroll-container {
+        scrollbar-width: none;
+    }
+    .articles-scroll-container::-webkit-scrollbar {
+        display: none;
+    }
+    .sticky-welcome {
+        position: sticky;
+        top: 0;
+        background: var(--panel); /* Asegúrate de que tenga fondo para cubrir los artículos */
+        z-index: 10;
+        padding: 1rem 0;
+        margin: 0;
+    }
+  </style>
 </head>
 
 <body>
