@@ -1,5 +1,20 @@
 [
   {
+    "title": "Guía Maestra: Optimización de Outlook",
+    "category": "Soporte IT",
+    "slug": "optimice-outlook",
+    "description": "Domina el autoarchivado, la conversión de OST a PST, la fragmentación de archivos grandes y la automatización de backups en Outlook.",
+    "date": "2026-03-05",
+    "updated": "2026-03-05",
+    "tags": [
+      "Outlook",
+      "PST",
+      "Backup",
+      "Productividad"
+    ],
+    "featured": true
+  },
+  {
     "title": "Introducción a JavaScript",
     "category": "Programación",
     "slug": "programacion1",
@@ -37,7 +52,7 @@
     "title": "Qué ocurre en una conexión túnel con OpenVPN",
     "category": "Redes Informáticas",
     "slug": "openvpn-tunnel",
-    "description": "Instructivo de las fases en que una conexión tunel VPN se establece exitosamente",
+    "description": "[Descripción corta del artículo]",
     "date": "2025-11-28",
     "updated": "2025-11-28",
     "tags": [
