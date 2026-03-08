@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <title>Configuración Profesional de Impresoras Brother y Kyocera en Red</title>
+    <meta name="description" content="Guía para desplegar impresoras Brother y Kyocera mediante IP, configurando perfiles de impresión estándar y digitalización SMB hacia carpetas locales.">
+
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/components.css">
+    <link rel="stylesheet" href="/assets/css/articles.css">
+    <link rel="stylesheet" href="/assets/css/article.css">
+    <script defer src="/assets/js/article-code.js"></script>
+    <script defer src="/assets/js/article-figures.js"></script>
+
+    <base target="_parent">
+
+    <script defer>
+        document.addEventListener("DOMContentLoaded", () => {
+            const article = document.querySelector("[data-article]");
+            if (!article) return;
+            const toc = article.querySelector("[data-toc]");
+            const headings = article.querySelectorAll("h2, h3");
+            const slugify = (s) => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9\s-]/g, "").trim().replace(/\s+/g, "-").replace(/-+/g, "-");
+            if (!toc || headings.length === 0) {
+                const tocWrap = article.querySelector(".article-toc");
+                if (tocWrap) tocWrap.hidden = true;
+                return;
+            }
+            const used = new Set();
+            const items = [];
+            headings.forEach(h => {
+                let id = h.id ? h.id : slugify(h.textContent || "");
+                if (!id) return;
+                let base = id, i = 2;
+                while (used.has(id)) id = `${base}-${i++}`;
+                used.add(id);
+                h.id = id;
+                if (!h.querySelector(".h-anchor")) {
+                    const a = document.createElement("a");
+                    a.className = "h-anchor";
+                    a.href = `#${id}`;
+                    a.setAttribute("aria-label", "Enlace directo a esta sección");
+                    a.textContent = "¶";
+                    h.appendChild(a);
+                }
+                const level = h.tagName.toLowerCase();
+                items.push({ id, text: h.textContent.replace("¶", "").trim(), level });
+            });
+            toc.innerHTML = items.map(it => {
+                const cls = it.level === "h3" ? "toc-item toc-h3" : "toc-item";
+                return `<a class="${cls}" href="#${it.id}">${it.text}</a>`;
+            }).join("");
+        });
+    </script>
+</head>
+
+<body class="article-shell">
+
+    <main class="container article-container" 
+        data-article 
+        data-article-title="Configuración Profesional de Impresoras Brother y Kyocera en Red"
+        data-article-category="Soporte IT" 
+        data-article-date="2026-03-08" 
+        data-article-updated="2026-03-08"
+        data-article-tags="Impresoras,Brother,Kyocera,SMB,Escaneado" 
+        data-article-featured="true" 
+        data-article-draft="false">
+
+        <header class="article-header" id="top">
+            <h1>Configuración Profesional de Impresoras Brother y Kyocera en Red</h1>
+
+            <p class="article-meta">
+                <span class="meta-item">Rolando Luis Martín</span>
+                <span class="meta-sep">·</span>
+                <time class="meta-item" datetime="2026-03-08">8 Mar 2026</time>
+                <span class="meta-sep">·</span>
+                <span class="meta-item">Soporte IT</span>
+                <span class="meta-sep">·</span>
+                <span class="meta-item">Nivel: Intermedio</span>
+            </p>
+
+            <p class="lede">Estandariza el despliegue de impresoras multifunción en la red del cliente configurando perfiles de impresión optimizados y escaneo SMB directo a carpetas locales.</p>
+        </header>
+
+        <div class="article-layout">
+            <aside class="article-toc" aria-label="Tabla de contenidos">
+                <div class="toc-title">Contenido</div>
+                <nav data-toc class="toc-nav"></nav>
+                <div class="figs-title">Figuras</div>
+                <nav data-figures class="figs-nav"></nav>
+            </aside>
+            
+            <article class="article-body">
+
+                <div class="callout callout-note">
+                    <div class="callout-title">Contexto</div>
+                    <div class="callout-body">
+                        Esta guía asume que la impresora tiene una IP estática asignada y que la PC destino se encuentra en la misma subred.
+                    </div>
+                </div>
+
+                <h2>Objetivo</h2>
+                <p>Implementar un despliegue estandarizado de impresoras Brother y Kyocera creando 4 perfiles predeterminados y habilitando el escaneo directo vía SMB.</p>
+
+                <h2>Configuración de Perfiles de Impresión</h2>
+                <p>Para evitar confusiones al usuario, instalaremos la misma impresora 4 veces con nombres distintos, configurando las preferencias de cada una:</p>
+                <ul>
+                    <li><strong>BNUC:</strong> Blanco y Negro, Una Cara.</li>
+                    <li><strong>BNDC:</strong> Blanco y Negro, Doble Cara.</li>
+                    <li><strong>ACUC:</strong> A Color, Una Cara.</li>
+                    <li><strong>ACDC:</strong> A Color, Doble Cara.</li>
+                </ul>
+                <p><strong>Operativa:</strong></p>
+                <ol>
+                    <li>Añadir impresora mediante dirección IP.</li>
+                    <li>En "Preferencias de impresión", ajustar el color (Escala de grises o Color) y la configuración de dúplex.</li>
+                    <li>Renombrar la cola de impresión en el panel de control antes de instalar la siguiente.</li>
+                </ol>
+
+                <h2>Escaneado SMB a carpeta local</h2>
+                <p>Para que la impresora pueda enviar documentos directamente a una carpeta en la PC (protocolo SMB):</p>
+                <h3>1. Preparación en la PC</h3>
+                <ul>
+                    <li>Cree la carpeta (ej: <code>C:\Scans</code>) y compártala con permisos de lectura/escritura para un usuario local de la PC.</li>
+                    <li>Asegúrese de que el perfil de red sea "Privado".</li>
+                </ul>
+                <h3>2. Configuración en el Web Server de la impresora</h3>
+                <ul>
+                    <li>Acceda a la IP de la impresora vía navegador.</li>
+                    <li>Diríjase a la sección de <strong>Libreta de direcciones</strong> o <strong>Escaneo a Red</strong>.</li>
+                    <li>Cree un nuevo perfil (SMB):
+                        <ul>
+                            <li><strong>Ruta:</strong> <code>\\IP_de_la_PC\Nombre_Carpeta_Compartida</code></li>
+                            <li><strong>Usuario/Password:</strong> Use las credenciales del usuario creado en el paso anterior.</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <div class="callout callout-tip">
+                    <div class="callout-title">Tip Pro</div>
+                    <div class="callout-body">
+                        En Kyocera, utilice la herramienta "Command Center RX". En Brother, acceda mediante "Web Based Management" para verificar la conexión SMB; si el test falla, revise que el puerto 445 esté permitido en el Firewall de Windows.
+                    </div>
+                </div>
+
+                <h2>Validación</h2>
+                <ul>
+                    <li>Realice una impresión de prueba desde cada una de las 4 colas.</li>
+                    <li>Ejecute un escaneo de prueba y confirme que el archivo aparece en la carpeta local.</li>
+                </ul>
+
+                <div class="callout callout-warn">
+                    <div class="callout-title">Advertencia SMBv1</div>
+                    <div class="callout-body">
+                        Muchos modelos antiguos de Brother o Kyocera requieren SMBv1. Se recomienda encarecidamente actualizar el firmware de la impresora a una versión que soporte SMBv2/v3 para cumplir con estándares de seguridad modernos.
+                    </div>
+                </div>
+
+                <h2>Conclusión</h2>
+                <p>La segmentación de impresoras en perfiles específicos elimina el error humano durante la impresión y el escaneo SMB asegura un flujo de trabajo sin necesidad de software de terceros, haciendo que la infraestructura del cliente sea más robusta y fácil de mantener.</p>
+
+                <hr class="article-divider">
+
+                <footer class="article-footer">
+                    <div class="article-tags">
+                        <span class="tag">#Impresoras</span>
+                        <span class="tag">#SMB</span>
+                        <span class="tag">#Brother</span>
+                        <span class="tag">#Kyocera</span>
+                    </div>
+
+                    <div class="article-actions">
+                        <a class="btn-link" href="#top">Volver arriba</a>
+                    </div>
+                </footer>
+
+            </article>
+        </div>
+    </main>
+</body>
+</html>

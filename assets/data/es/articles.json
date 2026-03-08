@@ -16,6 +16,22 @@
     "featured": true
   },
   {
+    "title": "Configuración Profesional de Impresoras Brother y Kyocera en Red",
+    "category": "Soporte IT",
+    "slug": "mpf_en_red",
+    "description": "Guía para desplegar impresoras Brother y Kyocera mediante IP, configurando perfiles de impresión estándar y digitalización SMB hacia carpetas locales.",
+    "date": "2026-03-08",
+    "updated": "2026-03-08",
+    "tags": [
+      "Impresoras",
+      "Brother",
+      "Kyocera",
+      "SMB",
+      "Escaneado"
+    ],
+    "featured": true
+  },
+  {
     "title": "Preparación de PCs en Laboratorio: Unión a Dominio vía VPN",
     "category": "Soporte IT",
     "slug": "unir_pc_dominio",
