@@ -9,7 +9,7 @@
 .iframe-section{
   grid-area: content;
   min-width: 0;  /*clave para evitar overflow raro en grid */
-  align-self: start;
+  align-self: stretch;
 }
 
 iframe{
@@ -19,20 +19,21 @@ iframe{
 .iframe-section {
   display:flex;
   flex-direction:column;
-  padding: 20px;
+  padding: 10px;
   border: 1px solid var(--line);
   border-radius: 14px;
   background: color-mix(in srgb, var(--panel) 82%, transparent);
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  height: calc(100vh - 140px);
 }
 
 .reader-bar{
   display:flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: right;
   gap: 12px;
-  padding: 10px 16px;
+  padding: 8px 16px;
   border-bottom: 1px solid var(--line);
   background:color-mix(in srgb, var(--panel) 88%, transparent);
 }
@@ -49,13 +50,15 @@ iframe{
 #articleIframe{
   width:100%;
   flex: 1;
-  height: calc(100vh - 230px);
-  min-height: 0;
-  max-height: 820px;
+  /* height: calc(100vh - 230px) ;
+  min-height: 0; 
+  max-height: 820px; */
   border:0;
   display:block;
   border-radius: 10px;
   background: transparent;
+  height: calc(100vh - 260px);
+  min-height: 0;
 }
 
 .reader-close{
@@ -79,14 +82,14 @@ iframe{
   display:flex;
   align-items:center;
   gap:10px;
-  padding: 14px 16px 18px;
+  padding: 8px 16px 8px;
   border-top: 1px solid var(--line);
   background: rgba(0,0,0,.12);
 }
 
 .progress-container{
   position: relative;
-  margin-bottom: 18px;
+  margin-bottom: 8px;
   width:180px;
 }
 
@@ -200,12 +203,13 @@ iframe{
 .articles-layout{
   display: grid;
   grid-template-areas:
-    "hero content"
+    "hero    content"
     "sidebar content";
   grid-template-columns: 260px 1fr;
   grid-template-rows: auto 1fr;
-  gap: 26px;
+  gap: 18px;
   align-items: start;
+  min-height: calc(100vh - 140px);
 }
 
 /* Barra lateral */
@@ -277,11 +281,6 @@ iframe{
 
   .articles-section-title{
     margin-top: 20px;
-  }
-
-  #articleIframe{
-    height: calc(100vh - 260px);
-    min-height: 440px;
   }
 
   .progress-step{
