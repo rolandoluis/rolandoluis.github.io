@@ -25,7 +25,7 @@ iframe{
   background: color-mix(in srgb, var(--panel) 82%, transparent);
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  height: calc(100vh - 200px);
+  height: calc(100vh - 210px);
 }
 
 .reader-bar{
@@ -57,7 +57,7 @@ iframe{
   display:block;
   border-radius: 10px;
   background: transparent;
-  height: calc(100vh - 200px);
+  height: calc(100vh - 210px);
   min-height: 0;
 }
 
@@ -83,15 +83,15 @@ iframe{
   align-items:center;
   gap:10px;
   padding: 8px 16px 8px;
-  border-top: 1px solid var(--line);
-  background: rgba(0,0,0,.12);
+  /* border-top: 1px solid var(--line);
+  background: rgba(0,0,0,.12); */
   justify-content: right;
   flex: auto;
 }
 
 .progress-container{
   position: relative;
-  margin-bottom: 8px;
+  /* margin-bottom: 8px; */
   width: fit-content;
   right: auto;
 }
@@ -212,15 +212,20 @@ iframe{
   grid-template-rows: auto 1fr;
   gap: 18px;
   align-items: start;
-  min-height: calc(100vh - 140px);
+  min-height: calc(100vh - 210px);
 }
 
 /* Barra lateral */
 .sidebar{
   grid-area: sidebar;
-  position: sticky;
+  /* position: sticky; */
   align-self: start;
-  top: 90px;
+  /* top: 90px; */
+  border: 1px solid var(--line);
+  background: var(--panel);
+  border-radius: 12px;
+  padding: 16px 18px;
+  min-height: 265px;
   /* width: auto;
   flex-shrink: initial;
   background: color-mix(in srgb, var(--panel) 78%, transparent);
