@@ -16,6 +16,21 @@
     "featured": true
   },
   {
+    "title": "Solución a firmas HTML en Outlook",
+    "category": "Soporte IT",
+    "slug": "outlook_firmas",
+    "description": "Guía técnica para solucionar problemas de persistencia y renderizado de firmas HTML en Microsoft Outlook.",
+    "date": "2026-03-08",
+    "updated": "2026-03-08",
+    "tags": [
+      "Outlook",
+      "HTML",
+      "Productividad",
+      "Soporte"
+    ],
+    "featured": true
+  },
+  {
     "title": "Guía Maestra: Optimización de Outlook",
     "category": "Soporte IT",
     "slug": "optimice-outlook",

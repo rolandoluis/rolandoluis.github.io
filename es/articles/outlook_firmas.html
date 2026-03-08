@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <title>Solución definitiva: Outlook no mantiene las firmas HTML</title>
+    <meta name="description" content="Guía técnica para solucionar problemas de persistencia y renderizado de firmas HTML en Microsoft Outlook.">
+
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/components.css">
+    <link rel="stylesheet" href="/assets/css/articles.css">
+    <link rel="stylesheet" href="/assets/css/article.css">
+    <script defer src="/assets/js/article-code.js"></script>
+    <script defer src="/assets/js/article-figures.js"></script>
+
+    <base target="_parent">
+
+    <script defer>
+        document.addEventListener("DOMContentLoaded", () => {
+            const article = document.querySelector("[data-article]");
+            if (!article) return;
+            const toc = article.querySelector("[data-toc]");
+            const headings = article.querySelectorAll("h2, h3");
+            const slugify = (s) => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9\s-]/g, "").trim().replace(/\s+/g, "-").replace(/-+/g, "-");
+            if (!toc || headings.length === 0) {
+                const tocWrap = article.querySelector(".article-toc");
+                if (tocWrap) tocWrap.hidden = true;
+                return;
+            }
+            const used = new Set();
+            const items = [];
+            headings.forEach(h => {
+                let id = h.id ? h.id : slugify(h.textContent || "");
+                if (!id) return;
+                let base = id, i = 2;
+                while (used.has(id)) id = `${base}-${i++}`;
+                used.add(id);
+                h.id = id;
+                if (!h.querySelector(".h-anchor")) {
+                    const a = document.createElement("a");
+                    a.className = "h-anchor";
+                    a.href = `#${id}`;
+                    a.setAttribute("aria-label", "Enlace directo a esta sección");
+                    a.textContent = "¶";
+                    h.appendChild(a);
+                }
+                const level = h.tagName.toLowerCase();
+                items.push({ id, text: h.textContent.replace("¶", "").trim(), level });
+            });
+            toc.innerHTML = items.map(it => {
+                const cls = it.level === "h3" ? "toc-item toc-h3" : "toc-item";
+                return `<a class="${cls}" href="#${it.id}">${it.text}</a>`;
+            }).join("");
+        });
+    </script>
+</head>
+
+<body class="article-shell">
+
+    <main class="container article-container" 
+        data-article 
+        data-article-title="Solución a firmas HTML en Outlook"
+        data-article-category="Soporte IT" 
+        data-article-date="2026-03-08" 
+        data-article-updated="2026-03-08"
+        data-article-tags="Outlook,HTML,Productividad,Soporte" 
+        data-article-featured="true" 
+        data-article-draft="false">
+
+        <header class="article-header" id="top">
+            <h1>Outlook no mantiene las firmas HTML: Diagnóstico y Solución</h1>
+
+            <p class="article-meta">
+                <span class="meta-item">Rolando Luis Martín</span>
+                <span class="meta-sep">·</span>
+                <time class="meta-item" datetime="2026-03-08">8 Mar 2026</time>
+                <span class="meta-sep">·</span>
+                <span class="meta-item">Soporte IT</span>
+                <span class="meta-sep">·</span>
+                <span class="meta-item">Nivel: Intermedio</span>
+            </p>
+
+            <p class="lede">¿Tu firma HTML desaparece o se rompe en Outlook? Descubre por qué ocurre y cómo estandarizar su funcionamiento para evitar errores recurrentes.</p>
+        </header>
+
+        <div class="article-layout">
+            <aside class="article-toc" aria-label="Tabla de contenidos">
+                <div class="toc-title">Contenido</div>
+                <nav data-toc class="toc-nav"></nav>
+                <div class="figs-title">Figuras</div>
+                <nav data-figures class="figs-nav"></nav>
+            </aside>
+            
+            <article class="article-body">
+
+                <div class="callout callout-note">
+                    <div class="callout-title">Nota</div>
+                    <div class="callout-body">
+                        El motor de renderizado de Outlook no es un navegador web estándar. Utiliza un editor basado en Word, lo que explica la mayoría de los problemas de compatibilidad con código HTML moderno.
+                    </div>
+                </div>
+
+                <h2>Incidencia</h2>
+                <p>Las opciones de firma predeterminada vuelvan a <strong>"ninguna"</strong> en las opciones de Redactar y Responder</p>
+
+                <h2>Objetivo</h2>
+                <p>Resolver la inestabilidad de las firmas personalizadas en el cliente de escritorio de Microsoft Outlook, garantizando una correcta persistencia y visualización del código HTML.</p>
+
+                <h2>Introducción</h2>
+                <p>Para muchos profesionales IT, la gestión de firmas es una tarea recurrente. Un error frecuente es la pérdida de formato o la desaparición total de la firma tras reiniciar el cliente. Esto se debe principalmente a conflictos de codificación de caracteres y al uso de editores de texto enriquecido (como Word) para generar código que debería ser estricto.</p>
+
+                <h2>Diagnóstico del problema</h2>
+                
+                <p>Si Outlook no mantiene la configuración, las causas principales suelen ser:</p>
+                <ul>
+                    <li>Codificación ANSI en lugar de UTF-8 en los archivos locales.</li>
+                    <li>Rutas de imágenes locales que no son accesibles desde el servidor de correo.</li>
+                    <li>Entradas de registro residuales tras actualizaciones de Office.</li>
+                </ul>
+
+                <h2>Pasos para la solución</h2>
+                
+                <h3>Paso 1: Estandarización del código</h3>
+                <p>Evita copiar y pegar desde Word. Utiliza un editor de texto plano (VS Code o Notepad++) para crear tu archivo <code>.html</code>. Asegúrate de que las imágenes tengan rutas absolutas (URLs públicas) y no referencias a tu disco duro local.</p>
+
+                <h3>Paso 2: Corrección de codificación</h3>
+                <p>Localiza la carpeta de firmas en <code>%AppData%\Microsoft\Signatures</code>. Abre tus archivos <code>.htm</code>, <code>.txt</code> y <code>.rtf</code> y asegúrate de guardarlos explícitamente con codificación <strong>UTF-8</strong>.</p>
+
+                <div class="callout callout-tip">
+                    <div class="callout-title">Tip</div>
+                    <div class="callout-body">
+                        Si el problema persiste, usa <strong>Outlook Web (OWA)</strong> para configurar la firma; al ser un entorno basado en web, es mucho más tolerante con el código HTML que la versión de escritorio.
+                    </div>
+                </div>
+
+                <h2>Validación</h2>
+                <ul>
+                    <li>Verifica que el botón de firmas no esté bloqueado por políticas de grupo (GPO) de tu empresa.</li>
+                    <li>Comprueba que no existan varias versiones de Office instaladas que causen conflictos en el registro.</li>
+                </ul>
+
+                <h2>Conclusión</h2>
+                <p>La clave para una firma estable en Outlook es la simplicidad del código y una correcta codificación. Al abandonar el "copiar y pegar" desde Word y centralizar los recursos de imagen en la web, se elimina la fuente de la mayoría de los errores de persistencia.</p>
+
+                <hr class="article-divider">
+
+                <footer class="article-footer">
+                    <div class="article-tags">
+                        <span class="tag">#Outlook</span>
+                        <span class="tag">#Soporte</span>
+                        <span class="tag">#Productividad</span>
+                    </div>
+
+                    <div class="article-actions">
+                        <a class="btn-link" href="#top">Volver arriba</a>
+                    </div>
+                </footer>
+
+            </article>
+        </div>
+    </main>
+</body>
+</html>
