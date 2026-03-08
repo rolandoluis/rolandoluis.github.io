@@ -48,6 +48,21 @@
     "featured": true
   },
   {
+    "title": "Implementación de Active Directory y Backup Centralizado",
+    "category": "Sistemas Operativos",
+    "slug": "dominio_nas_gpo",
+    "description": "Guía técnica para la configuración de un Controlador de Dominio y estrategia de almacenamiento en NAS para entornos profesionales de 25 usuarios.",
+    "date": "2026-03-08",
+    "updated": "2026-03-08",
+    "tags": [
+      "ActiveDirectory",
+      "NAS",
+      "GPO",
+      "Seguridad"
+    ],
+    "featured": true
+  },
+  {
     "title": "Las Cookies y la Primera Visita",
     "category": "Desarrollo Web",
     "slug": "controlar_visitas-cookies",

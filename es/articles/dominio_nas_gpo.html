@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <title>Implementación de Estructura de Dominio y Backup Centralizado</title>
+    <meta name="description" content="Guía técnica para la configuración de un Controlador de Dominio y estrategia de almacenamiento en NAS para entornos profesionales de 25 usuarios.">
+
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/components.css">
+    <link rel="stylesheet" href="/assets/css/articles.css">
+    <link rel="stylesheet" href="/assets/css/article.css">
+    <script defer src="/assets/js/article-code.js"></script>
+    <script defer src="/assets/js/article-figures.js"></script>
+
+    <base target="_parent">
+
+    <script defer>
+        document.addEventListener("DOMContentLoaded", () => {
+            const article = document.querySelector("[data-article]");
+            if (!article) return;
+            const toc = article.querySelector("[data-toc]");
+            const headings = article.querySelectorAll("h2, h3");
+            const slugify = (s) => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9\s-]/g, "").trim().replace(/\s+/g, "-").replace(/-+/g, "-");
+            if (!toc || headings.length === 0) {
+                const tocWrap = article.querySelector(".article-toc");
+                if (tocWrap) tocWrap.hidden = true;
+                return;
+            }
+            const used = new Set();
+            const items = [];
+            headings.forEach(h => {
+                let id = h.id ? h.id : slugify(h.textContent || "");
+                if (!id) return;
+                let base = id, i = 2;
+                while (used.has(id)) id = `${base}-${i++}`;
+                used.add(id);
+                h.id = id;
+                if (!h.querySelector(".h-anchor")) {
+                    const a = document.createElement("a");
+                    a.className = "h-anchor";
+                    a.href = `#${id}`;
+                    a.setAttribute("aria-label", "Enlace directo a esta sección");
+                    a.textContent = "¶";
+                    h.appendChild(a);
+                }
+                const level = h.tagName.toLowerCase();
+                items.push({ id, text: h.textContent.replace("¶", "").trim(), level });
+            });
+            toc.innerHTML = items.map(it => {
+                const cls = it.level === "h3" ? "toc-item toc-h3" : "toc-item";
+                return `<a class="${cls}" href="#${it.id}">${it.text}</a>`;
+            }).join("");
+        });
+    </script>
+</head>
+
+<body class="article-shell">
+
+    <main class="container article-container" 
+        data-article 
+        data-article-title="Implementación de Active Directory y Backup Centralizado"
+        data-article-category="Sistemas Operativos" 
+        data-article-date="2026-03-08" 
+        data-article-updated="2026-03-08"
+        data-article-tags="ActiveDirectory,NAS,GPO,Seguridad" 
+        data-article-featured="true" 
+        data-article-draft="false">
+
+        <header class="article-header" id="top">
+            <h1>Implementación de Estructura de Dominio y Backup Centralizado</h1>
+
+            <p class="article-meta">
+                <span class="meta-item">Rolando Luis Martín</span>
+                <span class="meta-sep">·</span>
+                <time class="meta-item" datetime="2026-03-08">8 Mar 2026</time>
+                <span class="meta-sep">·</span>
+                <span class="meta-item">Sistemas</span>
+                <span class="meta-sep">·</span>
+                <span class="meta-item">Nivel: Intermedio</span>
+            </p>
+
+            <p class="lede">Guía técnica estructurada para la implementación de un entorno profesional de dominio y almacenamiento centralizado para 25 usuarios[cite: 225, 226].</p>
+        </header>
+
+        <div class="article-layout">
+            <aside class="article-toc" aria-label="Tabla de contenidos">
+                <div class="toc-title">Contenido</div>
+                <nav data-toc class="toc-nav"></nav>
+                <div class="figs-title">Figuras</div>
+                <nav data-figures class="figs-nav"></nav>
+            </aside>
+            
+            <article class="article-body">
+
+                <div class="callout callout-note">
+                    <div class="callout-title">Nota</div>
+                    <div class="callout-body">
+                        Esta configuración está diseñada para una empresa con cuatro departamentos clave: Dirección, Recursos Humanos, Producción y Comercialización[cite: 227].
+                    </div>
+                </div>
+
+                <h2>Objetivo</h2>
+                <p>Optimizar la seguridad y disponibilidad de los datos mediante un Controlador de Dominio (DC) y la integración de un NAS de 8TB como repositorio central[cite: 227].</p>
+
+                <h2>Contexto</h2>
+                <p>La gestión centralizada en Windows Server permite aplicar permisos granulares y facilitar la auditoría de acceso para los 25 usuarios del entorno[cite: 235, 226].</p>
+
+                <h2>Desarrollo</h2>
+
+                <h3>1. Usuarios y Grupos en Active Directory</h3>
+                <p>Utilizaremos Unidades Organizativas (OU) para segmentar las políticas bajo una unidad principal denominada "Empresa_Usuarios"[cite: 229, 230]:</p>
+                <ul>
+                    <li><strong>OU Dirección:</strong> Asociada al grupo de seguridad <code>G_Direccion</code>[cite: 231].</li>
+                    <li><strong>OU Recursos Humanos:</strong> Asociada al grupo <code>G_RRHH</code>[cite: 232].</li>
+                    <li><strong>OU Producción:</strong> Asociada al grupo <code>G_Produccion</code>[cite: 233].</li>
+                    <li><strong>OU Comercialización:</strong> Asociada al grupo <code>G_Comercial</code>[cite: 234].</li>
+                </ul>
+
+                <h3>2. Diseño del Almacenamiento en el NAS</h3>
+                <p>La ruta raíz <code>\\NAS-BACKUP\Empresa_Data</code> reflejará la jerarquía organizacional para facilitar la sincronización y cuotas de disco[cite: 239, 252]:</p>
+                <pre><code class="language-bash">\Direccion
+  \Backups_Area (Datos operativos)
+  \Perfiles (Redirección de carpetas)
+\RRHH
+  \Backups_Area
+  \Perfiles
+... (Repetir estructura para Producción y Comercial)</code></pre> [cite: 240, 241, 242, 243, 244, 245, 246, 249]
+
+                <h3>3. Implementación de GPO: Redirección de Carpetas</h3>
+                <p>Configuraremos una directiva para que la información de los terminales se guarde automáticamente en el servidor[cite: 254]:</p>
+                <ul>
+                    <li><strong>Ruta:</strong> Configuración de usuario > Directivas > Configuración de Windows > Redirección de carpetas[cite: 257].</li>
+                    <li><strong>Destino:</strong> <code>\\SERVIDOR\Perfiles\%USERNAME%</code>[cite: 260].</li>
+                </ul>
+
+                <div class="callout callout-tip">
+                    <div class="callout-title">Tip de Seguridad</div>
+                    <div class="callout-body">
+                        Desmarca "Otorgar al usuario derechos exclusivos" para permitir que los administradores realicen backups de las carpetas redirigidas[cite: 261].
+                    </div>
+                </div>
+
+                <h2>Estrategia de Backup</h2>
+                <p>Se recomienda una sincronización incremental programada (ej. Synology Active Backup) con la siguiente frecuencia[cite: 264, 265]:</p>
+                <ul>
+                    <li><strong>Copia Completa:</strong> Semanal[cite: 265].</li>
+                    <li><strong>Copia Diferencial:</strong> Diaria para optimizar los 8TB de capacidad[cite: 265].</li>
+                </ul>
+
+                <h2>Conclusión</h2>
+                <p>La integración de Active Directory con un almacenamiento NAS centralizado no solo simplifica la administración de los 25 usuarios, sino que garantiza la soberanía de los datos. Al utilizar GPOs de redirección de carpetas, se elimina la dependencia del hardware local de los empleados, asegurando que la información crítica de departamentos como RRHH o Dirección esté siempre respaldada y disponible para procesos de recuperación ante desastres.</p>
+
+                <hr class="article-divider">
+
+                <footer class="article-footer">
+                    <div class="article-tags">
+                        <span class="tag">#ActiveDirectory</span>
+                        <span class="tag">#NAS</span>
+                        <span class="tag">#Backup</span>
+                        <span class="tag">#GPO</span>
+                    </div>
+
+                    <div class="article-actions">
+                        <a class="btn-link" href="#top">Volver arriba</a>
+                    </div>
+                </footer>
+
+            </article>
+        </div>
+
+    </main>
+
+    <script>
+      (() => {
+        let lastHeight = 0;
+        let rafId = 0;
+        function measureAndPost() {
+          cancelAnimationFrame(rafId);
+          rafId = requestAnimationFrame(() => {
+            const body = document.body;
+            const html = document.documentElement;
+            const h = Math.max(body.scrollHeight, body.offsetHeight, html.scrollHeight, html.offsetHeight);
+            if (Math.abs(h - lastHeight) < 2) return;
+            lastHeight = h;
+            parent.postMessage({ type: "articleHeight", height: h }, "*");
+          });
+        }
+        window.addEventListener("load", measureAndPost);
+        document.addEventListener("DOMContentLoaded", measureAndPost);
+        const ro = new ResizeObserver(() => measureAndPost());
+        ro.observe(document.body);
+      })();
+    </script>
+
+</body>
+</html>
