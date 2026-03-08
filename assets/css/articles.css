@@ -5,41 +5,39 @@
 }
 
 /* Contenido de artículos */
-.articles-content{
+/* .articles-content{
   grid-area: content;
   display: flex;
   flex-direction: column;
   contain: layout;
-  min-width: 0;  /*clave para evitar overflow raro en grid */
+  min-width: 0;  
   position: relative;
   align-self: stretch;
   height: 100%;
   overflow: hidden;
-}
+} */
 
-.sticky-welcome {
+/* .sticky-welcome {
     position: sticky;
-    top: 0; /* Se pega al borde superior del contenedor padre */
-    background: var(--panel); /* Asegura que no se vea el texto de atrás */
+    top: 0;  
+    background: var(--panel);  
     padding: 10px 0;
     margin: 0;
     z-index: 10;
     margin-top: 0; 
     margin-bottom: 0;
-}
+} */
 
-.articles-scroll-container {
-    flex-grow: 1;      /* Ocupa todo el espacio restante */
-    overflow-y: auto;  /* Aquí aparece el scroll, pero solo para los artículos */
-    
-    /* Opcional: Para ocultar la barra de scroll visualmente */
-    scrollbar-width: none;  /* Firefox */
-}
+/* .articles-scroll-container {
+    flex-grow: 1;       
+    overflow-y: auto;   
+    scrollbar-width: none;   
+} */
 
 /* Para ocultar scrollbar en Chrome/Safari/Edge */
-.articles-scroll-container::-webkit-scrollbar {
+/* .articles-scroll-container::-webkit-scrollbar {
     display: none;
-}
+} */
 
 iframe{
   background: transparent;
@@ -235,7 +233,7 @@ iframe{
   background-color: var(--accent-net);
 }
 
-.articles-layout{
+/* .articles-layout{
   display: grid;
   grid-template-areas:
     "hero    content"
@@ -245,7 +243,7 @@ iframe{
   gap: 18px;
   align-items: start;
   min-height: calc(100vh - 210px);
-}
+} */
 
 /* Barra lateral */
 .sidebar{
