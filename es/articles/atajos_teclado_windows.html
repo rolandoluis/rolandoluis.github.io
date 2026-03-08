@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <title>Guía Maestra: Atajos de Teclado esenciales para Windows 11</title>
+    <meta name="description" content="Optimiza tu flujo de trabajo con esta recopilación exhaustiva de atajos de teclado para Windows 11, desde funciones generales hasta el Explorador de archivos.">
+
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/components.css">
+    <link rel="stylesheet" href="/assets/css/articles.css">
+    <link rel="stylesheet" href="/assets/css/article.css">
+    <script defer src="/assets/js/article-code.js"></script>
+    <script defer src="/assets/js/article-figures.js"></script>
+
+    <base target="_parent">
+
+    <script defer>
+        // ===== Article Enhancements (TOC + <kbd>Anchors) =====
+        document.addEventListener("DOMContentLoaded", () => {
+            const article = document.querySelector("[data-article]");
+            if (!article) return;
+
+            const toc = article.querySelector("[data-toc]");
+            const headings = article.querySelectorAll("h2, h3");
+
+            const slugify = (s) =>
+                s.toLowerCase()
+                    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                    .replace(/[^a-z0-9\s-]/g, "")
+                    .trim()
+                    .replace(/\s+/g, "-")
+                    .replace(/-+/g, "-");
+
+            if (!toc || headings.length === 0) {
+                const tocWrap = article.querySelector(".article-toc");
+                if (tocWrap) tocWrap.hidden = true;
+                return;
+            }
+
+            const used = new Set();
+            const items = [];
+
+            headings.forEach(h => {
+                let id = h.id ? h.id : slugify(h.textContent || "");
+                if (!id) return;
+
+                let base = id, i = 2;
+                while (used.has(id)) id = `${base}-${i++}`;
+                used.add(id);
+                h.id = id;
+
+                if (!h.querySelector(".h-anchor")) {
+                    const a = document.createElement("a");
+                    a.className = "h-anchor";
+                    a.href = `#${id}`;
+                    a.setAttribute("aria-label", "Enlace directo a esta sección");
+                    a.textContent = "¶";
+                    h.appendChild(a);
+                }
+
+                const level = h.tagName.toLowerCase(); // h2/h3
+                items.push({ id, text: h.textContent.replace("¶", "").trim(), level });
+            });
+
+            toc.innerHTML = items.map(it => {
+                const cls = it.level === "h3" ? "toc-item toc-h3" : "toc-item";
+                return `<a class="${cls}" href="#${it.id}">${it.text}</a>`;
+            }).join("");
+
+            const hash = (location.hash || "").slice(1);
+            if (hash) {
+                const target = document.getElementById(hash);
+                if (target) target.scrollIntoView({ block: "start" });
+            }
+        });
+    </script>
+</head>
+
+<body class="article-shell">
+
+    <main class="container article-container" 
+        data-article 
+        data-article-title="Atajos de Teclado para Windows 11"
+        data-article-category="Sistemas Operativos" 
+        data-article-date="2026-03-08" 
+        data-article-updated="2026-03-08"
+        data-article-tags="Windows11,Productividad,Atajos,Sistemas" 
+        data-article-featured="false" 
+        data-article-draft="false">
+
+        <header class="article-header" id="top">
+            <h1>Atajos de Teclado para Windows 11</h1>
+
+            <p class="article-meta">
+                <span class="meta-item">Rolando Luis Martín</span>
+                <span class="meta-sep">·</span>
+                <time class="meta-item" datetime="2026-03-08">8 Mar 2026</time>
+                <span class="meta-sep">·</span>
+                <span class="meta-item">Sistemas Operativos</span>
+                <span class="meta-sep">·</span>
+                <span class="meta-item">Nivel: Base</span>
+            </p>
+
+            <p class="lede">Domina Windows 11 utilizando combinaciones de teclas que te permitirán navegar, gestionar ventanas y administrar archivos con la velocidad de un profesional.</p>
+        </header>
+
+        <div class="article-layout">
+            <aside class="article-toc" aria-label="Tabla de contenidos">
+                <div class="toc-title">Contenido</div>
+                <nav data-toc class="toc-nav"></nav>
+                <div class="figs-title">Figuras</div>
+                <nav data-figures class="figs-nav"></nav>
+            </aside>
+            
+            <article class="article-body">
+
+                <div class="callout callout-note">
+                    <div class="callout-title">Nota</div>
+                    <div class="callout-body">
+                        Esta guía se centra en las combinaciones nativas de Windows 11. Algunos atajos de la tecla Windows (Win) pueden variar ligeramente en versiones anteriores del sistema.
+                    </div>
+                </div>
+
+                <h2>Objetivo</h2>
+                <p>El propósito de esta guía es reducir la dependencia del ratón y mejorar la eficiencia operativa del usuario en el entorno de Windows 11, facilitando el acceso rápido a herramientas del sistema y la gestión avanzada de ventanas.</p>
+
+                <h2>Introducción</h2>
+                <p>En el desarrollo y la administración de sistemas, el tiempo es el recurso más valioso. Los atajos de teclado no son solo una comodidad, sino una herramienta de productividad que permite mantener el flujo de trabajo sin distracciones. Windows 11 introduce nuevas combinaciones, especialmente enfocadas en el diseño de ventanas y la integración de funciones del sistema.</p>
+
+                <h2>Atajos generales</h2>
+                <p>Estas combinaciones son la base de la navegación en prácticamente cualquier aplicación dentro del ecosistema Windows:</p>
+                <ul>
+                    <li><strong><kbd>Ctrl</kbd> + <kbd>C</kbd>:</kbd></strong> Copiar</li>
+                    <li><strong><kbd>Ctrl</kbd> + <kbd>V</kbd>:</strong> Pegar</li>
+                    <li><strong><kbd>Ctrl</kbd> + <kbd>X</kbd>:</strong> Cortar</li>
+                    <li><strong><kbd>Ctrl</kbd> + <kbd>Z</kbd>:</strong> Deshacer</li>
+                    <li><strong><kbd>Ctrl</kbd> + <kbd>Y</kbd>:</strong> Rehacer</li>
+                    <li><strong><kbd>Ctrl</kbd> + <kbd>A</kbd>:</strong> Seleccionar todo</li>
+                    <li><strong><kbd>Alt</kbd> + <kbd>Tab</kbd>:</strong> Cambiar entre aplicaciones abiertas</li>
+                    <li><strong><kbd>Alt</kbd> + <kbd>F4</kbd>:</strong> Cerrar la ventana activa</li>
+                    <li><strong><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Esc</kbd>:</strong> Abrir el Administrador de tareas</li>
+                    <li><strong><kbd>F2</kbd>:</strong> Renombrar un archivo o carpeta seleccionada</li>
+                </ul>
+
+                <div class="callout callout-tip">
+                    <div class="callout-title">Tip</div>
+                    <div class="callout-body">
+                        Usa <strong><kbd>Ctrl</kbd> + <kbd>Shift + <kbd>Esc</strong> para abrir directamente el Administrador de tareas si una aplicación deja de responder; es más rápido que el clásico <kbd>Ctrl</kbd> + <kbd>Alt + <kbd>Del.
+                    </div>
+                </div>
+
+                <h2>Atajos de Windows 11</h2>
+                <p>Aprovecha las funciones específicas del sistema operativo y la gestión de multiventana (Snap Layouts):</p>
+                <ul>
+                    <li><strong><kbd>⊞</kbd>+ <kbd>D</kbd>:</strong> Mostrar u ocultar el escritorio</li>
+                    <li><strong><kbd>⊞</kbd>+ <kbd>I</kbd>:</strong> Abrir la configuración de Windows 11</li>
+                    <li><strong><kbd>⊞</kbd>+ <kbd>Pause</kbd>:</strong> Abrir configuración "Acerca de" o Información del sistema</li>
+                    <li><strong><kbd>⊞</kbd>+ <kbd>Alt</kbd> + <kbd>↑</kbd>:</strong> Acoplar la ventana activa al borde superior</li>
+                    <li><strong><kbd>⊞</kbd>+ <kbd>Alt</kbd> + <kbd>↓</kbd>:</strong> Acoplar la ventana activa al borde inferior</li>
+                    <li><strong><kbd>⊞</kbd>+ <kbd>Alt</kbd> + <kbd>→</kbd>:</strong> Acoplar la ventana activa al borde derecho</li>
+                    <li><strong><kbd>⊞</kbd>+ <kbd>Alt</kbd> + <kbd>←</kbd>:</strong> Acoplar la ventana activa al borde izquierdo</li>
+                    <li><strong><kbd>⊞</kbd>+ <kbd>Alt</kbd> + <kbd>K</kbd>:</strong> Alternar la activación del micrófono</li>
+                    <li><strong><kbd>⊞</kbd>+ <kbd>,</kbd> :</strong> Mostrar momentáneamente el escritorio</li>
+                    <li><strong><kbd>⊞</kbd>+ <kbd>Ctrl</kbd> + <kbd>Q:</strong> Abrir la Asistencia Rápida</li>
+                    <li><strong><kbd>⊞</kbd>+ <kbd>Ctrl</kbd> + <kbd>Barra espaciadora:</kbd></strong> Reabrir última ventana cerrada</li>
+                    <li><strong><kbd>⊞</kbd>+ <kbd>↓</kbd>:</strong> Minimizar la ventana actual</li>
+                    <li><strong><kbd>⊞</kbd>+ <kbd>Shift</kbd> + <kbd>↓</kbd>:</strong> Restaurar ventana maximizada o acoplada</li>
+                    <li><strong><kbd>⊞</kbd>+ <kbd>Shift</kbd> + <kbd>→</kbd>:</strong> Mover ventana actual al monitor derecho</li>
+                    <li><strong><kbd>⊞</kbd>+ <kbd>Shift</kbd> + <kbd>←</kbd>:</strong> Mover ventana actual al monitor izquierdo</li>
+                    <li><strong><kbd>⊞</kbd>+ <kbd>Shift</kbd> + <kbd>M</kbd>:</strong> Restaurar ventana minimizada</li>
+                    <li><strong><kbd>⊞</kbd>+ <kbd>E</kbd>:</strong> Abrir el Explorador de Archivos</li>
+                    <li><strong><kbd>⊞</kbd>+ <kbd>L</kbd>:</strong> Bloquear tu computadora</li>
+                    <li><strong><kbd>⊞</kbd>+ <kbd>P</kbd>:</strong> Proyectar una pantalla</li>
+                    <li><strong><kbd>⊞</kbd>+ <kbd>R</kbd>:</strong> Abrir el comando Ejecutar</li>
+                    <li><strong><kbd>⊞</kbd>+ <kbd>Tab</kbd>:</strong> Abrir la Vista de tareas</li>
+                    <li><strong><kbd>⊞</kbd>+ <kbd>Shift</kbd> + <kbd>S</kbd>:</strong> Capturar parte de la pantalla</li>
+                    <li><strong><kbd>⊞</kbd>+ <kbd>S</kbd>:</strong> Buscar archivo o aplicación</li>
+                </ul>
+
+                <h2>Atajos para el Explorador de archivos</h2>
+                <p>Optimiza la gestión de tus directorios y archivos con estos comandos específicos:</p>
+                <ul>
+                    <li><strong><kbd>Alt</kbd> + <kbd>D</kbd></strong> o <strong><kbd>Ctrl</kbd> + <kbd>L</kbd>:</strong> Seleccionar la barra de direcciones</li>
+                    <li><strong><kbd>Alt</kbd> + <kbd>P</kbd>:</strong> Mostrar el panel de vista previa</li>
+                    <li><strong><kbd>Alt</kbd> + <kbd>←</kbd>:</strong> Ir a la carpeta anterior</li>
+                    <li><strong><kbd>Alt</kbd> + <kbd>→</kbd>:</strong> Ir a la siguiente carpeta</li>
+                    <li><strong><kbd>Ctrl</kbd> + <kbd>E</kbd>:</strong> Buscar en el Explorador de archivos</li>
+                    <li><strong><kbd>Ctrl</kbd> + <kbd>W</kbd>:</strong> Cerrar la ventana actual del Explorador</li>
+                    <li><strong><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>N</kbd>:</strong> Crear una nueva carpeta</li>
+                </ul>
+
+                <div class="callout callout-warn">
+                    <div class="callout-title">Advertencia</div>
+                    <div class="callout-body">
+                        Ciertos atajos como <strong><kbd>⊞</kbd>+ <kbd>Alt + <kbd>K</strong> requieren que la aplicación sea compatible con el control global de hardware de Windows 11.
+                    </div>
+                </div>
+
+                <h2>Conclusiones</h2>
+                <p>La adopción de estos atajos permite una interacción mucho más fluida con el sistema. Se recomienda empezar integrando 3 o 5 comandos nuevos en la rutina diaria hasta que se conviertan en memoria muscular. Una vez dominados, la velocidad de navegación en Windows 11 se incrementa de forma exponencial.</p>
+
+                <hr class="article-divider">
+
+                <footer class="article-footer">
+                    <div class="article-tags">
+                        <span class="tag">#Windows11</span>
+                        <span class="tag">#Productividad</span>
+                        <span class="tag">#Sistemas</span>
+                    </div>
+
+                    <div class="article-actions">
+                        <a class="btn-link" href="#top">Volver arriba</a>
+                    </div>
+                </footer>
+
+            </article>
+        </div>
+
+    </main>
+
+    <script>
+      (() => {
+        let lastHeight = 0;
+        let rafId = 0;
+    
+        function measureAndPost() {
+          cancelAnimationFrame(rafId);
+        
+          rafId = requestAnimationFrame(() => {
+            const body = document.body;
+            const html = document.documentElement;
+        
+            const h = Math.max(
+              body.scrollHeight,
+              body.offsetHeight,
+              html.scrollHeight,
+              html.offsetHeight
+            );
+        
+            if (Math.abs(h - lastHeight) < 2) return;
+        
+            lastHeight = h;
+            parent.postMessage({ type: "articleHeight", height: h }, "*");
+          });
+        }
+    
+        window.addEventListener("load", measureAndPost);
+        document.addEventListener("DOMContentLoaded", measureAndPost);
+    
+        const ro = new ResizeObserver(() => measureAndPost());
+        ro.observe(document.body);
+      })();
+    </script>
+
+</body>
+
+</html>
