@@ -17,7 +17,7 @@
 .sticky-welcome {
     position: sticky;
     top: 0; /* Se pega al borde superior del contenedor padre */
-    background: var(--bg-color); /* Asegura que no se vea el texto de atrás */
+    background: var(--panel); /* Asegura que no se vea el texto de atrás */
     padding: 10px 0;
     margin: 0;
     z-index: 10;
