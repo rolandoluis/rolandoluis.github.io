@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <title>Detección de Primera Visita mediante Cookies: Enfoque Híbrido</title>
+    <meta name="description" content="Guía técnica sobre cómo implementar un sistema de detección de usuarios nuevos usando PHP y JavaScript para mejorar la personalización y UX.">
+
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/components.css">
+    <link rel="stylesheet" href="/assets/css/articles.css">
+    <link rel="stylesheet" href="/assets/css/article.css">
+    <script defer src="/assets/js/article-code.js"></script>
+    <script defer src="/assets/js/article-figures.js"></script>
+
+    <base target="_parent">
+
+    <script defer>
+        document.addEventListener("DOMContentLoaded", () => {
+            const article = document.querySelector("[data-article]");
+            if (!article) return;
+            const toc = article.querySelector("[data-toc]");
+            const headings = article.querySelectorAll("h2, h3");
+            const slugify = (s) => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9\s-]/g, "").trim().replace(/\s+/g, "-").replace(/-+/g, "-");
+            if (!toc || headings.length === 0) {
+                const tocWrap = article.querySelector(".article-toc");
+                if (tocWrap) tocWrap.hidden = true;
+                return;
+            }
+            const used = new Set();
+            const items = [];
+            headings.forEach(h => {
+                let id = h.id ? h.id : slugify(h.textContent || "");
+                if (!id) return;
+                let base = id, i = 2;
+                while (used.has(id)) id = `${base}-${i++}`;
+                used.add(id);
+                h.id = id;
+                if (!h.querySelector(".h-anchor")) {
+                    const a = document.createElement("a");
+                    a.className = "h-anchor";
+                    a.href = `#${id}`;
+                    a.setAttribute("aria-label", "Enlace directo a esta sección");
+                    a.textContent = "¶";
+                    h.appendChild(a);
+                }
+                const level = h.tagName.toLowerCase();
+                items.push({ id, text: h.textContent.replace("¶", "").trim(), level });
+            });
+            toc.innerHTML = items.map(it => {
+                const cls = it.level === "h3" ? "toc-item toc-h3" : "toc-item";
+                return `<a class="${cls}" href="#${it.id}">${it.text}</a>`;
+            }).join("");
+        });
+    </script>
+</head>
+
+<body class="article-shell">
+
+    <main class="container article-container" 
+        data-article 
+        data-article-title="Las Cookies y la Primera Visita"
+        data-article-category="Desarrollo Web" 
+        data-article-date="2026-03-08" 
+        data-article-updated="2026-03-08"
+        data-article-tags="PHP,JavaScript,Cookies,UX" 
+        data-article-featured="true" 
+        data-article-draft="false">
+
+        <header class="article-header" id="top">
+            <h1>Detección de Primera Visita mediante Cookies: Enfoque Híbrido</h1>
+
+            <p class="article-meta">
+                <span class="meta-item">Rolando Luis Martín</span>
+                <span class="meta-sep">·</span>
+                <time class="meta-item" datetime="2026-03-08">8 Mar 2026</time>
+                <span class="meta-sep">·</span>
+                <span class="meta-item">Desarrollo Web</span>
+                <span class="meta-sep">·</span>
+                <span class="meta-item">Nivel: Intermedio</span>
+            </p>
+
+            <p class="lede">Aprende a identificar si un potencial cliente accede a tu aplicación por primera vez combinando la potencia del servidor y la agilidad del cliente.</p>
+        </header>
+
+        <div class="article-layout">
+            <aside class="article-toc" aria-label="Tabla de contenidos">
+                <div class="toc-title">Contenido</div>
+                <nav data-toc class="toc-nav"></nav>
+                <div class="figs-title">Figuras</div>
+                <nav data-figures class="figs-nav"></nav>
+            </aside>
+            
+            <article class="article-body">
+
+                <div class="callout callout-note">
+                    <div class="callout-title">Nota</div>
+                    <div class="callout-body">
+                        Para este tutorial, utilizaremos cookies estándar del navegador. Asegúrate de cumplir con las normativas locales (como RGPD) al implementar sistemas de rastreo.
+                    </div>
+                </div>
+
+                <h2>Objetivo</h2>
+                <p>El objetivo es personalizar la experiencia del usuario desde su primer contacto. Al detectar una primera visita, podemos mostrar mensajes de bienvenida, tutoriales o promociones específicas que no deberían aparecer en visitas recurrentes, optimizando así el embudo de conversión.</p>
+
+                <h2>Contexto Técnico</h2>
+                <p>Las cookies son pequeños fragmentos de datos almacenados en el navegador. Implementar esta lógica de forma <strong>híbrida</strong> (Server-Side + Client-Side) aporta ventajas críticas:</p>
+                <ul>
+                    <li><strong>PHP (Servidor):</strong> Evita el "parpadeo" de contenido (FOUT/CLS) al procesar la información antes de renderizar el HTML.</li>
+                    <li><strong>JavaScript (Cliente):</strong> Permite gestionar la lógica en aplicaciones dinámicas o SPA sin recargar la página.</li>
+                </ul>
+
+                <h2>Desarrollo de la Solución</h2>
+
+                <h3>Paso 1: Estructura y Estilos (HTML/CSS)</h3>
+                <p>Definimos un contenedor sencillo para el mensaje y aplicamos estilos para asegurar una presentación profesional.</p>
+
+                <pre><code class="language-css">/* styles.css */
+#welcome-message {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}</code></pre>
+
+                <h3>Paso 2: Lógica del Lado del Cliente (JavaScript)</h3>
+                <p>Utilizaremos JavaScript para verificar la existencia de la cookie y crearla en caso de que el usuario sea nuevo.</p>
+
+                <pre><code class="language-javascript">// scripts.js
+document.addEventListener('DOMContentLoaded', function() {
+    function getCookie(name) {
+        let matches = document.cookie.match(new RegExp(
+            "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+        ));
+        return matches ? decodeURIComponent(matches[1]) : undefined;
+    }
+
+    if (!getCookie('firstVisit')) {
+        document.getElementById('welcome-message').textContent = '¡Bienvenido a nuestra aplicación web!';
+        // Cookie válida por 1 año
+        document.cookie = "firstVisit=true; max-age=" + (365*24*60*60) + "; path=/";
+    } else {
+        document.getElementById('welcome-message').textContent = 'Bienvenido de nuevo.';
+    }
+});</code></pre>
+
+                <div class="callout callout-tip">
+                    <div class="callout-title">Tip</div>
+                    <div class="callout-body">
+                        Utiliza el atributo <code>path=/</code> al crear cookies para asegurar que sean accesibles desde cualquier sección de tu sitio web.
+                    </div>
+                </div>
+
+                <h3>Paso 3: Lógica del Lado del Servidor (PHP)</h3>
+                <p>Este es el método más robusto para el renderizado inicial, ya que el servidor lee la cabecera <code>Cookie</code> de la petición HTTP.</p>
+
+                <pre><code class="language-php">&lt;?php
+if(!isset($_COOKIE['firstVisit'])) {
+    setcookie('firstVisit', 'true', time() + (365 * 24 * 60 * 60), "/");
+    $message = "¡Bienvenido a nuestra aplicación web!";
+} else {
+    $message = "Bienvenido de nuevo.";
+}
+?&gt;
+
+&lt;!-- Integración en el HTML --&gt;
+&lt;div id="welcome-message"&gt;&lt;?php echo $message; ?&gt;&lt;/div&gt;</code></pre>
+
+                <div class="callout callout-warn">
+                    <div class="callout-title">Advertencia</div>
+                    <div class="callout-body">
+                        La función <code>setcookie()</code> en PHP debe llamarse antes de enviar cualquier salida HTML al navegador, ya que modifica las cabeceras HTTP.
+                    </div>
+                </div>
+
+                <h2>Validación</h2>
+                <p>Para confirmar que el sistema funciona correctamente, sigue estos pasos:</p>
+                <ul>
+                    <li>Limpia las cookies de tu navegador o abre una ventana de incógnito.</li>
+                    <li>Accede a la página: deberías ver el mensaje de "¡Bienvenido a nuestra aplicación web!".</li>
+                    <li>Recarga la página (F5): el mensaje debería cambiar a "Bienvenido de nuevo.".</li>
+                    <li>Inspecciona las herramientas de desarrollador (F12 > Application > Cookies) para verificar que <code>firstVisit</code> existe.</li>
+                </ul>
+
+                <h2>Conclusión</h2>
+                <p>El uso de un enfoque híbrido garantiza que la detección sea infalible. Mientras PHP asegura un renderizado limpio desde el primer milisegundo, JavaScript ofrece la flexibilidad necesaria para interfaces modernas e interactivas.</p>
+
+                <hr class="article-divider">
+
+                <footer class="article-footer">
+                    <div class="article-tags">
+                        <span class="tag">#PHP</span>
+                        <span class="tag">#JavaScript</span>
+                        <span class="tag">#Cookies</span>
+                        <span class="tag">#UX</span>
+                    </div>
+
+                    <div class="article-actions">
+                        <a class="btn-link" href="#top">Volver arriba</a>
+                    </div>
+                </footer>
+
+            </article>
+        </div>
+    </main>
+
+    <script>
+      (() => {
+        let lastHeight = 0;
+        let rafId = 0;
+        function measureAndPost() {
+          cancelAnimationFrame(rafId);
+          rafId = requestAnimationFrame(() => {
+            const body = document.body;
+            const html = document.documentElement;
+            const h = Math.max(body.scrollHeight, body.offsetHeight, html.scrollHeight, html.offsetHeight);
+            if (Math.abs(h - lastHeight) < 2) return;
+            lastHeight = h;
+            parent.postMessage({ type: "articleHeight", height: h }, "*");
+          });
+        }
+        window.addEventListener("load", measureAndPost);
+        document.addEventListener("DOMContentLoaded", measureAndPost);
+        const ro = new ResizeObserver(() => measureAndPost());
+        ro.observe(document.body);
+      })();
+    </script>
+</body>
+</html>
