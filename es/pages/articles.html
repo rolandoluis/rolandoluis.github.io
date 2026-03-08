@@ -113,23 +113,24 @@
       <section class="iframe-section" id="iframeSection" hidden>
         <div class="reader-bar">
           <div class="reader-title" id="readerTitle">Artículo</div>
+          <div class="reader-progress" id="readerProgress" hidden>
+            <div class="progress-container">
+              <div class="progress-bar" id="readerProgressBar"></div>
+              <div class="progress-steps" id="readerProgressSteps"></div>
+            </div>
+          
+            <div class="progress-actions">
+              <button class="reader-nav-btn" id="readerPrev" type="button" disabled>Anterior</button>
+              <button class="reader-nav-btn" id="readerNext" type="button">Siguiente</button>
+            </div>
+          </div>
           <div class="reader-meta" id="readerMeta"></div>
         </div>
         <div class="reader-frameWrap"></div>
           <iframe id="articleIframe" src="" width="100%" height="600px"></iframe>
           <button id="backToArticles" class="btn">Volver a Artículos</button>
         </div>
-        <div class="reader-progress" id="readerProgress" hidden>
-          <div class="progress-container">
-            <div class="progress-bar" id="readerProgressBar"></div>
-            <div class="progress-steps" id="readerProgressSteps"></div>
-          </div>
         
-          <div class="progress-actions">
-            <button class="reader-nav-btn" id="readerPrev" type="button" disabled>Anterior</button>
-            <button class="reader-nav-btn" id="readerNext" type="button">Siguiente</button>
-          </div>
-        </div>
       </section>
     </div>
   </main>

@@ -17,6 +17,8 @@ iframe{
 }
 
 .iframe-section {
+  display:flex;
+  flex-direction:column;
   padding: 20px;
   border: 1px solid var(--line);
   border-radius: 14px;
@@ -30,19 +32,25 @@ iframe{
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 10px 12px;
+  padding: 10px 16px;
   border-bottom: 1px solid var(--line);
+  background:color-mix(in srgb, var(--panel) 88%, transparent);
 }
 
-.reader-title{ font-weight: 600; }
+.reader-title{ 
+    font-weight: 600;
+    font-size:14px;
+    color:var(--text);
+}
 .reader-meta{ color: var(--muted); font-size: 12px; }
 
 .reader-frameWrap{ position: relative; }
 
 #articleIframe{
   width:100%;
+  flex: 1;
   height: calc(100vh - 230px);
-  min-height: 520px;
+  min-height: 0;
   max-height: 820px;
   border:0;
   display:block;
@@ -68,6 +76,9 @@ iframe{
 }
 
 .reader-progress{
+  display:flex;
+  align-items:center;
+  gap:10px;
   padding: 14px 16px 18px;
   border-top: 1px solid var(--line);
   background: rgba(0,0,0,.12);
@@ -76,21 +87,23 @@ iframe{
 .progress-container{
   position: relative;
   margin-bottom: 18px;
+  width:180px;
 }
 
 .progress-actions{
   display: flex;
   justify-content: center;
-  gap: 10px;
+  gap: 6px;
 }
 
 .progress-container::before{
   content: "";
   position: absolute;
-  top: 15px;
+  top: 50%;
   left: 0;
+  transform:translateY(-50%);
   width: 100%;
-  height: 4px;
+  height: 3px;
   background: rgba(255,255,255,.10);
   border-radius: 999px;
   z-index: 0;
@@ -98,14 +111,15 @@ iframe{
 
 .progress-bar{
   position: absolute;
-  top: 15px;
+  top: 50%;
   left: 0;
-  height: 4px;
+  transform:translateY(-50%);
+  height: 3px;
   width: 0%;
   background: var(--accent-net);
   border-radius: 999px;
   z-index: 1;
-  transition: width .25s ease;
+  transition:width .2s ease;
 }
 
 .progress-steps{
@@ -117,16 +131,16 @@ iframe{
 }
 
 .progress-step{
-  width: 30px;
-  height: 30px;
-  border-radius: 999px;
-  border: 3px solid rgba(255,255,255,.16);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,.18);
   background: var(--panel);
   color: var(--muted);
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 700;
   cursor: pointer;
   transition: all .2s ease;
@@ -134,7 +148,7 @@ iframe{
 
 .progress-step.active{
   border-color: var(--accent-net);
-  color: var(--text);
+  color: var(--accent-net);
   transform: scale(1.08);
 }
 
@@ -148,10 +162,14 @@ iframe{
   border: 1px solid var(--btn-brd);
   background: var(--btn-bkg);
   color: var(--text);
-  border-radius: 10px;
-  padding: 10px 18px;
+  border-radius: 8px;
+  padding: 4px 10px;
   cursor: pointer;
   font-size: 14px;
+}
+
+.reader-nav-btn:hover{
+  background:var(--btn-hov-bkg);
 }
 
 .reader-nav-btn:hover:not(:disabled){
@@ -186,7 +204,7 @@ iframe{
     "sidebar content";
   grid-template-columns: 260px 1fr;
   grid-template-rows: auto 1fr;
-  gap: 18px;
+  gap: 26px;
   align-items: start;
 }
 
@@ -260,7 +278,7 @@ iframe{
   .articles-section-title{
     margin-top: 20px;
   }
-  
+
   #articleIframe{
     height: calc(100vh - 260px);
     min-height: 440px;
