@@ -222,10 +222,22 @@ iframe{
   border: 1px solid var(--line);
   background: var(--panel);
   border-radius: 12px;
-  padding: 16px 18px;
+  padding: 12px 18px;
   min-height: 265px;
   max-height: 518px;
   overflow-y: auto;
+}
+
+.sidebar-head {
+    position: sticky;
+    top: 0;
+    background: var(--panel);
+    margin: auto;
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--line);
+    z-index: 10;
+    justify-self: stretch;
+    text-align: center;
 }
 
 /* Estilo opcional para la barra de scroll */
