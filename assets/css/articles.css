@@ -218,20 +218,23 @@ iframe{
 /* Barra lateral */
 .sidebar{
   grid-area: sidebar;
-  /* position: sticky; */
   align-self: start;
-  /* top: 90px; */
   border: 1px solid var(--line);
   background: var(--panel);
   border-radius: 12px;
   padding: 16px 18px;
   min-height: 265px;
-  /* width: auto;
-  flex-shrink: initial;
-  background: color-mix(in srgb, var(--panel) 78%, transparent);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 14px; */
+  max-height: 518px;
+  overflow-y: auto;
+}
+
+/* Estilo opcional para la barra de scroll */
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+.sidebar::-webkit-scrollbar-thumb {
+    background-color: var(--line);
+    border-radius: 4px;
 }
 
 /* Sticky sidebar en desktop */
