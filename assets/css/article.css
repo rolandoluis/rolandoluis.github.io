@@ -287,8 +287,8 @@ code{
   background:
     linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.137),
-      rgba(0,0,0,.2)
+      rgba(255, 255, 255, 0.26),
+      rgba(41, 41, 41, 0.692)
     ),
     var(--panel);
   border:1px solid var(--line);
