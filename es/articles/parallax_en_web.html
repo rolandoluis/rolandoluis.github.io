@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <title>Efecto Parallax en Maquetado Web</title>
+    <meta name="description" content="Guía técnica sobre la implementación del efecto Parallax y diseño Glassmorphism en interfaces web modernas.">
+
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/components.css">
+    <link rel="stylesheet" href="/assets/css/articles.css">
+    <link rel="stylesheet" href="/assets/css/article.css">
+    
+    <base target="_parent">
+</head>
+
+<body class="article-shell">
+
+    <main class="container article-container" 
+        data-article 
+        data-article-title="Efecto Parallax en Maquetado Web"
+        data-article-category="Desarrollo Web" 
+        data-article-date="2026-03-08" 
+        data-article-updated="2026-03-08"
+        data-article-tags="CSS,UI,UX,Parallax,Glassmorphism" 
+        data-article-featured="true">
+
+        <header class="article-header" id="top">
+            <h1>Efecto Parallax en Maquetado Web</h1>
+            <p class="article-meta">
+                <span class="meta-item">Rolando Luis Martín</span>
+                <span class="meta-sep">·</span>
+                <time datetime="2026-03-08">8 Mar 2026</time>
+            </p>
+            <p class="lede">Una inmersión técnica en la creación de profundidad visual mediante desplazamiento diferencial y la aplicación de interfaces modernas con Glassmorphism.</p>
+        </header>
+
+        <div class="article-layout">
+            <aside class="article-toc" aria-label="Tabla de contenidos">
+                <div class="toc-title">Contenido</div>
+                <nav data-toc class="toc-nav"></nav>
+            </aside>
+            
+            <article class="article-body">
+
+                <h2>Introducción</h2>
+                <p>El efecto Parallax ha revolucionado el diseño web al proporcionar experiencias visuales inmersivas. Originado en la animación clásica y los videojuegos, este efecto crea una ilusión de profundidad moviendo capas de fondo a velocidades distintas respecto al contenido principal.</p>
+
+                <h2>Fundamentos Técnicos</h2>
+                <p>El Parallax no es solo estética; es una herramienta de narrativa visual. Su impacto en el desarrollo UI radica en guiar al usuario a través del scroll, convirtiendo la navegación en un recorrido dinámico.</p>
+
+                <h3>Implementación CSS</h3>
+                <p>Para un efecto Parallax sencillo y eficiente en recursos, utilizamos <code>background-attachment: fixed</code>:</p>
+                <pre><code>.parallax-section {
+    height: 100vh;
+    background-image: url('imagen.jpg');
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
+}</code></pre>
+
+                <div class="callout callout-warn">
+                    <div class="callout-title">Nota de Rendimiento</div>
+                    <div class="callout-body">
+                        El uso excesivo de animaciones complejas puede afectar el hardware. Se recomienda optimizar las imágenes y evitar su uso en dispositivos móviles de gama baja para no comprometer el <em>Frame Rate</em>.
+                    </div>
+                </div>
+
+                <h2>Interfaz con Glassmorphism</h2>
+                <p>Para complementar el Parallax, el diseño <em>Glassmorphism</em> aporta un aspecto sofisticado mediante desenfoques y transparencias.</p>
+                
+                <pre><code>.glassmorph {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}</code></pre>
+
+                <h2>Consideraciones Finales</h2>
+                <ul>
+                    <li><strong>Accesibilidad:</strong> Asegúrate siempre de que el contraste sea suficiente entre el fondo desenfocado y el texto.</li>
+                    <li><strong>Consumo:</strong> En implementaciones de alto nivel, utiliza <em>requestAnimationFrame</em> para suavizar el scroll si realizas cálculos complejos en JavaScript.</li>
+                    <li><strong>Contexto:</strong> Úsalo para landing pages o portafolios, pero evita implementarlo en interfaces de herramientas técnicas donde la velocidad de lectura es prioritaria.</li>
+                </ul>
+
+                <hr class="article-divider">
+
+                <footer class="article-footer">
+                    <div class="article-tags">
+                        <span class="tag">#CSS</span>
+                        <span class="tag">#WebDev</span>
+                        <span class="tag">#UI</span>
+                    </div>
+                </footer>
+            </article>
+        </div>
+    </main>
+</body>
+</html>

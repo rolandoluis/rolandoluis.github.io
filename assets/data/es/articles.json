@@ -32,6 +32,22 @@
     "featured": true
   },
   {
+    "title": "Efecto Parallax en Maquetado Web",
+    "category": "Desarrollo Web",
+    "slug": "parallax_en_web",
+    "description": "Guía técnica sobre la implementación del efecto Parallax y diseño Glassmorphism en interfaces web modernas.",
+    "date": "2026-03-08",
+    "updated": "2026-03-08",
+    "tags": [
+      "CSS",
+      "UI",
+      "UX",
+      "Parallax",
+      "Glassmorphism"
+    ],
+    "featured": true
+  },
+  {
     "title": "Preparación de PCs en Laboratorio: Unión a Dominio vía VPN",
     "category": "Soporte IT",
     "slug": "unir_pc_dominio",
