@@ -9,9 +9,12 @@
   grid-area: content;
   display: flex;
   flex-direction: column;
+  contain: layout;
   min-width: 0;  /*clave para evitar overflow raro en grid */
+  position: relative;
   align-self: stretch;
   height: 100%;
+  overflow: hidden;
 }
 
 .sticky-welcome {
@@ -21,6 +24,8 @@
     padding: 10px 0;
     margin: 0;
     z-index: 10;
+    margin-top: 0; 
+    margin-bottom: 0;
 }
 
 .articles-scroll-container {
