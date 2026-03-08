@@ -25,13 +25,13 @@ iframe{
   background: color-mix(in srgb, var(--panel) 82%, transparent);
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  height: calc(100vh - 260px);
+  height: calc(100vh - 200px);
 }
 
 .reader-bar{
   display:flex;
   align-items: center;
-  justify-content: right;
+  justify-content: space-between;
   gap: 12px;
   padding: 8px 16px;
   border-bottom: 1px solid var(--line);
@@ -40,7 +40,7 @@ iframe{
 
 .reader-title{ 
     font-weight: 600;
-    font-size:14px;
+    font-size:1.5em;
     color:var(--text);
 }
 .reader-meta{ color: var(--muted); font-size: 12px; }
@@ -57,7 +57,7 @@ iframe{
   display:block;
   border-radius: 10px;
   background: transparent;
-  height: calc(100vh - 260px);
+  height: calc(100vh - 200px);
   min-height: 0;
 }
 
@@ -85,12 +85,15 @@ iframe{
   padding: 8px 16px 8px;
   border-top: 1px solid var(--line);
   background: rgba(0,0,0,.12);
+  justify-content: right;
+  flex: auto;
 }
 
 .progress-container{
   position: relative;
   margin-bottom: 8px;
-  width:180px;
+  width: fit-content;
+  right: auto;
 }
 
 .progress-actions{
@@ -209,7 +212,7 @@ iframe{
   grid-template-rows: auto 1fr;
   gap: 18px;
   align-items: start;
-  min-height: calc(100vh - 260px);
+  min-height: calc(100vh - 140px);
 }
 
 /* Barra lateral */
