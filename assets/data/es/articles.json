@@ -62,5 +62,20 @@
       "teletrabajo"
     ],
     "featured": true
+  },
+  {
+    "title": "Atajos de Teclado para Windows 11",
+    "category": "Sistemas Operativos",
+    "slug": "atajos_teclado_windows",
+    "description": "Optimiza tu flujo de trabajo con esta recopilación exhaustiva de atajos de teclado para Windows 11, desde funciones generales hasta el Explorador de archivos.",
+    "date": "2026-03-08",
+    "updated": "2026-03-08",
+    "tags": [
+      "Windows11",
+      "Productividad",
+      "Atajos",
+      "Sistemas"
+    ],
+    "featured": false
   }
 ]
