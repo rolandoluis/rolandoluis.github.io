@@ -341,6 +341,9 @@ iframe{
 --------------------------------*/
 @media (max-width: 860px){
 
+  body.articles-shell {
+    overflow: auto;
+  }
   .articles-section-title{
     margin-top: 20px;
   }
