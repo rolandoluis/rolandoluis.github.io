@@ -2,10 +2,13 @@
   --bg: #0b1220;
   --panel: #0f172a;
   --text: #e5e7eb;
-  --muted: #9ca3af;
-  --line: rgba(255,255,255,.10);
+  /* --muted: #9ca3af; */
+  --muted: #a1a1aa;
+  /* --line: rgba(255,255,255,.10); */
+  --line: rgba(255, 255, 255, 0.15);
   --accent: #3f0808;
-  --accent-net: #e11d48; /* accent para la red (más visible) */
+  /* --accent-net: #e11d48; */ /* accent para la red (más visible) */
+  --accent-net: #f43f5e;
   --radius: 14px;
   --max: 1060px;
   --brand-mrk-color: #e11d48;
@@ -364,4 +367,40 @@ details[open] summary::after{
 .btn-link:hover{
   border-color: var(--btn-hov-brd);
   background: var(--btn-hov-bkg);
+}
+
+@media (max-width: 860px) {
+    /* Forzamos que el botón de menú sea visible siempre que la pantalla sea pequeña */
+    .nav-toggle {
+        display: flex !important; 
+        position: relative;
+        z-index: 10001; /* Un nivel por encima del menú móvil */
+        background: var(--btn-bkg);
+        border: 1px solid var(--btn-brd);
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+    /* Las 3 líneas de la hamburguesa (si usas spans) */
+    .nav-toggle span, 
+    .nav-toggle span::before, 
+    .nav-toggle span::after {
+        background-color: var(--text) !important; /* Blanco/Gris claro */
+        height: 2px;
+        width: 24px;
+    }
+
+    /* Si el botón tiene texto o iconos, asegúrate de que sea brillante */
+    .nav-toggle i, .nav-toggle svg {
+        color: var(--text);
+        font-size: 1.2rem;
+    }
+    /* Cambia el color del botón cuando el menú está abierto */
+    .nav-toggle[aria-expanded="true"] {
+        border-color: var(--accent-net);
+        background: var(--btn-act-bkgnd);
+    }
+
 }
