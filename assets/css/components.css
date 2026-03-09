@@ -297,15 +297,23 @@
 
 /* Drawer */
 .mobile-nav{
+  display: flex; /* Para que el backdrop funcione */
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,.55);
-  backdrop-filter: blur(6px);
-  z-index: 999;
+  background: rgba(0,0,0,.8); /* Más oscuro para que resalte */
+  backdrop-filter: blur(8px);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-nav[hidden] {
+  display: none !important;
 }
 
 .mobile-nav-inner{
-  position:absolute;
+  /* position:absolute; */
+  position: relative;
   top: 12px;
   right: 12px;
   left: 12px;
@@ -314,6 +322,8 @@
   border-radius: 16px;
   padding: 14px;
   box-shadow: 0 20px 60px rgba(0,0,0,.35);
+  width: 90%;
+  max-width: 400px;
 }
 
 .mobile-nav-links{

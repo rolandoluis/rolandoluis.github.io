@@ -23,6 +23,8 @@ main.articles-shell {
   display: flex;
   flex-direction: column;
   height: 100%; /* Obliga a que ocupe toda la celda del grid */
+  /* overflow-y: auto; */ /* Cambia de hidden a auto para que el contenido haga scroll */
+  /* position: relative; */
   overflow: hidden; /* El contenedor padre no debe tener scroll */
 }
 
@@ -32,13 +34,16 @@ main.articles-shell {
   background: var(--panel); /* Asegúrate de que tenga fondo para cubrir los artículos */
   z-index: 10;
   padding: 1rem 0;
-  margin: 0;
+  /* margin: 0; */
+  border-bottom: 1px solid var(--line);
 }
 
 /* El contenedor interno que realmente se desplaza */
 /* Ocultar barra de scroll estéticamente */
 .articles-scroll-container {
-  scrollbar-width: none;
+  flex-grow: 1;      /* Ocupa todo el espacio sobrante debajo del sticky-welcome */
+  overflow-y: auto;  /* AQUÍ es donde permitimos el scroll */
+  scrollbar-width: thin; /* Opcional: para que no sea tan tosca la barra */
 }
 
 /* Para ocultar scrollbar en Chrome/Safari/Edge */
@@ -342,8 +347,15 @@ iframe{
 @media (max-width: 860px){
 
   body.articles-shell {
-    overflow: auto;
+    height: auto;
+    overflow: visible;
   }
+
+  main.articles-shell {
+    height: auto;
+    overflow: visible;
+  }
+
   .articles-section-title{
     margin-top: 20px;
   }
@@ -360,13 +372,10 @@ iframe{
   }
 
   .articles-layout {
-    grid-template-areas:
-      "hero"
-      "sidebar"
-      "content";
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto;
-    min-height: auto;
+    /* display: flex; */ /* Cambiamos grid por flex para evitar líos de áreas en móvil */
+    /* flex-direction: column; */
+    display: block;
+    height: auto;
   }
 
   .hero-articles {
@@ -386,19 +395,27 @@ iframe{
     padding: 12px 0;
   }
 
-  .articles-content {
+  .articles-content,
+  .articles-scroll-container {
     height: auto;
     overflow: visible;
   }
 
   .sticky-welcome {
-    position: static;
-    padding: .5rem 0 1rem;
+    /* position: static;
+    padding: .5rem 0 1rem; */
+    position: sticky;
+    top: 0;
+    background: var(--panel);
+    z-index: 10;
+    padding: 1rem;
+    margin: 0;
+    border-bottom: 1px solid var(--line); /* Ayuda visual para ver que el contenido pasa por debajo */
   }
 
-  .articles-scroll-container {
+  /* .articles-scroll-container {
     overflow: visible;
-  }
+  } */
 
   .articles-list {
     display: block;
