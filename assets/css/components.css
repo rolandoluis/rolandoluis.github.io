@@ -285,6 +285,7 @@
   justify-content:center;
   flex-direction:column;
   gap:5px;
+  z-index: 10002;
 }
 
 .nav-toggle span{
@@ -296,40 +297,23 @@
 }
 
 /* Drawer */
-.mobile-nav{
-  display: flex; /* Para que el backdrop funcione */
-  position: fixed;
-  inset: 0;
-  /* background: rgba(0,0,0,.8); */ /* Más oscuro para que resalte */
-  background-color: rgba(11, 18, 32, 0.98); /* Un azul muy oscuro (var --panel) con opacidad */
-  backdrop-filter: blur(12px);
-  flex-direction: column;
-  z-index: 9999;
-  padding: 80px 20px;
-  align-items: center;
-  justify-content: center;
-  /* Animación de entrada */
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
-              transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
 
 .mobile-nav[hidden] {
   display: none !important;
   opacity: 0;
-  transform: translateY(-20px);
+  transform: translateY(-100%);
 }
 
 /* Estilo de los enlaces para que resalten */
 .mobile-nav a {
   color: var(--text);
-  font-size: 1.4rem;
-  font-weight: 500;
+  font-size: 1.6rem;
+  font-weight: 600;
   padding: 12px;
   border-radius: 12px;
   text-decoration: none;
   border: 1px solid var(--line);
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
   /* text-align: center; */
   transition: all 0.2s ease;
 }
@@ -398,7 +382,7 @@
     border-radius: 8px;
     background: var(--panel);
     cursor: pointer;
-    z-index: 10000; /* Por encima de todo */
+    z-index: 10002; /* Por encima de todo */
   } /* muestra hamburger */
   
   /* Color de las rayitas del menú para que resalten */
@@ -494,16 +478,24 @@
 /* Estilos de la barra flotante de navegación */
 .mobile-nav {
     position: fixed;
-    top: 10%;
+    flex-direction: column;
+    top: 0;
+    left: 0;
     right: 0;
-    z-index: 9999;
+    width: 100%;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    z-index: 10001;
     width: 300px;
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(11, 18, 32, 0.98);
+    backdrop-filter: blur(12px);
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     padding: 20px;
-    display: none; /* Se oculta por defecto */
-    transition: transform 0.3s ease-in-out;
+    gap: 2rem;
+    display: flex; /* Se oculta por defecto */
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
 }
 
 .mobile-nav.show {
