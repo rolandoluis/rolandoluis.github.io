@@ -139,12 +139,12 @@
                 <h4>Unión Estándar</h4>
                 <p>Para unir el equipo al dominio y reiniciar automáticamente:</p>
                 <pre>
-                    <code class="language-powershell"><span class="tok-fn"> Add-Computer</span><span class="tok-param"> -DomainName</span><span class="tok-string"> "dominio.com"</span><span class="tok-param"> -Restart</span></code>
+                    <code class="language-powershell">Add-Computer -DomainName "dominio.com" -Restart</code>
                 </pre>
                 <h4>Unión a una Unidad Organizativa (OU) Específica</h4>
                 <p>Si el flujo de trabajo requiere que el objeto de equipo se cree en una ruta específica dentro del AD:</p>
                 <pre>
-                    <code class="language-powershell"><span class="tok-fn"> Add-Computer</span><span class="tok-param"> -DomainName</span><span class="tok-string"> "dominio.com"</span> <span class="tok-param">-OUPath</span> <span class="tok-string">"OU=Equipos,DC=dominio,DC=com"</span> <span class="tok-param">-Restart</span></code>
+                    <code class="language-powershell">Add-Computer -DomainName "dominio.com" -OUPath "OU=Equipos,DC=dominio,DC=com" -Restart</code>
                 </pre>
                 <h3>💻 Método 2: Símbolo del Sistema (CMD)</h3>
                 <p>Este método es útil en entornos donde PowerShell esté restringido o se utilicen scripts de legado (.bat / .cmd). Se utiliza la herramienta <code class="language-bash">netdom</code>.</p>
