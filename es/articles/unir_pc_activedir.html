@@ -144,15 +144,13 @@
                 <h4>Unión a una Unidad Organizativa (OU) Específica</h4>
                 <p>Si el flujo de trabajo requiere que el objeto de equipo se cree en una ruta específica dentro del AD:</p>
                 <pre>
-                    <code class="language-powershell"><span class="tok-fn"> Add-Computer</span><span class="tok-param"> -DomainName</span><span class="tok-string"> "dominio.com"</span> <span class="tok-param">-OUPath</span> <span class="tok-string">"OU=Equipos,DC=dominio,DC=com"</span> <span class="tok-param">-Restart</span>
-                    </code>
+                    <code class="language-powershell"><span class="tok-fn"> Add-Computer</span><span class="tok-param"> -DomainName</span><span class="tok-string"> "dominio.com"</span> <span class="tok-param">-OUPath</span> <span class="tok-string">"OU=Equipos,DC=dominio,DC=com"</span> <span class="tok-param">-Restart</span></code>
                 </pre>
                 <h3>💻 Método 2: Símbolo del Sistema (CMD)</h3>
                 <p>Este método es útil en entornos donde PowerShell esté restringido o se utilicen scripts de legado (.bat / .cmd). Se utiliza la herramienta <code class="language-bash">netdom</code>.</p>
                 <h4>Comando de Ejecución:</h4>
                 <pre>
-                    <code class="language-bash">netdom join <span>%COMPUTERNAME%</span> /domain:dominio.com /userd:UsuarioAdmin /passwordd:*
-                    </code>
+                    <code class="language-bash">netdom join %COMPUTERNAME% /domain:dominio.com /userd:UsuarioAdmin /passwordd:*</code>
                 </pre>
                 <div class="callout callout-tip">
                     <div class="callout-title">Tip</div>
