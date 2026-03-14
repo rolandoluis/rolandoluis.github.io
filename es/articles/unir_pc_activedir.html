@@ -138,20 +138,14 @@
                 <p>PowerShell ofrece la forma más moderna y eficiente de gestionar esta tarea, permitiendo incluso la ubicación específica del equipo en el Active Directory.</p>
                 <h4>Unión Estándar</h4>
                 <p>Para unir el equipo al dominio y reiniciar automáticamente:</p>
-                <pre>
-                    <code>Add-Computer -DomainName "dominio.com" -Restart</code>
-                </pre>
+                <pre><code>Add-Computer -DomainName "dominio.com" -Restart</code></pre>
                 <h4>Unión a una Unidad Organizativa (OU) Específica</h4>
                 <p>Si el flujo de trabajo requiere que el objeto de equipo se cree en una ruta específica dentro del AD:</p>
-                <pre>
-                    <code>Add-Computer -DomainName "dominio.com" -OUPath "OU=Equipos,DC=dominio,DC=com" -Restart</code>
-                </pre>
+                <pre><code>Add-Computer -DomainName "dominio.com" -OUPath "OU=Equipos,DC=dominio,DC=com" -Restart</code></pre>
                 <h3>💻 Método 2: Símbolo del Sistema (CMD)</h3>
                 <p>Este método es útil en entornos donde PowerShell esté restringido o se utilicen scripts de legado (.bat / .cmd). Se utiliza la herramienta <code class="language-bash">netdom</code>.</p>
                 <h4>Comando de Ejecución:</h4>
-                <pre>
-                    <code>netdom join %COMPUTERNAME% /domain:dominio.com /userd:UsuarioAdmin /passwordd:*</code>
-                </pre>
+                <pre><code>netdom join %COMPUTERNAME% /domain:dominio.com /userd:UsuarioAdmin /passwordd:*</code></pre>
                 <div class="callout callout-tip">
                     <div class="callout-title">Tip</div>
                     <div class="callout-body">
@@ -191,9 +185,7 @@
                 </ol>
                 <h4>Paso 2: Reparación desde el Equipo (PowerShell)</h4>
                 <p>No siempre es necesario sacar el equipo del dominio y volverlo a meter (el método largo). Puedes intentar <b>reparar el canal seguro</b> con este comando:</p>
-                <pre>
-                    <code>Test-ComputerSecureChannel -Repair -Credential (Get-Credential)</code>
-                </pre>
+                <pre><code>Test-ComputerSecureChannel -Repair -Credential (Get-Credential)</code></pre>
                 <p><i>Este comando te pedirá credenciales de administrador de dominio y forzará la sincronización de la contraseña sin necesidad de reiniciar.</i></p>
                 <h4>Paso 3: El "Truco del Grupo de Trabajo" (Si lo anterior falla)</h4>
                 <p>Si la reparación falla por la duplicidad:</p>
@@ -218,8 +210,7 @@
                 <p>Este script realiza tres acciones críticas en una sola ejecución: <b>cambia el nombre del equipo</b>, lo <b>une al dominio</b> en la ruta (OU) que elijas y solicita el <b>reinicio</b> necesario.</p>
                 <h3>📜 Script: Cambio de Nombre y Unión al Dominio</h3>
                 <p>Copia este código en un archivo <code>.ps1</code> o ejecútalo directamente en una consola de PowerShell como Administrador.</p>
-                <pre>
-                    <code># 1. Definición de variables (Edita estos campos)
+                <pre><code># 1. Definición de variables (Edita estos campos)
 $nuevoNombre = "PC-VENTAS-01"
 $dominio = "dominio.com"
 $ouPath = "OU=Equipos,DC=dominio,DC=com" # Opcional: Déjalo en blanco si no usas OUs específicas
@@ -238,9 +229,7 @@ try {
 }
 catch {
     Write-Host "Error al procesar la solicitud: $_" -ForegroundColor Red
-}
-                    </code>
-                </pre>
+}</code></pre>
                 <h3>🔍 ¿Qué hace este script exactamente?</h3>
                 <ul data-path-to-node="7">
                     <li><p><b><code>Get-Credential</code></b>: Evita que escribas la contraseña en el script. Abre la ventana típica de Windows para loguearte de forma segura.</p></li>
@@ -266,9 +255,7 @@ catch {
                     <li><p><b>Inicio de sesión:</b> Intenta entrar con una cuenta de dominio que <b>nunca</b> haya iniciado sesión en esa máquina. Si el perfil se crea y entras al escritorio, el canal seguro está perfecto.</p></li>
                     <li><p><b>Consola (PowerShell):</b> Ejecuta este comando para que Windows mismo testee la conexión con el DC:</p></li>
                     <div>
-                        <pre>
-                            <code><span>Test-ComputerSecureChannel</span></code>
-                        </pre>
+                        <pre><code><span>Test-ComputerSecureChannel</span></code></pre>
                         <ul>
                             <li><p>Si devuelve <b><code>True</code></b>, todo está en orden.</p></li>
                             <li><p>Si devuelve <b><code>False</code></b>, algo falló en la autenticación.</p></li>
