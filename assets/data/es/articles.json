@@ -185,5 +185,20 @@
       "Sistemas"
     ],
     "featured": false
+  },
+  {
+    "title": "Unir Equipos a Dominio vía Powershell y CMD",
+    "category": "Soporte IT",
+    "slug": "unir_pc_activedir",
+    "description": "[Descripción corta del artículo]",
+    "date": "2026-03-05",
+    "updated": "2026-03-05",
+    "tags": [
+      "dominio",
+      "Active Directory",
+      "redes",
+      "powershell"
+    ],
+    "featured": false
   }
 ]

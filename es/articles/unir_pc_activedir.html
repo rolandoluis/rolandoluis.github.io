@@ -1,0 +1,432 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <title>[Título del Artículo]</title>
+    <meta name="description" content="[Descripción corta del artículo]">
+
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/components.css">
+    <link rel="stylesheet" href="/assets/css/articles.css">
+    <link rel="stylesheet" href="/assets/css/article.css">
+    <script defer src="/assets/js/article-code.js"></script>
+    <script defer src="/assets/js/article-figures.js"></script>
+
+    <!-- Los enlaces del artículo navegan fuera del iframe -->
+    <base target="_parent">
+
+    <script defer>
+        // ===== Article Enhancements (TOC + Anchors) =====
+        document.addEventListener("DOMContentLoaded", () => {
+            const article = document.querySelector("[data-article]");
+            if (!article) return;
+
+            const toc = article.querySelector("[data-toc]");
+            const headings = article.querySelectorAll("h2, h3");
+
+            const slugify = (s) =>
+                s.toLowerCase()
+                    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                    .replace(/[^a-z0-9\s-]/g, "")
+                    .trim()
+                    .replace(/\s+/g, "-")
+                    .replace(/-+/g, "-");
+
+            if (!toc || headings.length === 0) {
+                const tocWrap = article.querySelector(".article-toc");
+                if (tocWrap) tocWrap.hidden = true;
+                return;
+            }
+
+            const used = new Set();
+            const items = [];
+
+            headings.forEach(h => {
+                let id = h.id ? h.id : slugify(h.textContent || "");
+                if (!id) return;
+
+                let base = id, i = 2;
+                while (used.has(id)) id = `${base}-${i++}`;
+                used.add(id);
+                h.id = id;
+
+                if (!h.querySelector(".h-anchor")) {
+                    const a = document.createElement("a");
+                    a.className = "h-anchor";
+                    a.href = `#${id}`;
+                    a.setAttribute("aria-label", "Enlace directo a esta sección");
+                    a.textContent = "¶";
+                    h.appendChild(a);
+                }
+
+                const level = h.tagName.toLowerCase(); // h2/h3
+                items.push({ id, text: h.textContent.replace("¶", "").trim(), level });
+            });
+
+            toc.innerHTML = items.map(it => {
+                const cls = it.level === "h3" ? "toc-item toc-h3" : "toc-item";
+                return `<a class="${cls}" href="#${it.id}">${it.text}</a>`;
+            }).join("");
+
+            // Si llegas con hash, posiciona
+            const hash = (location.hash || "").slice(1);
+            if (hash) {
+                const target = document.getElementById(hash);
+                if (target) target.scrollIntoView({ block: "start" });
+            }
+        });
+    </script>
+</head>
+
+<body class="article-shell">
+
+    <main class="container article-container" 
+        data-article 
+        data-article-title="Unir Equipos a Dominio vía Powershell y CMD"
+        data-article-category="Soporte IT" 
+        data-article-date="2026-03-05" 
+        data-article-updated="2026-03-05"
+        data-article-tags="dominio,Active Directory,redes,powershell" 
+        data-article-featured="false" 
+        data-article-draft="true">
+        <header class="article-header" id="top">
+            <h1>Guía Técnica: Unión de Equipos a Dominio vía CLI (PowerShell y CMD)</h1>
+            <p class="article-meta">
+                <span class="meta-item">Rolando Luis Martín</span>
+                <span class="meta-sep">·</span>
+                <time class="meta-item" datetime="2026-03-05">5 Mar 2026</time>
+                <span class="meta-sep">·</span>
+                <span class="meta-item">Sporte IT</span>
+                <span class="meta-sep">·</span>
+                <span class="meta-item">Nivel: [Base|Intermedio|Avanzado]</span>
+            </p>
+            <p class="lede">Uniremos PC a un dominio utilizando comandos de Powershell y CMD, validando su efectividad.</p>
+        </header>
+        <div class="article-layout">
+            <!-- TOC -->
+            <aside class="article-toc" aria-label="Tabla de contenidos">
+                <div class="toc-title">Contenido</div>
+                <nav data-toc class="toc-nav"></nav>
+                <div class="figs-title">Figuras</div>
+                <nav data-figures class="figs-nav"></nav>
+            </aside>
+            <!-- Body -->
+            <article class="article-body">
+                <div class="callout callout-note">
+                    <div class="callout-title">Nota</div>
+                    <div class="callout-body">
+                        <p>Útil para entornos de <b>Laboratorio de Soporte IT</b>, donde la dinámica, la precisión y la productividad, van de la mano.</p>
+                    </div>
+                </div>
+                <h2>Objetivo</h2>
+                <p>Unir, en condiciones de laboratorio, una PC al Dominio de Active Directory, utilizando Comandos de Terminal</p>
+                <h2>Contexto</h2>
+                <p>En la administración avanzada de Windows, unir un equipo a un dominio mediante la línea de comandos permite agilizar despliegues y facilitar el soporte remoto. Este documento detalla los procedimientos recomendados utilizando <b>PowerShell</b> y el símbolo del sistema (<b>CMD</b>).</p>
+                <h3>📋 Requisitos Previos</h3>
+                <p>Antes de iniciar, asegúrese de cumplir con los siguientes puntos para evitar errores de autenticación o resolución:</p>
+                <ul>
+                    <li><p>Conectividad:</b> El equipo debe tener línea de vista (ping) con el Controlador de Dominio (DC).</p></li>
+                    <li><p>DNS:</b> Las DNS del adaptador de red deben apuntar a las direcciones IP de los controladores de dominio.</p></li>
+                    <li><p>Privilegios:</b> Se requieren credenciales de un usuario con permisos para unir equipos al dominio (Domain Admin o Delegated User).</p></li>
+                    <li><p><b>Ejecución:</b> Ambas consolas deben ejecutarse con <b>privilegios de Administrador</b>.</p></li>
+                </ul>
+                <h2>Desarrollo</h2>
+                <h3>🛠️ Método 1: PowerShell (Recomendado)</h3>
+                <p>PowerShell ofrece la forma más moderna y eficiente de gestionar esta tarea, permitiendo incluso la ubicación específica del equipo en el Active Directory.</p>
+                <h4>Unión Estándar</h4>
+                <p>Para unir el equipo al dominio y reiniciar automáticamente:</p>
+                <pre>
+                    <code class="language-powershell">
+                        <span>Add-Computer</span> <span>-DomainName</span> <span>"dominio.com"</span> <span>-Restart</span>
+                    </code>
+                </pre>
+                <h4>Unión a una Unidad Organizativa (OU) Específica</h4>
+                <p>Si el flujo de trabajo requiere que el objeto de equipo se cree en una ruta específica dentro del AD:</p>
+                <pre>
+                    <code class="language-powershell">
+                        <span>Add-Computer</span> <span>-DomainName</span> <span>"dominio.com"</span> <span>-OUPath</span> <span>"OU=Equipos,DC=dominio,DC=com"</span> <span>-Restart</span>
+                    </code>
+                </pre>
+                <h3>💻 Método 2: Símbolo del Sistema (CMD)</h3>
+                <p>Este método es útil en entornos donde PowerShell esté restringido o se utilicen scripts de legado (.bat / .cmd). Se utiliza la herramienta <code class="language-bash">netdom</code>.</p>
+                <h4>Comando de Ejecución:</h4>
+                <pre>
+                    <code class="language-bash">netdom join <span>%COMPUTERNAME%</span> /domain:dominio.com /userd:UsuarioAdmin /passwordd:*
+                    </code>
+                </pre>
+                <div class="callout callout-tip">
+                    <div class="callout-title">Tip</div>
+                    <div class="callout-body">
+                        <p>[!IMPORTANT]
+                        <b>Nota sobre seguridad:</b> El uso del asterisco (<code>*</code>) en el parámetro <code>/passwordd</code> es una buena práctica de seguridad, ya que el sistema solicitará la contraseña en una línea oculta en lugar de escribirla en texto plano en el historial de la consola.</p>
+                    </div>
+                </div>
+                <hr>
+                <h3>✅ Consideraciones Finales</h3>
+                <ol>
+                    <li><p><b>Reinicio:</b> Ambos métodos (usando el parámetro <code class="language-powershell">-Restart</code> en PowerShell o por naturaleza del cambio en CMD) requieren un reinicio para que el equipo cargue las políticas de grupo (GPOs) y reconozca la nueva relación de confianza.</p></li>
+                    <li><p><b>Confirmación:</b> Una vez reiniciado, puede verificar el estado del dominio ejecutando el comando <code class="language-bash">whoami /fqdn</code> o revisando las Propiedades del Sistema.</p></li>
+                </ol>
+                <div class="callout callout-warn">
+                    <div class="callout-title">Advertencia</div>
+                    <div class="callout-body">
+                        <p>¡¡¡Ufff, me ha salido un mensaje de "<strong>Trust Relationship</strong>"!!!.</p>
+                    </div>
+                </div>
+                <p>Ese error es el "pan de cada día" en soporte técnico, pero cuando aparece por duplicidad de nombre, puede ser un pequeño dolor de cabeza si no se limpia bien el rastro.</p>
+                <hr class="article-divider">
+                <h2>🔍 Resolución de Errores de Relación de Confianza (Trust Relationship)</h2>
+                <p>El error <i>"La relación de confianza entre esta estación de trabajo y el dominio principal falló"</i> ocurre cuando el <b>secreto compartido</b> (una contraseña de cuenta de equipo que cambia automáticamente cada 30 días) se desincroniza entre el Active Directory (AD) y el equipo local.</p>
+                <h3>⚠️ Causas Comunes</h3>
+                <ul>
+                    <li><p><b>Nombres Duplicados:</b> Como te sucedió hoy, si unes un equipo con un nombre que ya existe en el AD, el servidor sobrescribe el objeto anterior, "rompiendo" la conexión del equipo original.</p></li>
+                    <li><p><b>Restauración de Snapshots:</b> En máquinas virtuales, volver a un estado anterior puede revertir la contraseña del equipo a una versión que el AD ya no reconoce.</p></li>
+                    <li><p><b>Inactividad Prolongada:</b> Si un equipo está apagado meses, el AD puede marcar la cuenta como expirada o haber cambiado la clave sin que el equipo se enterara.</p></li>
+                </ul>
+                <h3>🛠️ Cómo Solucionar la Duplicidad de Nombre</h3>
+                <p>Si el error fue por un nombre idéntico, el alcance es que <b>ninguno de los dos equipos podrá iniciar sesión con cuentas de dominio</b> hasta que se resuelva.</p>
+                <h4>Paso 1: Limpieza en el Controlador de Dominio (AD)</h4>
+                <p>Antes de intentar unir el equipo de nuevo, es vital limpiar el rastro:</p>
+                <ol>
+                    <li><p>Busca el nombre del equipo en <b>Usuarios y Equipos de Active Directory</b>.</p></li>
+                    <li><p>Haz clic derecho y selecciona <b>"Restablecer cuenta"</b> (esto pone la contraseña a un estado inicial) o, preferiblemente, <b>Eliminar</b> el objeto si vas a hacer una unión limpia.</p></li>
+                </ol>
+                <h4>Paso 2: Reparación desde el Equipo (PowerShell)</h4>
+                <p>No siempre es necesario sacar el equipo del dominio y volverlo a meter (el método largo). Puedes intentar <b>reparar el canal seguro</b> con este comando:</p>
+                <pre>
+                    <code class="language-powershell"><span>Test-ComputerSecureChannel</span> <span>-Repair</span> <span>-Credential</span> (<span>Get-Credential</span>)</code>
+                </pre>
+                <p><i>Este comando te pedirá credenciales de administrador de dominio y forzará la sincronización de la contraseña sin necesidad de reiniciar.</i></p>
+                <h4>Paso 3: El "Truco del Grupo de Trabajo" (Si lo anterior falla)</h4>
+                <p>Si la reparación falla por la duplicidad:</p>
+                <ol>
+                    <li><p>Cambia el equipo a un <b>Grupo de Trabajo</b> (ej. WORKGROUP).</p></li>
+                    <li><p>Reinicia.</p></li><li><p><b>Cambia el nombre del equipo</b> a uno único que no exista en la red.</p></li>
+                    <li><p>Vuelve a unirlo al dominio usando los comandos de la sección anterior.</p></li>
+                </ol>
+                <h3>💡 Alcance del Problema</h3>
+                <p>Cuando la confianza se rompe:</p>
+                <ul>
+                    <li><p><b>Usuarios de dominio:</b> No pueden iniciar sesión (verán el error de confianza).</p></li>
+                    <li><p><b>Usuarios locales:</b> Siguen funcionando (es tu vía de entrada para arreglarlo).</p></li>
+                    <li><p><b>GPOs:</b> Dejan de aplicarse, dejando al equipo vulnerable o sin configuraciones corporativas.</p></li>
+                </ul>
+                <div class="callout callout-tip">
+                    <div class="callout-title">Tip</div>
+                    <div class="callout-body">
+                        <p>Pero... ¿Son muchos pasos manuales y la puedes liar?. El siguiente script te puede ayudar a automatizar el proceso</p>
+                    </div>
+                </div>
+                <p>Este script realiza tres acciones críticas en una sola ejecución: <b>cambia el nombre del equipo</b>, lo <b>une al dominio</b> en la ruta (OU) que elijas y solicita el <b>reinicio</b> necesario.</p>
+                <h3>📜 Script: Cambio de Nombre y Unión al Dominio</h3>
+                <p>Copia este código en un archivo <code class="language-powershell">.ps1</code> o ejecútalo directamente en una consola de PowerShell como Administrador.</p>
+                <pre>
+                    <code class="language-powershell"><span># 1. Definición de variables (Edita estos campos)</span>
+<span>$nuevoNombre</span> = <span>"PC-VENTAS-01"</span>
+<span>$dominio</span> = <span>"dominio.com"</span>
+<span>$ouPath</span> = <span>"OU=Equipos,DC=dominio,DC=com"</span> <span># Opcional: Déjalo en blanco si no usas OUs específicas</span>
+<span># 2. Credenciales (Abrirá una ventana emergente segura)</span>
+<span>$credenciales</span> = <span>Get-Credential</span> <>-UserName</span> <span>"admin_dominio"</span> <span>-Message</span> <span>"Introduce credenciales de Administrador de Dominio"</span>
+<span>Write-Host</span> <span>"Iniciando proceso de cambio de nombre y unión..."</span> <span>-ForegroundColor</span> Cyan
+<span>try</span> {
+    <span># 3. Ejecución del comando principal</span>
+    <span>Add-Computer</span> <span>-DomainName</span> <span>$dominio</span> `
+                 <span>-NewName</span> <span>$nuevoNombre</span> `
+                 <span>-OUPath</span> <span>$ouPath</span> `
+                 <span>-Credential</span> <span>$credenciales</span> `
+                 <span>-Restart</span> `
+                 <span>-ErrorAction</span> Stop
+    <span>Write-Host</span> <span>"¡Éxito! El equipo se reiniciará en unos segundos."</span> <span>-ForegroundColor</span> Green
+}
+<span>catch</span> {
+    <span>Write-Host</span> <span>"Error al procesar la solicitud: <span>$_</span>"</span> <span>-ForegroundColor</span> Red
+}
+                    </code>
+                </pre>
+                <h3>🔍 ¿Qué hace este script exactamente?</h3>
+                <ul data-path-to-node="7">
+                    <li><p><b><code class = "language-powershell">Get-Credential</code></b>: Evita que escribas la contraseña en el script. Abre la ventana típica de Windows para loguearte de forma segura.</p></li>
+                    <li><p><b><code class = "language-powershell">-NewName</code></b>: Cambia el nombre local del equipo al mismo tiempo que lo registra en el Active Directory. Esto evita el conflicto de nombres que tuviste hoy.</p></li>
+                    <li><p><b><code class = "language-powershell">-ErrorAction Stop</code></b>: Si algo sale mal (ej. contraseña incorrecta o el DC no responde), el script se detiene y te muestra el error exacto en rojo en lugar de intentar forzar el reinicio.</p></li>
+                    <li><p><b><code class = "language-powershell">-Restart</code></b>: Aplica los cambios de inmediato. Sin reinicio, el cambio de nombre no es efectivo y la relación de confianza no se termina de establecer.</p></li>
+                </ul>
+                <h3>💡 Un consejo de "pro"</h3>
+                <p>Si alguna vez tienes que hacer esto en muchos equipos a la vez, puedes guardar una lista de nombres en un archivo <code>.csv</code> y hacer que el script los recorra uno a uno.</p>
+                <div class="callout callout-tip">
+                    <div class="callout-title">Pero...</div>
+                    <div class="callout-body">
+                        <p>Pero... ¿Cómo puedo validar que esto quedó bien y funcionando</p>
+                    </div>
+                </div>
+                <hr class="article-divider">
+                <p>¡Buena pregunta! En soporte, <b>no asumimos que funciona hasta que lo probamos</b>. Una vez que el equipo se reinicia tras ejecutar el script, existen tres niveles de validación para dormir tranquilo.</p>
+                <h2>Validación</h2>
+                <p>Aquí tienes el "checklist" de verificación:</p>
+                <h3>1. Validación Local (La prueba de fuego)</h3>
+                <p>La forma más rápida de saber si la relación de confianza es sólida es intentar loguearse.</p>
+                <ul>
+                    <li><p><b>Inicio de sesión:</b> Intenta entrar con una cuenta de dominio que <b>nunca</b> haya iniciado sesión en esa máquina. Si el perfil se crea y entras al escritorio, el canal seguro está perfecto.</p></li>
+                    <li><p><b>Consola (PowerShell):</b> Ejecuta este comando para que Windows mismo testee la conexión con el DC:</p></li>
+                    <div>
+                        <pre>
+                            <code class="language-powershell"><span>Test-ComputerSecureChannel</span></code>
+                        </pre>
+                        <ul>
+                            <li><p>Si devuelve <b><code class="language-powershell">True</code></b>, todo está en orden.</p></li>
+                            <li><p>Si devuelve <b><code class="language-powershell">False</code></b>, algo falló en la autenticación.</p></li>
+                        </ul>
+                    </div>
+                <h3>2. Validación en el Active Directory (AD)</h3>
+                <p>Desde el servidor o un equipo con las herramientas de administración (RSAT) instaladas:</p>
+                <ul>
+                    <li><p><b>Usuarios y Equipos de AD:</b> Busca el nombre del equipo. Verifica que:</p>
+                        <ol>
+                            <li><p>El objeto existe en la <b>OU correcta</b> (si usaste el parámetro <code class="language-powershell">-OUPath</code>).</p></li>
+                            <li><p>En la pestaña <b>"Attribute Editor"</b> (o en General), la propiedad <code class="language-powershell">dNSHostName</code> coincida con el nuevo nombre que asignaste.</p></li>
+                        </ol>
+                    </li>
+                    <li>
+                        <p><b>DNS Manager:</b> Asegúrate de que se haya creado un registro tipo <b>A</b> con el nuevo nombre del equipo apuntando a su IP actual.</p>
+                    </li>
+                </ul>
+                <h3>3. Validación de Políticas (GPO)</h3>
+                <p>Un equipo unido al dominio debe recibir las directivas de la empresa. Para verificar que las está "escuchando", usa:</p>
+                <pre><code class="language-powershell">gpresult /r</code></pre>
+                <p>En el apartado <b>"Configuración del equipo"</b>, deberías ver el nombre de tu dominio y las GPOs aplicadas. Si ves un error que dice <i>"El usuario no tiene datos de RSoP"</i>, es probable que necesites forzar una actualización con <code class="language-powershell">gpupdate /force</code>.</p>
+                <h3>📊 Resumen de Comandos Rápidos</h3>
+                <div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <td><span>Qué quieres saber</span></td>
+                                <td><span>Comando (PowerShell/CMD)</span></td>
+                                <td><span>Resultado esperado</span></td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span><b>¿Está el canal activo?</b></span></td>
+                                <td><span><code class="language-powershell">Test-ComputerSecureChannel</code></span></td>
+                                <td><span><code class="language-powershell">True</code></span></td>
+                            </tr>
+                            <tr>
+                                <td><span><b>¿Quién soy en la red?</b></span></td>
+                                <td><span><code class="language-bash">whoami /fqdn</code></span></td>
+                                <td><span>El nombre completo en el dominio</span></td>
+                            </tr>
+                            <tr>
+                                <td><span><b>¿A qué dominio pertenezco?</b></span></td>
+                                <td><span><code class="language-powershell">(Get-WmiObject Win32_ComputerSystem).Domain</code></span></td>
+                                <td><span><code class="language-powershell">dominio.com</code></span></td>
+                            </tr>
+                            <tr><td><span><b>¿Tengo mis políticas?</b></span></td>
+                                <td><span><code class="language-bash">gpresult /r</code></span></td>
+                                <td><span>Lista de GPOs aplicadas</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="callout callout-tip">
+                    <div class="callout-title">Tip</div>
+                    <div class="callout-body">
+                        <p>Si el comando <code class="language-powershell">Test-ComputerSecureChannel</code> te devuelve: <code class="language-powershell">True</code> pero el usuario sigue viendo errores de confianza, a veces el <b>reloj del equipo</b> está desincronizado con el del servidor (más de 5 minutos de diferencia). Asegúrate de que la hora sea idéntica.</p>
+                    </div>
+                </div>
+                <p>Para cerrar con broche de oro, aquí tienes un resumen ejecutivo que sintetiza todo lo que hemos cubierto. Puedes usar esto como la sección final de tu guía técnica 
+                    o como un "cheatsheet" (hoja de consulta rápida) para tu equipo de soporte.</p>
+
+                <h2>🏁 Conclusiones y Mejores Prácticas: Gestión de Dominio</h2>
+                <p>La administración de equipos en un dominio mediante CLI no es solo una cuestión de velocidad, sino de <b>consistencia y reducción de errores humanos</b>. 
+                    Tras analizar los métodos, el error de confianza y la validación, estas son las claves maestras:</p>
+                <h3>1. La Herramienta Ideal</h3>
+                <ul>
+                    <li><p><b>PowerShell es el estándar actual:</b> El comando <code class="language-powershell">Add-Computer</code> es superior a <code class="language-bash">netdom</code> porque permite gestionar el nombre del equipo (<code class="language-powershell">-NewName</code>) y su ubicación organizativa (<code class="language-powershell">-OUPath</code>) en una sola línea de ejecución.</p></li>
+                    <li><p><b>Automatización Segura:</b> Siempre utiliza <code class="language-powershell">Get-Credential</code> o el asterisco (<code class="language-powershell">*</code>) para el manejo de contraseñas. Nunca dejes credenciales en texto plano dentro de scripts.</p></li>
+                </ul>
+                <h3>2. El Error de Confianza (Trust Relationship)</h3>
+                <ul>
+                    <li><p><b>Diagnóstico:</b> El error suele ser un síntoma de un "desfase" entre el secreto guardado en el equipo local y el objeto en el Active Directory.</p></li>
+                    <li><p><b>Causa Raíz:</b> En tu caso, la <b >duplicidad de nombres</b> es el culpable número uno. Al usar el mismo nombre, el AD "pisa" la cuenta anterior, invalidando el acceso del equipo original.</p></li>
+                    <li><p><b>Solución Ágil:</b> Antes de desunir y volver a unir (el camino largo), intenta siempre <code class="language-powershell">Test-ComputerSecureChannel -Repair</code>. Es el "primer auxilio" del administrador de redes.</p></li>
+                </ul>
+                <h3>3. El Ciclo de Vida del Soporte (Checklist)</h3>
+                <p>Para asegurar que un equipo quedó correctamente integrado, sigue siempre este flujo:</p>
+                <ol>
+                    <li><p><b>Conectividad:</b> Validar DNS y visibilidad del DC.</p></li>
+                    <li><p><b>Ejecución:</b> Script de unión con cambio de nombre único.</p></li>
+                    <li><p><b>Verificación:</b> * <code class="language-powershell">Test-ComputerSecureChannel</code> para validar el canal.</p>
+                        <ul>
+                            <li><p><code class="language-bash">gpresult /r</code> para confirmar la recepción de políticas.</p></li>
+                            <li><p>Revisión de la hora del sistema (debe coincidir con el DC).</p></li>
+                        </ul>
+                    </li>
+                </ol>
+                <hr class="article-divider">
+                <div class="callout callout-tip">
+                    <div class="callout-title">Tip</div>
+                    <div class="callout-body">
+                        <h3>💡 Nota Final del Especialista</h3>
+                        <p>El éxito en el soporte técnico de infraestructura no está en saberse todos los comandos de memoria, sino en <b>limpiar el entorno antes de actuar</b>. 
+                            Si mantienes tu Active Directory libre de objetos antiguos y nombres duplicados, el 90% de estos errores desaparecerán.</p>                    
+                    </div>
+                </div>
+
+                <footer class="article-footer">
+                    <div class="article-tags">
+                        <span class="tag">#ActiveDirectory</span>
+                        <span class="tag">#dominio</span>
+                        <span class="tag">#redes</span>
+                    </div>
+
+                    <div class="article-actions">
+                        <a class="btn-link" href="#top">Volver arriba</a>
+                    </div>
+                </footer>
+
+            </article>
+        </div>
+
+    </main>
+
+    <script>
+      (() => {
+        let lastHeight = 0;
+        let rafId = 0;
+    
+        function measureAndPost() {
+          cancelAnimationFrame(rafId);
+        
+          rafId = requestAnimationFrame(() => {
+            const body = document.body;
+            const html = document.documentElement;
+        
+            const h = Math.max(
+              body.scrollHeight,
+              body.offsetHeight,
+              html.scrollHeight,
+              html.offsetHeight
+            );
+        
+            // evita spam si no cambió realmente
+            if (Math.abs(h - lastHeight) < 2) return;
+        
+            lastHeight = h;
+            parent.postMessage({ type: "articleHeight", height: h }, "*");
+          });
+        }
+    
+        window.addEventListener("load", measureAndPost);
+        document.addEventListener("DOMContentLoaded", measureAndPost);
+    
+        // Observa cambios reales en el contenido, no resize del viewport
+        const ro = new ResizeObserver(() => measureAndPost());
+        ro.observe(document.body);
+      })();
+    </script>
+
+</body>
+
+</html>
