@@ -139,18 +139,18 @@
                 <h4>Unión Estándar</h4>
                 <p>Para unir el equipo al dominio y reiniciar automáticamente:</p>
                 <pre>
-                    <code class="language-powershell">Add-Computer -DomainName "dominio.com" -Restart</code>
+                    <code>Add-Computer -DomainName "dominio.com" -Restart</code>
                 </pre>
                 <h4>Unión a una Unidad Organizativa (OU) Específica</h4>
                 <p>Si el flujo de trabajo requiere que el objeto de equipo se cree en una ruta específica dentro del AD:</p>
                 <pre>
-                    <code class="language-powershell">Add-Computer -DomainName "dominio.com" -OUPath "OU=Equipos,DC=dominio,DC=com" -Restart</code>
+                    <code>Add-Computer -DomainName "dominio.com" -OUPath "OU=Equipos,DC=dominio,DC=com" -Restart</code>
                 </pre>
                 <h3>💻 Método 2: Símbolo del Sistema (CMD)</h3>
                 <p>Este método es útil en entornos donde PowerShell esté restringido o se utilicen scripts de legado (.bat / .cmd). Se utiliza la herramienta <code class="language-bash">netdom</code>.</p>
                 <h4>Comando de Ejecución:</h4>
                 <pre>
-                    <code class="language-bash">netdom join %COMPUTERNAME% /domain:dominio.com /userd:UsuarioAdmin /passwordd:*</code>
+                    <code>netdom join %COMPUTERNAME% /domain:dominio.com /userd:UsuarioAdmin /passwordd:*</code>
                 </pre>
                 <div class="callout callout-tip">
                     <div class="callout-title">Tip</div>
@@ -192,7 +192,7 @@
                 <h4>Paso 2: Reparación desde el Equipo (PowerShell)</h4>
                 <p>No siempre es necesario sacar el equipo del dominio y volverlo a meter (el método largo). Puedes intentar <b>reparar el canal seguro</b> con este comando:</p>
                 <pre>
-                    <code class="language-powershell"><span>Test-ComputerSecureChannel</span> <span>-Repair</span> <span>-Credential</span> (<span>Get-Credential</span>)</code>
+                    <code>Test-ComputerSecureChannel -Repair -Credential (Get-Credential)</code>
                 </pre>
                 <p><i>Este comando te pedirá credenciales de administrador de dominio y forzará la sincronización de la contraseña sin necesidad de reiniciar.</i></p>
                 <h4>Paso 3: El "Truco del Grupo de Trabajo" (Si lo anterior falla)</h4>
@@ -217,36 +217,36 @@
                 </div>
                 <p>Este script realiza tres acciones críticas en una sola ejecución: <b>cambia el nombre del equipo</b>, lo <b>une al dominio</b> en la ruta (OU) que elijas y solicita el <b>reinicio</b> necesario.</p>
                 <h3>📜 Script: Cambio de Nombre y Unión al Dominio</h3>
-                <p>Copia este código en un archivo <code class="language-powershell">.ps1</code> o ejecútalo directamente en una consola de PowerShell como Administrador.</p>
+                <p>Copia este código en un archivo <code>.ps1</code> o ejecútalo directamente en una consola de PowerShell como Administrador.</p>
                 <pre>
-                    <code class="language-powershell"><span># 1. Definición de variables (Edita estos campos)</span>
-<span>$nuevoNombre</span> = <span>"PC-VENTAS-01"</span>
-<span>$dominio</span> = <span>"dominio.com"</span>
-<span>$ouPath</span> = <span>"OU=Equipos,DC=dominio,DC=com"</span> <span># Opcional: Déjalo en blanco si no usas OUs específicas</span>
-<span># 2. Credenciales (Abrirá una ventana emergente segura)</span>
-<span>$credenciales</span> = <span>Get-Credential</span> <>-UserName</span> <span>"admin_dominio"</span> <span>-Message</span> <span>"Introduce credenciales de Administrador de Dominio"</span>
-<span>Write-Host</span> <span>"Iniciando proceso de cambio de nombre y unión..."</span> <span>-ForegroundColor</span> Cyan
-<span>try</span> {
-    <span># 3. Ejecución del comando principal</span>
-    <span>Add-Computer</span> <span>-DomainName</span> <span>$dominio</span> `
-                 <span>-NewName</span> <span>$nuevoNombre</span> `
-                 <span>-OUPath</span> <span>$ouPath</span> `
-                 <span>-Credential</span> <span>$credenciales</span> `
-                 <span>-Restart</span> `
-                 <span>-ErrorAction</span> Stop
-    <span>Write-Host</span> <span>"¡Éxito! El equipo se reiniciará en unos segundos."</span> <span>-ForegroundColor</span> Green
+                    <code># 1. Definición de variables (Edita estos campos)
+$nuevoNombre = "PC-VENTAS-01"
+$dominio = "dominio.com"
+$ouPath = "OU=Equipos,DC=dominio,DC=com" # Opcional: Déjalo en blanco si no usas OUs específicas
+# 2. Credenciales (Abrirá una ventana emergente segura)
+$credenciales = Get-Credential <>-UserName "admin_dominio" -Message "Introduce credenciales de Administrador de Dominio"
+Write-Host "Iniciando proceso de cambio de nombre y unión..." -ForegroundColor Cyan
+try {
+    # 3. Ejecución del comando principal
+    Add-Computer -DomainName $dominio `
+                 -NewName $nuevoNombre `
+                 -OUPath $ouPath `
+                 -Credential $credenciales `
+                 -Restart `
+                 -ErrorAction Stop
+    Write-Host "¡Éxito! El equipo se reiniciará en unos segundos." -ForegroundColor Green
 }
-<span>catch</span> {
-    <span>Write-Host</span> <span>"Error al procesar la solicitud: <span>$_</span>"</span> <span>-ForegroundColor</span> Red
+catch {
+    Write-Host "Error al procesar la solicitud: $_" -ForegroundColor Red
 }
                     </code>
                 </pre>
                 <h3>🔍 ¿Qué hace este script exactamente?</h3>
                 <ul data-path-to-node="7">
-                    <li><p><b><code class = "language-powershell">Get-Credential</code></b>: Evita que escribas la contraseña en el script. Abre la ventana típica de Windows para loguearte de forma segura.</p></li>
-                    <li><p><b><code class = "language-powershell">-NewName</code></b>: Cambia el nombre local del equipo al mismo tiempo que lo registra en el Active Directory. Esto evita el conflicto de nombres que tuviste hoy.</p></li>
-                    <li><p><b><code class = "language-powershell">-ErrorAction Stop</code></b>: Si algo sale mal (ej. contraseña incorrecta o el DC no responde), el script se detiene y te muestra el error exacto en rojo en lugar de intentar forzar el reinicio.</p></li>
-                    <li><p><b><code class = "language-powershell">-Restart</code></b>: Aplica los cambios de inmediato. Sin reinicio, el cambio de nombre no es efectivo y la relación de confianza no se termina de establecer.</p></li>
+                    <li><p><b><code>Get-Credential</code></b>: Evita que escribas la contraseña en el script. Abre la ventana típica de Windows para loguearte de forma segura.</p></li>
+                    <li><p><b><code>-NewName</code></b>: Cambia el nombre local del equipo al mismo tiempo que lo registra en el Active Directory. Esto evita el conflicto de nombres que tuviste hoy.</p></li>
+                    <li><p><b><code>-ErrorAction Stop</code></b>: Si algo sale mal (ej. contraseña incorrecta o el DC no responde), el script se detiene y te muestra el error exacto en rojo en lugar de intentar forzar el reinicio.</p></li>
+                    <li><p><b><code>-Restart</code></b>: Aplica los cambios de inmediato. Sin reinicio, el cambio de nombre no es efectivo y la relación de confianza no se termina de establecer.</p></li>
                 </ul>
                 <h3>💡 Un consejo de "pro"</h3>
                 <p>Si alguna vez tienes que hacer esto en muchos equipos a la vez, puedes guardar una lista de nombres en un archivo <code>.csv</code> y hacer que el script los recorra uno a uno.</p>
@@ -267,11 +267,11 @@
                     <li><p><b>Consola (PowerShell):</b> Ejecuta este comando para que Windows mismo testee la conexión con el DC:</p></li>
                     <div>
                         <pre>
-                            <code class="language-powershell"><span>Test-ComputerSecureChannel</span></code>
+                            <code><span>Test-ComputerSecureChannel</span></code>
                         </pre>
                         <ul>
-                            <li><p>Si devuelve <b><code class="language-powershell">True</code></b>, todo está en orden.</p></li>
-                            <li><p>Si devuelve <b><code class="language-powershell">False</code></b>, algo falló en la autenticación.</p></li>
+                            <li><p>Si devuelve <b><code>True</code></b>, todo está en orden.</p></li>
+                            <li><p>Si devuelve <b><code>False</code></b>, algo falló en la autenticación.</p></li>
                         </ul>
                     </div>
                 <h3>2. Validación en el Active Directory (AD)</h3>
@@ -279,8 +279,8 @@
                 <ul>
                     <li><p><b>Usuarios y Equipos de AD:</b> Busca el nombre del equipo. Verifica que:</p>
                         <ol>
-                            <li><p>El objeto existe en la <b>OU correcta</b> (si usaste el parámetro <code class="language-powershell">-OUPath</code>).</p></li>
-                            <li><p>En la pestaña <b>"Attribute Editor"</b> (o en General), la propiedad <code class="language-powershell">dNSHostName</code> coincida con el nuevo nombre que asignaste.</p></li>
+                            <li><p>El objeto existe en la <b>OU correcta</b> (si usaste el parámetro <code>-OUPath</code>).</p></li>
+                            <li><p>En la pestaña <b>"Attribute Editor"</b> (o en General), la propiedad <code>dNSHostName</code> coincida con el nuevo nombre que asignaste.</p></li>
                         </ol>
                     </li>
                     <li>
@@ -289,7 +289,7 @@
                 </ul>
                 <h3>3. Validación de Políticas (GPO)</h3>
                 <p>Un equipo unido al dominio debe recibir las directivas de la empresa. Para verificar que las está "escuchando", usa:</p>
-                <pre><code class="language-powershell">gpresult /r</code></pre>
+                <pre><code>gpresult /r</code></pre>
                 <p>En el apartado <b>"Configuración del equipo"</b>, deberías ver el nombre de tu dominio y las GPOs aplicadas. Si ves un error que dice <i>"El usuario no tiene datos de RSoP"</i>, es probable que necesites forzar una actualización con <code class="language-powershell">gpupdate /force</code>.</p>
                 <h3>📊 Resumen de Comandos Rápidos</h3>
                 <div>
@@ -304,8 +304,8 @@
                         <tbody>
                             <tr>
                                 <td><span><b>¿Está el canal activo?</b></span></td>
-                                <td><span><code class="language-powershell">Test-ComputerSecureChannel</code></span></td>
-                                <td><span><code class="language-powershell">True</code></span></td>
+                                <td><span><code>Test-ComputerSecureChannel</code></span></td>
+                                <td><span><code>True</code></span></td>
                             </tr>
                             <tr>
                                 <td><span><b>¿Quién soy en la red?</b></span></td>
@@ -314,8 +314,8 @@
                             </tr>
                             <tr>
                                 <td><span><b>¿A qué dominio pertenezco?</b></span></td>
-                                <td><span><code class="language-powershell">(Get-WmiObject Win32_ComputerSystem).Domain</code></span></td>
-                                <td><span><code class="language-powershell">dominio.com</code></span></td>
+                                <td><span><code>(Get-WmiObject Win32_ComputerSystem).Domain</code></span></td>
+                                <td><span><code>dominio.com</code></span></td>
                             </tr>
                             <tr><td><span><b>¿Tengo mis políticas?</b></span></td>
                                 <td><span><code class="language-bash">gpresult /r</code></span></td>
@@ -327,7 +327,7 @@
                 <div class="callout callout-tip">
                     <div class="callout-title">Tip</div>
                     <div class="callout-body">
-                        <p>Si el comando <code class="language-powershell">Test-ComputerSecureChannel</code> te devuelve: <code class="language-powershell">True</code> pero el usuario sigue viendo errores de confianza, a veces el <b>reloj del equipo</b> está desincronizado con el del servidor (más de 5 minutos de diferencia). Asegúrate de que la hora sea idéntica.</p>
+                        <p>Si el comando <code>Test-ComputerSecureChannel</code> te devuelve: <code>True</code> pero el usuario sigue viendo errores de confianza, a veces el <b>reloj del equipo</b> está desincronizado con el del servidor (más de 5 minutos de diferencia). Asegúrate de que la hora sea idéntica.</p>
                     </div>
                 </div>
                 <p>Para cerrar con broche de oro, aquí tienes un resumen ejecutivo que sintetiza todo lo que hemos cubierto. Puedes usar esto como la sección final de tu guía técnica 
@@ -338,21 +338,21 @@
                     Tras analizar los métodos, el error de confianza y la validación, estas son las claves maestras:</p>
                 <h3>1. La Herramienta Ideal</h3>
                 <ul>
-                    <li><p><b>PowerShell es el estándar actual:</b> El comando <code class="language-powershell">Add-Computer</code> es superior a <code class="language-bash">netdom</code> porque permite gestionar el nombre del equipo (<code class="language-powershell">-NewName</code>) y su ubicación organizativa (<code class="language-powershell">-OUPath</code>) en una sola línea de ejecución.</p></li>
-                    <li><p><b>Automatización Segura:</b> Siempre utiliza <code class="language-powershell">Get-Credential</code> o el asterisco (<code class="language-powershell">*</code>) para el manejo de contraseñas. Nunca dejes credenciales en texto plano dentro de scripts.</p></li>
+                    <li><p><b>PowerShell es el estándar actual:</b> El comando <code>Add-Computer</code> es superior a <code class="language-bash">netdom</code> porque permite gestionar el nombre del equipo (<code class="language-powershell">-NewName</code>) y su ubicación organizativa (<code class="language-powershell">-OUPath</code>) en una sola línea de ejecución.</p></li>
+                    <li><p><b>Automatización Segura:</b> Siempre utiliza <code>Get-Credential</code> o el asterisco (<code>*</code>) para el manejo de contraseñas. Nunca dejes credenciales en texto plano dentro de scripts.</p></li>
                 </ul>
                 <h3>2. El Error de Confianza (Trust Relationship)</h3>
                 <ul>
                     <li><p><b>Diagnóstico:</b> El error suele ser un síntoma de un "desfase" entre el secreto guardado en el equipo local y el objeto en el Active Directory.</p></li>
                     <li><p><b>Causa Raíz:</b> En tu caso, la <b >duplicidad de nombres</b> es el culpable número uno. Al usar el mismo nombre, el AD "pisa" la cuenta anterior, invalidando el acceso del equipo original.</p></li>
-                    <li><p><b>Solución Ágil:</b> Antes de desunir y volver a unir (el camino largo), intenta siempre <code class="language-powershell">Test-ComputerSecureChannel -Repair</code>. Es el "primer auxilio" del administrador de redes.</p></li>
+                    <li><p><b>Solución Ágil:</b> Antes de desunir y volver a unir (el camino largo), intenta siempre <code>Test-ComputerSecureChannel -Repair</code>. Es el "primer auxilio" del administrador de redes.</p></li>
                 </ul>
                 <h3>3. El Ciclo de Vida del Soporte (Checklist)</h3>
                 <p>Para asegurar que un equipo quedó correctamente integrado, sigue siempre este flujo:</p>
                 <ol>
                     <li><p><b>Conectividad:</b> Validar DNS y visibilidad del DC.</p></li>
                     <li><p><b>Ejecución:</b> Script de unión con cambio de nombre único.</p></li>
-                    <li><p><b>Verificación:</b> * <code class="language-powershell">Test-ComputerSecureChannel</code> para validar el canal.</p>
+                    <li><p><b>Verificación:</b> * <code>Test-ComputerSecureChannel</code> para validar el canal.</p>
                         <ul>
                             <li><p><code class="language-bash">gpresult /r</code> para confirmar la recepción de políticas.</p></li>
                             <li><p>Revisión de la hora del sistema (debe coincidir con el DC).</p></li>
