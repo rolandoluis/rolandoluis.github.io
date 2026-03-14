@@ -267,8 +267,9 @@ iframe{
   background: var(--panel);
   border-radius: 12px;
   padding: 0 18px;
+  height: 516px;
   min-height: 265px;
-  max-height: 518px;
+  max-height: 516px;
   overflow-y: auto;
 }
 
