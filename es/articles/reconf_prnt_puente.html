@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <title>[Título del Artículo]</title>
+    <meta name="description" content="[Descripción corta del artículo]">
+
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/components.css">
+    <link rel="stylesheet" href="/assets/css/articles.css">
+    <link rel="stylesheet" href="/assets/css/article.css">
+    <script defer src="/assets/js/article-code.js"></script>
+    <script defer src="/assets/js/article-figures.js"></script>
+
+    <!-- Los enlaces del artículo navegan fuera del iframe -->
+    <base target="_parent">
+
+    <script defer>
+        // ===== Article Enhancements (TOC + Anchors) =====
+        document.addEventListener("DOMContentLoaded", () => {
+            const article = document.querySelector("[data-article]");
+            if (!article) return;
+
+            const toc = article.querySelector("[data-toc]");
+            const headings = article.querySelectorAll("h2, h3");
+
+            const slugify = (s) =>
+                s.toLowerCase()
+                    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                    .replace(/[^a-z0-9\s-]/g, "")
+                    .trim()
+                    .replace(/\s+/g, "-")
+                    .replace(/-+/g, "-");
+
+            if (!toc || headings.length === 0) {
+                const tocWrap = article.querySelector(".article-toc");
+                if (tocWrap) tocWrap.hidden = true;
+                return;
+            }
+
+            const used = new Set();
+            const items = [];
+
+            headings.forEach(h => {
+                let id = h.id ? h.id : slugify(h.textContent || "");
+                if (!id) return;
+
+                let base = id, i = 2;
+                while (used.has(id)) id = `${base}-${i++}`;
+                used.add(id);
+                h.id = id;
+
+                if (!h.querySelector(".h-anchor")) {
+                    const a = document.createElement("a");
+                    a.className = "h-anchor";
+                    a.href = `#${id}`;
+                    a.setAttribute("aria-label", "Enlace directo a esta sección");
+                    a.textContent = "¶";
+                    h.appendChild(a);
+                }
+
+                const level = h.tagName.toLowerCase(); // h2/h3
+                items.push({ id, text: h.textContent.replace("¶", "").trim(), level });
+            });
+
+            toc.innerHTML = items.map(it => {
+                const cls = it.level === "h3" ? "toc-item toc-h3" : "toc-item";
+                return `<a class="${cls}" href="#${it.id}">${it.text}</a>`;
+            }).join("");
+
+            // Si llegas con hash, posiciona
+            const hash = (location.hash || "").slice(1);
+            if (hash) {
+                const target = document.getElementById(hash);
+                if (target) target.scrollIntoView({ block: "start" });
+            }
+        });
+    </script>
+</head>
+
+<body class="article-shell">
+
+    <main class="container article-container" 
+        data-article 
+        data-article-title="¿Cambió la Subred?. Toca Reconfigurar Periféricos Estáticos"
+        data-article-category="Soporte IT" 
+        data-article-date="2026-03-05" 
+        data-article-updated="2026-03-05"
+        data-article-tags="puente,impresoras,ipaddress,ipscanner" 
+        data-article-featured="false" 
+        data-article-draft="true">
+
+        <header class="article-header" id="top">
+            <h1>Guía Técnica: Reconfiguración de Periféricos por Cambio de Subred</h1>
+            
+
+            <p class="article-meta">
+                <span class="meta-item">Rolando Luis Martín</span>
+                <span class="meta-sep">·</span>
+                <time class="meta-item" datetime="2026-03-05">5 Mar 2026</time>
+                <span class="meta-sep">·</span>
+                <span class="meta-item">Soporte IT</span>
+                <span class="meta-sep">·</span>
+                <span class="meta-item">Nivel: Avanzado</span>
+            </p>
+
+            <p class="lede">Guía técnica para resolver huérfanos de IP tras un cambio de Subred (router/ISP/Dominio).</p>
+        </header>
+
+        <div class="article-layout">
+            <!-- TOC -->
+            <aside class="article-toc" aria-label="Tabla de contenidos">
+                <div class="toc-title">Contenido</div>
+                <nav data-toc class="toc-nav"></nav>
+                <div class="figs-title">Figuras</div>
+                <nav data-figures class="figs-nav"></nav>
+            </aside>
+            
+            <!-- Body -->
+            <article class="article-body">
+
+                <div class="callout callout-note">
+                    <div class="callout-title">Nota</div>
+                    <div class="callout-body">
+                        <p>Esta es una guía técnica estructurada para resolver conflictos de direccionamiento IP tras un cambio de infraestructura de red (router/ISP). </p>
+                    </div>
+                </div>
+
+                <h2>Objetivo</h2>
+                <p>El objetivo es recuperar el acceso a periféricos con IPs estáticas sin necesidad de un reset de fábrica físico.</p>
+
+                <h2>Contexto</h2>
+                <h3>1. Diagnóstico de la Situación</h3>
+                <p>Al cambiar el router, la subred cambió de <code>192.168.1.0/24</code> a <code>172.26.3.0/24</code>. 
+                    Los equipos por DHCP se adaptaron automáticamente, pero las impresoras, al tener <>IP Fija (estática)</b>, 
+                    quedaron "huérfanas" en una red que el nuevo router no reconoce.</p>
+
+                <h2>Desarrollo</h2>
+                <h3>2. Identificación de Dispositivos (Advanced IP Scanner)</h3>
+                <p>Para encontrar las impresoras sin adivinar, debemos escanear ambos rangos simultáneamente.</p>
+                <ul data-path-to-node="7">
+                    <li><p><b>Acción:</b> En la barra de direcciones de Advanced IP Scanner, define un rango amplio que cubra ambas subredes.</p></li>
+                    <li><p><b>Rango a ingresar:</b> <code>172.26.3.1-172.26.3.254, 192.168.1.1-192.168.1.254</code></p></li>
+                </ul>
+                <div class="callout callout-note">
+                    <div class="callout-title">Nota</div>
+                    <div class="callout-body">
+                        <p><b>Nota Visual:</b> En el software, verás que puedes separar los rangos por comas. Esto obligará a la tarjeta de red a buscar respuestas en ambos segmentos.</p>                    
+                    </div>
+                </div>
+                <h3>3. El "Puente" de Red (Configuración IPv4)</h3>
+                <p>Para que el PC de soporte "hable" con la impresora en la red vieja, necesitamos que la tarjeta de red del PC pertenezca a ambas redes a la vez.</p>
+                <ol>
+                    <li><p>Ve a <b>Propiedades de Ethernet -&gt; Protocolo de Internet versión 4 (TCP/IPv4)</b>.</p></li>
+                    <li><p>Asigna una IP fija temporal en el rango nuevo (ej. <code>172.26.3.50</code>).</p></li>
+                    <li><p>Haz clic en <b>Opciones avanzadas...</b> y en la sección <b>Direcciones IP</b>, pulsa "Agregar".</p></li>
+                    <li><p>Añade una IP del rango antiguo (ej. <code>192.168.1.50</code>) con su respectiva máscara (<code>255.255.255.0</code>).</p></li>
+                </ol>
+                <div class="callout callout-note">
+                    <div class="callout-title">Nota</div>
+                    <div class="callout-body">
+                        <p><b>¿Por qué hacemos esto?</b> Esto permite que tu navegador pueda cargar la interfaz web de la impresora aunque esta siga en la IP <code>192.168.1.X</code>.</p>                    
+                    </div>
+                </div>
+                <h3>3. El "Puente" de Red (Configuración IPv4)</h3>
+                <p>Con el "puente" activo, abre tu navegador y escribe la IP antigua de la impresora detectada en el escaneo.</p>
+                <ul>
+                    <li><p><b>Acción:</b> Ve al apartado <b>Network/Red -&gt; IPv4</b>.</p></li>
+                    <li><p><b>Cambio:</b> Cambia el modo de "Manual/Static" a las nuevas direcciones:</p>
+                        <ul>
+                            <li><p><b>Impresora 1:</b> <code>172.26.3.100</code></p></li>
+                            <li><p><b>Impresora 2:</b> <code>172.26.3.101</code></p></li>
+                            <li><p><b>Máscara:</b> <code>255.255.255.0</code></p></li>
+                            <li><p><b>Puerta de enlace:</b> <code>172.26.3.1</code> (La IP del nuevo router).</p></li>
+                        </ul>
+                    </li>
+                    <li><p><b>Importante:</b> Aplica los cambios. Perderás conexión momentáneamente porque la impresora se ha movido a la nueva red.</p></li>
+                </ul>
+                <h3>5. Actualización de Puertos en Estaciones de Trabajo</h3>
+                <p>No es necesario reinstalar drivers. Solo debemos apuntar el "túnel" de comunicación a la nueva dirección.</p>
+                <ol>
+                    <li><p>En cada PC: <b>Panel de Control -&gt; Dispositivos e Impresoras</b>.</p></li>
+                    <li><p>Clic derecho en la impresora -&gt; <b>Propiedades de impresora</b> (no confundir con "Propiedades" a secas).</p></li>
+                    <li><p>Pestaña <b>Puertos</b> -&gt; <b>Configurar puerto...</b> (o "Agregar puerto" -&gt; Standard TCP/IP Port).</p></li>
+                    <li><p>Actualiza el nombre de la impresora o dirección IP a la nueva (<code>172.26.3.100</code>).</p></li>
+                </ol>
+                <table>
+                    <thead>
+                        <tr>
+                            <td><span>Configuración de Puerto</span></td>
+                            <td><span>Valor Sugerido</span></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span><b>Nombre de puerto</b></span></td>
+                            <td><span>IP_172.26.3.100</span></td>
+                        </tr>
+                        <tr>
+                            <td><span><b>Dirección IP</b></span></td>
+                            <td><span>172.26.3.100</span></td></tr>
+                        <tr>
+                            <td><span><b>Protocolo</b></span></td>
+                            <td><span>RAW (Puerto 9100)</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- Cómo escribir tus bloques de código en el artículo
+                    PowerShell
+                        <pre><code class="language-powershell">Get-ChildItem -Path C:\ -Force
+                        $env:Path
+                        # Comentario</code></pre>
+                    Bash
+                        <pre><code class="language-bash">#!/usr/bin/env bash
+                        echo "Hello"
+                        export PATH="$PATH:/opt/bin"</code></pre>
+                    JSON
+                        <pre><code class="language-json">{
+                          "name": "rolandoluis",
+                          "enabled": true,
+                          "count": 3,
+                          "tags": ["ps", "win", "net"]
+                        }</code></pre>
+                -->
+                <h3>6. Verificación Final</h3>
+                <ul>
+                    <li><p>Realiza una <b>Página de prueba</b> desde las propiedades de Windows.</p></li>
+                    <li><p><b>Limpieza:</b> Una vez terminado en todos los PCs, recuerda volver a poner la configuración IPv4 del PC de soporte en modo "Obtener una dirección IP automáticamente" (DHCP) para evitar conflictos futuros.</p></li>
+                </ul>        
+
+                <div class="callout callout-tip">
+                    <div class="callout-title">Tip</div>
+                    <div class="callout-body">
+                        <p>Puedes automatizar el proceso de configuración. El siguiente script de Powershell, realiza la mayoría de las acciones por ti</p>
+                    </div>
+                </div>
+                <p>De hecho, para un Técnico IT, usar <b>PowerShell</b> es como tener un superpoder para ahorrar tiempo. En lugar de ir PC por PC haciendo 
+                    clics en menús infinitos, puedes ejecutar un comando que reasigne el puerto de la impresora en segundos.</p>
+                <p>Aquí tienes el script y la explicación técnica de cómo funciona.</p>
+                <h3>🚀 Script: "IT-Bridge &amp; Printer Migrator"</h3>
+                <p><b>Script Interactivo</b> que hace todo el trabajo sucio por ti: configura el "puente" de red (añadiendo la IP vieja a la tarjeta), 
+                    abre el panel de control para que el técnico vea los nombres de las impresoras y luego solicita los datos para reconfigurar el puerto.</p>                
+                <h3>El Código (PowerShell)</h3>
+                <p>Copia este código en un archivo de texto, guárdalo como <code>MigrarImpresora.ps1</code> y ejecútalo como <b>Administrador</b>.</p>
+                <pre><code class="language-powershell"># 1. --- CONFIGURACIÓN DEL PUENTE ---
+Write-Host "=== PASO 1: CREANDO PUENTE DE RED (MULTIHOMING) ===" -ForegroundColor Yellow
+$interfaz = (Get-NetAdapter | Where-Object Status -eq "Up")[0].Name
+
+$ipNueva = Read-Host "IP ACTUAL del PC (ej. 172.26.3.50)"
+$ipVieja = Read-Host "IP VIEJA para el puente (ej. 192.168.1.50)"
+
+# Configuración de IPs
+New-NetIPAddress -InterfaceAlias $interfaz -IPAddress $ipNueva -PrefixLength 24 -DefaultGateway "172.26.3.1"
+New-NetIPAddress -InterfaceAlias $interfaz -IPAddress $ipVieja -PrefixLength 24
+Write-Host "Red configurada. Acceso a ambas subredes activo." -ForegroundColor Green
+
+# 2. --- IDENTIFICACIÓN (TU MEJORA) ---
+Write-Host "`n=== PASO 2: SELECCIÓN DE IMPRESORA ===" -ForegroundColor Yellow
+Start-Process "shell:::{A8A91A66-3A7D-4424-8D24-04E180695C7A}" # Tu comando pro
+Write-Host "Copiando nombres de impresoras instaladas..." -ForegroundColor Cyan
+Get-Printer | Select-Object Name | Format-Table
+
+$nombreImpresora = Read-Host "Nombre EXACTO de la impresora"
+$nuevaIPImpresora = Read-Host "NUEVA IP (ej. 172.26.3.100)"
+$nuevoPuerto = "IP_$nuevaIPImpresora"
+
+# 3. --- CAMBIO DE PUERTO ---
+Add-PrinterPort -Name $nuevoPuerto -PrinterHostAddress $nuevaIPImpresora
+Set-Printer -Name $nombreImpresora -PortName $nuevoPuerto
+Write-Host "✅ Puerto migrado a $nuevaIPImpresora" -ForegroundColor Green
+
+# 4. --- LIMPIEZA AUTOMÁTICA ---
+Write-Host "`n=== PASO 4: FINALIZACIÓN Y LIMPIEZA ===" -ForegroundColor Yellow
+$limpiar = Read-Host "¿Deseas restaurar el PC a DHCP automáticamente ahora? (S/N)"
+if($limpiar -eq "S") {
+    Set-NetIPInterface -InterfaceAlias $interfaz -Dhcp Enabled
+    # Borramos las IPs estáticas temporales para evitar conflictos
+    Get-NetIPAddress -InterfaceAlias $interfaz | Where-Object { $_.AddressFamily -eq "IPv4" } | Remove-NetIPAddress -Confirm:$false
+    Write-Host "PC restaurado a DHCP. ¡Trabajo terminado!" -ForegroundColor Green
+}
+                </code></pre>
+                <h3>📘 Argumentación Técnica para el Técnico Junior</h3>
+                
+                <p>Es importante que el equipo entienda <b>por qué</b> usamos esto y no la interfaz gráfica:</p>
+                <ol>
+                    <li><p><b>Consistencia:</b> Evitas errores humanos al escribir la IP en máquinas distintas. Si el script funciona en una, funcionará en las restantes.</p></li>
+                    <li><p><b>Gestión de "Printer Spooler":</b> PowerShell interactúa directamente con el servicio de cola de impresión, lo que suele ser más rápido y menos propenso a bloqueos que la ventana de "Propiedades de Impresora".</p></li>
+                    <li><p><b>Escalabilidad:</b> Hoy son pocos ordenadores, pero si mañana son 50, este script te ahorra horas de trabajo manual.</p></li>
+                </ol>
+                <p>¿Qué está pasando "bajo el capó" de este script?</p>
+                <ol>
+                    <li><p><b><code>New-NetIPAddress</code></b>: Es el comando de PowerShell que equivale a ir a las Propiedades Avanzadas de TCP/IPv4. Al ejecutarlo dos veces sobre la misma tarjeta (<code>InterfaceAlias</code>), Windows entiende que quieres <b>multihoming</b> (una tarjeta con varias IPs).</p></li>
+                    <li><p><b><code>shell:::{A8A91A66-3A7D-4424-8D24-04E180695C7A}</code></b>: Este comando fuerza a Windows a abrir la <b>Vista de Escritorio Clásica</b>, que es donde podemos ver los nombres de puerto y propiedades avanzadas con total libertad.</p></li>
+                    <li><p><b><code>Try/Catch</code></b>: Es una estructura de control de errores. Si el técnico escribe mal el nombre de la impresora, el script no "explota" con letras rojas feas, sino que da un mensaje controlado.</p></li>
+                </ol>
+                <div class="callout callout-warn">
+                    <div class="callout-title">Advertencia</div>
+                    <div class="callout-body">
+                        <h3>⚠️ Notas de Implementación</h3>
+                        <ul data-path-to-node="13">
+                            <li><p><b>Nombre de la Impresora:</b> El parámetro <code>$nombreImpresora</code> debe coincidir exactamente con el nombre que ves en Windows. Puedes listar todas tus impresoras instaladas con el comando <code>Get-Printer | Select-Object Name</code> para estar seguro.</p></li>
+                            <li><p><b>Permisos:</b> El script fallará si no se ejecuta como <b>Administrador</b>, ya que modificar puertos de impresión afecta a la configuración del sistema.</p></li>
+                            <p>Al terminar el trabajo en los PCs, recuerda que el adaptador se ha quedado con <b>IP fija</b>. Para volver a DHCP y limpiar el "puente", el técnico debe ejecutar:
+<pre><code class="language-powershell">Set-NetIPInterface -InterfaceAlias "Ethernet" -Dhcp Enabled</code></pre>
+(O hacerlo manualmente en las propiedades de red).</p>
+                        </ul>
+                    </div>
+                </div>
+                <hr class="article-divider">
+                <div class="callout callout-tip">
+                    <div class="callout-title">Tip</div>
+                    <div class="callout-body">
+                        <h3>💡 Tip de "Hacker" para el Técnico Junior:</h3>
+                        <p>Si alguna vez el CLSID se te olvida, puedes usar este comando en PowerShell para encontrar otros paneles ocultos:
+<pre><code class="language-powershell">Get-ChildItem 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\ControlPanel\NameSpace'</code></pre></p>
+                    </div>
+                </div>
+
+                <hr class="article-divider">
+
+                <footer class="article-footer">
+                    <div class="article-tags">
+                        <span class="tag">#estatica</span>
+                        <span class="tag">#subred</span>
+                        <span class="tag">#impresoras</span>
+                    </div>
+
+                    <div class="article-actions">
+                        <a class="btn-link" href="#top">Volver arriba</a>
+                    </div>
+                </footer>
+
+            </article>
+        </div>
+
+    </main>
+
+    <script>
+      (() => {
+        let lastHeight = 0;
+        let rafId = 0;
+    
+        function measureAndPost() {
+          cancelAnimationFrame(rafId);
+        
+          rafId = requestAnimationFrame(() => {
+            const body = document.body;
+            const html = document.documentElement;
+        
+            const h = Math.max(
+              body.scrollHeight,
+              body.offsetHeight,
+              html.scrollHeight,
+              html.offsetHeight
+            );
+        
+            // evita spam si no cambió realmente
+            if (Math.abs(h - lastHeight) < 2) return;
+        
+            lastHeight = h;
+            parent.postMessage({ type: "articleHeight", height: h }, "*");
+          });
+        }
+    
+        window.addEventListener("load", measureAndPost);
+        document.addEventListener("DOMContentLoaded", measureAndPost);
+    
+        // Observa cambios reales en el contenido, no resize del viewport
+        const ro = new ResizeObserver(() => measureAndPost());
+        ro.observe(document.body);
+      })();
+    </script>
+
+</body>
+
+</html>

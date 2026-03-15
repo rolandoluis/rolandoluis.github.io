@@ -187,6 +187,21 @@
     "featured": false
   },
   {
+    "title": "¿Cambió la Subred?. Toca Reconfigurar Periféricos Estáticos",
+    "category": "Soporte IT",
+    "slug": "reconf_prnt_puente",
+    "description": "[Descripción corta del artículo]",
+    "date": "2026-03-05",
+    "updated": "2026-03-05",
+    "tags": [
+      "puente",
+      "impresoras",
+      "ipaddress",
+      "ipscanner"
+    ],
+    "featured": false
+  },
+  {
     "title": "Unir Equipos a Dominio vía Powershell y CMD",
     "category": "Soporte IT",
     "slug": "unir_pc_activedir",
