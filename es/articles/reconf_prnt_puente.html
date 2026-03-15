@@ -15,6 +15,11 @@
     <script defer src="/assets/js/article-code.js"></script>
     <script defer src="/assets/js/article-figures.js"></script>
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism-tomorrow.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/prismjs/prism.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs/components/prism-powershell.min.js"></script>
+
     <!-- Los enlaces del artículo navegan fuera del iframe -->
     <base target="_parent">
 
@@ -141,7 +146,7 @@
                 <h2>Desarrollo</h2>
                 <h3>2. Identificación de Dispositivos (Advanced IP Scanner)</h3>
                 <p>Para encontrar las impresoras sin adivinar, debemos escanear ambos rangos simultáneamente.</p>
-                <ul data-path-to-node="7">
+                <ul>
                     <li><p><b>Acción:</b> En la barra de direcciones de Advanced IP Scanner, define un rango amplio que cubra ambas subredes.</p></li>
                     <li><p><b>Rango a ingresar:</b> <code>172.26.3.1-172.26.3.254, 192.168.1.1-192.168.1.254</code></p></li>
                 </ul>
@@ -245,7 +250,7 @@
                     abre el panel de control para que el técnico vea los nombres de las impresoras y luego solicita los datos para reconfigurar el puerto.</p>                
                 <h3>El Código (PowerShell)</h3>
                 <p>Copia este código en un archivo de texto, guárdalo como <code>MigrarImpresora.ps1</code> y ejecútalo como <b>Administrador</b>.</p>
-                <pre><code class="language-powershell"># 1. --- CONFIGURACIÓN DEL PUENTE ---
+                <pre data-code="powershell"><code class="language-powershell"># 1. --- CONFIGURACIÓN DEL PUENTE ---
 Write-Host "=== PASO 1: CREANDO PUENTE DE RED (MULTIHOMING) ===" -ForegroundColor Yellow
 $interfaz = (Get-NetAdapter | Where-Object Status -eq "Up")[0].Name
 
