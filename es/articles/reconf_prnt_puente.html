@@ -250,7 +250,7 @@
                     abre el panel de control para que el técnico vea los nombres de las impresoras y luego solicita los datos para reconfigurar el puerto.</p>                
                 <h3>El Código (PowerShell)</h3>
                 <p>Copia este código en un archivo de texto, guárdalo como <code>MigrarImpresora.ps1</code> y ejecútalo como <b>Administrador</b>.</p>
-                <pre data-code="powershell"><code class="language-powershell"># 1. --- CONFIGURACIÓN DEL PUENTE ---
+                <pre><code># 1. --- CONFIGURACIÓN DEL PUENTE ---
 Write-Host "=== PASO 1: CREANDO PUENTE DE RED (MULTIHOMING) ===" -ForegroundColor Yellow
 $interfaz = (Get-NetAdapter | Where-Object Status -eq "Up")[0].Name
 
