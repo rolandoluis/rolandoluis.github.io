@@ -309,7 +309,7 @@ if($limpiar -eq "S") {
                             <li><p><b>Nombre de la Impresora:</b> El parámetro <code>$nombreImpresora</code> debe coincidir exactamente con el nombre que ves en Windows. Puedes listar todas tus impresoras instaladas con el comando <code>Get-Printer | Select-Object Name</code> para estar seguro.</p></li>
                             <li><p><b>Permisos:</b> El script fallará si no se ejecuta como <b>Administrador</b>, ya que modificar puertos de impresión afecta a la configuración del sistema.</p></li>
                             <p>Al terminar el trabajo en los PCs, recuerda que el adaptador se ha quedado con <b>IP fija</b>. Para volver a DHCP y limpiar el "puente", el técnico debe ejecutar:
-<pre><code class="language-powershell">Set-NetIPInterface -InterfaceAlias "Ethernet" -Dhcp Enabled</code></pre>
+<pre><code>Set-NetIPInterface -InterfaceAlias "Ethernet" -Dhcp Enabled</code></pre>
 (O hacerlo manualmente en las propiedades de red).</p>
                         </ul>
                     </div>
@@ -320,7 +320,7 @@ if($limpiar -eq "S") {
                     <div class="callout-body">
                         <h3>💡 Tip de "Hacker" para el Técnico Junior:</h3>
                         <p>Si alguna vez el CLSID se te olvida, puedes usar este comando en PowerShell para encontrar otros paneles ocultos:
-<pre><code class="language-powershell">Get-ChildItem 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\ControlPanel\NameSpace'</code></pre></p>
+<pre><code>Get-ChildItem 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\ControlPanel\NameSpace'</code></pre></p>
                     </div>
                 </div>
 
