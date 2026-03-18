@@ -40,9 +40,9 @@ main.engineering-shell {
 
 .hero-engineering {
   min-height: 150px;
-  border: 1px solid var(--line);
+  /* border: 1px solid var(--line); */
   border-radius: 14px;
-  background: color-mix(in srgb, var(--panel) 82%, transparent);
+  /* background: color-mix(in srgb, var(--panel) 82%, transparent); */
   overflow: hidden;
   position: relative;
 }
