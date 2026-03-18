@@ -8,9 +8,12 @@
   <link rel="icon" href="/assets/img/brand/favicon.png" />
   <link rel="stylesheet" href="/assets/css/main.css" />
   <link rel="stylesheet" href="/assets/css/components.css" />
+  <link rel="stylesheet" href="/assets/css/engineering.css" />
   <script defer src="/assets/js/main.js"></script>
   <script defer src="/assets/js/hero-net.js"></script>
+  <script defer src="/assets/js/engineering.js"></script>
 </head>
+
 <body>
   <header class="site-header">
     <div class="container header-inner">
@@ -87,27 +90,82 @@
 
   <nav class="breadcrumb" id="breadcrumb"></nav>
   
-  <main class="container">
-    <section class="hero hero-canvas">
+  <main class="container engineering-shell">
+  <div class="engineering-layout is-index" id="engineeringLayout">
+
+    <section class="hero hero-canvas hero-engineering" id="engineeringHero">
       <canvas id="heroNet" aria-hidden="true"></canvas>
-      <h1>Ingeniería</h1>
-      <p class="lede">Competencias principales, áreas de enfoque y el tipo de sistemas que construyo.</p>
+
+      <div class="hero-engineering-inner">
+        <h1>Ingeniería</h1>
+        <p class="lede">
+          Arquitectura, automatización, documentación técnica y diseño de sistemas.
+        </p>
+
+        <div class="engineering-hero-links" id="engineeringHeroLinks">
+          <!-- Botones dinámicos desde engineering.json -->
+        </div>
+      </div>
     </section>
 
-    <section class="grid">
-      <article class="card">
-        <h2>PowerShell Automation</h2>
-        <p>Herramientas modulares, registro y reportes, flujos de trabajo y scripts idempotentes.</p>
-      </article>
-      <article class="card">
-        <h2>Windows Deployment</h2>
-        <p>Aprovisionamiento, estandarización de perfiles, instalaciones offline y protocolos basados en fases.</p>
-      </article>
-      <article class="card">
-        <h2>Infrastructure</h2>
-        <p>Redes, VPN, entornos de laboratorio, integración y endurecimiento operacional.</p>
-      </article>
+    <section class="engineering-content" id="engineeringContent">
+      <div class="engineering-content-head">
+        <h2>Documentos de ingeniería</h2>
+        <p class="engineering-intro">
+          Especificaciones, diseños, decisiones técnicas y documentación estructural del sistema.
+        </p>
+      </div>
+
+      <div class="engineering-scroll-container">
+        <div class="engineering-list" id="engineeringList">
+          <!-- Cards dinámicas -->
+        </div>
+      </div>
     </section>
+
+    <section class="engineering-reader" id="engineeringReader" hidden>
+      <aside class="engineering-sidepanel">
+
+        <section class="hero hero-canvas hero-engineering hero-engineering-mini">
+          <canvas id="heroNetMini" aria-hidden="true"></canvas>
+          <div class="hero-engineering-mini-inner">
+            <h2>Ingeniería</h2>
+            <p class="lede">Lectura técnica guiada</p>
+          </div>
+        </section>
+
+        <section class="engineering-toc-panel">
+          <div class="engineering-toc-head">Contenido</div>
+          <nav class="engineering-toc" id="engineeringToc"></nav>
+        </section>
+      </aside>
+
+      <section class="engineering-framepanel">
+        <div class="engineering-reader-bar">
+          <div class="engineering-reader-title" id="engineeringReaderTitle">Documento</div>
+
+          <div class="engineering-reader-progress" id="engineeringReaderProgress" hidden>
+            <div class="engineering-progress-container">
+              <div class="engineering-progress-bar" id="engineeringProgressBar"></div>
+              <div class="engineering-progress-steps" id="engineeringProgressSteps"></div>
+            </div>
+
+            <div class="engineering-progress-actions">
+              <button class="engineering-nav-btn" id="engineeringPrev" type="button" disabled>Anterior</button>
+              <button class="engineering-nav-btn" id="engineeringNext" type="button">Siguiente</button>
+            </div>
+          </div>
+        </div>
+
+        <iframe id="engineeringIframe" src=""></iframe>
+      </section>
+
+      <aside class="engineering-thumbs" id="engineeringThumbs" hidden>
+        <!-- Futura columna de miniaturas -->
+      </aside>
+    </section>
+
+  </div>
   </main>
 
   <footer class="site-footer">

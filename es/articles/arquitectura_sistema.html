@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <title>[Título del Artículo]</title>
+    <meta name="description" content="[Descripción corta del artículo]">
+
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/components.css">
+    <link rel="stylesheet" href="/assets/css/articles.css">
+    <link rel="stylesheet" href="/assets/css/article.css">
+    <script defer src="/assets/js/article-code.js"></script>
+    <script defer src="/assets/js/article-figures.js"></script>
+
+    <!-- Los enlaces del artículo navegan fuera del iframe -->
+    <base target="_parent">
+
+    <script defer>
+        // ===== Article Enhancements (TOC + Anchors) =====
+        document.addEventListener("DOMContentLoaded", () => {
+            const article = document.querySelector("[data-article]");
+            if (!article) return;
+
+            const toc = article.querySelector("[data-toc]");
+            const headings = article.querySelectorAll("h2, h3");
+
+            const slugify = (s) =>
+                s.toLowerCase()
+                    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                    .replace(/[^a-z0-9\s-]/g, "")
+                    .trim()
+                    .replace(/\s+/g, "-")
+                    .replace(/-+/g, "-");
+
+            if (!toc || headings.length === 0) {
+                const tocWrap = article.querySelector(".article-toc");
+                if (tocWrap) tocWrap.hidden = true;
+                return;
+            }
+
+            const used = new Set();
+            const items = [];
+
+            headings.forEach(h => {
+                let id = h.id ? h.id : slugify(h.textContent || "");
+                if (!id) return;
+
+                let base = id, i = 2;
+                while (used.has(id)) id = `${base}-${i++}`;
+                used.add(id);
+                h.id = id;
+
+                if (!h.querySelector(".h-anchor")) {
+                    const a = document.createElement("a");
+                    a.className = "h-anchor";
+                    a.href = `#${id}`;
+                    a.setAttribute("aria-label", "Enlace directo a esta sección");
+                    a.textContent = "¶";
+                    h.appendChild(a);
+                }
+
+                const level = h.tagName.toLowerCase(); // h2/h3
+                items.push({ id, text: h.textContent.replace("¶", "").trim(), level });
+            });
+
+            toc.innerHTML = items.map(it => {
+                const cls = it.level === "h3" ? "toc-item toc-h3" : "toc-item";
+                return `<a class="${cls}" href="#${it.id}">${it.text}</a>`;
+            }).join("");
+
+            // Si llegas con hash, posiciona
+            const hash = (location.hash || "").slice(1);
+            if (hash) {
+                const target = document.getElementById(hash);
+                if (target) target.scrollIntoView({ block: "start" });
+            }
+        });
+    </script>
+</head>
+
+<body class="article-shell">
+
+    <main class="container article-container" 
+        data-article 
+        data-article-title="Especificación de Arquitectura del Sistema"
+        data-article-category="[Categoría]" 
+        data-article-date="2026-03-05" 
+        data-article-updated="2026-03-05"
+        data-article-tags="tag1,tag2,tag3" 
+        data-article-featured="false" 
+        data-article-draft="true">
+
+        <header class="article-header" id="top">
+            <h1>[Título del Artículo]</h1>
+
+            <p class="article-meta">
+                <span class="meta-item">Rolando Luis Martín</span>
+                <span class="meta-sep">·</span>
+                <time class="meta-item" datetime="2026-03-05">5 Mar 2026</time>
+                <span class="meta-sep">·</span>
+                <span class="meta-item">[Categoría]</span>
+                <span class="meta-sep">·</span>
+                <span class="meta-item">Nivel: [Base|Intermedio|Avanzado]</span>
+            </p>
+
+            <p class="lede">[Resumen corto / qué aprenderá el lector]</p>
+        </header>
+
+        <div class="article-layout">
+            <!-- TOC -->
+            <aside class="article-toc" aria-label="Tabla de contenidos">
+                <div class="toc-title">Contenido</div>
+                <nav data-toc class="toc-nav"></nav>
+                <div class="figs-title">Figuras</div>
+                <nav data-figures class="figs-nav"></nav>
+            </aside>
+            
+            <!-- Body -->
+            <article class="article-body">
+
+                <div class="callout callout-note">
+                    <div class="callout-title">Nota</div>
+                    <div class="callout-body">
+                        [Contexto breve, prerequisitos, versión o alcance.]
+                    </div>
+                </div>
+
+                <h2>Objetivo</h2>
+                <p>[Qué se va a lograr, por qué importa.]</p>
+
+                <h2>Contexto</h2>
+                <p>[Contexto técnico.]</p>
+
+                <h2>Desarrollo</h2>
+                <h3>Paso 1</h3>
+                <p>[Explicación.]</p>
+                <!-- Cómo escribir tus bloques de código en el artículo
+                    PowerShell
+                        <pre><code class="language-powershell">Get-ChildItem -Path C:\ -Force
+                        $env:Path
+                        # Comentario</code></pre>
+                    Bash
+                        <pre><code class="language-bash">#!/usr/bin/env bash
+                        echo "Hello"
+                        export PATH="$PATH:/opt/bin"</code></pre>
+                    JSON
+                        <pre><code class="language-json">{
+                          "name": "rolandoluis",
+                          "enabled": true,
+                          "count": 3,
+                          "tags": ["ps", "win", "net"]
+                        }</code></pre>
+                -->
+                <pre><code class="language-powershell"># Ejemplo
+Write-Host "Hola"</code></pre>
+
+                <div class="callout callout-tip">
+                    <div class="callout-title">Tip</div>
+                    <div class="callout-body">
+                        [Recomendación práctica o atajo.]
+                    </div>
+                </div>
+
+                <h3>Paso 2</h3>
+                <p>[Explicación.]</p>
+
+                <div class="callout callout-warn">
+                    <div class="callout-title">Advertencia</div>
+                    <div class="callout-body">
+                        [Riesgos, compatibilidad, permisos, etc.]
+                    </div>
+                </div>
+
+                <h2>Validación</h2>
+                <ul>
+                    <li>[Check 1]</li>
+                    <li>[Check 2]</li>
+                </ul>
+
+                <h2>Conclusión</h2>
+                <p>[Cierre + próximos pasos.]</p>
+
+                <hr class="article-divider">
+
+                <footer class="article-footer">
+                    <div class="article-tags">
+                        <span class="tag">#tag1</span>
+                        <span class="tag">#tag2</span>
+                        <span class="tag">#tag3</span>
+                    </div>
+
+                    <div class="article-actions">
+                        <a class="btn-link" href="#top">Volver arriba</a>
+                    </div>
+                </footer>
+
+            </article>
+        </div>
+
+    </main>
+
+    <script>
+      (() => {
+        let lastHeight = 0;
+        let rafId = 0;
+    
+        function measureAndPost() {
+          cancelAnimationFrame(rafId);
+        
+          rafId = requestAnimationFrame(() => {
+            const body = document.body;
+            const html = document.documentElement;
+        
+            const h = Math.max(
+              body.scrollHeight,
+              body.offsetHeight,
+              html.scrollHeight,
+              html.offsetHeight
+            );
+        
+            // evita spam si no cambió realmente
+            if (Math.abs(h - lastHeight) < 2) return;
+        
+            lastHeight = h;
+            parent.postMessage({ type: "articleHeight", height: h }, "*");
+          });
+        }
+    
+        window.addEventListener("load", measureAndPost);
+        document.addEventListener("DOMContentLoaded", measureAndPost);
+    
+        // Observa cambios reales en el contenido, no resize del viewport
+        const ro = new ResizeObserver(() => measureAndPost());
+        ro.observe(document.body);
+      })();
+    </script>
+
+</body>
+
+</html>

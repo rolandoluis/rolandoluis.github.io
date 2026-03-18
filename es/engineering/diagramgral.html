@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <title>[Título del Artículo]</title>
+    <meta name="description" content="[Descripción corta del artículo]">
+
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/components.css">
+    <link rel="stylesheet" href="/assets/css/articles.css">
+    <link rel="stylesheet" href="/assets/css/article.css">
+    <script defer src="/assets/js/article-code.js"></script>
+    <script defer src="/assets/js/article-figures.js"></script>
+
+    <!-- Los enlaces del artículo navegan fuera del iframe -->
+    <base target="_parent">
+    <style>
+        :root {
+            --bg: #0b1220;
+            --panel: #0f172a;
+            --text: #e5e7eb;
+            --muted: #a1a1aa;
+            --line: rgba(255, 255, 255, 0.15);
+            --accent: #3f0808;
+            --accent-net: #f43f5e;
+            --radius: 14px;
+            --max: 1060px;
+            --brand-mrk-color: #e11d48;
+            --brand-mrk-bkgnd: #5c0000;
+        }
+
+        :root[data-theme="graphite"] {
+            --bg: #032906;
+            --panel: #0b1020;
+            --text: #eef2ff;
+            --muted: #a1a1aa;
+            --line: rgba(255, 255, 255, .10);
+            --accent: #003012;
+            --accent-net: #22c55e;
+        }
+
+        :root[data-theme="solar"] {
+            --bg: #0b0a08;
+            --panel: #14110d;
+            --text: #fff2e0;
+            --muted: #c7b6a3;
+            --line: rgba(255, 200, 120, .14);
+            --accent: #ff3b1a;
+            --accent-net: #ffb020;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px;
+            margin: 0;
+            transition: background 0.3s ease;
+        }
+
+        /* Contenedor de controles para el tema */
+        .theme-switcher {
+            margin-bottom: 30px;
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            padding: 8px 16px;
+            cursor: pointer;
+            border-radius: var(--radius);
+            border: 1px solid var(--line);
+            background: var(--panel);
+            color: var(--text);
+        }
+
+        /* Estilos del Diagrama */
+        .diagram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .node {
+            background: var(--panel);
+            border: 2px solid var(--line);
+            border-radius: var(--radius);
+            width: 100%;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: transform 0.2s ease;
+        }
+
+        .node:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent-net);
+        }
+
+        .node-header {
+            background: var(--accent);
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.85rem;
+            border-bottom: 1px solid var(--line);
+            color: var(--accent-net);
+        }
+
+        .node-content {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            font-size: 0.9rem;
+        }
+
+        .item {
+            color: var(--muted);
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .item::before {
+            content: "•";
+            margin-right: 8px;
+            color: var(--accent-net);
+        }
+
+        /* Flechas Conectoras */
+        .arrow {
+            width: 2px;
+            height: 30px;
+            background: var(--accent-net);
+            position: relative;
+        }
+
+        .arrow::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 8px solid var(--accent-net);
+        }
+
+        .user-node {
+            text-align: center;
+            padding: 10px;
+            font-weight: bold;
+            color: var(--text);
+        }
+
+        .http-label {
+            font-size: 0.75rem;
+            color: var(--accent-net);
+            font-family: monospace;
+            margin: 5px 0;
+        }
+    </style>
+    <script defer>
+        // ===== Article Enhancements (TOC + Anchors) =====
+        document.addEventListener("DOMContentLoaded", () => {
+            const article = document.querySelector("[data-article]");
+            if (!article) return;
+
+            const toc = article.querySelector("[data-toc]");
+            const headings = article.querySelectorAll("h2, h3");
+
+            const slugify = (s) =>
+                s.toLowerCase()
+                    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                    .replace(/[^a-z0-9\s-]/g, "")
+                    .trim()
+                    .replace(/\s+/g, "-")
+                    .replace(/-+/g, "-");
+
+            if (!toc || headings.length === 0) {
+                const tocWrap = article.querySelector(".article-toc");
+                if (tocWrap) tocWrap.hidden = true;
+                return;
+            }
+
+            const used = new Set();
+            const items = [];
+
+            headings.forEach(h => {
+                let id = h.id ? h.id : slugify(h.textContent || "");
+                if (!id) return;
+
+                let base = id, i = 2;
+                while (used.has(id)) id = `${base}-${i++}`;
+                used.add(id);
+                h.id = id;
+
+                if (!h.querySelector(".h-anchor")) {
+                    const a = document.createElement("a");
+                    a.className = "h-anchor";
+                    a.href = `#${id}`;
+                    a.setAttribute("aria-label", "Enlace directo a esta sección");
+                    a.textContent = "¶";
+                    h.appendChild(a);
+                }
+
+                const level = h.tagName.toLowerCase(); // h2/h3
+                items.push({ id, text: h.textContent.replace("¶", "").trim(), level });
+            });
+
+            toc.innerHTML = items.map(it => {
+                const cls = it.level === "h3" ? "toc-item toc-h3" : "toc-item";
+                return `<a class="${cls}" href="#${it.id}">${it.text}</a>`;
+            }).join("");
+
+            // Si llegas con hash, posiciona
+            const hash = (location.hash || "").slice(1);
+            if (hash) {
+                const target = document.getElementById(hash);
+                if (target) target.scrollIntoView({ block: "start" });
+            }
+        });
+    </script>
+</head>
+
+<body class="article-shell">
+
+    <main class="container article-container" 
+        data-article 
+        data-article-title="Diagrama de Arquitectura General"
+        data-article-category="Ingeniería" 
+        data-article-date="2026-03-05" 
+        data-article-updated="2026-03-05"
+        data-article-tags="diagrama,capas,blueprint" 
+        data-article-featured="false" 
+        data-article-draft="true">
+
+        <header class="article-header" id="top">
+            <h1>Diagrama de Arquitectura General (Capas del Sistema)</h1>
+
+            <p class="article-meta">
+                <span class="meta-item">Rolando Luis Martín</span>
+                <span class="meta-sep">·</span>
+                <time class="meta-item" datetime="2026-03-05">5 Mar 2026</time>
+                <span class="meta-sep">·</span>
+                <span class="meta-item">Ingeniería</span>
+                <span class="meta-sep">·</span>
+                <span class="meta-item">Nivel: Avanzado</span>
+            </p>
+
+            <p class="lede">Este diagrama explica cómo se construye una página.</p>
+        </header>
+
+        <div class="article-layout">
+            <!-- TOC -->
+            <aside class="article-toc" aria-label="Tabla de contenidos">
+                <div class="toc-title">Contenido</div>
+                <nav data-toc class="toc-nav"></nav>
+                <div class="figs-title">Figuras</div>
+                <nav data-figures class="figs-nav"></nav>
+            </aside>
+            
+            <!-- Body -->
+            <article class="article-body">
+
+                <div class="callout callout-note">
+                    <div class="callout-title">Nota</div>
+                    <div class="callout-body">
+                        <p>Este es el <strong>blueprint principal</strong> del portal.</p>>
+                    </div>
+                </div>
+
+                <div class="theme-switcher">
+                    <button onclick="document.documentElement.setAttribute('data-theme', 'default')">Original</button>
+                    <button onclick="document.documentElement.setAttribute('data-theme', 'graphite')">Graphite</button>
+                    <button onclick="document.documentElement.setAttribute('data-theme', 'solar')">Solar</button>
+                </div>
+            
+                <div class="diagram">
+                    <div class="user-node">USER / BROWSER [cite: 1]</div>
+                    <div class="http-label">HTTP ▼</div>
+                    <div class="arrow"></div>
+                
+                    <div class="node">
+                        <div class="node-header">GLOBAL SHELL [cite: 2]</div>
+                        <div class="node-content">
+                            <div class="item">Header [cite: 2]</div>
+                            <div class="item">Navigation [cite: 3]</div>
+                            <div class="item">Language switch [cite: 3]</div>
+                            <div class="item">Theme switch [cite: 3]</div>
+                            <div class="item">Footer [cite: 3]</div>
+                        </div>
+                    </div>
+                
+                    <div class="arrow"></div>
+                
+                    <div class="node">
+                        <div class="node-header">LAYOUT [cite: 5]</div>
+                        <div class="node-content">
+                            <div class="item">l-simple [cite: 5]</div>
+                            <div class="item">l-article [cite: 6]</div>
+                            <div class="item">l-docs [cite: 6]</div>
+                            <div class="item">l-showcase [cite: 6]</div>
+                        </div>
+                    </div>
+                
+                    <div class="arrow"></div>
+                
+                    <div class="node">
+                        <div class="node-header">COMPONENTS [cite: 8]</div>
+                        <div class="node-content">
+                            <div class="item">prose [cite: 8]</div>
+                            <div class="item">toc [cite: 8]</div>
+                            <div class="item">reader-bar [cite: 9]</div>
+                            <div class="item">article-header [cite: 9]</div>
+                            <div class="item">cards [cite: 9]</div>
+                        </div>
+                    </div>
+                
+                    <div class="arrow"></div>
+                
+                    <div class="node">
+                        <div class="node-header">CONTENT [cite: 11]</div>
+                        <div class="node-content">
+                            <div class="item">articles [cite: 11]</div>
+                            <div class="item">projects [cite: 11]</div>
+                            <div class="item">docs [cite: 12]</div>
+                            <div class="item">pages [cite: 12]</div>
+                        </div>
+                    </div>
+                
+                    <div class="arrow"></div>
+                
+                    <div class="node">
+                        <div class="node-header">METADATA / DATA [cite: 13]</div>
+                        <div class="node-content">
+                            <div class="item">navigation.json [cite: 14]</div>
+                            <div class="item">tags.json [cite: 14]</div>
+                            <div class="item">series.json [cite: 14]</div>
+                            <div class="item">i18n dictionaries [cite: 15]</div>
+                        </div>
+                    </div>
+                
+                    <div class="arrow"></div>
+                
+                    <div class="node">
+                        <div class="node-header">ASSETS [cite: 16]</div>
+                        <div class="node-content">
+                            <div class="item">CSS [cite: 16]</div>
+                            <div class="item">JS [cite: 17]</div>
+                            <div class="item">images [cite: 17]</div>
+                        </div>
+                    </div>
+                </div>
+
+                <footer class="article-footer">
+                    <div class="article-tags">
+                        <span class="tag">#tag1</span>
+                        <span class="tag">#tag2</span>
+                        <span class="tag">#tag3</span>
+                    </div>
+
+                    <div class="article-actions">
+                        <a class="btn-link" href="#top">Volver arriba</a>
+                    </div>
+                </footer>
+
+            </article>
+        </div>
+
+    </main>
+
+    <script>
+      (() => {
+        let lastHeight = 0;
+        let rafId = 0;
+    
+        function measureAndPost() {
+          cancelAnimationFrame(rafId);
+        
+          rafId = requestAnimationFrame(() => {
+            const body = document.body;
+            const html = document.documentElement;
+        
+            const h = Math.max(
+              body.scrollHeight,
+              body.offsetHeight,
+              html.scrollHeight,
+              html.offsetHeight
+            );
+        
+            // evita spam si no cambió realmente
+            if (Math.abs(h - lastHeight) < 2) return;
+        
+            lastHeight = h;
+            parent.postMessage({ type: "articleHeight", height: h }, "*");
+          });
+        }
+    
+        window.addEventListener("load", measureAndPost);
+        document.addEventListener("DOMContentLoaded", measureAndPost);
+    
+        // Observa cambios reales en el contenido, no resize del viewport
+        const ro = new ResizeObserver(() => measureAndPost());
+        ro.observe(document.body);
+      })();
+    </script>
+
+</body>
+
+</html>

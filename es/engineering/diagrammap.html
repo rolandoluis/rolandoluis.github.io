@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <title>[Título del Artículo]</title>
+    <meta name="description" content="[Descripción corta del artículo]">
+
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/components.css">
+    <link rel="stylesheet" href="/assets/css/articles.css">
+    <link rel="stylesheet" href="/assets/css/article.css">
+    <script defer src="/assets/js/article-code.js"></script>
+    <script defer src="/assets/js/article-figures.js"></script>
+
+    <!-- Los enlaces del artículo navegan fuera del iframe -->
+    <base target="_parent">
+    <style>
+        :root {
+            --bg: #0b1220; --panel: #0f172a; --text: #e5e7eb; --muted: #a1a1aa;
+            --line: rgba(255, 255, 255, 0.15); --accent-net: #f43f5e;
+            --brand-mrk-color: #e11d48; --radius: 14px;
+        }
+        :root[data-theme="graphite"] { --bg: #032906; --panel: #0b1020; --accent-net: #22c55e; }
+        :root[data-theme="solar"] { --bg: #0b0a08; --panel: #14110d; --accent-net: #ffb020; }
+
+        body {
+            background-color: var(--bg); color: var(--text);
+            font-family: 'Cascadia Code', monospace; padding: 40px;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        .map-container { position: relative; display: flex; flex-direction: column; align-items: center; gap: 40px; }
+
+        /* Nodos */
+        .k-node {
+            background: var(--panel); border: 1px solid var(--line);
+            padding: 12px 20px; border-radius: 8px; position: relative;
+            z-index: 2; min-width: 140px; text-align: center;
+            transition: all 0.3s;
+        }
+        .k-node:hover { border-color: var(--accent-net); box-shadow: 0 0 15px var(--accent-net); }
+        .root-node { border: 2px solid var(--brand-mrk-color); color: var(--brand-mrk-color); font-weight: bold; }
+
+        /* Ramas */
+        .branches { display: flex; gap: 40px; position: relative; }
+        .branch-path { display: flex; flex-direction: column; align-items: center; gap: 40px; }
+
+        /* Conectores SVG para precisión */
+        .connector-svg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; stroke: var(--line); stroke-width: 2; fill: none;
+        }
+
+        .badge {
+            font-size: 0.65rem; background: var(--line); padding: 2px 6px;
+            border-radius: 4px; vertical-align: middle; margin-left: 5px;
+        }
+    </style>
+    <script defer>
+        // ===== Article Enhancements (TOC + Anchors) =====
+        document.addEventListener("DOMContentLoaded", () => {
+            const article = document.querySelector("[data-article]");
+            if (!article) return;
+
+            const toc = article.querySelector("[data-toc]");
+            const headings = article.querySelectorAll("h2, h3");
+
+            const slugify = (s) =>
+                s.toLowerCase()
+                    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                    .replace(/[^a-z0-9\s-]/g, "")
+                    .trim()
+                    .replace(/\s+/g, "-")
+                    .replace(/-+/g, "-");
+
+            if (!toc || headings.length === 0) {
+                const tocWrap = article.querySelector(".article-toc");
+                if (tocWrap) tocWrap.hidden = true;
+                return;
+            }
+
+            const used = new Set();
+            const items = [];
+
+            headings.forEach(h => {
+                let id = h.id ? h.id : slugify(h.textContent || "");
+                if (!id) return;
+
+                let base = id, i = 2;
+                while (used.has(id)) id = `${base}-${i++}`;
+                used.add(id);
+                h.id = id;
+
+                if (!h.querySelector(".h-anchor")) {
+                    const a = document.createElement("a");
+                    a.className = "h-anchor";
+                    a.href = `#${id}`;
+                    a.setAttribute("aria-label", "Enlace directo a esta sección");
+                    a.textContent = "¶";
+                    h.appendChild(a);
+                }
+
+                const level = h.tagName.toLowerCase(); // h2/h3
+                items.push({ id, text: h.textContent.replace("¶", "").trim(), level });
+            });
+
+            toc.innerHTML = items.map(it => {
+                const cls = it.level === "h3" ? "toc-item toc-h3" : "toc-item";
+                return `<a class="${cls}" href="#${it.id}">${it.text}</a>`;
+            }).join("");
+
+            // Si llegas con hash, posiciona
+            const hash = (location.hash || "").slice(1);
+            if (hash) {
+                const target = document.getElementById(hash);
+                if (target) target.scrollIntoView({ block: "start" });
+            }
+        });
+    </script>
+</head>
+
+<body class="article-shell">
+
+    <main class="container article-container" 
+        data-article 
+        data-article-title="[Título del Artículo]"
+        data-article-category="[Categoría]" 
+        data-article-date="2026-03-05" 
+        data-article-updated="2026-03-05"
+        data-article-tags="tag1,tag2,tag3" 
+        data-article-featured="false" 
+        data-article-draft="true">
+
+        <header class="article-header" id="top">
+            <h1>[Título del Artículo]</h1>
+
+            <p class="article-meta">
+                <span class="meta-item">Rolando Luis Martín</span>
+                <span class="meta-sep">·</span>
+                <time class="meta-item" datetime="2026-03-05">5 Mar 2026</time>
+                <span class="meta-sep">·</span>
+                <span class="meta-item">[Categoría]</span>
+                <span class="meta-sep">·</span>
+                <span class="meta-item">Nivel: [Base|Intermedio|Avanzado]</span>
+            </p>
+
+            <p class="lede">[Resumen corto / qué aprenderá el lector]</p>
+        </header>
+
+        <div class="article-layout">
+            <!-- TOC -->
+            <aside class="article-toc" aria-label="Tabla de contenidos">
+                <div class="toc-title">Contenido</div>
+                <nav data-toc class="toc-nav"></nav>
+                <div class="figs-title">Figuras</div>
+                <nav data-figures class="figs-nav"></nav>
+            </aside>
+            
+            <!-- Body -->
+            <article class="article-body">
+
+                <div class="callout callout-note">
+                    <div class="callout-title">Nota</div>
+                    <div class="callout-body">
+                        [Contexto breve, prerequisitos, versión o alcance.]
+                    </div>
+                </div>
+
+                <div class="map-container">
+                    <div class="k-node root-node">
+                        ⚙️ Windows Engineering
+                    </div>
+                
+                    <div class="branches">
+                        <div class="branch-path">
+                            <div class="k-node">Deployment</div>
+                            <div class="k-node">Offline Repo</div>
+                            <div class="k-node" id="bdc-node">BDC <span class="badge">Tool</span></div>
+                            <div class="k-node">Deployment Console</div>
+                        </div>
+                    
+                        <div class="branch-path">
+                            <div class="k-node">Updates</div>
+                            <div class="k-node">Windows Servicing</div>
+                            <div class="k-node" id="auto-node">Automation <span class="badge">Core</span></div>
+                        </div>
+                    
+                        <div class="branch-path">
+                            <div class="k-node">Profiles</div>
+                            <div class="k-node">DefProf</div>
+                        </div>
+                    
+                        <svg class="connector-svg" style="z-index: 1;">
+                            </svg>
+                    </div>
+                </div>
+            
+                <p style="color:var(--muted); margin-top: 40px; font-size: 0.8rem;">
+                    * Las flechas de flujo y la relación BDC ➔ Automation definen el pipeline de ingeniería.
+                </p>
+
+                <footer class="article-footer">
+                    <div class="article-tags">
+                        <span class="tag">#tag1</span>
+                        <span class="tag">#tag2</span>
+                        <span class="tag">#tag3</span>
+                    </div>
+
+                    <div class="article-actions">
+                        <a class="btn-link" href="#top">Volver arriba</a>
+                    </div>
+                </footer>
+
+            </article>
+        </div>
+
+    </main>
+
+    <script>
+      (() => {
+        let lastHeight = 0;
+        let rafId = 0;
+    
+        function measureAndPost() {
+          cancelAnimationFrame(rafId);
+        
+          rafId = requestAnimationFrame(() => {
+            const body = document.body;
+            const html = document.documentElement;
+        
+            const h = Math.max(
+              body.scrollHeight,
+              body.offsetHeight,
+              html.scrollHeight,
+              html.offsetHeight
+            );
+        
+            // evita spam si no cambió realmente
+            if (Math.abs(h - lastHeight) < 2) return;
+        
+            lastHeight = h;
+            parent.postMessage({ type: "articleHeight", height: h }, "*");
+          });
+        }
+    
+        window.addEventListener("load", measureAndPost);
+        document.addEventListener("DOMContentLoaded", measureAndPost);
+    
+        // Observa cambios reales en el contenido, no resize del viewport
+        const ro = new ResizeObserver(() => measureAndPost());
+        ro.observe(document.body);
+      })();
+    </script>
+
+</body>
+
+</html>

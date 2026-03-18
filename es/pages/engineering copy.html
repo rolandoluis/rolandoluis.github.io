@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Articles · rolandoluis</title>
-  <meta name="description" content="Artículos sobre programación, redes, Windows y herramientas útiles." />
+  <title>Engineering · rolandoluis</title>
+  <meta name="description" content="Engineering focus, skills and technical capabilities." />
   <link rel="icon" href="/assets/img/brand/favicon.png" />
   <link rel="stylesheet" href="/assets/css/main.css" />
   <link rel="stylesheet" href="/assets/css/components.css" />
@@ -15,7 +15,7 @@
   <script defer src="/assets/js/articles.js"></script>
 </head>
 
-<body class = "articles-shell">
+<body>
   <header class="site-header">
     <div class="container header-inner">
       <a class="brand" href="/">
@@ -91,52 +91,34 @@
 
   <nav class="breadcrumb" id="breadcrumb"></nav>
   
-  <main class="container articles-shell">
-      <div class="articles-layout" id="articlesLayout">  
-        <section class="hero hero-canvas hero-articles">
-          <canvas id="heroNet" aria-hidden="true"></canvas>
-          <h1>Artículos</h1>
-          <p class="lede">Tutoriales y notas de ingeniería.</p>
-        </section>
-
-        <aside class="sidebar">
-          <div class="sidebar-head"><h2>Categorías</h2></div>
-          <ul class="categories" id="categoriesMenu"><!-- Se generan dinámicamente desde articles.json --></ul>
-        </aside>
-
-        <section class="articles-content" id="articlesContent">
-          <!-- <h1>Artículos</h1> -->
-          <p class="sticky-welcome">Bienvenido a la página de artículos. Aquí encontrarás varios tutoriales y artículos sobre temas técnicos.</p>
-          <div class="articles-scroll-container">
-            <div class="articles-list" id="articlesList">
-              <!-- Se generan dinámicamente desde articles.json -->
-            </div>
-          </div>
-        </section>
-        <!-- Área de iframe -->
-        <section class="iframe-section" id="iframeSection" hidden>
-          <div class="reader-bar">
-            <div class="reader-title" id="readerTitle">Artículo</div>
-            <div class="reader-progress" id="readerProgress" hidden>
-              <div class="progress-container">
-                <div class="progress-bar" id="readerProgressBar"></div>
-                <div class="progress-steps" id="readerProgressSteps"></div>
-              </div>
-            
-              <div class="progress-actions">
-                <button class="reader-nav-btn" id="readerPrev" type="button" disabled>Anterior</button>
-                <button class="reader-nav-btn" id="readerNext" type="button">Siguiente</button>
-              </div>
-            </div>
-            <div class="reader-meta" id="readerMeta"></div>
-          </div>
-          <div class="reader-frameWrap"></div>
-            <iframe id="articleIframe" src="" width="100%" height="600px"></iframe>
-            <button id="backToArticles" class="btn">Volver a Artículos</button>
-          </div>
-
-        </section>
+  <main class="container">
+    <section class="hero hero-canvas">
+      <canvas id="heroNet" aria-hidden="true"></canvas>
+      <h1>Ingeniería</h1>
+      <p class="lede">Competencias principales, áreas de enfoque y el tipo de sistemas que construyo.</p>
+      <div class="cta-row">
+        <a class="category-btn" data-i18n-link="engineering/architecture.html">Especificación de Arquitectura del Sistema</a>
       </div>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h2>PowerShell Automation</h2>
+        <p>Herramientas modulares, registro y reportes, flujos de trabajo y scripts idempotentes.</p>
+      </article>
+      <article class="card">
+        <h2>Windows Deployment</h2>
+        <p>Aprovisionamiento, estandarización de perfiles, instalaciones offline y protocolos basados en fases.</p>
+      </article>
+      <article class="card">
+        <h2>Infrastructure</h2>
+        <p>Redes, VPN, entornos de laboratorio, integración y endurecimiento operacional.</p>
+      </article>
+      <article class="card">
+        <h2>Especificación de Arquitectura del Sistema</h2>
+        <p>Plataforma estática de conocimiento técnico, estructurada, con componentes y layouts, tematizados con tokens visuales.</p>
+      </article>
+    </section>
   </main>
 
   <footer class="site-footer">

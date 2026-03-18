@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <title>[Título del Artículo]</title>
+    <meta name="description" content="[Descripción corta del artículo]">
+
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/components.css">
+    <link rel="stylesheet" href="/assets/css/articles.css">
+    <link rel="stylesheet" href="/assets/css/article.css">
+    <script defer src="/assets/js/article-code.js"></script>
+    <script defer src="/assets/js/article-figures.js"></script>
+
+    <!-- Los enlaces del artículo navegan fuera del iframe -->
+    <base target="_parent">
+    <style>
+        :root {
+            --bg: #0b1220; --panel: #0f172a; --text: #e5e7eb; --muted: #a1a1aa;
+            --line: rgba(255, 255, 255, 0.15); --accent: #3f0808; --accent-net: #f43f5e;
+            --radius: 14px; --btn-brd: rgba(225,29,72,.45); --btn-bkg: rgba(225,29,72,.18);
+        }
+
+        :root[data-theme="graphite"] {
+            --bg: #032906; --panel: #0b1020; --accent: #003012; --accent-net: #22c55e;
+        }
+
+        :root[data-theme="solar"] {
+            --bg: #0b0a08; --panel: #14110d; --text: #fff2e0; --muted: #c7b6a3;
+            --accent: #ff3b1a; --accent-net: #ffb020;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', system-ui, sans-serif;
+            display: flex; flex-direction: column; align-items: center; padding: 40px;
+        }
+
+        .controls { margin-bottom: 30px; display: flex; gap: 10px; }
+        button {
+            padding: 8px 16px; cursor: pointer; border-radius: 8px;
+            border: 1px solid var(--btn-brd); background: var(--btn-bkg); color: var(--text);
+        }
+
+        /* Contenedor del Grafo */
+        .content-model {
+            display: flex; flex-direction: column; align-items: center; gap: 0;
+            width: 100%; max-width: 600px;
+        }
+
+        .entity {
+            background: var(--panel);
+            border: 2px solid var(--line);
+            border-radius: var(--radius);
+            padding: 15px 25px;
+            min-width: 160px;
+            text-align: center;
+            font-weight: bold;
+            position: relative;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .entity:hover {
+            border-color: var(--accent-net);
+            box-shadow: 0 0 15px var(--btn-brd);
+            transform: translateY(-3px);
+        }
+
+        .entity-sub {
+            font-size: 0.7rem; color: var(--muted);
+            text-transform: uppercase; margin-top: 4px; display: block;
+        }
+
+        /* Conectores */
+        .line-v { width: 2px; height: 30px; background: var(--line); }
+        
+        /* Bifurcación */
+        .branch-container { display: flex; gap: 20px; position: relative; padding-top: 30px; }
+        .branch-container::before {
+            content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+            width: 80%; height: 2px; background: var(--line);
+        }
+        .branch-line {
+            position: absolute; top: 0; width: 2px; height: 30px; background: var(--line);
+        }
+        .branch-left { left: 10%; }
+        .branch-center { left: 50%; }
+        .branch-right { right: 10%; }
+
+        .tag-node { font-size: 0.85rem; padding: 10px 15px; border-style: dotted; }
+    </style>
+    <script defer>
+        // ===== Article Enhancements (TOC + Anchors) =====
+        document.addEventListener("DOMContentLoaded", () => {
+            const article = document.querySelector("[data-article]");
+            if (!article) return;
+
+            const toc = article.querySelector("[data-toc]");
+            const headings = article.querySelectorAll("h2, h3");
+
+            const slugify = (s) =>
+                s.toLowerCase()
+                    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                    .replace(/[^a-z0-9\s-]/g, "")
+                    .trim()
+                    .replace(/\s+/g, "-")
+                    .replace(/-+/g, "-");
+
+            if (!toc || headings.length === 0) {
+                const tocWrap = article.querySelector(".article-toc");
+                if (tocWrap) tocWrap.hidden = true;
+                return;
+            }
+
+            const used = new Set();
+            const items = [];
+
+            headings.forEach(h => {
+                let id = h.id ? h.id : slugify(h.textContent || "");
+                if (!id) return;
+
+                let base = id, i = 2;
+                while (used.has(id)) id = `${base}-${i++}`;
+                used.add(id);
+                h.id = id;
+
+                if (!h.querySelector(".h-anchor")) {
+                    const a = document.createElement("a");
+                    a.className = "h-anchor";
+                    a.href = `#${id}`;
+                    a.setAttribute("aria-label", "Enlace directo a esta sección");
+                    a.textContent = "¶";
+                    h.appendChild(a);
+                }
+
+                const level = h.tagName.toLowerCase(); // h2/h3
+                items.push({ id, text: h.textContent.replace("¶", "").trim(), level });
+            });
+
+            toc.innerHTML = items.map(it => {
+                const cls = it.level === "h3" ? "toc-item toc-h3" : "toc-item";
+                return `<a class="${cls}" href="#${it.id}">${it.text}</a>`;
+            }).join("");
+
+            // Si llegas con hash, posiciona
+            const hash = (location.hash || "").slice(1);
+            if (hash) {
+                const target = document.getElementById(hash);
+                if (target) target.scrollIntoView({ block: "start" });
+            }
+        });
+    </script>
+</head>
+
+<body class="article-shell">
+
+    <main class="container article-container" 
+        data-article 
+        data-article-title="[Título del Artículo]"
+        data-article-category="[Categoría]" 
+        data-article-date="2026-03-05" 
+        data-article-updated="2026-03-05"
+        data-article-tags="tag1,tag2,tag3" 
+        data-article-featured="false" 
+        data-article-draft="true">
+
+        <header class="article-header" id="top">
+            <h1>[Título del Artículo]</h1>
+
+            <p class="article-meta">
+                <span class="meta-item">Rolando Luis Martín</span>
+                <span class="meta-sep">·</span>
+                <time class="meta-item" datetime="2026-03-05">5 Mar 2026</time>
+                <span class="meta-sep">·</span>
+                <span class="meta-item">[Categoría]</span>
+                <span class="meta-sep">·</span>
+                <span class="meta-item">Nivel: [Base|Intermedio|Avanzado]</span>
+            </p>
+
+            <p class="lede">[Resumen corto / qué aprenderá el lector]</p>
+        </header>
+
+            <div class="article-layout">
+                    <!-- TOC -->
+                    <aside class="article-toc" aria-label="Tabla de contenidos">
+                        <div class="toc-title">Contenido</div>
+                        <nav data-toc class="toc-nav"></nav>
+                        <div class="figs-title">Figuras</div>
+                        <nav data-figures class="figs-nav"></nav>
+                    </aside>
+                    
+                    <!-- Body -->
+                    <article class="article-body">
+                    
+                        <div class="callout callout-note">
+                            <div class="callout-title">Nota</div>
+                            <div class="callout-body">
+                                [Contexto breve, prerequisitos, versión o alcance.]
+                            </div>
+                        </div>
+                    
+                        <div class="controls">
+                <button onclick="document.documentElement.setAttribute('data-theme', 'default')">Rose</button>
+                <button onclick="document.documentElement.setAttribute('data-theme', 'graphite')">Graphite</button>
+                <button onclick="document.documentElement.setAttribute('data-theme', 'solar')">Solar</button>
+            </div>
+        
+            <div class="content-model">
+                <div class="entity">
+                    ARTICLE
+                    <span class="entity-sub">Main Entry Point</span>
+                </div>
+            
+                <div class="branch-container">
+                    <div class="branch-line branch-left"></div>
+                    <div class="branch-line branch-center"></div>
+                    <div class="branch-line branch-right"></div>
+                
+                    <div class="entity tag-node">TAGS</div>
+                    
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                        <div class="entity">RELATED</div>
+                        <div class="line-v"></div>
+                        <div class="entity">PROJECT</div>
+                        <div class="line-v"></div>
+                        <div class="entity">DOC</div>
+                        <div class="line-v"></div>
+                        <div class="entity">PAGE</div>
+                    </div>
+                
+                    <div class="entity tag-node">SERIES</div>
+                </div>
+            </div>
+
+                <footer class="article-footer">
+                    <div class="article-tags">
+                        <span class="tag">#tag1</span>
+                        <span class="tag">#tag2</span>
+                        <span class="tag">#tag3</span>
+                    </div>
+
+                    <div class="article-actions">
+                        <a class="btn-link" href="#top">Volver arriba</a>
+                    </div>
+                </footer>
+
+            </article>
+        </div>
+
+    </main>
+
+    <script>
+      (() => {
+        let lastHeight = 0;
+        let rafId = 0;
+    
+        function measureAndPost() {
+          cancelAnimationFrame(rafId);
+        
+          rafId = requestAnimationFrame(() => {
+            const body = document.body;
+            const html = document.documentElement;
+        
+            const h = Math.max(
+              body.scrollHeight,
+              body.offsetHeight,
+              html.scrollHeight,
+              html.offsetHeight
+            );
+        
+            // evita spam si no cambió realmente
+            if (Math.abs(h - lastHeight) < 2) return;
+        
+            lastHeight = h;
+            parent.postMessage({ type: "articleHeight", height: h }, "*");
+          });
+        }
+    
+        window.addEventListener("load", measureAndPost);
+        document.addEventListener("DOMContentLoaded", measureAndPost);
+    
+        // Observa cambios reales en el contenido, no resize del viewport
+        const ro = new ResizeObserver(() => measureAndPost());
+        ro.observe(document.body);
+      })();
+    </script>
+
+</body>
+
+</html>

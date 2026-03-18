@@ -1,0 +1,405 @@
+/* =========================================================
+   Engineering Shell
+   ========================================================= */
+
+body.engineering-shell {
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+main.engineering-shell {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.engineering-layout {
+  display: grid;
+  gap: 18px;
+  height: 100%;
+}
+
+.engineering-layout.is-index {
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
+}
+
+.engineering-layout.is-reading {
+  grid-template-columns: minmax(260px, 25%) minmax(0, 1fr);
+  grid-template-rows: 1fr;
+  align-items: stretch;
+  overflow: hidden;
+}
+
+/* =========================================================
+   Hero
+   ========================================================= */
+
+.hero-engineering {
+  min-height: 150px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--panel) 82%, transparent);
+  overflow: hidden;
+  position: relative;
+}
+
+.hero-engineering-inner,
+.hero-engineering-mini-inner {
+  position: relative;
+  z-index: 1;
+  padding: 18px 20px;
+}
+
+.hero-engineering-mini {
+  min-height: 120px;
+}
+
+.engineering-hero-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* =========================================================
+   Index content
+   ========================================================= */
+
+.engineering-content {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--panel) 82%, transparent);
+  overflow: hidden;
+}
+
+.engineering-content-head {
+  padding: 16px 18px 10px;
+  border-bottom: 1px solid var(--line);
+  background: color-mix(in srgb, var(--panel) 90%, transparent);
+}
+
+.engineering-content-head h2 {
+  margin: 0 0 6px;
+}
+
+.engineering-intro {
+  margin: 0;
+  color: var(--muted);
+}
+
+.engineering-scroll-container {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 14px 18px 18px;
+}
+
+.engineering-scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+.engineering-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+.engineering-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 16px 18px;
+  transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+
+.engineering-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255,255,255,.18);
+  box-shadow: 0 10px 22px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.04);
+}
+
+.engineering-card-link {
+  display: block;
+  text-decoration: none;
+}
+
+.engineering-card h3 {
+  margin: 0 0 8px;
+  font-size: 15px;
+}
+
+.engineering-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* =========================================================
+   Reader mode
+   ========================================================= */
+
+.engineering-reader {
+  display: grid;
+  grid-template-columns: minmax(260px, 25%) minmax(0, 1fr);
+  gap: 18px;
+  height: 100%;
+  min-height: 0;
+}
+
+.engineering-sidepanel {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 14px;
+  min-height: 0;
+}
+
+.engineering-toc-panel {
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--panel) 82%, transparent);
+  display: flex;
+  flex-direction: column;
+}
+
+.engineering-toc-head {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line);
+  background: color-mix(in srgb, var(--panel) 92%, transparent);
+  font-weight: 600;
+}
+
+.engineering-toc {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 12px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.engineering-toc a {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.engineering-toc a:hover,
+.engineering-toc a.is-active {
+  color: var(--text);
+}
+
+.engineering-framepanel {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--panel) 82%, transparent);
+  overflow: hidden;
+}
+
+.engineering-reader-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--line);
+  background: color-mix(in srgb, var(--panel) 88%, transparent);
+}
+
+.engineering-reader-title {
+  font-weight: 600;
+  color: var(--text);
+  font-size: 1.05rem;
+}
+
+.engineering-reader-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.engineering-progress-container {
+  position: relative;
+  width: 180px;
+}
+
+.engineering-progress-container::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  width: 100%;
+  height: 3px;
+  background: rgba(255,255,255,.10);
+  border-radius: 999px;
+}
+
+.engineering-progress-bar {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  height: 3px;
+  width: 0%;
+  background: var(--accent-net);
+  border-radius: 999px;
+  transition: width .2s ease;
+}
+
+.engineering-progress-steps {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+}
+
+.engineering-progress-step {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  border: 2px solid rgba(255,255,255,.18);
+  background: var(--panel);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.engineering-progress-step.active {
+  border-color: var(--accent-net);
+  color: var(--accent-net);
+}
+
+.engineering-progress-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.engineering-nav-btn {
+  appearance: none;
+  border: 1px solid var(--btn-brd);
+  background: var(--btn-bkg);
+  color: var(--text);
+  border-radius: 10px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.engineering-nav-btn:hover:not(:disabled) {
+  border-color: var(--btn-hov-brd);
+  background: var(--btn-hov-bkg);
+}
+
+.engineering-nav-btn:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+
+#engineeringIframe {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  border: 0;
+  display: block;
+  background: transparent;
+}
+
+/* =========================================================
+   Footer hover
+   ========================================================= */
+
+.site-footer.engineering-footer {
+  transition: padding .18s ease, background .18s ease;
+}
+
+.site-footer.engineering-footer:hover {
+  padding-top: 22px;
+  padding-bottom: 22px;
+}
+
+/* =========================================================
+   Responsive
+   ========================================================= */
+
+@media (max-width: 860px) {
+  body.engineering-shell,
+  main.engineering-shell {
+    height: auto;
+    overflow: visible;
+  }
+
+  .engineering-layout,
+  .engineering-layout.is-index,
+  .engineering-layout.is-reading {
+    display: block;
+    height: auto;
+    overflow: visible;
+  }
+
+  .hero-engineering {
+    min-height: 110px;
+  }
+
+  .engineering-content {
+    margin-top: 14px;
+    min-height: auto;
+  }
+
+  .engineering-scroll-container {
+    overflow: visible;
+  }
+
+  .engineering-list {
+    grid-template-columns: 1fr;
+  }
+
+  .engineering-reader {
+    display: block;
+    height: auto;
+  }
+
+  .engineering-sidepanel {
+    display: block;
+    margin-bottom: 14px;
+  }
+
+  .engineering-toc-panel {
+    margin-top: 14px;
+    max-height: 260px;
+  }
+
+  .engineering-reader-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .engineering-reader-progress {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .engineering-progress-container {
+    width: 100%;
+  }
+
+  #engineeringIframe {
+    min-height: 65vh;
+  }
+}

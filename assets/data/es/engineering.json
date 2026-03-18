@@ -1,0 +1,12 @@
+[
+  {
+    "title": "Especificación de Arquitectura del Sistema",
+    "slug": "architecture-spec",
+    "description": "Plataforma estática de conocimiento técnico, estructurada con componentes, layouts y tokens visuales.",
+    "category": "Arquitectura",
+    "date": "2026-03-18",
+    "updated": "2026-03-18",
+    "tags": ["arquitectura", "frontend", "design-system"],
+    "featured": true
+  }
+]

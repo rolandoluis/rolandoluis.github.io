@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <title>[Título del Artículo]</title>
+    <meta name="description" content="[Descripción corta del artículo]">
+
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/components.css">
+    <link rel="stylesheet" href="/assets/css/articles.css">
+    <link rel="stylesheet" href="/assets/css/article.css">
+    <script defer src="/assets/js/article-code.js"></script>
+    <script defer src="/assets/js/article-figures.js"></script>
+
+    <!-- Los enlaces del artículo navegan fuera del iframe -->
+    <base target="_parent">
+    <<style>
+        :root {
+            --bg: #0b1220; --panel: #0f172a; --text: #e5e7eb; --muted: #a1a1aa;
+            --line: rgba(255, 255, 255, 0.15); --accent-net: #f43f5e;
+            --brand-mrk-color: #e11d48; --radius: 12px;
+            --btn-brd: rgba(225,29,72,.45); --btn-bkg: rgba(225,29,72,.18);
+        }
+
+        :root[data-theme="graphite"] {
+            --bg: #032906; --panel: #0b1020; --accent-net: #22c55e;
+        }
+
+        :root[data-theme="solar"] {
+            --bg: #0b0a08; --panel: #14110d; --text: #fff2e0; --muted: #c7b6a3;
+            --accent-net: #ffb020;
+        }
+
+        body {
+            background-color: var(--bg); color: var(--text);
+            font-family: 'Cascadia Code', 'Fira Code', monospace;
+            padding: 40px; display: flex; flex-direction: column; align-items: center;
+        }
+
+        .controls { margin-bottom: 30px; display: flex; gap: 10px; }
+        button {
+            padding: 8px 16px; cursor: pointer; border-radius: 8px;
+            border: 1px solid var(--btn-brd); background: var(--btn-bkg); color: var(--text);
+        }
+
+        .tree-container {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            padding: 30px;
+            min-width: 350px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .tree-root {
+            color: var(--accent-net);
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tree-item {
+            margin-left: 20px;
+            border-left: 1px solid var(--line);
+            padding-left: 15px;
+            position: relative;
+            margin-bottom: 5px;
+        }
+
+        .tree-item::before {
+            content: "";
+            position: absolute;
+            top: 12px;
+            left: 0;
+            width: 10px;
+            height: 1px;
+            background: var(--line);
+        }
+
+        .folder-label, .file-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .folder-label:hover, .file-label:hover {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .icon { font-style: normal; }
+        .folder-icon::before { content: "📁"; }
+        .file-icon::before { content: "📄"; }
+        .root-icon::before { content: "📦"; }
+
+        .folder-name { color: var(--text); font-weight: 500; }
+        .file-name { color: var(--muted); }
+        .sub-tree { margin-bottom: 10px; }
+
+    </style>
+    <script defer>
+        // ===== Article Enhancements (TOC + Anchors) =====
+        document.addEventListener("DOMContentLoaded", () => {
+            const article = document.querySelector("[data-article]");
+            if (!article) return;
+
+            const toc = article.querySelector("[data-toc]");
+            const headings = article.querySelectorAll("h2, h3");
+
+            const slugify = (s) =>
+                s.toLowerCase()
+                    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                    .replace(/[^a-z0-9\s-]/g, "")
+                    .trim()
+                    .replace(/\s+/g, "-")
+                    .replace(/-+/g, "-");
+
+            if (!toc || headings.length === 0) {
+                const tocWrap = article.querySelector(".article-toc");
+                if (tocWrap) tocWrap.hidden = true;
+                return;
+            }
+
+            const used = new Set();
+            const items = [];
+
+            headings.forEach(h => {
+                let id = h.id ? h.id : slugify(h.textContent || "");
+                if (!id) return;
+
+                let base = id, i = 2;
+                while (used.has(id)) id = `${base}-${i++}`;
+                used.add(id);
+                h.id = id;
+
+                if (!h.querySelector(".h-anchor")) {
+                    const a = document.createElement("a");
+                    a.className = "h-anchor";
+                    a.href = `#${id}`;
+                    a.setAttribute("aria-label", "Enlace directo a esta sección");
+                    a.textContent = "¶";
+                    h.appendChild(a);
+                }
+
+                const level = h.tagName.toLowerCase(); // h2/h3
+                items.push({ id, text: h.textContent.replace("¶", "").trim(), level });
+            });
+
+            toc.innerHTML = items.map(it => {
+                const cls = it.level === "h3" ? "toc-item toc-h3" : "toc-item";
+                return `<a class="${cls}" href="#${it.id}">${it.text}</a>`;
+            }).join("");
+
+            // Si llegas con hash, posiciona
+            const hash = (location.hash || "").slice(1);
+            if (hash) {
+                const target = document.getElementById(hash);
+                if (target) target.scrollIntoView({ block: "start" });
+            }
+        });
+    </script>
+</head>
+
+<body class="article-shell">
+
+    <main class="container article-container" 
+        data-article 
+        data-article-title="[Título del Artículo]"
+        data-article-category="[Categoría]" 
+        data-article-date="2026-03-05" 
+        data-article-updated="2026-03-05"
+        data-article-tags="tag1,tag2,tag3" 
+        data-article-featured="false" 
+        data-article-draft="true">
+
+        <header class="article-header" id="top">
+            <h1>[Título del Artículo]</h1>
+
+            <p class="article-meta">
+                <span class="meta-item">Rolando Luis Martín</span>
+                <span class="meta-sep">·</span>
+                <time class="meta-item" datetime="2026-03-05">5 Mar 2026</time>
+                <span class="meta-sep">·</span>
+                <span class="meta-item">[Categoría]</span>
+                <span class="meta-sep">·</span>
+                <span class="meta-item">Nivel: [Base|Intermedio|Avanzado]</span>
+            </p>
+
+            <p class="lede">[Resumen corto / qué aprenderá el lector]</p>
+        </header>
+
+        <div class="article-layout">
+            <!-- TOC -->
+            <aside class="article-toc" aria-label="Tabla de contenidos">
+                <div class="toc-title">Contenido</div>
+                <nav data-toc class="toc-nav"></nav>
+                <div class="figs-title">Figuras</div>
+                <nav data-figures class="figs-nav"></nav>
+            </aside>
+            
+            <!-- Body -->
+            <article class="article-body">
+
+                <div class="controls">
+                    <button onclick="document.documentElement.setAttribute('data-theme', 'default')">Rose</button>
+                    <button onclick="document.documentElement.setAttribute('data-theme', 'graphite')">Graphite</button>
+                    <button onclick="document.documentElement.setAttribute('data-theme', 'solar')">Solar</button>
+                </div>
+            
+                <div class="tree-container">
+                    <div class="tree-root">
+                        <i class="icon root-icon"></i> rolandoluis-site-v2
+                    </div>
+                
+                    <div class="tree-item">
+                        <div class="folder-label"><i class="icon folder-icon"></i> <span class="folder-name">content</span></div>
+                        <div class="sub-tree">
+                            <div class="tree-item"><div class="folder-label"><i class="icon folder-icon"></i> <span class="folder-name">articles</span></div></div>
+                            <div class="tree-item"><div class="folder-label"><i class="icon folder-icon"></i> <span class="folder-name">projects</span></div></div>
+                            <div class="tree-item"><div class="folder-label"><i class="icon folder-icon"></i> <span class="folder-name">docs</span></div></div>
+                            <div class="tree-item"><div class="folder-label"><i class="icon folder-icon"></i> <span class="folder-name">pages</span></div></div>
+                        </div>
+                    </div>
+                
+                    <div class="tree-item">
+                        <div class="folder-label"><i class="icon folder-icon"></i> <span class="folder-name">data</span></div>
+                        <div class="sub-tree">
+                            <div class="tree-item"><div class="file-label"><i class="icon file-icon"></i> <span class="file-name">navigation.json</span></div></div>
+                            <div class="tree-item"><div class="file-label"><i class="icon file-icon"></i> <span class="file-name">tags.json</span></div></div>
+                            <div class="tree-item"><div class="folder-label"><i class="icon folder-icon"></i> <span class="folder-name">i18n</span></div></div>
+                        </div>
+                    </div>
+                
+                    <div class="tree-item">
+                        <div class="folder-label"><i class="icon folder-icon"></i> <span class="folder-name">layouts</span></div>
+                        <div class="sub-tree">
+                            <div class="tree-item"><div class="folder-label"><i class="icon folder-icon"></i> <span class="folder-name">l-simple</span></div></div>
+                            <div class="tree-item"><div class="folder-label"><i class="icon folder-icon"></i> <span class="folder-name">l-article</span></div></div>
+                        </div>
+                    </div>
+                
+                    <div class="tree-item">
+                        <div class="folder-label"><i class="icon folder-icon"></i> <span class="folder-name">components</span></div>
+                        <div class="sub-tree">
+                            <div class="tree-item"><div class="folder-label"><i class="icon folder-icon"></i> <span class="folder-name">global</span></div></div>
+                        </div>
+                    </div>
+                
+                    <div class="tree-item">
+                        <div class="folder-label"><i class="icon folder-icon"></i> <span class="folder-name">assets</span></div>
+                        <div class="sub-tree">
+                            <div class="tree-item"><div class="folder-label"><i class="icon folder-icon"></i> <span class="folder-name">css</span></div></div>
+                            <div class="tree-item"><div class="folder-label"><i class="icon folder-icon"></i> <span class="folder-name">js</span></div></div>
+                        </div>
+                    </div>
+                
+                    <div class="tree-item">
+                        <div class="folder-label"><i class="icon folder-icon"></i> <span class="folder-name">tools</span></div>
+                        <div class="sub-tree">
+                            <div class="tree-item"><div class="file-label"><i class="icon file-icon"></i> <span class="file-name">build</span></div></div>
+                        </div>
+                    </div>
+                
+                    <div class="tree-item">
+                        <div class="folder-label"><i class="icon folder-icon"></i> <span class="folder-name">docs</span></div>
+                        <div class="sub-tree">
+                            <div class="tree-item"><div class="file-label"><i class="icon file-icon"></i> <span class="file-name">architecture</span></div></div>
+                        </div>
+                    </div>
+                
+                </div>
+
+                
+                <footer class="article-footer">
+                    <div class="article-tags">
+                        <span class="tag">#tag1</span>
+                        <span class="tag">#tag2</span>
+                        <span class="tag">#tag3</span>
+                    </div>
+
+                    <div class="article-actions">
+                        <a class="btn-link" href="#top">Volver arriba</a>
+                    </div>
+                </footer>
+
+            </article>
+        </div>
+
+    </main>
+
+    <script>
+      (() => {
+        let lastHeight = 0;
+        let rafId = 0;
+    
+        function measureAndPost() {
+          cancelAnimationFrame(rafId);
+        
+          rafId = requestAnimationFrame(() => {
+            const body = document.body;
+            const html = document.documentElement;
+        
+            const h = Math.max(
+              body.scrollHeight,
+              body.offsetHeight,
+              html.scrollHeight,
+              html.offsetHeight
+            );
+        
+            // evita spam si no cambió realmente
+            if (Math.abs(h - lastHeight) < 2) return;
+        
+            lastHeight = h;
+            parent.postMessage({ type: "articleHeight", height: h }, "*");
+          });
+        }
+    
+        window.addEventListener("load", measureAndPost);
+        document.addEventListener("DOMContentLoaded", measureAndPost);
+    
+        // Observa cambios reales en el contenido, no resize del viewport
+        const ro = new ResizeObserver(() => measureAndPost());
+        ro.observe(document.body);
+      })();
+      // Pequeña función para asegurar que los temas funcionen
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+        }
+    </script>
+
+</body>
+
+</html>
