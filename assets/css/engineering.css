@@ -134,9 +134,9 @@ main.engineering-shell {
   display: flex;
   flex-direction: column;
   min-height: 0;
-  border: 1px solid var(--line);
+  /* border: 1px solid var(--line); */
   border-radius: 14px;
-  background: color-mix(in srgb, var(--panel) 82%, transparent);
+  background: /* color-mix(in srgb, var(--panel) 82%, transparent) */transparent;
   overflow: hidden;
 }
 
