@@ -9,30 +9,78 @@ body.engineering-shell {
   flex-direction: column;
 }
 
+body.engineering-shell .site-footer {
+  flex-shrink: 0;
+  transition: padding .18s ease, background .18s ease;
+}
+
+body.engineering-shell .site-footer:hover {
+  padding-top: 22px;
+  padding-bottom: 22px;
+}
+
 main.engineering-shell {
   flex: 1;
+  min-height: 0;
   overflow: hidden;
   display: flex;
   flex-direction: column;
 }
 
 .engineering-layout {
+  flex: 1;
+  min-height: 0;
   display: grid;
   gap: 18px;
-  height: 100%;
+  overflow: hidden;
 }
 
 .engineering-layout.is-index {
   grid-template-rows: auto 1fr;
+  /* overflow: hidden; */
+  min-height: 0;
+}
+
+.engineering-layout.is-index .engineering-reader {
+  display: none !important;
+}
+
+.engineering-layout.is-reading .engineering-content {
+  display: none !important;
+}
+
+.engineering-layout.is-index .engineering-content {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
   overflow: hidden;
 }
 
 .engineering-layout.is-reading {
   grid-template-columns: minmax(260px, 25%) minmax(0, 1fr);
   grid-template-rows: 1fr;
+  min-height: 0;
   align-items: stretch;
   overflow: hidden;
 }
+
+.engineering-layout.is-reading .engineering-reader {
+  display: grid;
+  grid-template-columns: minmax(260px, 25%) minmax(0, 1fr);
+  gap: 18px;
+  min-height: 0;
+  height: 100%;
+}
+
+.engineering-sidepanel {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 14px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+
 
 /* =========================================================
    Hero
@@ -64,6 +112,19 @@ main.engineering-shell {
   gap: 10px;
   margin-top: 10px;
 }
+
+.engineering-layout.is-reading #engineeringHero {
+  display: none;
+}
+
+.engineering-layout.is-index .engineering-hero-links {
+  display: flex;
+}
+
+.hero-engineering-mini .engineering-hero-links {
+  display: none !important;
+}
+
 
 /* =========================================================
    Index content
@@ -163,11 +224,13 @@ main.engineering-shell {
 .engineering-toc-panel {
   min-height: 0;
   overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  background: color-mix(in srgb, var(--panel) 82%, transparent);
+  display: grid;
+  grid-template-rows: auto 1fr;
+  /* border: 1px solid var(--line); */
+  /* border-radius: 14px; */
+  /* background: color-mix(in srgb, var(--panel) 82%, transparent);
   display: flex;
-  flex-direction: column;
+  flex-direction: column; */
 }
 
 .engineering-toc-head {
@@ -181,7 +244,7 @@ main.engineering-shell {
 }
 
 .engineering-toc {
-  flex: 1;
+  /* flex: 1; */
   min-height: 0;
   overflow-y: auto;
   padding: 12px 16px 16px;
@@ -203,11 +266,13 @@ main.engineering-shell {
 .engineering-framepanel {
   min-width: 0;
   min-height: 0;
-  display: flex;
-  flex-direction: column;
+  /* display: flex; */
+  display: grid;
+  grid-template-rows: auto 1fr;
+  /* flex-direction: column;
   border: 1px solid var(--line);
   border-radius: 14px;
-  background: color-mix(in srgb, var(--panel) 82%, transparent);
+  background: color-mix(in srgb, var(--panel) 82%, transparent); */
   overflow: hidden;
 }
 
@@ -222,9 +287,20 @@ main.engineering-shell {
 }
 
 .engineering-reader-title {
-  font-weight: 600;
+  /* font-weight: 600;
   color: var(--text);
-  font-size: 1.05rem;
+  font-size: 1.05rem; */
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.engineering-reader-tools {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
 }
 
 .engineering-reader-progress {
@@ -314,7 +390,8 @@ main.engineering-shell {
 
 #engineeringIframe {
   width: 100%;
-  flex: 1;
+  height: 100%;
+  /* flex: 1; */
   min-height: 0;
   border: 0;
   display: block;
@@ -386,8 +463,13 @@ main.engineering-shell {
   }
 
   .engineering-reader-bar {
-    flex-direction: column;
-    align-items: stretch;
+    /* flex-direction: column;
+    align-items: stretch; */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-width: 0;
   }
 
   .engineering-reader-progress {

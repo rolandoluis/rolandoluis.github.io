@@ -15,6 +15,8 @@
   const progressSteps = document.getElementById("engineeringProgressSteps");
   const prevBtn = document.getElementById("engineeringPrev");
   const nextBtn = document.getElementById("engineeringNext");
+  const closeBtn = document.getElementById("engineeringClose");
+
 
   if (!layout || !list || !content || !reader || !iframe) return;
 
@@ -90,6 +92,10 @@
     iframe.src = "";
     toc.innerHTML = "";
     progress.hidden = true;
+    progressSteps.innerHTML = "";
+    progressBar.style.width = "0%";
+    readerCurrent = 0;
+    readerSections = [];
     history.replaceState(null, "", location.pathname);
   }
 
@@ -199,6 +205,10 @@
 
   nextBtn?.addEventListener("click", () => {
     if (readerCurrent < readerSections.length - 1) goToSection(readerCurrent + 1);
+  });
+
+  closeBtn?.addEventListener("click", () => {
+    exitReaderMode();
   });
 
   window.addEventListener("message", (e) => {

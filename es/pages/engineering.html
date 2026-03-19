@@ -101,7 +101,7 @@
         <p class="lede">
           Arquitectura, automatización, documentación técnica y diseño de sistemas.
         </p>
-
+        <p></p>
         <div class="engineering-hero-links" id="engineeringHeroLinks">
           <!-- Botones dinámicos desde engineering.json -->
         </div>
@@ -143,16 +143,22 @@
       <section class="engineering-framepanel">
         <div class="engineering-reader-bar">
           <div class="engineering-reader-title" id="engineeringReaderTitle">Documento</div>
-
-          <div class="engineering-reader-progress" id="engineeringReaderProgress" hidden>
-            <div class="engineering-progress-container">
-              <div class="engineering-progress-bar" id="engineeringProgressBar"></div>
-              <div class="engineering-progress-steps" id="engineeringProgressSteps"></div>
-            </div>
-
-            <div class="engineering-progress-actions">
-              <button class="engineering-nav-btn" id="engineeringPrev" type="button" disabled>Anterior</button>
-              <button class="engineering-nav-btn" id="engineeringNext" type="button">Siguiente</button>
+                
+          <div class="engineering-reader-tools">
+            <button class="engineering-nav-btn engineering-close-btn" id="engineeringClose" type="button">
+              Volver
+            </button>
+          
+            <div class="engineering-reader-progress" id="engineeringReaderProgress" hidden>
+              <div class="engineering-progress-container">
+                <div class="engineering-progress-bar" id="engineeringProgressBar"></div>
+                <div class="engineering-progress-steps" id="engineeringProgressSteps"></div>
+              </div>
+            
+              <div class="engineering-progress-actions">
+                <button class="engineering-nav-btn" id="engineeringPrev" type="button" disabled>Anterior</button>
+                <button class="engineering-nav-btn" id="engineeringNext" type="button">Siguiente</button>
+              </div>
             </div>
           </div>
         </div>
