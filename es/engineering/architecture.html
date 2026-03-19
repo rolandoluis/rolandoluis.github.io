@@ -1,0 +1,2071 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <title>Arquitectura del Sistema</title>
+    <meta name="description" content="Plataforma de conocimiento técnico, estructurada con elementos avanzados">
+
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/components.css">
+    <link rel="stylesheet" href="/assets/css/articles.css">
+    <link rel="stylesheet" href="/assets/css/article.css">
+    <script defer src="/assets/js/article-code.js"></script>
+    <script defer src="/assets/js/article-figures.js"></script>
+
+    <!-- Los enlaces del artículo navegan fuera del iframe -->
+    <base target="_parent">
+
+    <script defer>
+        // ===== Article Enhancements (TOC + Anchors) =====
+        document.addEventListener("DOMContentLoaded", () => {
+            const article = document.querySelector("[data-article]");
+            if (!article) return;
+
+            const toc = article.querySelector("[data-toc]");
+            const headings = article.querySelectorAll("h2, h3");
+
+            const slugify = (s) =>
+                s.toLowerCase()
+                    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                    .replace(/[^a-z0-9\s-]/g, "")
+                    .trim()
+                    .replace(/\s+/g, "-")
+                    .replace(/-+/g, "-");
+
+            if (!toc || headings.length === 0) {
+                const tocWrap = article.querySelector(".article-toc");
+                if (tocWrap) tocWrap.hidden = true;
+                return;
+            }
+
+            const used = new Set();
+            const items = [];
+
+            headings.forEach(h => {
+                let id = h.id ? h.id : slugify(h.textContent || "");
+                if (!id) return;
+
+                let base = id, i = 2;
+                while (used.has(id)) id = `${base}-${i++}`;
+                used.add(id);
+                h.id = id;
+
+                if (!h.querySelector(".h-anchor")) {
+                    const a = document.createElement("a");
+                    a.className = "h-anchor";
+                    a.href = `#${id}`;
+                    a.setAttribute("aria-label", "Enlace directo a esta sección");
+                    a.textContent = "¶";
+                    h.appendChild(a);
+                }
+
+                const level = h.tagName.toLowerCase(); // h2/h3
+                items.push({ id, text: h.textContent.replace("¶", "").trim(), level });
+            });
+
+            toc.innerHTML = items.map(it => {
+                const cls = it.level === "h3" ? "toc-item toc-h3" : "toc-item";
+                return `<a class="${cls}" href="#${it.id}">${it.text}</a>`;
+            }).join("");
+
+            // Si llegas con hash, posiciona
+            const hash = (location.hash || "").slice(1);
+            if (hash) {
+                const target = document.getElementById(hash);
+                if (target) target.scrollIntoView({ block: "start" });
+            }
+        });
+    </script>
+</head>
+
+<body class="article-shell">
+
+    <main class="container article-container" 
+        data-article 
+        data-article-title="Especificación de Arquitectura del Sistema"
+        data-article-category="Proyecto de Ingeniería" 
+        data-article-date="2026-03-11" 
+        data-article-updated="2026-03-11"
+        data-article-tags="ingeniería,desarrollo web,proyecto,portal,componentes,layouts" 
+        data-article-featured="false" 
+        data-article-draft="true">
+
+        <header class="article-header" id="top">
+            <h1>Especificación de Arquitectura del Sistema</h1>
+
+            <p class="article-meta">
+
+                <span class="meta-item">Rolando Luis Martín</span>
+                <span class="meta-sep">·</span>
+                <time class="meta-item" datetime="2026-03-11">11 Mar 2026</time>
+                <span class="meta-sep">·</span>
+                <span class="meta-item">Proyecto de Ingeniería</span>
+                <span class="meta-sep">·</span>
+                <span class="meta-item">Nivel: Avanzado</span>
+            </p>
+
+            <p class="lede">Este documento define la arquitectura completa del sistema que da soporte al portal técnico personal/profesional de Rolando Luis Martin.</p>
+        </header>
+
+        <div class="article-layout">
+            <!-- TOC -->
+            <aside class="article-toc" aria-label="Tabla de contenidos">
+                <div class="toc-title">Contenido</div>
+                <nav data-toc class="toc-nav"></nav>
+                <div class="figs-title">Figuras</div>
+                <nav data-figures class="figs-nav"></nav>
+            </aside>
+            
+            <!-- Body -->
+            <article class="article-body">
+                <h3>Proyecto: Rolando Luis Knowledge Engine</h3>
+                <h3>Sistema: Portal técnico modular, editorial y de conocimiento estructurado</h3>
+                <h3>Versión: 1.0</h3>
+                <h3>Estado: Fundacional</h3>
+                <h3>Autor: Rolando Luis Martin</h3>
+                <div class="callout callout-note">
+                    <div class="callout-title">Nota</div>
+                    <div class="callout-body">
+                        <p>Lo que sigue está redactado como un <strong>manual maestro de arquitectura de software / ingeniería informática</strong> para el sistema que he diseñado.</p>
+                    </div>
+                </div>
+                <h1>1. Resumen ejecutivo</h1>
+                <h2>1.1 Propósito del documento</h2>
+                <p>Este documento define la arquitectura completa del sistema que da soporte al portal técnico personal/profesional de Rolando Luis Martin.</p>
+                <p>El sistema no debe entenderse como un simple sitio web estático ni como un blog personal convencional. Su diseño responde a una necesidad más amplia: construir una <strong>plataforma de conocimiento técnico</strong> modular, estructurada, versionable y mantenible, capaz de integrar:</p>
+                <ul>
+                    <li>
+                        <p>artículos técnicos de largo formato,</p>
+                    </li>
+                    <li>
+                        <p>documentación navegable,</p>
+                    </li>
+                    <li>
+                        <p>fichas de proyectos,</p>
+                    </li>
+                    <li>
+                        <p>contenido institucional,</p>
+                    </li>
+                    <li>
+                        <p>internacionalización,</p>
+                    </li>
+                    <li>
+                        <p>sistema de temas visuales,</p>
+                    </li>
+                    <li>
+                        <p>navegación semántica,</p>
+                    </li>
+                    <li>
+                        <p>automatización editorial,</p>
+                    </li>
+                    <li>
+                        <p>y gobernanza técnica del crecimiento del sistema.</p>
+                    </li>
+                </ul>
+                <h2>1.2 Naturaleza del sistema</h2>
+                <p>Este proyecto se clasifica como:</p>
+                <ul>
+                    <li>
+                        <p><strong>Sistema editorial técnico</strong></p>
+                    </li>
+                    <li>
+                        <p><strong>Plataforma de publicación estructurada</strong></p>
+                    </li>
+                    <li>
+                        <p><strong>Motor personal de conocimiento técnico</strong></p>
+                    </li>
+                    <li>
+                        <p><strong>Proyecto de ingeniería informática orientado a documentación, publicación y navegación semántica del conocimiento</strong></p>
+                    </li>
+                </ul>
+                <p>En términos conceptuales, el sistema se define como:</p>
+                <div class="callout callout-note">
+                    <div class="callout-title"></div>
+                    <div class="callout-body">
+                        <p>un <strong>mapa de pensamiento técnico</strong> publicado mediante una arquitectura modular y reproducible.</p>                    </div>
+                </div>
+                <hr class="article-divider">
+                <h2>1.3 Objetivo estratégico</h2>
+                <p>El objetivo estratégico del sistema es crear una plataforma que permita representar públicamente no solo el conocimiento técnico del autor, sino también su forma de pensar, estructurar, relacionar y documentar sistemas complejos.</p>
+                <p>La plataforma debe permitir:</p>
+                <ul>
+                    <li>
+                        <p>publicar conocimiento con calidad editorial,</p>
+                    </li>
+                    <li>
+                        <p>mostrar proyectos como sistemas, no como fichas aisladas,</p>
+                    </li>
+                    <li>
+                        <p>conectar conceptos, procedimientos y arquitecturas,</p>
+                    </li>
+                    <li>
+                        <p>crecer sin entropía,</p>
+                    </li>
+                    <li>
+                        <p>mantenerse en GitHub Pages con simplicidad operativa,</p>
+                    </li>
+                    <li>
+                        <p>y servir como activo profesional de largo plazo.</p>
+                    </li>
+                </ul>
+                <hr class="article-divider">
+                <h1>2. Alcance del sistema</h1>
+                <h2>2.1 Alcance funcional</h2>
+                <p>El sistema cubrirá los siguientes dominios funcionales:</p>
+                <h3>Publicación editorial</h3>
+                <ul>
+                    <li>
+                        <p>artículos técnicos</p>
+                    </li>
+                    <li>
+                        <p>análisis</p>
+                    </li>
+                    <li>
+                        <p>guías</p>
+                    </li>
+                    <li>
+                        <p>tutoriales</p>
+                    </li>
+                    <li>
+                        <p>notas de arquitectura</p>
+                    </li>
+                </ul>
+                <h3>Documentación estructurada</h3>
+                <ul>
+                    <li>
+                        <p>documentación de proyectos</p>
+                    </li>
+                    <li>
+                        <p>documentación técnica navegable</p>
+                    </li>
+                    <li>
+                        <p>referencias conceptuales y operativas</p>
+                    </li>
+                </ul>
+                <h3>Portfolio técnico</h3>
+                <ul>
+                    <li>
+                    <p>proyectos</p>
+                    </li>
+                    <li>
+                    <p>sistemas</p>
+                    </li>
+                    <li>
+                    <p>automatizaciones</p>
+                    </li>
+                    <li>
+                    <p>herramientas</p>
+                    </li>
+                    <li>
+                    <p>arquitecturas</p>
+                    </li>
+                </ul>
+                <h3>Base de conocimiento</h3>
+                <ul>
+                    <li>
+                        <p>conceptos</p>
+                    </li>
+                    <li>
+                        <p>procedimientos</p>
+                    </li>
+                    <li>
+                        <p>troubleshooting</p>
+                    </li>
+                    <li>
+                        <p>relaciones entre tecnologías y decisiones técnicas</p>
+                    </li>
+                </ul>
+                <h3>Presentación institucional</h3>
+                <ul>
+                    <li>
+                        <p>home</p>
+                    </li>
+                    <li>
+                        <p>about</p>
+                    </li>
+                    <li>
+                        <p>páginas informativas</p>
+                    </li>
+                    <li>
+                        <p>presentación profesional del autor</p>
+                    </li>
+                </ul>
+                <hr class="article-divider">
+                <h2>2.2 Alcance técnico</h2>
+                <p>El sistema deberá soportar:</p>
+                <ul>
+                    <li>
+                        <p>contenido estructurado por entidades,</p>
+                    </li>
+                    <li>
+                        <p>renderizado de múltiples tipos de páginas,</p>
+                    </li>
+                    <li>
+                        <p>separación entre contenido y presentación,</p>
+                    </li>
+                    <li>
+                        <p>temas visuales intercambiables,</p>
+                    </li>
+                    <li>
+                        <p>internacionalización base ES/EN,</p>
+                    </li>
+                    <li>
+                        <p>publicación estática,</p>
+                    </li>
+                    <li>
+                        <p>automatización de scaffolding y validación,</p>
+                    </li>
+                    <li>
+                        <p>navegación transversal entre contenidos,</p>
+                    </li>
+                    <li>
+                        <p>estructura de repositorio mantenible,</p>
+                    </li>
+                    <li>
+                        <p>y despliegue simple en GitHub Pages.</p>
+                    </li>
+                </ul>
+                <hr class="article-divider">
+                <h2>2.3 Fuera de alcance inicial</h2>
+                <p>Quedan fuera del alcance inicial, aunque la arquitectura los contempla a futuro:</p>
+                <ul>
+                    <li>
+                        <p>CMS multiusuario,</p>
+                    </li>
+                    <li>
+                        <p>base de datos relacional o documental,</p>
+                    </li>
+                    <li>
+                        <p>edición colaborativa online,</p>
+                    </li>
+                    <li>
+                        <p>comentarios,</p>
+                    </li>
+                    <li>
+                        <p>autenticación,</p>
+                    </li>
+                    <li>
+                        <p>backend dinámico,</p>
+                    </li>
+                    <li>
+                        <p>búsqueda full-text avanzada con indexación remota,</p>
+                    </li>
+                    <li>
+                        <p>panel administrativo web.</p>
+                    </li>
+                </ul>
+                <p>La arquitectura se diseña para un sistema <strong>estático, determinista y controlado por repositorio</strong>.</p>
+                <hr class="article-divider">
+                <h1>3. Principios de ingeniería del sistema</h1>
+                <h2>3.1 Principio de modularidad</h2>
+                <p>Todo el sistema se construye a partir de módulos con responsabilidades delimitadas.</p>
+                <p>Las piezas del sistema deben ser:</p>
+                <ul>
+                    <li>
+                        <p>comprensibles,</p>
+                    </li>
+                    <li>
+                        <p>reemplazables,</p>
+                    </li>
+                    <li>
+                        <p>escalables,</p>
+                    </li>
+                    <li>
+                        <p>y desacopladas en lo posible.</p>
+                    </li>
+                </ul>
+                <p>La modularidad aplica a:</p>
+                <ul>
+                    <li>
+                        <p>layouts,</p>
+                    </li>
+                    <li>
+                        <p>componentes,</p>
+                    </li>
+                    <li>
+                        <p>contenido,</p>
+                    </li>
+                    <li>
+                        <p>datos,</p>
+                    </li>
+                    <li>
+                        <p>estilos,</p>
+                    </li>
+                    <li>
+                        <p>scripts,</p>
+                    </li>
+                    <li>
+                        <p>automatización.</p>
+                    </li>
+                </ul>
+                <hr class="article-divider">
+                <h2>3.2 Principio de separación de responsabilidades</h2>
+                <p>El sistema separa estrictamente:</p>
+                <ul>
+                    <li>
+                        <p><strong>contenido</strong>: conocimiento y cuerpo editorial,</p>
+                    </li>
+                    <li>
+                        <p><strong>metadatos</strong>: descripción estructural del contenido,</p>
+                    </li>
+                    <li>
+                        <p><strong>layout</strong>: organización espacial,</p>
+                    </li>
+                    <li>
+                        <p><strong>componentes</strong>: piezas reutilizables de interfaz,</p>
+                    </li>
+                    <li>
+                        <p><strong>tema</strong>: apariencia visual,</p>
+                    </li>
+                    <li>
+                        <p><strong>idioma</strong>: textualización y localización,</p>
+                    </li>
+                    <li>
+                        <p><strong>render</strong>: ensamblaje final de página,</p>
+                    </li>
+                    <li>
+                        <p><strong>automatización</strong>: generación, validación y build.</p>
+                    </li>
+                </ul>
+                <p>Ninguna capa debe asumir las responsabilidades de otra salvo por composición explícita.</p>
+                <hr class="article-divider">
+                <h2>3.3 Principio de identidad lógica estable</h2>
+                <p>Cada entidad de contenido debe tener un identificador lógico único y estable, independiente de:</p>
+                <ul>
+                    <li>
+                        <p>idioma,</p>
+                    </li>
+                    <li>
+                        <p>slug,</p>
+                    </li>
+                    <li>
+                        <p>estructura visual,</p>
+                    </li>
+                    <li>
+                        <p>cambios editoriales,</p>
+                    </li>
+                    <li>
+                        <p>evolución del diseño.</p>
+                    </li>
+                </ul>
+                <p>Ejemplo:</p>
+                <pre><code><span>id = windows-update-offline</span></code></pre>
+                <p>Ese identificador permanece aunque el artículo:</p>
+                <ul>
+                    <li>
+                        <p>cambie de título,</p>
+                    </li>
+                    <li>
+                        <p>cambie de slug,</p>
+                    </li>
+                    <li>
+                        <p>se traduzca,</p>
+                    </li>
+                    <li>
+                        <p>se relacione con otros proyectos,</p>
+                    </li>
+                    <li>
+                        <p>o se mueva de sección.</p>
+                    </li>
+                </ul>
+                <hr class="article-divider">
+                <h2>3.4 Principio de build reproducible</h2>
+                <p>El sistema debe poder reconstruirse íntegramente desde el repositorio.</p>
+                <p>Esto implica:</p>
+                <ul>
+                    <li>
+                        <p>configuración declarativa,</p>
+                    </li>
+                    <li>
+                        <p>contenido fuente claro,</p>
+                    </li>
+                    <li>
+                        <p>plantillas estables,</p>
+                    </li>
+                    <li>
+                        <p>scripts de generación controlados,</p>
+                    </li>
+                    <li>
+                        <p>ausencia de dependencias ocultas,</p>
+                    </li>
+                    <li>
+                        <p>y capacidad de rehacer la salida final de manera determinista.</p>
+                    </li>
+                </ul>
+                <hr class="article-divider">
+                <h2>3.5 Principio de gobernanza antes que improvisación</h2>
+                <p>El crecimiento del sistema no se basa en excepciones locales, sino en reglas.</p>
+                <p>Toda nueva decisión debe responder a:</p>
+                <ul>
+                    <li>
+                        <p>coherencia arquitectónica,</p>
+                    </li>
+                    <li>
+                        <p>justificación funcional,</p>
+                    </li>
+                    <li>
+                        <p>impacto sistémico,</p>
+                    </li>
+                    <li>
+                        <p>mantenibilidad futura.</p>
+                    </li>
+                </ul>
+                <hr class="article-divider">
+                <h2>3.6 Principio de automatización del trabajo repetitivo</h2>
+                <p>El sistema automatiza:</p>
+                <ul>
+                    <li>
+                        <p>scaffolding,</p>
+                    </li>
+                    <li>
+                        <p>validación,</p>
+                    </li>
+                    <li>
+                        <p>cálculo de derivados,</p>
+                    </li>
+                    <li>
+                        <p>generación de índices,</p>
+                    </li>
+                    <li>
+                        <p>build,</p>
+                    </li>
+                    <li>
+                        <p>publicación.</p>
+                    </li>
+                </ul>
+                <p>No automatiza el criterio técnico ni la autoría intelectual.</p>
+                <hr class="article-divider">
+                <h1>4. Visión conceptual del sistema</h1>
+                <h2>4.1 Definición general</h2>
+                <p>El sistema puede describirse mediante la siguiente fórmula conceptual:</p>
+                <div class="callout callout-note">
+                    <div class="callout-title"></div>
+                    <div class="callout-body">
+                        <p><strong>Página = Ruta + Contexto + Entidad + Shell + Layout + Componentes + Tema + Estado</strong></p>
+                    </div>
+                </div>
+                <p>Donde:</p>
+                <h3>Ruta</h3>
+                <p>Define:</p>
+                <ul>
+                    <li>
+                        <p>idioma,</p>
+                    </li>
+                    <li>
+                        <p>sección,</p>
+                    </li>
+                    <li>
+                        <p>slug,</p>
+                    </li>
+                    <li>
+                        <p>punto de entrada.</p>
+                    </li>
+                </ul>
+                <h3>Contexto</h3>
+                <p>Define:</p>
+                <ul>
+                    <li>
+                        <p>idioma activo,</p>
+                    </li>
+                    <li>
+                        <p>diccionario UI,</p>
+                    </li>
+                    <li>
+                        <p>tema activo,</p>
+                    </li>
+                    <li>
+                        <p>preferencias del usuario,</p>
+                    </li>
+                    <li>
+                        <p>configuración global.</p>
+                    </li>
+                </ul>
+                <h3>Entidad</h3>
+                <p>Representa la pieza de contenido:</p>
+                <ul>
+                    <li>
+                        <p>article,</p>
+                    </li>
+                    <li>
+                        <p>project,</p>
+                    </li>
+                    <li>
+                        <p>doc,</p>
+                    </li>
+                    <li>
+                        <p>page.</p>
+                    </li>
+                </ul>
+                <h3>Shell</h3>
+                <p>Estructura global persistente:</p>
+                <ul>
+                    <li>
+                        <p>header,</p>
+                    </li>
+                    <li>
+                        <p>navegación principal,</p>
+                    </li>
+                    <li>
+                        <p>selector de idioma,</p>
+                    </li>
+                    <li>
+                        <p>selector de tema,</p>
+                    </li>
+                    <li>
+                        <p>footer.</p>
+                    </li>
+                </ul>
+                <h3>Layout</h3>
+                <p>Define la organización espacial de la página.</p>
+                <h3>Componentes</h3>
+                <p>Renderizan partes concretas de interfaz dentro del layout.</p>
+                <h3>Tema</h3>
+                <p>Aplica la apariencia visual sin alterar estructura ni contenido.</p>
+                <h3>Estado</h3>
+                <p>Gestiona comportamiento interactivo y preferencias:</p>
+                <ul>
+                    <li>
+                        <p>tema actual,</p>
+                    </li>
+                    <li>
+                        <p>colapsado de TOC,</p>
+                    </li>
+                    <li>
+                        <p>menú móvil,</p>
+                    </li>
+                    <li>
+                        <p>etc.</p>
+                    </li>
+                </ul>
+                <hr class="article-divider">
+                <h2>4.2 Definición operativa del sistema</h2>
+                <p>El sistema completo puede describirse como:</p>
+                <div class="callout callout-tip">
+                    <div class="callout-title"></div>
+                    <div class="callout-body">
+                        <p>una plataforma estática de conocimiento técnico basada en entidades estructuradas, 
+                            ensambladas a través de layouts y componentes, tematizadas mediante tokens visuales, 
+                            internacionalizadas mediante variantes idiomáticas, y publicadas por un pipeline 
+                            reproducible en GitHub Pages.</p>
+                    </div>
+                </div>
+                <hr class="article-divider">
+                <h1>5. Genoma arquitectónico del sistema</h1>
+                <p>La arquitectura se organiza en doce bloques.</p>
+                <h2>5.1 Bloque 1 — Arquitectura modular</h2>
+                <p>Define la separación entre:</p>
+                <ul>
+                    <li>
+                        <p>shell,</p>
+                    </li>
+                    <li>
+                        <p>layouts,</p>
+                    </li>
+                    <li>
+                        <p>componentes,</p>
+                    </li>
+                    <li>
+                        <p>contenido.</p>
+                    </li>
+                </ul>
+                <h2>5.2 Bloque 2 — Internacionalización</h2>
+                <p>Define:</p>
+                <ul>
+                    <li>
+                        <p>idiomas soportados,</p>
+                    </li>
+                    <li>
+                        <p>estructura de rutas por idioma,</p>
+                    </li>
+                    <li>
+                        <p>diccionarios UI,</p>
+                    </li>
+                    <li>
+                        <p>páginas hermanas,</p>
+                    </li>
+                    <li>
+                        <p>estrategia de traducción progresiva.</p>
+                    </li>
+                </ul>
+                <h2>5.3 Bloque 3 — Sistema de temas</h2>
+                <p>Define:</p>
+                <ul>
+                    <li>
+                        <p>design tokens,</p>
+                    </li>
+                    <li>
+                        <p>temas,</p>
+                    </li>
+                    <li>
+                        <p>persistencia de tema,</p>
+                    </li>
+                    <li>
+                        <p>separación entre estilo y estructura.</p>
+                    </li>
+                </ul>
+                <h2>5.4 Bloque 4 — Layouts y grid estructural</h2>
+                <p>Define:</p>
+                <ul>
+                    <li>
+                        <p>patrones de estructura por tipo de página,</p>
+                    </li>
+                    <li>
+                        <p>regiones,</p>
+                    </li>
+                    <li>
+                        <p>sidebars,</p>
+                    </li>
+                    <li>
+                        <p>responsive por layout.</p>
+                    </li>
+                </ul>
+                <h2>5.5 Bloque 5 — Sistema de componentes</h2>
+                <p>Define:</p>
+                <ul>
+                    <li>
+                        <p>catálogo de componentes,</p>
+                    </li>
+                    <li>
+                        <p>responsabilidad única,</p>
+                    </li>
+                    <li>
+                        <p>variantes,</p>
+                    </li>
+                    <li>
+                        <p>estados,</p>
+                    </li>
+                    <li>
+                        <p>compatibilidad con i18n y theming.</p>
+                    </li>
+                </ul>
+                <h2>5.6 Bloque 6 — Modelo de contenido</h2>
+                <p>Define:</p>
+                <ul>
+                    <li>
+                        <p>tipos de entidad,</p>
+                    </li>
+                    <li>
+                        <p>contratos de datos,</p>
+                    </li>
+                    <li>
+                        <p>metadatos,</p>
+                    </li>
+                    <li>
+                        <p>relaciones,</p>
+                    </li>
+                    <li>
+                        <p>cuerpo editorial.</p>
+                    </li>
+                </ul>
+                <h2>5.7 Bloque 7 — Flujo de render</h2>
+                <p>Define:</p>
+                <ul>
+                    <li>
+                        <p>resolución de ruta,</p>
+                    </li>
+                    <li>
+                        <p>resolución de entidad,</p>
+                    </li>
+                    <li>
+                        <p>carga de contexto,</p>
+                    </li>
+                    <li>
+                        <p>selección de layout,</p>
+                    </li>
+                    <li>
+                        <p>inyección de componentes,</p>
+                    </li>
+                    <li>
+                        <p>ensamblaje de página.</p>
+                    </li>
+                </ul>
+                <h2>5.8 Bloque 8 — Navegación y jerarquía</h2>
+                <p>Define:</p>
+                <ul>
+                    <li>
+                        <p>navegación global,</p>
+                    </li>
+                    <li>
+                        <p>hubs,</p>
+                    </li>
+                    <li>
+                        <p>breadcrumbs,</p>
+                    </li>
+                    <li>
+                        <p>TOC,</p>
+                    </li>
+                    <li>
+                        <p>series,</p>
+                    </li>
+                    <li>
+                        <p>contenido relacionado,</p>
+                    </li>
+                    <li>
+                        <p>descubrimiento.</p>
+                    </li>
+                </ul>
+                <h2>5.9 Bloque 9 — Sistema editorial</h2>
+                <p>Define:</p>
+                <ul>
+                    <li>
+                        <p>ciclo de vida de contenido,</p>
+                    </li>
+                    <li>
+                        <p>creación,</p>
+                    </li>
+                    <li>
+                        <p>revisión,</p>
+                    </li>
+                    <li>
+                        <p>publicación,</p>
+                    </li>
+                    <li>
+                        <p>traducción,</p>
+                    </li>
+                    <li>
+                        <p>mantenimiento,</p>
+                    </li>
+                    <li>
+                        <p>archivado.</p>
+                    </li>
+                </ul>
+                <h2>5.10 Bloque 10 — Estructura física del repositorio</h2>
+                <p>Define:</p>
+                <ul>
+                    <li>
+                        <p>organización de carpetas,</p>
+                    </li>
+                    <li>
+                        <p>separación de capas,</p>
+                    </li>
+                    <li>
+                        <p>ubicación física de artefactos.</p>
+                    </li>
+                </ul>
+                <h2>5.11 Bloque 11 — Automatización y generación</h2>
+                <p>Define:</p>
+                <ul>
+                    <li>
+                        <p>scaffolding,</p>
+                    </li>
+                    <li>
+                        <p>validadores,</p>
+                    </li>
+                    <li>
+                        <p>generación de derivados,</p>
+                    </li>
+                    <li>
+                        <p>build,</p>
+                    </li>
+                    <li>
+                        <p>publicación.</p>
+                    </li>
+                </ul>
+                <h2>5.12 Bloque 12 — Gobernanza</h2>
+                <p>Define:</p>
+                <ul>
+                    <li>
+                        <p>naming,</p>
+                    </li>
+                    <li>
+                        <p>evolución,</p>
+                    </li>
+                    <li>
+                        <p>políticas de cambio,</p>
+                    </li>
+                    <li>
+                        <p>control de calidad,</p>
+                    </li>
+                    <li>
+                        <p>disciplina del sistema.</p>
+                    </li>
+                </ul>
+                <hr class="article-divider">
+                <h1>6. Arquitectura lógica</h1>
+                <h2>6.1 Shell global</h2>
+                <h3>Definición</h3>
+                <p>El shell es la estructura persistente y transversal del portal.</p>
+                <h3>Responsabilidades</h3>
+                <ul>
+                    <li>
+                        <p>presentar la cabecera global,</p>
+                    </li>
+                    <li>
+                        <p>mostrar navegación principal,</p>
+                    </li>
+                    <li>
+                        <p>exponer selector de idioma,</p>
+                    </li>
+                    <li>
+                        <p>exponer selector de tema,</p>
+                    </li>
+                    <li>
+                        <p>incluir footer,</p>
+                    </li>
+                    <li>
+                        <p>alojar el layout actual.</p>
+                    </li>
+                </ul>
+                <h3>Componentes típicos del shell</h3>
+                <ul>
+                    <li>
+                    <p><code>c-site-header</code></p>
+                    </li>
+                    <li>
+                    <p><code>c-main-nav</code></p>
+                    </li>
+                    <li>
+                    <p><code>c-language-switcher</code></p>
+                    </li>
+                    <li>
+                    <p><code>c-theme-switcher</code></p>
+                    </li>
+                    <li>
+                    <p><code>c-site-footer</code></p>
+                    </li>
+                </ul>
+                <h3>Restricciones</h3>
+                <p>El shell no contiene contenido editorial específico.<br>
+                    No debe decidir layouts ni renderizar entidades por sí mismo.</p>
+                <hr class="article-divider">
+                <h2>6.2 Layouts</h2>
+                <h3>Definición</h3>
+                <p>Un layout es una plantilla estructural que organiza regiones de la página.</p>
+                <h3>Layouts iniciales oficiales</h3>
+                <ul>
+                    <li>
+                        <p><code>l-simple</code></p>
+                    </li>
+                    <li>
+                        <p><code>l-article</code></p>
+                    </li>
+                    <li>
+                        <p><code>l-docs</code></p>
+                    </li>
+                    <li>
+                        <p><code>l-showcase</code></p>
+                    </li>
+                </ul>
+                <h3>Regla fundamental</h3>
+                <p>El layout organiza espacio, no contenido.</p>
+                <h3>Ejemplo: <code>l-article</code></h3>
+                <p>Regiones:</p>
+                <ul>
+                    <li>
+                        <p>top</p>
+                    </li>
+                    <li>
+                        <p>reader</p>
+                    </li>
+                    <li>
+                        <p>body</p>
+                    <ul>
+                        <li>
+                            <p>main</p>
+                        </li>
+                        <li>
+                            <p>aside</p>
+                        </li>
+                    </ul>
+                    </li>
+                    <li>
+                        <p>bottom</p>
+                    </li>
+                </ul>
+                <p>Uso:</p>
+                <ul>
+                    <li>
+                        <p>artículos largos,</p>
+                    </li>
+                    <li>
+                        <p>tutoriales,</p>
+                    </li>
+                    <li>
+                        <p>análisis técnicos.</p>
+                    </li>
+                </ul>
+                <hr class="article-divider">
+                <h2>6.3 Componentes</h2>
+                <h2>Definición</h2>
+                <p>Unidad reutilizable de interfaz con responsabilidad concreta.</p>
+                <h2>Taxonomía</h2>
+                <h3>Globales</h3>
+                <ul>
+                    <li>
+                        <p>header</p>
+                    </li>
+                    <li>
+                        <p>nav</p>
+                    </li>
+                    <li>
+                        <p>footer</p>
+                    </li>
+                    <li>
+                        <p>switchers</p>
+                    </li>
+                </ul>
+                <h3>Editoriales</h3>
+                <ul>
+                    <li>
+                        <p>article-header</p>
+                    </li>
+                    <li>
+                        <p>article-meta</p>
+                    </li>
+                    <li>
+                        <p>prose</p>
+                    </li>
+                    <li>
+                        <p>toc</p>
+                    </li>
+                    <li>
+                        <p>reader-bar</p>
+                    </li>
+                    <li>
+                        <p>callout</p>
+                    </li>
+                    <li>
+                        <p>code-block</p>
+                    </li>
+                </ul>
+                <h3>Navegación</h3>
+                <ul>
+                    <li>
+                        <p>breadcrumb</p>
+                    </li>
+                    <li>
+                        <p>sidebar-nav</p>
+                    </li>
+                    <li>
+                        <p>prev-next</p>
+                    </li>
+                </ul>
+                <h3>Descubrimiento</h3>
+                <ul>
+                    <li>
+                        <p>article-card</p>
+                    </li>
+                    <li>
+                        <p>project-card</p>
+                    </li>
+                    <li>
+                        <p>related-posts</p>
+                    </li>
+                </ul>
+                <h3>Interactivos</h3>
+                <ul>
+                    <li>
+                        <p>copy button</p>
+                    </li>
+                    <li>
+                        <p>collapsibles</p>
+                    </li>
+                    <li>
+                        <p>tabs</p>
+                    </li>
+                    <li>
+                        <p>accordions</p>
+                    </li>
+                </ul>
+                <h2>Regla de diseño</h2>
+                <p>Un componente:</p>
+                <ul>
+                    <li>
+                        <p>hace una cosa,</p>
+                    </li>
+                    <li>
+                        <p>expone contrato claro,</p>
+                    </li>
+                    <li>
+                        <p>usa tokens,</p>
+                    </li>
+                    <li>
+                        <p>consume diccionario si tiene UI textual,</p>
+                    </li>
+                    <li>
+                        <p>define su comportamiento responsive.</p>
+                    </li>
+                </ul>
+                <hr class="article-divider">
+                <h1>7. Arquitectura de internacionalización</h1>
+                <h2>7.1 Idiomas soportados</h2>
+                <p>Inicialmente:</p>
+                <ul>
+                    <li>
+                        <p>español (<code>es</code>)</p>
+                    </li>
+                    <li>
+                        <p>inglés (<code>en</code>)</p>
+                    </li>
+                </ul>
+                <h2>7.2 Estrategia</h2>
+                <p>Arquitectura multidioma real, con:</p>
+                <ul>
+                    <li>
+                        <p>prefijos de idioma,</p>
+                    </li>
+                    <li>
+                        <p>diccionarios UI,</p>
+                    </li>
+                    <li>
+                        <p>contenido traducible progresivo.</p>
+                    </li>
+                </ul>
+                <h2>7.3 Estructura de rutas</h2>
+                <pre><div><div><div><div><div><div><div><div><button><svg><use></use></svg></button></div><div><div><div><div><div><span>/es/</span><br><span>/en/</span></div></div></div></div></div></div></div></div></div><div><div></div></div></div></div></div></pre>
+                <h2>7.4 Rutas de ejemplo</h2>
+                <pre><code>
+                    <div>
+                        <span>/es/</span><br>
+                        <span>  /es/articulos/</span><br>
+                        <span>  /es/proyectos/</span><br>
+                        <span>  /es/sobre-mi/</span><br><br>
+                        <span>/en/</span><br>
+                        <span>  /en/articles/</span><br>
+                        <span>  /en/projects/</span><br>
+                        <span>  /en/about/</span>
+                    </div>
+                </code></pre>
+                <h2>7.5 Diccionarios UI</h2>
+                <p>Ubicación:</p>
+                <pre><code>
+                    <span>data/i18n/</span>
+                </code></pre>
+                <p>Responsabilidad:</p>
+                <ul>
+                    <li>
+                        <p>labels globales,</p>
+                    </li>
+                    <li>
+                        <p>textos de componentes,</p>
+                    </li>
+                    <li>
+                        <p>navegación principal,</p>
+                    </li>
+                    <li>
+                        <p>mensajes de sistema.</p>
+                    </li>
+                </ul>
+                <h2>7.6 Política editorial de idiomas</h2>
+                <ul>
+                    <li>
+                        <p>UI siempre preparada para ambos idiomas.</p>
+                    </li>
+                    <li>
+                        <p>contenido editorial traducido por prioridad, no por obligación.</p>
+                    </li>
+                    <li>
+                        <p>ausencia de traducción no rompe el sistema.</p>
+                    </li>
+                </ul>
+                <hr class="article-divider">
+                <h1>8. Arquitectura visual y sistema de temas</h1>
+                <h2>8.1 Design tokens</h2>
+                <p>El sistema visual se basa en dos capas:</p>
+                <h3>Tokens base</h3>
+                <p>Valores puros:</p>
+                <ul>
+                    <li>
+                        <p>escala de grises,</p>
+                    </li>
+                    <li>
+                        <p>spacing,</p>
+                    </li>
+                    <li>
+                        <p>radios,</p>
+                    </li>
+                    <li>
+                        <p>sombras,</p>
+                    </li>
+                    <li>
+                        <p>familias tipográficas.</p>
+                    </li>
+                </ul>
+                <h3>Tokens semánticos</h3>
+                <p>Valores consumidos por la UI:</p>
+                <ul>
+                    <li>
+                        <p><code>--bg-page</code></p>
+                    </li>
+                    <li>
+                        <p><code>--bg-panel</code></p>
+                    </li>
+                    <li>
+                        <p><code>--text-main</code></p>
+                    </li>
+                    <li>
+                        <p><code>--text-muted</code></p>
+                    </li>
+                    <li>
+                        <p><code>--border-default</code></p>
+                    </li>
+                    <li>
+                        <p><code>--accent</code></p>
+                    </li>
+                    <li>
+                        <p><code>--link</code></p>
+                    </li>
+                    <li>
+                        <p><code>--code-bg</code></p>
+                    </li>
+                </ul>
+                <h2>8.2 Temas oficiales iniciales</h2>
+                <ul>
+                    <li>
+                        <p><code>classic</code></p>
+                    </li>
+                    <li>
+                        <p><code>graphite</code></p>
+                    </li>
+                    <li>
+                        <p><code>solar</code></p>
+                    </li>
+                </ul>
+                <h2>8.3 Regla fundamental</h2>
+                <p>Los componentes no conocen colores finales; consumen tokens semánticos.</p>
+                <h2>8.4 Persistencia del tema</h2>
+                <p>El sistema puede recordar la preferencia del usuario en almacenamiento local.</p>
+                <hr class="article-divider">
+                <h1>9. Modelo de contenido</h1>
+                <h2>9.1 Entidades oficiales</h2>
+                <ul>
+                    <li>
+                        <p><code>article</code></p>
+                    </li>
+                    <li>
+                        <p><code>project</code></p>
+                    </li>
+                    <li>
+                        <p><code>doc</code></p>
+                    </li>
+                    <li>
+                        <p><code>page</code></p>
+                    </li>
+                </ul>
+                <h2>9.2 Contrato base común</h2>
+                <p>Toda entidad debe tener al menos:</p>
+                <ul>
+                    <li>
+                        <p><code>id</code></p>
+                    </li>
+                    <li>
+                        <p><code>type</code></p>
+                    </li>
+                    <li>
+                        <p><code>status</code></p>
+                    </li>
+                    <li>
+                        <p><code>layout</code></p>
+                    </li>
+                    <li>
+                        <p><code>createdAt</code></p>
+                    </li>
+                    <li>
+                        <p><code>updatedAt</code></p>
+                    </li>
+                    <li>
+                        <p><code>translations</code></p>
+                    </li>
+                    <li>
+                        <p><code>relations</code></p>
+                    </li>
+                </ul>
+                <h2>9.3 Estados editoriales globales</h2>
+                <ul>
+                    <li>
+                        <p><code>draft</code></p>
+                    </li>
+                    <li>
+                        <p><code>published</code></p>
+                    </li>
+                    <li>
+                        <p><code>archived</code></p>
+                    </li>
+                </ul>
+                <h2>9.4 Estados por idioma</h2>
+                <ul>
+                    <li>
+                        <p><code>missing</code></p>
+                    </li>
+                    <li>
+                        <p><code>draft</code></p>
+                    </li>
+                    <li>
+                        <p><code>published</code></p>
+                    </li>
+                </ul>
+                <h2>9.5 Variantes por idioma</h2>
+                <p>Cada entidad contiene un mapa <code>translations</code>.</p>
+                <p>Ejemplo conceptual:</p>
+                <pre><code><div>
+                    <span>"translations"</span><span>: {</span><br>
+                    <span>  "es": {</span><br>
+                    <span>    "status": </span><span>"published"</span><span>,</span><br>
+                    <span>    "slug": </span><span>"actualizar-windows-11-offline"</span><span>,</span><br>
+                    <span>    "title": </span><span>"Actualizar Windows 11 offline"</span><span>,</span><br>
+                    <span>    "description": </span><span>"Guía técnica para actualizar equipos sin dependencia de red."</span><br>
+                    <span>  },</span><br>
+                    <span>  "en": {</span><br>
+                    <span>    "status": </span><span>"missing"</span><br>
+                    <span>  }</span><br>
+                    <span>}</span>
+                </div></code></pre>
+                <h2>9.6 Cuerpo del contenido</h2>
+                <p>El cuerpo editorial se almacena desacoplado de los metadatos, típicamente en Markdown:</p>
+                <ul>
+                    <li>
+                        <p><code>body.es.md</code></p>
+                    </li>
+                    <li>
+                        <p><code>body.en.md</code></p>
+                    </li>
+                </ul>
+                <hr class="article-divider">
+                <h1>10. Relaciones entre entidades</h1>
+                <h2>10.1 Propósito</h2>
+                <p>Permitir navegación semántica y descubrimiento de conocimiento.</p>
+                <h2>10.2 Relaciones típicas</h2>
+                <h3>Article</h3>
+                <ul>
+                    <li>
+                        <p>relatedArticles</p>
+                    </li>
+                    <li>
+                        <p>relatedProjects</p>
+                    </li>
+                    <li>
+                        <p>previous</p>
+                    </li>
+                    <li>
+                        <p>next</p>
+                    </li>
+                    <li>
+                        <p>series</p>
+                    </li>
+                </ul>
+                <h3>Project</h3>
+                <ul>
+                    <li>
+                        <p>relatedArticles</p>
+                    </li>
+                    <li>
+                        <p>relatedDocs</p>
+                    </li>
+                    <li>
+                        <p>stack</p>
+                    </li>
+                    <li>
+                        <p>maturity</p>
+                    </li>
+                </ul>
+                <h3>Doc</h3>
+                <ul>
+                    <li>
+                        <p>parent</p>
+                    </li>
+                    <li>
+                        <p>previous</p>
+                    </li>
+                    <li>
+                        <p>next</p>
+                    </li>
+                    <li>
+                        <p>section</p>
+                    </li>
+                </ul>
+                <h3>Page</h3>
+                <ul>
+                    <li>
+                        <p>relaciones mínimas o nulas</p>
+                    </li>
+                </ul>
+                <h2>10.3 Regla</h2>
+                <p>Las relaciones se expresan por <code>id</code>, nunca por URL literal.</p>
+                <hr class="article-divider">
+                <h1>11. Flujo de render y ensamblaje</h1>
+                <h2>11.1 Pipeline conceptual</h2>
+                <pre><code><div>
+                    <span>Ruta</span><br>
+                    <span>→ Resolución de idioma y slug</span><br>
+                    <span>→ Resolución de entidad</span><br>
+                    <span>→ Carga de contexto</span><br>
+                    <span>→ Selección de layout</span><br>
+                    <span>→ Resolución de componentes</span><br>
+                    <span>→ Inyección de datos</span><br>
+                    <span>→ Render final</span>
+                </div></code></pre>
+                <h2>11.2 Prioridades del sistema</h2>
+                <h3>La ruta define</h3>
+                <ul>
+                    <li>
+                        <p>idioma,</p>
+                    </li>
+                    <li>
+                        <p>sección,</p>
+                    </li>
+                    <li>
+                        <p>slug.</p>
+                    </li>
+                </ul>
+                <h3>La entidad define</h3>
+                <ul>
+                    <li>
+                        <p>tipo,</p>
+                    </li>
+                    <li>
+                        <p>layout,</p>
+                    </li>
+                    <li>
+                        <p>metadatos,</p>
+                    </li>
+                    <li>
+                        <p>relaciones.</p>
+                    </li>
+                </ul>
+                <h3>El contexto define</h3>
+                <ul>
+                    <li>
+                        <p>diccionario,</p>
+                    </li>
+                    <li>
+                        <p>tema,</p>
+                    </li>
+                    <li>
+                        <p>estado de interfaz.</p>
+                    </li>
+                </ul>
+                <h3>El layout define</h3>
+                <ul>
+                    <li>
+                        <p>regiones.</p>
+                    </li>
+                </ul>
+                <h3>Los componentes definen</h3>
+                <ul>
+                    <li>
+                        <p>representación concreta de cada parte.</p>
+                    </li>
+                </ul>
+                <hr class="article-divider">
+                <h1>12. Sistema de navegación</h1>
+                <h2>12.1 Capas de navegación</h2>
+                <ul>
+                    <li>
+                        <p>global</p>
+                    </li>
+                    <li>
+                        <p>seccional</p>
+                    </li>
+                    <li>
+                        <p>contextual</p>
+                    </li>
+                    <li>
+                        <p>descubrimiento</p>
+                    </li>
+                </ul>
+                <h2>12.2 Navegación global</h2>
+                <p>Debe representar solo dominios principales:</p>
+                <ul>
+                    <li>
+                        <p>inicio/home</p>
+                    </li>
+                    <li>
+                        <p>artículos/articles</p>
+                    </li>
+                    <li>
+                        <p>proyectos/projects</p>
+                    </li>
+                    <li>
+                        <p>documentación/documentation</p>
+                    </li>
+                    <li>
+                        <p>sobre mí/about</p>
+                    </li>
+                </ul>
+                <h2>12.3 Hubs</h2>
+                <p>Cada dominio debe tener página índice de entrada:</p>
+                <ul>
+                    <li>
+                        <p><code>/es/articulos/</code></p>
+                    </li>
+                    <li>
+                        <p><code>/es/proyectos/</code></p>
+                    </li>
+                    <li>
+                        <p><code>/es/documentacion/</code></p>
+                    </li>
+                </ul>
+                <h2>12.4 Navegación contextual</h2>
+                <ul>
+                    <li>
+                        <p>breadcrumbs</p>
+                    </li>
+                    <li>
+                        <p>TOC</p>
+                    </li>
+                    <li>
+                        <p>prev-next</p>
+                    </li>
+                    <li>
+                        <p>sidebar-nav</p>
+                    </li>
+                    <li>
+                        <p>series</p>
+                    </li>
+                </ul>
+                <h2>12.5 Descubrimiento</h2>
+                <ul>
+                    <li>
+                        <p>relacionados por tags</p>
+                    </li>
+                    <li>
+                        <p>relacionados por categoría</p>
+                    </li>
+                    <li>
+                        <p>relacionados por proyecto</p>
+                    </li>
+                    <li>
+                        <p>relacionados por serie</p>
+                    </li>
+                </ul>
+                <hr class="article-divider">
+                <h1>13. Sistema editorial</h1>
+                <h2>13.1 Ciclo editorial</h2>
+                <pre><code><div>
+                    <span>Idea</span><br>
+                    <span>→ Alta de entidad</span><br>
+                    <span>→ Redacción</span><br>
+                    <span>→ Revisión</span><br>
+                    <span>→ Publicación</span><br>
+                    <span>→ Traducción</span><br>
+                    <span>→ Actualización</span><br>
+                    <span>→ Archivado</span>
+                </div></code></pre>
+                <h2>13.2 Regla base</h2>
+                <p>Toda pieza nueva nace desde una plantilla, no desde HTML libre.</p>
+                <h2>13.3 Condiciones de publicabilidad</h2>
+                <p>Una entidad es publicable si:</p>
+                <ul>
+                    <li>
+                        <p>tiene identidad estable,</p>
+                    </li>
+                    <li>
+                    <p>metadatos mínimos completos,</p>
+                        </li>
+                    <li>
+                        <p>layout asignado,</p>
+                    </li>
+                    <li>
+                        <p>cuerpo editorial suficiente,</p>
+                    </li>
+                    <li>
+                        <p>navegación resoluble,</p>
+                    </li>
+                    <li>
+                        <p>integración en hubs o relaciones.</p>
+                    </li>
+                </ul>
+                <hr class="article-divider">
+                <h1>14. Estructura física del repositorio</h1>
+                <h2>14.1 Estructura oficial de alto nivel</h2>
+                <pre><code><div>
+                    <span>repo/</span><br>
+                    <span>├── content/</span><br>
+                    <span>├── data/</span><br>
+                    <span>├── layouts/</span><br>
+                    <span>├── components/</span><br>
+                    <span>├── assets/</span><br>
+                    <span>├── docs/</span><br>
+                    <span>├── config/</span><br>
+                    <span>├── tools/</span><br>
+                    <span>└── dist/ o docs/ como salida publicada</span>
+                </div></code></pre>
+                <h2>14.2 Responsabilidades por carpeta</h2>
+                <h3><code>content/</code></h3>
+                <p>Contenido fuente por entidad.</p>
+                <h3><code>data/</code></h3>
+                <p>Configuración estructural del sistema.</p>
+                <h3><code>components/</code></h3>
+                <p>Piezas reutilizables de interfaz.</p>
+                <h3><code>assets/</code></h3>
+                <p>CSS, JS, imágenes, iconos, tipografías.</p>
+                <h3><code>docs/</code></h3>
+                <p>Documentación del sistema y, opcionalmente, salida publicada si se usa Pages desde <code>/docs</code>.</p>
+                <h3><code>config/</code></h3>
+                <p>Configuración global del sistema.</p>
+                <h3><code>tools/</code></h3>
+                <p>Automatización.</p>
+                <hr class="article-divider">
+                <h1>15. Automatización y generación</h1>
+                <h2>15.1 Objetivo</h2>
+                <p>Reducir trabajo repetitivo y reforzar el contrato arquitectónico.</p>
+                <h2>15.2 Subsistemas de automatización</h2>
+                <ul>
+                    <li>
+                        <p>Scaffolding</p>
+                    </li>
+                    <li>
+                        <p>Validación</p>
+                    </li>
+                    <li>
+                        <p>Derivados editoriales</p>
+                    </li>
+                    <li>
+                        <p>Build</p>
+                    </li>
+                    <li>
+                        <p>Publicación</p>
+                    </li>
+                </ul>
+                <h2>15.3 Scripts esperados</h2>
+                <h3>Creación</h3>
+                <ul>
+                    <li>
+                        <p><code>New-Article.ps1</code></p>
+                    </li>
+                    <li>
+                        <p><code>New-Project.ps1</code></p>
+                    </li>
+                    <li>
+                        <p><code>New-Doc.ps1</code></p>
+                    </li>
+                    <li>
+                        <p><code>New-Page.ps1</code></p>
+                    </li>
+                </ul>
+                <h3>Validación</h3>
+                <ul>
+                    <li>
+                        <p><code>Test-ContentContracts.ps1</code></p>
+                    </li>
+                    <li>
+                        <p><code>Test-Relations.ps1</code></p>
+                    </li>
+                    <li>
+                        <p><code>Test-I18n.ps1</code></p>
+                    </li>
+                    <li>
+                        <p><code>Test-Assets.ps1</code></p>
+                    </li>
+                    <li>
+                        <p><code>Test-Links.ps1</code></p>
+                    </li>
+                </ul>
+                <h3>Derivados</h3>
+                <ul>
+                    <li>
+                        <p><code>New-Toc.ps1</code></p>
+                    </li>
+                    <li>
+                        <p><code>New-ReadingTime.ps1</code></p>
+                    </li>
+                    <li>
+                        <p><code>New-NavigationIndex.ps1</code></p>
+                    </li>
+                    <li>
+                        <p><code>New-SeriesIndex.ps1</code></p>
+                    </li>
+                    <li>
+                        <p><code>New-RelatedContent.ps1</code></p>
+                    </li>
+                </ul>
+                <h3>Build</h3>
+                <ul>
+                    <li>
+                        <p><code>Build-Routes.ps1</code></p>
+                    </li>
+                    <li>
+                        <p><code>Build-Pages.ps1</code></p>
+                    </li>
+                    <li>
+                        <p><code>Build-Site.ps1</code></p>
+                    </li>
+                    <li>
+                        <p><code>Publish-GitHubPages.ps1</code></p>
+                    </li>
+                </ul>
+                <h2>15.4 Regla</h2>
+                <p>La automatización refuerza el sistema; no lo salta.</p>
+                <hr class="article-divider">
+                <h1>16. Gobernanza y convenciones</h1>
+                <h2>16.1 Naming</h2>
+                <h3>Entidades</h3>
+                <p><code>kebab-case</code></p>
+                <h3>Layouts</h3>
+                <p>Prefijo <code>l-</code></p>
+                <h3>Componentes</h3>
+                <p>Prefijo <code>c-</code></p>
+                <h3>Utilidades</h3>
+                <p>Prefijo <code>u-</code></p>
+                <h3>Estados</h3>
+                <p>Prefijo <code>is-</code></p>
+                <h2>16.2 Convención editorial</h2>
+                <ul>
+                    <li>
+                        <p>títulos claros,</p>
+                    </li>
+                    <li>
+                        <p>descripciones útiles,</p>
+                    </li>
+                    <li>
+                        <p>headings coherentes,</p>
+                    </li>
+                    <li>
+                        <p>taxonomía controlada,</p>
+                    </li>
+                    <li>
+                        <p>relaciones razonadas.</p>
+                    </li>
+                </ul>
+                <h2>16.3 Política de evolución</h2>
+                <ul>
+                    <li>
+                        <p>no crear nuevos layouts sin necesidad real,</p>
+                    </li>
+                    <li>
+                        <p>no duplicar componentes,</p>
+                    </li>
+                    <li>
+                        <p>no introducir entidades nuevas sin justificación,</p>
+                    </li>
+                    <li>
+                        <p>documentar cualquier cambio arquitectónico.</p>
+                    </li>
+                </ul>
+                <h2>16.4 Política de deuda técnica</h2>
+                <p>Clasificar deuda:</p>
+                <ul>
+                    <li>
+                        <p>LOW</p>
+                    </li>
+                    <li>
+                        <p>MEDIUM</p>
+                    </li>
+                    <li>
+                        <p>HIGH</p>
+                    </li>
+                    <li>
+                        <p>CRITICAL</p>
+                    </li>
+                </ul>
+                <p>Las deudas HIGH y CRITICAL deben resolverse antes de introducir nuevas complejidades.</p>
+                <hr class="article-divider">
+                <h1>17. Estrategia de despliegue</h1>
+                <h2>17.1 Producción actual</h2>
+                <ul>
+                    <li>
+                        <p><code>rolandoluis.github.io</code> como <strong>user site</strong>.</p>
+                    </li>
+                </ul>
+                <h2>17.2 Laboratorio / nueva generación</h2>
+                <ul>
+                    <li>
+                        <p><code>rolandoluis-site-v2</code> como <strong>project site</strong>.</p>
+                    </li>
+                </ul>
+                <h2>17.3 Regla de convivencia</h2>
+                <p>Se permite coexistencia entre:</p>
+                <ul>
+                    <li>
+                        <p>portal actual en producción,</p>
+                    </li>
+                    <li>
+                        <p>portal nuevo en desarrollo.</p>
+                    </li>
+                </ul>
+                <h2>17.4 GitHub Pages</h2>
+                <p>Para repos project site, la publicación por branch se realiza desde:</p>
+                <ul>
+                    <li>
+                        <p>raíz <code>/</code></p>
+                    </li>
+                    <li>
+                        <p>o carpeta <code>/docs</code></p>
+                    </li>
+                </ul>
+                <p>Nunca directamente desde <code>dist/</code> si no existe un proceso intermedio.</p>
+                <hr class="article-divider">
+                <h1>18. Arquitectura como proyecto de ingeniería</h1>
+                <h2>18.1 Clasificación recomendada</h2>
+                <p>Este sistema debe tratarse y presentarse como:</p>
+                <p><strong>Proyecto de Ingeniería de Software / Ingeniería Informática</strong><br>
+                    orientado a:</p>
+                <ul>
+                    <li>
+                        <p>arquitectura editorial,</p>
+                    </li>
+                    <li>
+                        <p>documentación técnica,</p>
+                    </li>
+                    <li>
+                        <p>modelado de conocimiento,</p>
+                    </li>
+                    <li>
+                        <p>publicación estructurada.</p>
+                    </li>
+                </ul>
+                <h2>18.2 Valor profesional</h2>
+                <p>Este proyecto demuestra:</p>
+                <ul>
+                    <li>
+                        <p>pensamiento sistémico,</p>
+                    </li>
+                    <li>
+                        <p>capacidad de modelado,</p>
+                    </li>
+                    <li>
+                        <p>disciplina arquitectónica,</p>
+                    </li>
+                    <li>
+                        <p>diseño de plataforma,</p>
+                    </li>
+                    <li>
+                        <p>automatización,</p>
+                    </li>
+                    <li>
+                        <p>mantenibilidad,</p>
+                    </li>
+                    <li>
+                        <p>criterio de ingeniería.</p>
+                    </li>
+                </ul>
+                <hr class="article-divider">
+                <h1>19. Roadmap técnico sugerido</h1>
+                <h2>Fase 1 — Base operativa</h2>
+                <ul>
+                    <li>
+                        <p>shell global</p>
+                    </li>
+                    <li>
+                        <p>home</p>
+                    </li>
+                    <li>
+                        <p>about</p>
+                    </li>
+                    <li>
+                        <p>theming</p>
+                    </li>
+                    <li>
+                        <p>publicación de demo</p>
+                    </li>
+                </ul>
+                <h2>Fase 2 — Layout editorial</h2>
+                <ul>
+                    <li>
+                        <p><code>l-article</code></p>
+                    </li>
+                    <li>
+                        <p>prose</p>
+                    </li>
+                    <li>
+                        <p>TOC</p>
+                    </li>
+                    <li>
+                        <p>reader-bar</p>
+                    </li>
+                    <li>
+                        <p>primer artículo real</p>
+                    </li>
+                </ul>
+                <h2>Fase 3 — Portfolio técnico</h2>
+                <ul>
+                    <li>
+                        <p><code>l-showcase</code></p>
+                    </li>
+                    <li>
+                        <p>primer proyecto real</p>
+                    </li>
+                    <li>
+                        <p>relaciones con artículos</p>
+                    </li>
+                </ul>
+                <h2>Fase 4 — Documentación</h2>
+                <ul>
+                    <li>
+                        <p><code>l-docs</code></p>
+                    </li>
+                    <li>
+                        <p>primer árbol documental real</p>
+                    </li>
+                </ul>
+                <h2>Fase 5 — Automatización</h2>
+                <ul>
+                    <li>
+                        <p>scaffolding</p>
+                    </li>
+                    <li>
+                        <p>validación</p>
+                    </li>
+                    <li>
+                        <p>derivados</p>
+                    </li>
+                    <li>
+                        <p>build reproducible</p>
+                    </li>
+                </ul>
+                <h2>Fase 6 — Mapa de conocimiento</h2>
+                <ul>
+                    <li>
+                        <p>series</p>
+                    </li>
+                    <li>
+                        <p>hubs semánticos</p>
+                    </li>
+                    <li>
+                        <p>navegación transversal avanzada</p>
+                    </li>
+                </ul>
+                <hr class="article-divider">
+                <h1>20. Conclusión técnica</h1>
+                <p>El sistema aquí especificado constituye una arquitectura completa para una plataforma personal de conocimiento técnico, orientada a largo plazo, basada en principios de ingeniería y preparada para crecer sin degradación.</p>
+                <p>No se trata de un portal construido a partir de páginas aisladas, sino de un sistema compuesto por:</p>
+                <ul>
+                    <li>
+                        <p>entidades,</p>
+                    </li>
+                    <li>
+                        <p>layouts,</p>
+                    </li>
+                    <li>
+                        <p>componentes,</p>
+                    </li>
+                    <li>
+                        <p>contexto,</p>
+                    </li>
+                    <li>
+                        <p>automatización,</p>
+                    </li>
+                    <li>
+                        <p>y reglas de evolución.</p>
+                    </li>
+                </ul>
+                <p>Su valor técnico reside en que permite representar públicamente no solo información, sino <strong>estructura de pensamiento técnico</strong>, relaciones semánticas y criterio de ingeniería.</p>
+                <p>En ese sentido, el sistema debe entenderse como:</p>
+                <div class="callout callout-note">
+                    <div class="callout-title"></div>
+                    <div class="callout-body">
+                        <p>un <strong>motor personal de conocimiento técnico</strong>, versionado, modular, reproducible y mantenible.</p>
+                    </div>
+                </div>
+                <hr class="article-divider">
+                <h1>21. Apéndice A — Árbol de referencia del repositorio</h1>
+                <pre><code><div>
+                    <span>rolandoluis-site-v2/</span><br>
+                    <span>├── README.md</span><br>
+                    <span>├── LICENSE</span><br>
+                    <span>├── .gitignore</span><br>
+                    <span>├── docs/</span><br>
+                    <span>│   └── architecture/</span><br>
+                    <span>│       ├── PORTAL_ARCHITECTURE.md</span><br>
+                    <span>│       ├── block-01-modular-system.md</span><br>
+                    <span>│       ├── block-02-i18n.md</span><br>
+                    <span>│       ├── block-03-themes.md</span><br>
+                    <span>│       ├── block-04-layouts.md</span><br>
+                    <span>│       ├── block-05-components.md</span><br>
+                    <span>│       ├── block-06-content-model.md</span><br>
+                    <span>│       ├── block-07-render-flow.md</span><br>
+                    <span>│       ├── block-08-navigation.md</span><br>
+                    <span>│       ├── block-09-editorial-flow.md</span><br>
+                    <span>│       ├── block-10-repository-structure.md</span><br>
+                    <span>│       ├── block-11-automation.md</span><br>
+                    <span>│       └── block-12-governance.md</span><br>
+                    <span>├── config/</span><br>
+                    <span>├── data/</span><br>
+                    <span>├── content/</span><br>
+                    <span>├── layouts/</span><br>
+                    <span>├── components/</span><br>
+                    <span>├── assets/</span><br>
+                    <span>├── tools/</span><br>
+                    <span>└── docs/ o dist/ como salida según estrategia de publicación</span>
+                </div></code></pre>
+                <h1>22. Apéndice B — Definición corta del sistema</h1>
+                <p>Para README, portfolio o presentación profesional:</p>
+                <div class="callout callout-note">
+                    <div class="callout-title"></div>
+                    <div class="callout-body">
+                        <p><strong>Rolando Luis Knowledge Engine</strong> 
+                            es una plataforma editorial técnica modular diseñada para publicar artículos, documentación y proyectos mediante una arquitectura basada en entidades, layouts, componentes, i18n, theming y automatización reproducible sobre GitHub Pages.</p>
+                    </div>
+                </div>
+                <hr class="article-divider">
+                <h1>23. Apéndice C — Frase de identidad del proyecto</h1>
+                <p>Si quieres una frase definitoria y potente, esta resume muy bien lo que has construido:</p>
+                <div class="callout callout-note">
+                    <div class="callout-title"></div>
+                    <div class="callout-body">
+                        <p><strong>No es un blog. Es un mapa de pensamiento técnico publicado como sistema de ingeniería.</strong></p>
+                    </div>
+                </div>
+                <hr class="article-divider">
+
+                <h1>Diagramas Complementarios</h1>
+                <p class="lede">En ingeniería de software, una arquitectura como la desarrollada, normalmente se representa con varios diagramas complementarios, no con uno solo. Los más útiles para tu sistema serían:</p>
+                <div class="cta-row">
+                    <ol>
+                        <li><a class="category-btn" data-i18n-link="engineering/anexos/diagramgral.html">Diagrama conceptual (capas del sistema)</a></li>
+                        <li><a class="category-btn" data-i18n-link="engineering/anexos/diagramflujo.html">Diagrama de flujo de render</a></li>
+                        <li><a class="category-btn" data-i18n-link="engineering/anexos/diagrammodc.html">Diagrama del modelo de contenido</a></li>
+                        <li><a class="category-btn" data-i18n-link="engineering/anexos/diagramrepo.html">Diagrama físico del repositorio</a></li>
+                        <li><a class="category-btn" data-i18n-link="engineering/anexos/diagrammap.html">Diagrama de navegación del conocimiento</a></li>
+                    </ol>
+                </div>
+
+                <footer class="article-footer">
+                    <div class="article-tags">
+                        <span class="tag">#tag1</span>
+                        <span class="tag">#tag2</span>
+                        <span class="tag">#tag3</span>
+                    </div>
+
+                    <div class="article-actions">
+                        <a class="btn-link" href="#top">Volver arriba</a>
+                    </div>
+                </footer>
+
+            </article>
+        </div>
+
+    </main>
+
+    <script>
+      (() => {
+        let lastHeight = 0;
+        let rafId = 0;
+    
+        function measureAndPost() {
+          cancelAnimationFrame(rafId);
+        
+          rafId = requestAnimationFrame(() => {
+            const body = document.body;
+            const html = document.documentElement;
+        
+            const h = Math.max(
+              body.scrollHeight,
+              body.offsetHeight,
+              html.scrollHeight,
+              html.offsetHeight
+            );
+        
+            // evita spam si no cambió realmente
+            if (Math.abs(h - lastHeight) < 2) return;
+        
+            lastHeight = h;
+            parent.postMessage({ type: "articleHeight", height: h }, "*");
+          });
+        }
+    
+        window.addEventListener("load", measureAndPost);
+        document.addEventListener("DOMContentLoaded", measureAndPost);
+    
+        // Observa cambios reales en el contenido, no resize del viewport
+        const ro = new ResizeObserver(() => measureAndPost());
+        ro.observe(document.body);
+      })();
+    </script>
+
+</body>
+
+</html>
