@@ -64,12 +64,39 @@ main.engineering-shell {
   overflow: hidden;
 }
 
+.engineering-layout.is-reading #engineeringHero {
+  display: block;
+  min-height: 140px;
+  height: 140px;
+  padding: 0;
+}
+
+.engineering-layout.is-reading #engineeringHero .hero-engineering-inner {
+  padding: 16px 18px;
+}
+
+.engineering-layout.is-reading #engineeringHero h1 {
+  font-size: clamp(2rem, 3vw, 3.2rem);
+  margin: 0 0 4px;
+  line-height: 1;
+}
+
+.engineering-layout.is-reading #engineeringHero .lede {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.3;
+}
+
 .engineering-layout.is-reading .engineering-reader {
   display: grid;
   grid-template-columns: minmax(260px, 25%) minmax(0, 1fr);
   gap: 18px;
   min-height: 0;
   height: 100%;
+}
+
+.engineering-layout.is-reading #engineeringHero .engineering-hero-links {
+  display: none !important;
 }
 
 .engineering-sidepanel {
@@ -113,9 +140,9 @@ main.engineering-shell {
   margin-top: 10px;
 }
 
-.engineering-layout.is-reading #engineeringHero {
+/* .engineering-layout.is-reading #engineeringHero {
   display: none;
-}
+} */
 
 .engineering-layout.is-index .engineering-hero-links {
   display: flex;
