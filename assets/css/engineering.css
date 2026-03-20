@@ -57,11 +57,39 @@ main.engineering-shell {
 }
 
 .engineering-layout.is-reading {
-  grid-template-columns: minmax(260px, 25%) minmax(0, 1fr);
-  grid-template-rows: 1fr;
+  display: grid;
+
+  grid-template-columns: 280px 1fr;
+  grid-template-rows: auto 1fr;
+
+  grid-template-areas:
+    "hero content"
+    "toc  content";
+
+  gap: 18px;
+
   min-height: 0;
-  align-items: stretch;
-  overflow: hidden;
+  height: 100%;
+}
+
+#engineeringHero {
+  grid-area: hero;
+}
+
+.engineering-toc-panel {
+  grid-area: toc;
+
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-height: 0;
+}
+
+.engineering-framepanel {
+  grid-area: content;
+
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-height: 0;
 }
 
 .engineering-layout.is-reading #engineeringHero {
@@ -69,6 +97,24 @@ main.engineering-shell {
   min-height: 140px;
   height: 140px;
   padding: 0;
+}
+
+.engineering-layout.is-reading .engineering-hero-links {
+  display: none;
+}
+
+.engineering-layout,
+.engineering-toc-panel,
+.engineering-framepanel {
+  min-height: 0;
+}
+
+.engineering-toc {
+  overflow-y: auto;
+}
+
+#engineeringIframe {
+  height: 100%;
 }
 
 .engineering-layout.is-reading #engineeringHero .hero-engineering-inner {
