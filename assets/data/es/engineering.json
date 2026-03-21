@@ -1,12 +1,34 @@
 [
   {
+    "title": "Manual de Arquitectura y Diseño. Conversor.",
+    "category": "Ingeniería",
+    "slug": "converter",
+    "description": "[Descripción corta]",
+    "date": "2026-03-20",
+    "updated": "2026-03-20",
+    "tags": [
+      "arquitectura",
+      "sistema"
+    ],
+    "featured": false,
+    "btnInHero": false
+  },
+  {
     "title": "Especificación de Arquitectura del Sistema",
+    "category": "Proyecto de Ingeniería",
     "slug": "architecture",
-    "description": "Plataforma estática de conocimiento técnico, estructurada con componentes, layouts y tokens visuales.",
-    "category": "Arquitectura",
-    "date": "2026-03-18",
-    "updated": "2026-03-18",
-    "tags": ["arquitectura", "frontend", "design-system"],
-    "featured": true
+    "description": "Plataforma de conocimiento técnico, estructurada con elementos avanzados",
+    "date": "2026-03-11",
+    "updated": "2026-03-11",
+    "tags": [
+      "ingeniería",
+      "desarrollo web",
+      "proyecto",
+      "portal",
+      "componentes",
+      "layouts"
+    ],
+    "featured": false,
+    "btnInHero": false
   }
 ]
