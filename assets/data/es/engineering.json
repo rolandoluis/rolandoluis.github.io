@@ -11,7 +11,7 @@
       "sistema"
     ],
     "featured": false,
-    "btnInHero": false
+    "btnInHero": true
   },
   {
     "title": "Especificación de Arquitectura del Sistema",
@@ -29,6 +29,6 @@
       "layouts"
     ],
     "featured": false,
-    "btnInHero": false
+    "btnInHero": true
   }
 ]
