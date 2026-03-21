@@ -105,6 +105,10 @@ body.engineering-shell .site-footer:hover{
   min-height: 140px;
 }
 
+/* .hero-engineering-mini{
+    will-change: transform;
+}
+ */
 .hero-engineering-inner,
 .hero-engineering-mini-inner{
   position:relative;

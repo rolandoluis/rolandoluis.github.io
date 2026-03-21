@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>[Título del Documento]</title>
+  <meta name="description" content="[Descripción corta]" />
+
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/components.css" />
+  <link rel="stylesheet" href="/assets/css/engineering-doc.css" />
+</head>
+
+<body class="engineering-doc-shell">
+
+  <main class="engineering-doc" 
+    data-engineering-doc 
+    data-doc-title="Manual de Arquitectura y Diseño. Conversor." 
+    data-doc-category="Ingeniería"
+    data-doc-date="2026-03-20" 
+    data-doc-updated="2026-03-20" 
+    data-doc-tags="arquitectura,sistema"
+    data-doc-featured="false">
+
+    <!-- HEADER -->
+    <header class="engineering-doc-header">
+      <h1>Manual de Arquitectura y Diseño. Conversor.</h1>
+
+      <p class="engineering-doc-meta">
+        Rolando Luis Martín · 20 Mar 2026 · Ingeniería
+      </p>
+
+      <p class="engineering-doc-summary">
+        Transformar informaciones técnicas de diferentes fuentes, en activos documentales.
+      </p>
+    </header>
+
+    <!-- TOC opcional (solo fuera del embed) -->
+    <nav class="engineering-doc-inline-toc">
+      <!-- opcional -->
+    </nav>
+
+    <!-- BODY -->
+    <section class="engineering-doc-body">
+
+      <h1>📘 Manual de Arquitectura y Diseño</h1>
+      <h1>Conversor de Información Técnica en Activos Reutilizables</h2>
+      <hr class="engineering-doc-divider">
+      <h1>1. Introducción</h2>
+      <p>En los entornos de Soporte Técnico, Programación y Sistemas, el conocimiento no suele faltar.<br>
+        Lo que falta es <strong>estructura, reutilización y continuidad</strong>.</p>
+      <p>Soluciones técnicas valiosas aparecen cada día en:</p>
+      <ul>
+        <li>chats con IAs,</li>
+        <li>foros,</li>
+        <li>correos,</li>
+        <li>incidencias resueltas,</li>
+        <li>búsquedas puntuales.</li>
+      </ul>
+      <p>Sin embargo, este conocimiento suele quedar:</p>
+      <ul>
+        <li>disperso,</li>
+        <li>mal formateado,</li>
+        <li>difícil de reutilizar,</li>
+        <li>dependiente de la memoria individual.</li>
+      </ul>
+      <p>Este proyecto nace para resolver ese problema de raíz.</p>
+      <hr class="engineering-doc-divider">
+      <h1>2. Slogan / Principio Rector</h2>
+      <blockquote>
+        <p><strong>Convertir conocimiento técnico disperso en activos reutilizables.</strong></p>
+      </blockquote>
+      <p>Este principio guía <strong>todas</strong> las decisiones de diseño, arquitectura y alcance del sistema.</p>
+      <hr class="engineering-doc-divider">
+      <h1>3. Objetivo del Sistema</h2>
+      <h2>Objetivo principal</h3>
+      <blockquote>
+        <p>Dado un HTML caótico (copiado de chats, webs, IAs, foros),<br>
+          extraer y normalizar únicamente el contenido semántico útil<br>
+          eliminando atributos, scripts, estilos, basura y ruido,<br>
+          y adaptarlo automáticamente:</p>
+        <ul>
+          <li>a un layout corporativo unificado,</li>
+          <li>a un sistema de multi‑skins definido centralmente,</li>
+          <li>a tipologías de artículos técnicas,</li>
+          <li>con metadatos estructurados y exportables.</li>
+        </ul>
+      </blockquote>
+      <h2>Objetivo estratégico</h3>
+      <p>Transformar <strong>soluciones aisladas</strong> en <strong>activos documentales</strong>, mantenibles y
+        reutilizables por toda la organización.</p>
+      <hr class="engineering-doc-divider">
+      <h1>4. Alcance del Conversor</h2>
+      <p>El sistema <strong>no</strong> pretende:</p>
+      <ul>
+        <li>redactar contenido nuevo,</li>
+        <li>inventar soluciones,</li>
+        <li>sustituir el criterio técnico.</li>
+      </ul>
+      <p>El sistema <strong>sí</strong> pretende:</p>
+      <ul>
+        <li>limpiar,</li>
+        <li>estructurar,</li>
+        <li>normalizar,</li>
+        <li>presentar,</li>
+        <li>reutilizar.</li>
+      </ul>
+      <hr class="engineering-doc-divider">
+      <h1>5. Arquitectura Conceptual (visión por capas)</h2>
+      <p>El conversor se concibe como un <strong>pipeline de transformación</strong>, compuesto por capas bien
+        definidas.</p>
+      <hr class="engineering-doc-divider">
+      <h2>5.1 Capa de Ingesta (Input)</h3>
+      <p><strong>Responsabilidad:</strong> recibir información sin interpretarla.</p>
+      <p><strong>Fuentes admitidas:</strong></p>
+      <ul>
+        <li>HTML de chats con IA</li>
+        <li>HTML copiado desde navegador</li>
+        <li>HTML de foros técnicos</li>
+        <li>Ficheros <code>.html</code> guardados localmente</li>
+      </ul>
+      <p><strong>Características del input:</strong></p>
+      <ul>
+        <li>desordenado</li>
+        <li>inconsistente</li>
+        <li>con dependencias externas</li>
+        <li>con ruido visual y técnico</li>
+      </ul>
+      <hr class="engineering-doc-divider">
+      <h2>5.2 Capa de Limpieza Semántica (Sanitization)</h3>
+      <p>Esta es la <strong>pieza crítica</strong> del sistema.</p>
+      <p><strong>Responsabilidades:</strong></p>
+      <ul>
+        <li>Eliminar completamente:
+          <ul>
+            <li><code>&lt;script&gt;</code></li>
+            <li><code>&lt;style&gt;</code></li>
+            <li><code>&lt;iframe&gt;</code></li>
+            <li>comentarios</li>
+          </ul>
+        </li>
+        <li>Eliminar <strong>todos los atributos</strong>:
+          <ul>
+            <li><code>class</code>, <code>id</code>, <code>style</code>, <code>data-*</code>, etc.</li>
+          </ul>
+        </li>
+        <li>Conservar:
+          <ul>
+            <li>etiquetas estructurales (<code>h1–h6</code>, <code>p</code>, <code>ul</code>, <code>li</code>,
+              <code>pre</code>, <code>code</code>, etc.)
+            </li>
+            <li>el contenido textual íntegro</li>
+          </ul>
+        </li>
+        <li>Extraer únicamente el <code>&lt;body&gt;</code></li>
+      </ul>
+      <p><strong>Resultado:</strong><br>
+        HTML limpio, neutro, portable y semánticamente coherente.</p>
+      <hr class="engineering-doc-divider">
+      <h2>5.3 Capa de Normalización Editorial</h3>
+      <p>Aquí el contenido se <strong>interpreta</strong>, no se reescribe.</p>
+      <p><strong>Objetivo:</strong> adaptar el HTML limpio a un <strong>modelo editorial común</strong>.</p>
+      <p>Ejemplos de normalización:</p>
+      <ul>
+        <li>un único <code>&lt;h1&gt;</code> como título del artículo</li>
+        <li><code>&lt;h2&gt;</code> como secciones</li>
+        <li><code>&lt;pre&gt;&lt;code&gt;</code> como bloques técnicos</li>
+        <li>listas como procedimientos o checklists</li>
+      </ul>
+      <p>Esto permite:</p>
+      <ul>
+        <li>coherencia entre artículos</li>
+        <li>facilidad de búsqueda</li>
+        <li>reutilización futura</li>
+        <li>exportación homogénea</li>
+      </ul>
+      <hr class="engineering-doc-divider">
+      <h2>5.4 Capa de Plantilla (Layout Corporativo)</h3>
+      <p>El contenido normalizado se inyecta en una <strong>plantilla estable</strong>.</p>
+      <p><strong>Características del layout:</strong></p>
+      <ul>
+        <li>estructura fija</li>
+        <li>semántica clara</li>
+        <li>compatible con web, KB y PDF</li>
+      </ul>
+      <p>El layout <strong>no depende del contenido</strong>.<br>
+        El contenido <strong>no rompe el layout</strong>.</p>
+      <hr class="engineering-doc-divider">
+      <h2>5.5 Capa de Skins / Multi‑Tema</h3>
+      <p>Sistema de identidad visual desacoplado del contenido.</p>
+      <p><strong>Principios:</strong></p>
+      <ul>
+        <li>temas definidos centralmente (GitHub)</li>
+        <li>uso de variables CSS / design tokens</li>
+        <li>mismo contenido → múltiples apariencias</li>
+      </ul>
+      <p>Casos de uso:</p>
+      <ul>
+        <li>Soporte IT (modo oscuro)</li>
+        <li>Cliente final (modo claro)</li>
+        <li>Auditoría / documentación formal</li>
+      </ul>
+      <hr class="engineering-doc-divider">
+      <h2>5.6 Capa de Metadatos</h3>
+      <p>Cada artículo generado es un <strong>activo documental</strong>, no solo HTML.</p>
+      <p><strong>Metadatos previstos:</strong></p>
+      <ul>
+        <li>título</li>
+        <li>categoría (Soporte, Windows, Programación, Herramientas…)</li>
+        <li>subcategoría</li>
+        <li>nivel (Junior / Senior)</li>
+        <li>tags</li>
+        <li>origen del conocimiento</li>
+        <li>fecha / versión</li>
+      </ul>
+      <p>Estos metadatos permiten:</p>
+      <ul>
+        <li>indexación</li>
+        <li>trazabilidad</li>
+        <li>reutilización sistemática</li>
+      </ul>
+      <hr class="engineering-doc-divider">
+      <h2>5.7 Capa de Exportación</h3>
+      <p>Un único origen, múltiples destinos:</p>
+      <ul>
+        <li>HTML final para web</li>
+        <li>PDF con identidad visual</li>
+        <li>Base de Conocimiento corporativa</li>
+        <li>Repositorios documentales</li>
+      </ul>
+      <hr class="engineering-doc-divider">
+      <h1>6. Principios de Diseño</h2>
+      <p>El sistema se rige por los siguientes principios:</p>
+      <ul>
+        <li><strong>Separación de responsabilidades</strong></li>
+        <li><strong>Contenido ≠ presentación</strong></li>
+        <li><strong>Reutilización por defecto</strong></li>
+        <li><strong>Escalabilidad sin deuda técnica</strong></li>
+        <li><strong>Automatizar lo repetitivo, preservar el criterio humano</strong></li>
+      </ul>
+      <hr class="engineering-doc-divider">
+      <h1>7. Valor para Soporte Técnico</h2>
+      <p>Este conversor permite:</p>
+      <ul>
+        <li>reducir tiempo de documentación</li>
+        <li>evitar duplicar soluciones</li>
+        <li>elevar la calidad documental</li>
+        <li>crear memoria técnica colectiva</li>
+        <li>transformar incidencias en conocimiento reutilizable</li>
+      </ul>
+      <hr class="engineering-doc-divider">
+      <h1>8. Visión a Medio Plazo</h2>
+      <p>Este sistema sienta las bases para:</p>
+      <ul>
+        <li>una KB viva</li>
+        <li>estándares documentales</li>
+        <li>herramientas internas orientadas a cliente</li>
+        <li>madurez técnica del área de soporte</li>
+      </ul>
+      <hr class="engineering-doc-divider">
+      <h1>9. Conclusión</h2>
+      <p>Este proyecto no trata de HTML.</p>
+      <p>Trata de:</p>
+      <ul>
+        <li><strong>ordenar conocimiento</strong></li>
+        <li><strong>preservar soluciones</strong></li>
+        <li><strong>hacer crecer a las personas a través de sistemas</strong></li>
+      </ul>
+      <blockquote>
+        <p>Convertir conocimiento técnico disperso en activos reutilizables<br>
+          no es un eslogan: es una <strong>estrategia</strong>.</p>
+      </blockquote>
+      <hr class="engineering-doc-divider">
+
+
+    </section>
+
+  </main>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("embed") === "engineering") {
+      document.documentElement.classList.add("embed-engineering");
+      document.body.classList.add("embed-engineering");
+    }
+  </script>
+
+</body>
+
+</html>
