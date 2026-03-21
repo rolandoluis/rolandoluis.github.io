@@ -97,11 +97,11 @@ body.engineering-shell .site-footer:hover{
    Hero
    ========================================================= */
 
-.hero-engineering{
-  min-height:150px;
-  border-radius:14px;
-  overflow:hidden;
-  position:relative;
+.hero-engineering,
+.hero-engineering-mini{
+  position: relative;
+  overflow: hidden;
+  border-radius: 14px;
 }
 
 .hero-engineering-inner,
@@ -111,11 +111,14 @@ body.engineering-shell .site-footer:hover{
   padding:18px 20px;
 }
 
-.hero-engineering-mini{
-  min-height:120px;
-  border-radius:14px;
-  overflow:hidden;
-  position:relative;
+.hero-engineering .hero-net-canvas,
+.hero-engineering-mini .hero-net-canvas{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 0;
 }
 
 .engineering-hero-links{
@@ -215,6 +218,8 @@ body.engineering-shell .site-footer:hover{
   overflow:hidden;
   display:grid;
   grid-template-rows:auto 1fr;
+  border: 1px solid var(--line);
+  background: var(--panel);
 }
 
 .engineering-toc-head{
@@ -222,18 +227,21 @@ body.engineering-shell .site-footer:hover{
   top:0;
   z-index:5;
   padding:14px 16px;
-  border-bottom:1px solid var(--line);
-  background:color-mix(in srgb, var(--panel) 92%, transparent);
+  border:1px solid var(--line);
+  background: var(--panel) 60%, transparent;
   font-weight:600;
+  border-radius: 12px 12px 0 0;
 }
 
 .engineering-toc{
   min-height:0;
   overflow-y:auto;
+  border:1px solid var(--line);
   padding:12px 16px 16px;
   display:flex;
   flex-direction:column;
   gap:8px;
+  background: color-mix(in srgb, var(--panel) 52%, transparent);
 }
 
 .engineering-toc a{
@@ -280,6 +288,13 @@ body.engineering-shell .site-footer:hover{
   align-items:center;
   gap:12px;
   flex-shrink:0;
+}
+
+.engineering-reader-counter{
+  font-size: .92rem;
+  color: var(--muted);
+  min-width: 54px;
+  text-align: center;
 }
 
 .engineering-reader-progress{
@@ -373,7 +388,7 @@ body.engineering-shell .site-footer:hover{
   min-height:0;
   border:0;
   display:block;
-  background:transparent;
+  background:color-mix(in srgb, var(--panel) 52%, transparent);
 }
 
 /* =========================================================
@@ -415,6 +430,11 @@ body.engineering-shell .site-footer:hover{
   .engineering-reader{
     display:block !important;
     height:auto;
+  }
+
+  .engineering-reader-tools{
+    justify-content: space-between;
+    flex-wrap: wrap;
   }
 
   .engineering-sidepanel{

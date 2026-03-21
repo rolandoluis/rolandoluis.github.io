@@ -1,5 +1,4 @@
 (() => {
-  const canvas = document.getElementById("heroNet");
   if (!canvas) return;
 
   const prefersReduceMotion =
@@ -37,6 +36,25 @@
     mouse.x = null;
     mouse.y = null;
   }, { passive: true });
+
+  function initHeroNet(canvas) {
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    function resize() {
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = Math.max(1, rect.width * devicePixelRatio);
+      canvas.height = Math.max(1, rect.height * devicePixelRatio);
+      ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+    }
+
+    resize();
+    window.addEventListener("resize", resize);
+
+    // aquí va tu lógica existente de nodos / líneas / animación
+  }
 
   function hexToRgb(hex) {
     const s = hex.replace("#", "").trim();

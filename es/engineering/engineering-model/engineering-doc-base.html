@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>[Título del Documento]</title>
+  <meta name="description" content="[Descripción corta]" />
+
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/components.css" />
+  <link rel="stylesheet" href="/assets/css/engineering-doc.css" />
+</head>
+
+<body class="engineering-doc-shell">
+
+<main class="engineering-doc"
+      data-engineering-doc
+      data-doc-title="[Título]"
+      data-doc-category="[Categoría]"
+      data-doc-date="2026-03-20"
+      data-doc-updated="2026-03-20"
+      data-doc-tags="arquitectura,sistema"
+      data-doc-featured="false">
+
+  <!-- HEADER -->
+  <header class="engineering-doc-header">
+    <h1>[Título del Documento]</h1>
+
+    <p class="engineering-doc-meta">
+      Rolando Luis Martín · 20 Mar 2026 · Ingeniería
+    </p>
+
+    <p class="engineering-doc-summary">
+      [Resumen ejecutivo del documento]
+    </p>
+  </header>
+
+  <!-- TOC opcional (solo fuera del embed) -->
+  <nav class="engineering-doc-inline-toc">
+    <!-- opcional -->
+  </nav>
+
+  <!-- BODY -->
+  <section class="engineering-doc-body">
+
+    <h1>1. Resumen ejecutivo</h1>
+    <p>Contenido...</p>
+
+    <h1>2. Alcance</h1>
+    <p>Contenido...</p>
+
+    <h1>3. Arquitectura</h1>
+    <p>Contenido...</p>
+
+  </section>
+
+</main>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("embed") === "engineering") {
+    document.documentElement.classList.add("embed-engineering");
+    document.body.classList.add("embed-engineering");
+  }
+</script>
+
+</body>
+</html>

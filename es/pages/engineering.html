@@ -94,14 +94,14 @@
   <div class="engineering-layout is-index" id="engineeringLayout">
 
     <section class="hero hero-canvas hero-engineering" id="engineeringHero">
-      <canvas id="heroNet" aria-hidden="true"></canvas>
+      <canvas class="hero-net-canvas" aria-hidden="true"></canvas>
 
       <div class="hero-engineering-inner">
         <h1>Ingeniería</h1>
         <p class="lede">
           Arquitectura, automatización, documentación técnica y diseño de sistemas.
         </p>
-        <p></p>
+      
         <div class="engineering-hero-links" id="engineeringHeroLinks">
           <!-- Botones dinámicos desde engineering.json -->
         </div>
@@ -126,8 +126,9 @@
     <section class="engineering-reader" id="engineeringReader" hidden>
       <aside class="engineering-sidepanel">
 
-        <section class="hero hero-canvas hero-engineering hero-engineering-mini">
-          <!-- <canvas id="heroNetMini" aria-hidden="true"></canvas> -->
+        <section class="hero hero-canvas hero-engineering-mini">
+          <canvas class="hero-net-canvas" aria-hidden="true"></canvas>
+
           <div class="hero-engineering-mini-inner">
             <h2>Ingeniería</h2>
             <p class="lede">Lectura técnica guiada</p>
@@ -143,23 +144,21 @@
       <section class="engineering-framepanel">
         <div class="engineering-reader-bar">
           <div class="engineering-reader-title" id="engineeringReaderTitle">Documento</div>
-
+                
           <div class="engineering-reader-tools">
+            <div class="engineering-reader-counter" id="engineeringReaderCounter">1 / 1</div>
+          
+            <button class="engineering-nav-btn" id="engineeringPrev" type="button" disabled>
+              Anterior
+            </button>
+          
+            <button class="engineering-nav-btn" id="engineeringNext" type="button">
+              Siguiente
+            </button>
+          
             <button class="engineering-nav-btn engineering-close-btn" id="engineeringClose" type="button">
               Volver
             </button>
-          
-            <div class="engineering-reader-progress" id="engineeringReaderProgress" hidden>
-              <div class="engineering-progress-container">
-                <div class="engineering-progress-bar" id="engineeringProgressBar"></div>
-                <div class="engineering-progress-steps" id="engineeringProgressSteps"></div>
-              </div>
-            
-              <div class="engineering-progress-actions">
-                <button class="engineering-nav-btn" id="engineeringPrev" type="button" disabled>Anterior</button>
-                <button class="engineering-nav-btn" id="engineeringNext" type="button">Siguiente</button>
-              </div>
-            </div>
           </div>
         </div>
 
