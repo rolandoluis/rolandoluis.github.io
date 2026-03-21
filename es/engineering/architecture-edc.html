@@ -1,0 +1,788 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Arquitectura del Sistema EDC2.2</title>
+  <meta name="description" content="[Descripción corta]" />
+
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/components.css" />
+  <link rel="stylesheet" href="/assets/css/engineering-doc.css" />
+
+  <!-- Los enlaces del artículo navegan fuera del iframe -->
+  <base target="_parent">
+</head>
+
+<body class="engineering-doc-shell">
+
+  <main class="engineering-doc" 
+    data-engineering-doc 
+    data-doc-title="Manual de Arquitectura y Diseño de EDC" 
+    data-doc-category="Proyecto de Ingeniería"
+    data-doc-date="2026-03-20" 
+    data-doc-updated="2026-03-20" 
+    data-doc-tags="arquitectura,sistema,ingeniería,"
+    data-doc-featured="false"
+    data-doc-draft="true">
+    <!-- HEADER -->
+    <header class="engineering-doc-header">
+      <h1>Manual de Arquitectura y Diseño de EDC2.2</h1>
+
+      <p class="engineering-doc-meta">
+        Rolando Luis Martín · 20 Mar 2026 · Ingeniería
+      </p>
+
+      <p class="engineering-doc-summary">
+        Servir como documento técnico de referencia para comprender, mantener, evolucionar o auditar EDC.
+      </p>
+    </header>
+
+    <!-- TOC opcional (solo fuera del embed) -->
+    <nav class="engineering-doc-inline-toc">
+      <!-- opcional -->
+    </nav>
+
+    <!-- BODY -->
+    <section>
+      <h1><span>Manual de Arquitectura y Diseño de EDC</span></h1>
+      <h1><span>1. Propósito del documento</span></h2>
+      <p><span>Este manual define la arquitectura, los principios de diseño, los contratos técnicos, la organización
+          modular y el flujo operativo de </span><strong><span>EDC (Eurodat Deployment Console)
+            2.2</span></strong><span>, con el objetivo de documentar formalmente el sistema para su publicación en
+          la sección </span><strong><span>Engineering</span></strong><span> del portal personal del autor.</span>
+      </p>
+      <p><span>Su finalidad es doble:</span></p>
+      <ul>
+        <li>
+          <p><span>Servir como documento técnico de referencia para comprender, mantener, evolucionar o auditar
+              EDC.</span></p>
+        </li>
+        <li>
+          <p><span>Presentar el proyecto como una pieza de ingeniería aplicada, mostrando decisiones de diseño,
+              estructura interna, criterios operativos y filosofía de implementación.</span></p>
+        </li>
+      </ul>
+      <div>
+        <hr class="engineering-doc-divider">
+      </div>
+      <h1><span>2. Visión general del sistema</span></h2>
+      <p><strong><span>EDC</span></strong><span> es una consola de despliegue y configuración de estaciones Windows
+          orientada a la estandarización técnica, automatización controlada y preparación de equipos bajo protocolo
+          operativo.</span></p>
+      <p><span>El sistema está concebido como una plataforma modular en PowerShell, organizada por responsabilidades
+          y diseñada para trabajar sobre tres grandes objetivos:</span></p>
+      <ol>
+        <li>
+          <p><strong><span>Automatizar la preparación técnica inicial de equipos Windows.</span></strong></p>
+        </li>
+        <li>
+          <p><strong><span>Aplicar configuraciones repetibles y auditables.</span></strong></p>
+        </li>
+        <li>
+          <p><strong><span>Permitir intervención humana controlada en los puntos donde la operación lo
+                exige.</span></strong></p>
+        </li>
+      </ol>
+      <p><span>EDC no es solo un script de instalación. Es una </span><strong><span>arquitectura
+            operacional</span></strong><span> compuesta por:</span></p>
+      <ul>
+        <li>
+          <p><span>un controlador principal,</span></p>
+        </li>
+        <li>
+          <p><span>un conjunto de módulos especializados,</span></p>
+        </li>
+        <li>
+          <p><span>un sistema de estado persistente,</span></p>
+        </li>
+        <li>
+          <p><span>un subsistema de logging,</span></p>
+        </li>
+        <li>
+          <p><span>un menú de operación técnica,</span></p>
+        </li>
+        <li>
+          <p><span>y una capa Express para ejecución guiada de fases.</span></p>
+        </li>
+      </ul>
+      <div>
+        <hr class="engineering-doc-divider">
+      </div>
+      <h1><span>3. Objetivos de ingeniería</span></h2>
+      <p><span>La arquitectura de EDC fue diseñada bajo los siguientes objetivos:</span></p>
+      <h3><span>3.1 Modularidad</span></h3>
+      <p><span>Cada responsabilidad funcional debe estar separada en su propio módulo, minimizando acoplamiento y
+          facilitando mantenimiento.</span></p>
+      <h3><span>3.2 Trazabilidad</span></h3>
+      <p><span>Cada acción relevante debe quedar registrada en logs físicos y, cuando proceda, reflejada visualmente
+          al técnico.</span></p>
+      <h3><span>3.3 Persistencia de estado</span></h3>
+      <p><span>El sistema debe poder conocer qué opciones han sido completadas, cuáles han fallado y en qué punto
+          exacto de una fase se encuentra.</span></p>
+      <h3><span>3.4 Repetibilidad</span></h3>
+      <p><span>Las tareas deben poder ejecutarse de forma consistente en múltiples equipos siguiendo el mismo
+          protocolo.</span></p>
+      <h3><span>3.5 Intervención humana controlada</span></h3>
+      <p><span>La automatización no debe invadir puntos críticos donde el técnico necesita revisar, corregir o
+          consolidar el entorno antes de continuar.</span></p>
+      <h3><span>3.6 Independencia de red</span></h3>
+      <p><span>La instalación offline y los repositorios locales son una prioridad arquitectónica.</span></p>
+      <div>
+        <hr class="engineering-doc-divider">
+      </div>
+      <h1><span>4. Filosofía operativa</span></h2>
+      <p><span>EDC adopta una filosofía híbrida:</span></p>
+      <ul>
+        <li>
+          <p><strong><span>Automatización donde aporta velocidad, consistencia y reducción de
+                errores.</span></strong></p>
+        </li>
+        <li>
+          <p><strong><span>Control humano donde existe riesgo de contaminar perfiles, consolidar configuraciones
+                indebidas o replicar estados no deseados.</span></strong></p>
+        </li>
+      </ul>
+      <p><span>Esto es especialmente visible en la separación entre:</span></p>
+      <ul>
+        <li>
+          <p><strong><span>Fase 1</span></strong><span>, orientada a construir el entorno base.</span></p>
+        </li>
+        <li>
+          <p><strong><span>Fase 2</span></strong><span>, orientada a consolidar y sellar el perfil.</span></p>
+        </li>
+        <li>
+          <p><strong><span>Fase 3</span></strong><span>, orientada al cierre y endurecimiento final.</span></p>
+        </li>
+      </ul>
+      <p><span>Y también en la doctrina Express:</span></p>
+      <ul>
+        <li>
+          <p><strong><span>X1</span></strong><span> automatiza Fase 1.</span></p>
+        </li>
+        <li>
+          <p><strong><span>X2</span></strong><span> automatiza Fase 2.</span></p>
+        </li>
+        <li>
+          <p><span>No existe Express para Fase 3.</span></p>
+        </li>
+      </ul>
+      <div>
+        <hr class="engineering-doc-divider">
+      </div>
+      <h1><span>5. Estructura general del proyecto</span></h2>
+      <p><span>La raíz del proyecto contiene el controlador principal, la configuración, los assets, la capa de
+          ejecución, los módulos del motor y los artefactos de logs.</span></p>
+      <h3><span>5.1 Componentes principales</span></h3>
+      <ul>
+        <li>
+          <p><code><span>EDC.ps1</span></code><span>: controlador principal.</span></p>
+        </li>
+        <li>
+          <p><code><span>EDC.Config.json</span></code><span>: configuración general.</span></p>
+        </li>
+        <li>
+          <p><code><span>Launcher\EDC_Launcher.cmd</span></code><span>: punto de entrada operativo.</span></p>
+        </li>
+        <li>
+          <p><code><span>Engine\</span></code><span>: módulos funcionales.</span></p>
+        </li>
+        <li>
+          <p><code><span>Assets\</span></code><span>: repositorios offline, layouts, actualizaciones y recursos
+              auxiliares.</span></p>
+        </li>
+        <li>
+          <p><code><span>Logs\</span></code><span>: estado persistente y trazabilidad.</span></p>
+        </li>
+        <li>
+          <p><code><span>UI\</span></code><span>: recursos visuales y auxiliares de interfaz.</span></p>
+        </li>
+      </ul>
+      <h3><span>5.2 Carpetas funcionales</span></h3>
+      <h4><span>Assets</span></h4>
+      <p><span>Contiene aplicaciones offline, layouts de barra de tareas, menú inicio, actualizaciones locales y
+          herramientas auxiliares.</span></p>
+      <h4><span>Engine</span></h4>
+      <p><span>Contiene la lógica modular del sistema. Cada archivo </span><code><span>.psm1</span></code><span>
+          implementa una responsabilidad concreta.</span></p>
+      <h4><span>Logs</span></h4>
+      <p><span>Almacena:</span></p>
+      <ul>
+        <li>
+          <p><span>logs diarios,</span></p>
+        </li>
+        <li>
+          <p><span>log maestro,</span></p>
+        </li>
+        <li>
+          <p><span>estado del menú,</span></p>
+        </li>
+        <li>
+          <p><span>estado de ejecución,</span></p>
+        </li>
+        <li>
+          <p><span>metadatos técnicos,</span></p>
+        </li>
+        <li>
+          <p><span>backups de registro.</span></p>
+        </li>
+      </ul>
+      <div>
+        <hr class="engineering-doc-divider">
+      </div>
+      <h1><span>6. Controlador principal: EDC.ps1</span></h2>
+      <p><code><span>EDC.ps1</span></code><span> actúa como </span><strong><span>orquestador
+            central</span></strong><span> del sistema.</span></p>
+      <h3><span>6.1 Responsabilidades</span></h3>
+      <ul>
+        <li>
+          <p><span>Resolver rutas del proyecto.</span></p>
+        </li>
+        <li>
+          <p><span>Validar presencia de módulos críticos.</span></p>
+        </li>
+        <li>
+          <p><span>Cargar Core, Menu, Dispatcher, State y Runtime.</span></p>
+        </li>
+        <li>
+          <p><span>Inicializar logging global.</span></p>
+        </li>
+        <li>
+          <p><span>Detectar reentrada Express.</span></p>
+        </li>
+        <li>
+          <p><span>Sincronizar estado persistente con el menú.</span></p>
+        </li>
+        <li>
+          <p><span>Gestionar el bucle principal de interacción.</span></p>
+        </li>
+        <li>
+          <p><span>Interceptar comandos Express (</span><code><span>X1</span></code><span>,
+            </span><code><span>X2</span></code><span>).</span></p>
+        </li>
+        <li>
+          <p><span>Despachar opciones numéricas al Dispatcher.</span></p>
+        </li>
+      </ul>
+      <h3><span>6.2 Patrón de funcionamiento</span></h3>
+      <p><span>El controlador sigue este ciclo:</span></p>
+      <ol>
+        <li>
+          <p><span>Arranque e importación de módulos.</span></p>
+        </li>
+        <li>
+          <p><span>Inicialización de logging.</span></p>
+        </li>
+        <li>
+          <p><span>Revisión del estado persistente.</span></p>
+        </li>
+        <li>
+          <p><span>Si Express está activo, delegación al Runtime.</span></p>
+        </li>
+        <li>
+          <p><span>Si no, presentación de menú.</span></p>
+        </li>
+        <li>
+          <p><span>Intercepción de comandos especiales o envío al Dispatcher.</span></p>
+        </li>
+      </ol>
+      <div>
+        <hr class="engineering-doc-divider">
+      </div>
+      <h1><span>7. Núcleo compartido: EDC.Core.psm1</span></h2>
+      <p><code><span>EDC.Core.psm1</span></code><span> define el conjunto de primitivas comunes usadas por todo el
+          sistema.</span></p>
+      <h3><span>7.1 Funciones clave</span></h3>
+      <ul>
+        <li>
+          <p><code><span>Initialize-EDCLogging</span></code></p>
+        </li>
+        <li>
+          <p><code><span>Write-EDCLog</span></code></p>
+        </li>
+        <li>
+          <p><code><span>Update-UILog</span></code></p>
+        </li>
+        <li>
+          <p><code><span>New-EDCActionResult</span></code></p>
+        </li>
+        <li>
+          <p><code><span>New-EDCStepResult</span></code></p>
+        </li>
+        <li>
+          <p><code><span>Get-EDCRoot</span></code></p>
+        </li>
+        <li>
+          <p><code><span>Get-EDCInteractiveUser</span></code></p>
+        </li>
+        <li>
+          <p><code><span>Test-EDCIsAdmin</span></code></p>
+        </li>
+        <li>
+          <p><span>helpers de registro y sincronización</span></p>
+        </li>
+      </ul>
+      <h3><span>7.2 Separación de logging</span></h3>
+      <p><span>La arquitectura diferencia entre:</span></p>
+      <h4><span>Write-EDCLog</span></h4>
+      <p><span>Logger persistente de sistema.</span></p>
+      <ul>
+        <li>
+          <p><span>Escribe a log diario.</span></p>
+        </li>
+        <li>
+          <p><span>Filtra eventos relevantes al log maestro.</span></p>
+        </li>
+        <li>
+          <p><span>Puede reflejar información a UI cuando la interfaz está preparada.</span></p>
+        </li>
+      </ul>
+      <h4><span>Update-UILog</span></h4>
+      <p><span>Logger visual.</span></p>
+      <ul>
+        <li>
+          <p><span>Actualiza solo el buffer visible del menú.</span></p>
+        </li>
+        <li>
+          <p><span>Su función es informar al técnico.</span></p>
+        </li>
+        <li>
+          <p><span>No es la fuente de verdad del sistema.</span></p>
+        </li>
+      </ul>
+      <p><span>Esta separación permite mantener trazabilidad técnica sin convertir la UI en el sistema de
+          auditoría.</span></p>
+      <div>
+        <hr class="engineering-doc-divider">
+      </div>
+      <h1><span>8. Menú técnico: EDC.Menu.psm1</span></h2>
+      <p><span>El menú es la interfaz operativa de EDC.</span></p>
+      <h3><span>8.1 Funciones principales</span></h3>
+      <ul>
+        <li>
+          <p><span>Mostrar fases y opciones.</span></p>
+        </li>
+        <li>
+          <p><span>Cargar y persistir </span><code><span>MenuState.json</span></code><span>.</span></p>
+        </li>
+        <li>
+          <p><span>Aplicar el último resultado visualmente.</span></p>
+        </li>
+        <li>
+          <p><span>Mostrar logs recientes del buffer.</span></p>
+        </li>
+        <li>
+          <p><span>Interceptar opciones Express.</span></p>
+        </li>
+        <li>
+          <p><span>Respetar permisos por rol y fase.</span></p>
+        </li>
+      </ul>
+      <h3><span>8.2 Principios de diseño</span></h3>
+      <ul>
+        <li>
+          <p><span>La UI no ejecuta lógica de negocio.</span></p>
+        </li>
+        <li>
+          <p><span>El menú solo devuelve una elección.</span></p>
+        </li>
+        <li>
+          <p><span>Las opciones Express no deben contaminar el estado persistente del menú.</span></p>
+        </li>
+        <li>
+          <p><span>La persistencia del menú solo aplica a opciones numéricas oficiales.</span></p>
+        </li>
+      </ul>
+      <div>
+        <hr class="engineering-doc-divider">
+      </div>
+      <h1><span>9. Dispatcher: EDC.Dispatcher.psm1</span></h2>
+      <p><span>El Dispatcher es la capa de resolución entre una opción elegida y el módulo responsable de
+          ejecutarla.</span></p>
+      <h3><span>9.1 Responsabilidad</span></h3>
+      <p><span>Traducir una opción (</span><code><span>1</span></code><span> a
+        </span><code><span>15</span></code><span>) en una llamada concreta al módulo correspondiente.</span></p>
+      <h3><span>9.2 Patrón de trabajo</span></h3>
+      <p><span>Cada caso del Dispatcher:</span></p>
+      <ul>
+        <li>
+          <p><span>importa el módulo necesario,</span></p>
+        </li>
+        <li>
+          <p><span>valida la existencia de la función requerida,</span></p>
+        </li>
+        <li>
+          <p><span>ejecuta la función,</span></p>
+        </li>
+        <li>
+          <p><span>empaqueta el resultado usando </span><code><span>New-EDCActionResult</span></code><span>.</span>
+          </p>
+        </li>
+      </ul>
+      <h3><span>9.3 Ventajas</span></h3>
+      <ul>
+        <li>
+          <p><span>Centraliza el enrutamiento.</span></p>
+        </li>
+        <li>
+          <p><span>Aísla el controlador principal de la lógica específica.</span></p>
+        </li>
+        <li>
+          <p><span>Estandariza contratos de salida.</span></p>
+        </li>
+      </ul>
+      <div>
+        <hr class="engineering-doc-divider">
+      </div>
+      <h1><span>10. Estado persistente: EDC.State.psm1</span></h2>
+      <p><span>El estado persistente es uno de los pilares de la arquitectura.</span></p>
+      <h3><span>10.1 Archivos</span></h3>
+      <ul>
+        <li>
+          <p><code><span>State.json</span></code></p>
+        </li>
+        <li>
+          <p><code><span>MenuState.json</span></code></p>
+        </li>
+      </ul>
+      <h3><span>10.2 Finalidad</span></h3>
+      <p><span>Permitir que EDC recuerde:</span></p>
+      <ul>
+        <li>
+          <p><span>qué opciones se han completado,</span></p>
+        </li>
+        <li>
+          <p><span>qué opciones han fallado,</span></p>
+        </li>
+        <li>
+          <p><span>si Express está activo,</span></p>
+        </li>
+        <li>
+          <p><span>en qué fase está el sistema,</span></p>
+        </li>
+        <li>
+          <p><span>y qué metadatos operativos están vigentes.</span></p>
+        </li>
+      </ul>
+      <h3><span>10.3 Beneficios</span></h3>
+      <ul>
+        <li>
+          <p><span>Soporte a reinicios.</span></p>
+        </li>
+        <li>
+          <p><span>Soporte a recuperación parcial.</span></p>
+        </li>
+        <li>
+          <p><span>Trazabilidad del proceso.</span></p>
+        </li>
+        <li>
+          <p><span>Sincronización entre estado real y representación visual.</span></p>
+        </li>
+      </ul>
+      <div>
+        <hr class="engineering-doc-divider">
+      </div>
+      <h1><span>11. Runtime: EDC.Runtime.psm1</span></h2>
+      <p><span>El Runtime es el componente que decide si el sistema debe continuar una ejecución Express o devolver
+          el control al menú.</span></p>
+      <h3><span>11.1 Responsabilidades</span></h3>
+      <ul>
+        <li>
+          <p><span>Evaluar </span><code><span>State.Execution</span></code><span>.</span></p>
+        </li>
+        <li>
+          <p><span>Detectar si hay Express activa.</span></p>
+        </li>
+        <li>
+          <p><span>Enrutar a </span><code><span>Invoke-EDCExpressF1</span></code><span> o
+            </span><code><span>Invoke-EDCExpressF2</span></code><span>.</span></p>
+        </li>
+        <li>
+          <p><span>Limpiar AutoLogon residual si existiera.</span></p>
+        </li>
+      </ul>
+      <h3><span>11.2 Naturaleza arquitectónica</span></h3>
+      <p><span>El Runtime no ejecuta negocio, no muestra UI y no despacha opciones. Su trabajo es estrictamente de
+        </span><strong><span>control de flujo de arranque</span></strong><span>.</span></p>
+      <div>
+        <hr class="engineering-doc-divider">
+      </div>
+      <h1><span>12. Capa Express: EDC.Express.psm1</span></h2>
+      <p><span>La capa Express automatiza fases completas como secuencias controladas.</span></p>
+      <h3><span>12.1 X1</span></h3>
+      <p><span>Ejecuta opciones 1–8 y finaliza con reinicio.</span></p>
+      <h3><span>12.2 X2</span></h3>
+      <p><span>Ejecuta opciones 9–10 desde sesión </span><code><span>tec</span></code><span>, sin reinicio.</span>
+      </p>
+      <h3><span>12.3 Doctrina Express</span></h3>
+      <ul>
+        <li>
+          <p><span>No ejecuta Windows Update final (opción 11).</span></p>
+        </li>
+        <li>
+          <p><span>No automatiza Fase 3.</span></p>
+        </li>
+        <li>
+          <p><span>No sustituye la revisión humana.</span></p>
+        </li>
+        <li>
+          <p><span>No debe contaminar el perfil antes de DefProf.</span></p>
+        </li>
+      </ul>
+      <h3><span>12.4 Principio crítico</span></h3>
+      <p><span>Express es un </span><strong><span>orquestador</span></strong><span>, no un segundo
+          Dispatcher.</span></p>
+      <div>
+        <hr class="engineering-doc-divider">
+      </div>
+      <h1><span>13. Arquitectura por fases</span></h2>
+      <h3><span>13.1 Fase 1</span></h3>
+      <p><span>Construcción del entorno base:</span></p>
+      <ul>
+        <li>
+          <p><span>zona horaria,</span></p>
+        </li>
+        <li>
+          <p><span>etiqueta del sistema,</span></p>
+        </li>
+        <li>
+          <p><span>creación de usuarios,</span></p>
+        </li>
+        <li>
+          <p><span>actualización a 25H2,</span></p>
+        </li>
+        <li>
+          <p><span>aplicaciones,</span></p>
+        </li>
+        <li>
+          <p><span>escritorio,</span></p>
+        </li>
+        <li>
+          <p><span>red,</span></p>
+        </li>
+        <li>
+          <p><span>energía,</span></p>
+        </li>
+        <li>
+          <p><span>características adicionales.</span></p>
+        </li>
+      </ul>
+      <h3><span>13.2 Fase 2</span></h3>
+      <p><span>Consolidación del entorno:</span></p>
+      <ul>
+        <li>
+          <p><span>ajuste fino del escritorio,</span></p>
+        </li>
+        <li>
+          <p><span>sellado con DefProf,</span></p>
+        </li>
+        <li>
+          <p><span>consolidación sobre perfil heredable.</span></p>
+        </li>
+      </ul>
+      <h3><span>13.3 Fase 3</span></h3>
+      <p><span>Cierre operativo:</span></p>
+      <ul>
+        <li>
+          <p><span>deshabilitación de perfiles auxiliares,</span></p>
+        </li>
+        <li>
+          <p><span>limpieza,</span></p>
+        </li>
+        <li>
+          <p><span>restauración,</span></p>
+        </li>
+        <li>
+          <p><span>endurecimiento final.</span></p>
+        </li>
+      </ul>
+      <div>
+        <hr class="engineering-doc-divider">
+      </div>
+      <h1><span>14. Instalación offline</span></h2>
+      <p><span>Uno de los principios distintivos de EDC es la prioridad por repositorios locales.</span></p>
+      <h3><span>14.1 Razón</span></h3>
+      <ul>
+        <li>
+          <p><span>independencia de red,</span></p>
+        </li>
+        <li>
+          <p><span>control de versiones,</span></p>
+        </li>
+        <li>
+          <p><span>reproducibilidad,</span></p>
+        </li>
+        <li>
+          <p><span>reducción de incertidumbre.</span></p>
+        </li>
+      </ul>
+      <h3><span>14.2 Estructura</span></h3>
+      <p><code><span>Assets\AppsOffline</span></code><span> contiene paquetes MSI y EXE organizados por
+          aplicación.</span></p>
+      <h3><span>14.3 Criterio operativo</span></h3>
+      <p><span>Winget queda relegado a tareas de mantenimiento del repositorio, no a la instalación principal del
+          equipo en producción.</span></p>
+      <div>
+        <hr class="engineering-doc-divider">
+      </div>
+      <h1><span>15. Logging y observabilidad</span></h2>
+      <p><span>La observabilidad del sistema se apoya en:</span></p>
+      <ul>
+        <li>
+          <p><span>log diario físico,</span></p>
+        </li>
+        <li>
+          <p><span>log maestro,</span></p>
+        </li>
+        <li>
+          <p><span>buffer visual del menú,</span></p>
+        </li>
+        <li>
+          <p><span>estado persistente,</span></p>
+        </li>
+        <li>
+          <p><span>backups de registro.</span></p>
+        </li>
+      </ul>
+      <p><span>Esto permite distinguir entre:</span></p>
+      <ul>
+        <li>
+          <p><span>auditoría técnica,</span></p>
+        </li>
+        <li>
+          <p><span>feedback visual,</span></p>
+        </li>
+        <li>
+          <p><span>recuperación operativa.</span></p>
+        </li>
+      </ul>
+      <div>
+        <hr class="engineering-doc-divider">
+      </div>
+      <h1><span>16. Principios de diseño clave</span></h2>
+      <ol>
+        <li>
+          <p><span>Separación estricta de responsabilidades.</span></p>
+        </li>
+        <li>
+          <p><span>Persistencia antes que suposición.</span></p>
+        </li>
+        <li>
+          <p><span>Automatización donde aporta valor.</span></p>
+        </li>
+        <li>
+          <p><span>Intervención humana donde existe riesgo.</span></p>
+        </li>
+        <li>
+          <p><span>Contratos estandarizados para resultados.</span></p>
+        </li>
+        <li>
+          <p><span>Modularidad orientada a mantenimiento.</span></p>
+        </li>
+        <li>
+          <p><span>Offline-first como filosofía operativa.</span></p>
+        </li>
+      </ol>
+      <div>
+        <hr class="engineering-doc-divider">
+      </div>
+      <h1><span>17. Riesgos arquitectónicos mitigados</span></h2>
+      <ul>
+        <li>
+          <p><span>contaminación del perfil base,</span></p>
+        </li>
+        <li>
+          <p><span>pérdida de trazabilidad tras reinicio,</span></p>
+        </li>
+        <li>
+          <p><span>estados inconsistentes entre UI y ejecución,</span></p>
+        </li>
+        <li>
+          <p><span>dependencia excesiva de conectividad,</span></p>
+        </li>
+        <li>
+          <p><span>acoplamiento entre interfaz y lógica de negocio,</span></p>
+        </li>
+        <li>
+          <p><span>automatización ciega en puntos críticos.</span></p>
+        </li>
+      </ul>
+      <div>
+        <hr class="engineering-doc-divider">
+      </div>
+      <h1><span>18. Valor de ingeniería del proyecto</span></h2>
+      <p><span>EDC no debe entenderse como un script puntual, sino como una solución de ingeniería aplicada a
+          despliegue, normalización y soporte técnico sobre Windows.</span></p>
+      <p><span>Su valor reside en:</span></p>
+      <ul>
+        <li>
+          <p><span>traducir operación repetitiva en arquitectura controlada,</span></p>
+        </li>
+        <li>
+          <p><span>documentar reglas de negocio técnicas,</span></p>
+        </li>
+        <li>
+          <p><span>reducir tiempo de preparación de equipos,</span></p>
+        </li>
+        <li>
+          <p><span>y proporcionar una base escalable para futuras evoluciones.</span></p>
+        </li>
+      </ul>
+      <div>
+        <hr class="engineering-doc-divider">
+      </div>
+      <h1><span>19. Evolución prevista</span></h2>
+      <p><span>Líneas naturales de evolución:</span></p>
+      <ul>
+        <li>
+          <p><span>endurecimiento definitivo de Express,</span></p>
+        </li>
+        <li>
+          <p><span>formalización de contratos por módulo,</span></p>
+        </li>
+        <li>
+          <p><span>mejora del reporting HTML,</span></p>
+        </li>
+        <li>
+          <p><span>adaptación multi-cliente,</span></p>
+        </li>
+        <li>
+          <p><span>parametrización avanzada por perfiles,</span></p>
+        </li>
+        <li>
+          <p><span>evolución de EDC hacia una base más genérica reutilizable.</span></p>
+        </li>
+      </ul>
+      <div>
+        <hr class="engineering-doc-divider">
+      </div>
+      <h1><span>20. Conclusión</span></h2>
+      <p><span>EDC representa una arquitectura modular de automatización técnica centrada en la preparación de
+          equipos Windows bajo un protocolo real de laboratorio y soporte.</span></p>
+      <p><span>Su principal fortaleza no reside solo en lo que ejecuta, sino en </span><strong><span>cómo
+            organiza</span></strong><span>, </span><strong><span>cómo documenta</span></strong><span>,
+        </span><strong><span>cómo persiste</span></strong><span> y </span><strong><span>cómo
+            controla</span></strong><span> cada fase del proceso.</span></p>
+      <p><span>Es, por tanto, un proyecto válido para publicarse en una sección de Ingeniería como ejemplo de diseño
+          de sistemas, automatización aplicada y arquitectura operacional en PowerShell.</span></p>
+        </div>
+      </div>
+
+
+    </section>
+
+  </main>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("embed") === "engineering") {
+      document.documentElement.classList.add("embed-engineering");
+      document.body.classList.add("embed-engineering");
+    }
+  </script>
+
+</body>
+
+</html>

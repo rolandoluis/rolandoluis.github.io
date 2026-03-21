@@ -1,5 +1,20 @@
 [
   {
+    "title": "Manual de Arquitectura y Diseño de EDC",
+    "category": "Proyecto de Ingeniería",
+    "slug": "architecture-edc",
+    "description": "[Descripción corta]",
+    "date": "2026-03-20",
+    "updated": "2026-03-20",
+    "tags": [
+      "arquitectura",
+      "sistema",
+      "ingeniería"
+    ],
+    "featured": false,
+    "btnInHero": true
+  },
+  {
     "title": "Manual de Arquitectura y Diseño. Conversor.",
     "category": "Ingeniería",
     "slug": "converter",
@@ -29,6 +44,6 @@
       "layouts"
     ],
     "featured": false,
-    "btnInHero": false
+    "btnInHero": true
   }
 ]
