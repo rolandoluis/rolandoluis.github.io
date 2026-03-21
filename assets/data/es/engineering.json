@@ -3,7 +3,7 @@
     "title": "Manual de Arquitectura y Diseño. Conversor.",
     "category": "Ingeniería",
     "slug": "converter",
-    "description": "[Descripción corta]",
+    "description": "Convertir conocimiento técnico disperso en activos reutilizables.",
     "date": "2026-03-20",
     "updated": "2026-03-20",
     "tags": [
@@ -11,7 +11,7 @@
       "sistema"
     ],
     "featured": false,
-    "btnInHero": true
+    "btnInHero": false
   },
   {
     "title": "Especificación de Arquitectura del Sistema",
@@ -29,6 +29,6 @@
       "layouts"
     ],
     "featured": false,
-    "btnInHero": true
+    "btnInHero": false
   }
 ]
