@@ -3,7 +3,7 @@
     "title": "Manual de Arquitectura y Diseño de EDC",
     "category": "Proyecto de Ingeniería",
     "slug": "architecture-edc",
-    "description": "[Descripción corta]",
+    "description": "Documento técnico para comprender, mantener, evolucionar o auditar EDC",
     "date": "2026-03-20",
     "updated": "2026-03-20",
     "tags": [
@@ -12,7 +12,7 @@
       "ingeniería"
     ],
     "featured": false,
-    "btnInHero": true
+    "btnInHero": false
   },
   {
     "title": "Manual de Arquitectura y Diseño. Conversor.",
@@ -44,6 +44,6 @@
       "layouts"
     ],
     "featured": false,
-    "btnInHero": true
+    "btnInHero": false
   }
 ]
