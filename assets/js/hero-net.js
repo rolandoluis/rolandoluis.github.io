@@ -208,7 +208,13 @@
     });
 
     const ro = new ResizeObserver(() => {
-      if (resize()) drawFrame(false);
+      if (resize()) {
+        if (!animate) {
+          drawFrame(false);
+        } else {
+          startLoopIfNeeded();
+        }
+      }
     });
     ro.observe(canvas);
 
@@ -220,25 +226,34 @@
       { passive: true }
     );
 
-    if (!resize()) return;
-
-    if (!animate) {
-      drawFrame(false);
-      return;
-    }
-
+    let started = false;
     let running = true;
 
     document.addEventListener("visibilitychange", () => {
       running = !document.hidden;
     });
 
+    function startLoopIfNeeded() {
+      if (started || !animate) return;
+      started = true;
+      loop();
+    }
+
     function loop() {
-      if (running) drawFrame(true);
+      if (running && w > 0 && h > 0) {
+        drawFrame(true);
+      }
       requestAnimationFrame(loop);
     }
 
-    loop();
+    // Intento inicial
+    if (resize()) {
+      if (!animate) {
+        drawFrame(false);
+      } else {
+        startLoopIfNeeded();
+      }
+    }
   }
 
   document.querySelectorAll(".hero-net-canvas").forEach(initHeroNet);
