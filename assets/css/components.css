@@ -241,7 +241,7 @@
   border-radius: 20px;
 }
 
-.hero-canvas #heroNet{
+.hero-canvas .hero-net-canvas{
   position:absolute;
   inset: -20px;              /* un poco más grande para que no se vean bordes */
   width: calc(100% + 40px);
