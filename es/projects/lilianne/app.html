@@ -63,13 +63,26 @@
 
       <!-- ===== PANEL ===== -->
       <aside class="lilianne-panel" id="elementPanel">
-
+      
+        <section class="lilianne-panel-controls">
+          <div class="lilianne-search">
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Buscar por nombre, símbolo o número atómico..."
+            />
+          </div>
+      
+          <div class="lilianne-filters" id="filtersContainer">
+            <!-- se generan dinámicamente -->
+          </div>
+        </section>
+      
         <div class="panel-empty" id="panelEmpty">
-          <p>Selecciona un elemento para ver su información</p>
+          <p>Selecciona un elemento o utiliza la búsqueda y los filtros.</p>
         </div>
-
+      
         <div class="panel-content" id="panelContent" hidden>
-
           <div class="panel-header">
             <div class="panel-symbol" id="elSymbol">H</div>
             <div>
@@ -77,23 +90,22 @@
               <span id="elNumber">1</span>
             </div>
           </div>
-
+      
           <div class="panel-body">
             <p><strong>Masa:</strong> <span id="elMass"></span></p>
             <p><strong>Categoría:</strong> <span id="elCategory"></span></p>
             <p><strong>Grupo:</strong> <span id="elGroup"></span></p>
             <p><strong>Periodo:</strong> <span id="elPeriod"></span></p>
             <p><strong>Estado:</strong> <span id="elState"></span></p>
-
+          
             <p class="panel-summary" id="elSummary"></p>
           </div>
-
+      
           <div class="panel-footer">
-            <a id="elWiki" target="_blank">Ver en Wikipedia</a>
+            <a id="elWiki" target="_blank" rel="noopener">Ver en Wikipedia</a>
           </div>
-
         </div>
-
+      
       </aside>
 
     </section>

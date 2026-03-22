@@ -34,6 +34,14 @@ body.lilianne-shell{
   border-bottom: 1px solid var(--line);
 }
 
+.lilianne-panel-controls{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  padding-bottom:12px;
+  border-bottom:1px solid var(--line);
+}
+
 .lilianne-search input{
   width:100%;
   padding:10px;
@@ -47,8 +55,8 @@ body.lilianne-shell{
 
 .lilianne-layout{
   display:grid;
-  grid-template-columns: 2.2fr 1fr;
-  height: calc(100vh - 160px);
+  grid-template-columns: 2.35fr 1fr;
+  min-height: 0;
 }
 
 /* ================= TABLE ================= */
@@ -57,10 +65,11 @@ body.lilianne-shell{
   padding: 16px;
   display: grid;
   grid-template-columns: repeat(18, minmax(48px, 1fr));
-  grid-auto-rows: 72px;
+  grid-auto-rows: 68px;
   gap: 8px;
   overflow: auto;
   align-content: start;
+  min-height:0;
 }
 
 /* elemento */
@@ -96,11 +105,11 @@ body.lilianne-shell{
 
 .lilianne-panel{
   border-left:1px solid var(--line);
-  padding:20px;
+  padding:16px;
   overflow:auto;
   display:flex;
   flex-direction:column;
-  gap:16px;
+  gap:14px;
 }
 
 .element.is-dimmed{
@@ -233,10 +242,19 @@ body.lilianne-shell{
   display:flex;
   align-items:center;
   justify-content:center;
-  height:100%;
-  font-size:0.9rem;
+  min-height:120px;
+  font-size:1.2rem;
   opacity:0.6;
   text-align:center;
+}
+
+.panel-empty p{
+  margin:0;
+  font-size:1rem;
+  line-height:1.4;
+  color:var(--text);
+  opacity:.82;
+  font-weight:500;
 }
 
 /* ================= RESPONSIVE ================= */
