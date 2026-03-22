@@ -66,6 +66,7 @@ function selectElement(symbol) {
   document.getElementById("elState").textContent = el.stateLabel ?? "—";
   document.getElementById("elSummary").textContent = el.summary || "Sin resumen disponible.";
   document.getElementById("elWiki").href = el.wiki || "#";
+  document.getElementById("elementPanel").scrollTop = 0;
 }
 
 function bindSearch() {
@@ -164,5 +165,3 @@ function applyFilter(categoryKey) {
 init().catch(err => {
   console.error("[Lilianne]", err);
 });
-
-init();

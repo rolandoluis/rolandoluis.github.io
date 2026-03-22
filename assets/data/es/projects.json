@@ -60,5 +60,21 @@
     "tags": ["themes", "ui", "ux", "design-system", "showcase"],
     "stack": ["HTML", "CSS", "JavaScript"],
     "date": "2026-03-22"
+  },
+  {
+    "title": "Lilianne",
+    "slug": "lilianne",
+    "description": "Aplicación educativa interactiva para explorar la tabla periódica con filtros, búsqueda y panel de detalle propio.",
+    "category": "Educational / Interactive UI",
+    "type": "app",
+    "status": "beta",
+    "featured": true,
+    "demoMode": "iframe",
+    "demoUrl": "/es/projects/lilianne/app.html",
+    "repoUrl": "",
+    "engineeringUrl": "",
+    "tags": ["education", "chemistry", "interactive", "ui", "data-visualization"],
+    "stack": ["HTML", "CSS", "JavaScript", "JSON"],
+    "date": "2026-03-22"
   }
 ]

@@ -1,0 +1,1857 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Theme Showroom</title>
+  <meta name="description" content="Aplicación interactiva para comparar sistemas de temas light/dark, layout, contraste, jerarquía y componentes UI en contexto.">
+
+
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/components.css" />
+  <link rel="stylesheet" href="/assets/css/project-demo.css" />
+</head>
+<body>
+
+  <main class="project-app"
+        data-project-demo
+        data-project-title="Theme Showroom"
+        data-project-type="app"
+        data-project-status="beta"
+        data-project-category="Design System / Theme Showcase"
+        data-project-date="2026-03-22"
+        data-project-tags="themes,ui,ux,design-system,showcase"
+        data-project-featured="true"
+        data-project-repo=""
+        data-project-engineering=""
+        data-project-stack="HTML,CSS,JavaScript">
+        <!doctype html>
+            <html lang="es" data-theme="default-dark" data-lang="es">
+            <head>
+              <meta charset="utf-8" />
+              <meta name="viewport" content="width=device-width, initial-scale=1" />
+              <title>Theme Showroom — Rolando Luis Martín</title>
+              <style>
+                /* =========================================================
+                   0) Base rules / layout constraints
+                   ========================================================= */
+                :root{
+                  --radius: 12px;
+                  --radius-sm: 8px;
+                  --max: 1060px;
+                
+                  /* Heights (fixed, used for calc layout) */
+                  --h-menu: 56px;
+                  --h-crumb: 38px;
+                  --h-hero: 110px;
+                  --h-footer: 56px;
+                
+                  /* Spacing */
+                  --gap: 12px;
+                  --pad: 14px;
+                
+                  /* Default theme (dark / your base-ish) */
+                  --bg: #0b1220;
+                  --panel: #0f172a;
+                  --text: #e5e7eb;
+                  --muted: #a1a1aa;
+                  --line: rgba(255, 255, 255, 0.15);
+                  --accent: #3f0808;
+                  --accent-net: #f43f5e;
+                
+                  --brand-mrk-color: #e11d48;
+                  --brand-mrk-bkgnd: #5c0000;
+                
+                  --btn-act-bkgnd: rgba(225,29,72,.14);
+                  --btn-act-brd: rgba(225,29,72,.35);
+                  --btn-brd: rgba(225,29,72,.45);
+                  --btn-bkg: rgba(225,29,72,.18);
+                  --btn-hov-brd: rgba(225,29,72,.75);
+                  --btn-hov-bkg: rgba(225,29,72,.41);
+                  --lnk-brd: #790000;
+                  --lnk-hov: #ff3434;
+                }
+            
+                html, body{
+                  height: 100%;
+                  overflow: hidden; /* ✔ Premisa 0: no scroll global */
+                  background: color-mix(in srgb, var(--bg) 70%, #000); /* gutters más oscuros */
+                  color: var(--text);
+                  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+                  margin: 0;
+                }
+            
+                /* Center stage at 80% viewport width; excluded area stays darker (body bg) */
+                .stage{
+                  width: 80vw;             /* ✔ Premisa 1 */
+                  height: 100vh;
+                  margin: 0 auto;
+                  background: var(--bg);
+                  box-shadow: 0 18px 60px rgba(0,0,0,.45);
+                  border-left: 1px solid color-mix(in srgb, var(--line) 85%, transparent);
+                  border-right: 1px solid color-mix(in srgb, var(--line) 85%, transparent);
+                  display: flex;
+                  flex-direction: column;
+                }
+            
+                /* =========================================================
+                   1) Top menu (sticky-ish)
+                   ========================================================= */
+                .topbar{
+                  height: var(--h-menu);
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                  padding: 0 var(--pad);
+                  background: color-mix(in srgb, var(--panel) 88%, var(--bg));
+                  border-bottom: 1px solid var(--line);
+                  position: sticky; top: 0; z-index: 50; /* ✔ Premisa 2 */
+                }
+            
+                .brand{
+                  display: flex;
+                  align-items: center;
+                  gap: 10px;
+                  min-width: 260px;
+                }
+                .brand-mark{
+                  width: 34px;
+                  height: 34px;
+                  border-radius: 10px;
+                  display: grid;
+                  place-items: center;
+                  font-weight: 800;
+                  letter-spacing: .5px;
+                  color: var(--brand-mrk-color);
+                  background: var(--brand-mrk-bkgnd);
+                  border: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+                  box-shadow: 0 0 18px rgba(0,0,0,.25);
+                  user-select: none;
+                }
+                .brand-title{
+                  display: flex;
+                  flex-direction: column;
+                  line-height: 1.05;
+                }
+                .brand-title b{ font-size: 14px; }
+                .brand-title span{ font-size: 12px; color: var(--muted); }
+            
+                .top-actions{
+                  display: flex;
+                  align-items: center;
+                  gap: 10px;
+                }
+            
+                .pill{
+                  border: 1px solid var(--line);
+                  background: color-mix(in srgb, var(--panel) 88%, transparent);
+                  border-radius: 999px;
+                  padding: 4px;
+                  display: flex;
+                  gap: 6px;
+                  align-items: center;
+                }
+            
+                .btn{
+                  border: 1px solid var(--btn-brd);
+                  background: var(--btn-bkg);
+                  color: var(--text);
+                  padding: 9px 12px;
+                  border-radius: 10px;
+                  cursor: pointer;
+                  transition: .18s ease;
+                  font-size: 13px;
+                  display: inline-flex;
+                  gap: 8px;
+                  align-items: center;
+                  user-select: none;
+                }
+                .btn:hover{ border-color: var(--btn-hov-brd); background: var(--btn-hov-bkg); }
+                .btn:active{ transform: translateY(1px); }
+                .btn.ghost{
+                  border-color: var(--line);
+                  background: transparent;
+                }
+            
+                .btn.small{ padding: 7px 10px; border-radius: 9px; font-size: 12px; }
+                .btn.lang.active{
+                  border-color: color-mix(in srgb, var(--accent-net) 60%, var(--line));
+                  background: color-mix(in srgb, var(--accent-net) 18%, transparent);
+                }
+            
+                .select, .toggle{
+                  border: 1px solid var(--line);
+                  background: color-mix(in srgb, var(--panel) 88%, transparent);
+                  color: var(--text);
+                  border-radius: 10px;
+                  padding: 8px 10px;
+                  font-size: 13px;
+                  outline: none;
+                }
+            
+                .toggle{
+                  display: inline-flex;
+                  align-items: center;
+                  gap: 8px;
+                  cursor: pointer;
+                  user-select: none;
+                }
+                .switch{
+                  width: 44px; height: 24px;
+                  background: color-mix(in srgb, var(--panel) 70%, #000);
+                  border: 1px solid var(--line);
+                  border-radius: 999px;
+                  position: relative;
+                }
+                .knob{
+                  width: 18px; height: 18px;
+                  border-radius: 999px;
+                  background: color-mix(in srgb, var(--text) 60%, var(--panel));
+                  position: absolute;
+                  top: 2px; left: 3px;
+                  transition: .18s ease;
+                }
+                [data-mode="light"] .knob{ left: 22px; background: color-mix(in srgb, var(--accent-net) 45%, var(--text)); }
+            
+                /* =========================================================
+                   2) Breadcrumb ribbon (arrow steps)
+                   ========================================================= */
+                .crumbbar{
+                  height: var(--h-crumb);
+                  display: flex;
+                  align-items: center;
+                  padding: 0 var(--pad);
+                  background: color-mix(in srgb, var(--panel) 86%, var(--bg));
+                  border-bottom: 1px solid var(--line);
+                  position: sticky; top: var(--h-menu); z-index: 40; /* ✔ Premisa 4 */
+                  overflow: hidden;
+                }
+                .crumbs{
+                  display: flex;
+                  align-items: stretch;
+                  gap: 0;
+                }
+                .crumb{
+                  position: relative;
+                  padding: 8px 14px 8px 16px;
+                  font-size: 12px;
+                  color: var(--muted);
+                  background: color-mix(in srgb, var(--panel) 84%, transparent);
+                  border: 1px solid var(--line);
+                  border-right: none;
+                  cursor: pointer;
+                  user-select: none;
+                  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 50%, calc(100% - 14px) 100%, 0 100%, 14px 50%);
+                }
+                .crumb:first-child{
+                  padding-left: 14px;
+                  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 50%, calc(100% - 14px) 100%, 0 100%);
+                  border-top-left-radius: 10px;
+                  border-bottom-left-radius: 10px;
+                }
+                .crumb:last-child{
+                  border-right: 1px solid var(--line);
+                  border-top-right-radius: 10px;
+                  border-bottom-right-radius: 10px;
+                }
+                .crumb:hover{
+                  color: var(--text);
+                  background: color-mix(in srgb, var(--accent-net) 10%, var(--panel));
+                }
+                .crumb.current{
+                  color: var(--text);
+                  background: color-mix(in srgb, var(--accent-net) 18%, var(--panel));
+                  border-color: color-mix(in srgb, var(--accent-net) 40%, var(--line));
+                  z-index: 1;
+                }
+            
+                /* =========================================================
+                   3) Hero band
+                   ========================================================= */
+                .hero{
+                  height: var(--h-hero);
+                  padding: 12px var(--pad);
+                  display: flex;
+                  gap: 14px;
+                  align-items: center;
+                  justify-content: space-between;
+                  border-bottom: 1px solid var(--line);
+                  background:
+                    radial-gradient(800px 260px at 10% 10%, color-mix(in srgb, var(--accent-net) 18%, transparent), transparent 60%),
+                    linear-gradient(180deg, color-mix(in srgb, var(--panel) 84%, transparent), color-mix(in srgb, var(--bg) 92%, transparent));
+                }
+                .hero h1{
+                  font-size: 18px;
+                  margin: 0 0 6px 0;
+                  letter-spacing: .2px;
+                }
+                .hero p{
+                  margin: 0;
+                  font-size: 12.5px;
+                  color: var(--muted);
+                  max-width: 68ch;
+                }
+                .hero .hero-cta{
+                  display: flex;
+                  gap: 10px;
+                  align-items: center;
+                }
+            
+                /* =========================================================
+                   4) Main split: sidebar + content (ONLY content scroll)
+                   ========================================================= */
+                .main{
+                  height: calc(100vh - var(--h-menu) - var(--h-crumb) - var(--h-hero) - var(--h-footer));
+                  display: grid;
+                  grid-template-columns: 280px 1fr;
+                  gap: var(--gap);
+                  padding: var(--gap);
+                  padding-bottom: 0;
+                  background: var(--bg);
+                }
+            
+                /* Sidebar: fixed height, internal scroll only (except sticky header) */
+                .sidebar{
+                  background: color-mix(in srgb, var(--panel) 92%, transparent);
+                  border: 1px solid var(--line);
+                  border-radius: var(--radius);
+                  overflow: hidden; /* clip rounded corners */
+                  display: flex;
+                  flex-direction: column;
+                  min-height: 0;
+                }
+                .sidebar-header{
+                  position: sticky; top: 0;
+                  z-index: 5;
+                  padding: 12px 12px 10px 12px;
+                  background: color-mix(in srgb, var(--panel) 96%, var(--bg));
+                  border-bottom: 1px solid var(--line);
+                }
+                .sidebar-header b{ font-size: 13px; display: block; }
+                .sidebar-header span{ font-size: 12px; color: var(--muted); }
+            
+                .sidebar-scroll{
+                  padding: 10px 10px 12px 10px;
+                  overflow: auto;   /* ✔ Premisa 6: scroll interior del contenido del sidebar */
+                  min-height: 0;
+                }
+            
+                details{
+                  border: 1px solid var(--line);
+                  border-radius: 11px;
+                  margin-bottom: 10px;
+                  background: color-mix(in srgb, var(--bg) 84%, transparent);
+                  overflow: hidden;
+                }
+                summary{
+                  list-style: none;
+                  cursor: pointer;
+                  padding: 10px 12px;
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                  font-size: 12.5px;
+                  user-select: none;
+                  background: color-mix(in srgb, var(--panel) 86%, transparent);
+                }
+                summary::-webkit-details-marker{ display: none; }
+                .acc-body{
+                  padding: 10px 12px 12px 12px;
+                  border-top: 1px solid var(--line);
+                  display: grid;
+                  gap: 8px;
+                }
+                .opt{
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                  gap: 8px;
+                  padding: 8px 10px;
+                  border-radius: 10px;
+                  border: 1px solid color-mix(in srgb, var(--line) 75%, transparent);
+                  background: color-mix(in srgb, var(--panel) 82%, transparent);
+                  font-size: 12px;
+                  cursor: pointer;
+                }
+                .opt:hover{
+                  border-color: color-mix(in srgb, var(--accent-net) 38%, var(--line));
+                  background: color-mix(in srgb, var(--accent-net) 10%, var(--panel));
+                }
+                .badge{
+                  padding: 3px 8px;
+                  border-radius: 999px;
+                  border: 1px solid color-mix(in srgb, var(--accent-net) 35%, var(--line));
+                  background: color-mix(in srgb, var(--accent-net) 16%, transparent);
+                  color: var(--text);
+                  font-size: 11px;
+                  white-space: nowrap;
+                }
+            
+                /* Content area: only scroller */
+                .content{
+                  background: color-mix(in srgb, var(--panel) 92%, transparent);
+                  border: 1px solid var(--line);
+                  border-radius: var(--radius);
+                  overflow: hidden;
+                  display: flex;
+                  flex-direction: column;
+                  min-height: 0;
+                }
+                .content-header{
+                  height: 50px;
+                  position: sticky; top: 0;
+                  z-index: 6;
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                  padding: 0 12px;
+                  background: color-mix(in srgb, var(--panel) 96%, var(--bg));
+                  border-bottom: 1px solid var(--line);
+                }
+                .content-header .meta{
+                  display: flex; flex-direction: column;
+                  line-height: 1.1;
+                }
+                .content-header .meta b{ font-size: 13px; }
+                .content-header .meta span{ font-size: 12px; color: var(--muted); }
+            
+                .content-scroll{
+                  overflow: auto;   /* ✔ Premisa 7: único scroll principal */
+                  padding: 12px;
+                  min-height: 0;
+                }
+            
+                /* Components showcase */
+                .grid{
+                  display: grid;
+                  gap: 12px;
+                  grid-template-columns: repeat(12, 1fr);
+                }
+                .card{
+                  grid-column: span 6;
+                  border: 1px solid var(--line);
+                  border-radius: var(--radius);
+                  background: color-mix(in srgb, var(--bg) 82%, transparent);
+                  padding: 12px;
+                  position: relative;
+                  overflow: hidden;
+                }
+                .card::before{
+                  content:"";
+                  position: absolute; inset: -1px;
+                  background: radial-gradient(circle 160px at var(--x,50%) var(--y,50%),
+                    color-mix(in srgb, var(--accent-net) 18%, transparent),
+                    transparent 60%);
+                  pointer-events: none;
+                  opacity: .9;
+                }
+                .card > *{ position: relative; }
+                .card h3{ margin: 0 0 6px 0; font-size: 14px; }
+                .card p{ margin: 0; color: var(--muted); font-size: 12.5px; }
+            
+                .row{
+                  display: flex;
+                  gap: 10px;
+                  flex-wrap: wrap;
+                  align-items: center;
+                  margin-top: 10px;
+                }
+                .input, .textarea{
+                  width: 100%;
+                  border: 1px solid var(--line);
+                  background: color-mix(in srgb, var(--panel) 80%, transparent);
+                  color: var(--text);
+                  border-radius: var(--radius-sm);
+                  padding: 10px 10px;
+                  outline: none;
+                  font-size: 13px;
+                }
+                .textarea{ min-height: 84px; resize: none; }
+                .input:focus, .textarea:focus{
+                  border-color: color-mix(in srgb, var(--accent-net) 55%, var(--line));
+                  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-net) 18%, transparent);
+                }
+            
+                .table{
+                  width: 100%;
+                  border-collapse: separate;
+                  border-spacing: 0;
+                  overflow: hidden;
+                  border-radius: var(--radius);
+                  border: 1px solid var(--line);
+                  background: color-mix(in srgb, var(--bg) 85%, transparent);
+                }
+                .table th, .table td{
+                  padding: 10px;
+                  font-size: 12.5px;
+                  border-bottom: 1px solid var(--line);
+                  color: var(--text);
+                }
+                .table th{ text-align: left; color: var(--muted); background: color-mix(in srgb, var(--panel) 86%, transparent); }
+                .table tr:last-child td{ border-bottom: none; }
+            
+                .alert{
+                  grid-column: span 12;
+                  border: 1px solid color-mix(in srgb, var(--accent-net) 35%, var(--line));
+                  background: color-mix(in srgb, var(--accent-net) 12%, transparent);
+                  border-radius: var(--radius);
+                  padding: 10px 12px;
+                  display: flex;
+                  justify-content: space-between;
+                  gap: 10px;
+                  align-items: center;
+                }
+                .alert b{ font-size: 13px; }
+                .alert span{ color: var(--muted); font-size: 12.5px; }
+            
+                .tabs{
+                  display: flex;
+                  gap: 6px;
+                  padding: 6px;
+                  border: 1px solid var(--line);
+                  border-radius: 999px;
+                  background: color-mix(in srgb, var(--panel) 85%, transparent);
+                  width: max-content;
+                }
+                .tab{
+                  padding: 7px 12px;
+                  border-radius: 999px;
+                  font-size: 12.5px;
+                  border: 1px solid transparent;
+                  cursor: pointer;
+                  color: var(--muted);
+                  user-select: none;
+                }
+                .tab.active{
+                  color: var(--text);
+                  border-color: color-mix(in srgb, var(--accent-net) 35%, var(--line));
+                  background: color-mix(in srgb, var(--accent-net) 14%, transparent);
+                }
+            
+                /* =========================================================
+                   5) Footer (hover expand)
+                   ========================================================= */
+                .footer{
+                  height: var(--h-footer);
+                  border-top: 1px solid var(--line);
+                  background: color-mix(in srgb, var(--panel) 88%, var(--bg));
+                  padding: 0 var(--pad);
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                  position: relative;
+                  overflow: visible;
+                }
+                #lnk:hover{ color: var(--lnk-hov); border-bottom-color: var(--lnk-hov); }
+            
+                .footer-panel{
+                  position: absolute;
+                  left: 0; right: 0;
+                  bottom: 0;
+                  height: var(--h-footer);
+                  transform: translateY(0);
+                  transition: .18s ease;
+                  border-top: 1px solid var(--line);
+                  background: color-mix(in srgb, var(--panel) 92%, var(--bg));
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                  padding: 0 var(--pad);
+                  border-bottom-left-radius: 0;
+                  border-bottom-right-radius: 0;
+                }
+                .footer:hover .footer-panel{
+                  transform: translateY(-22px); /* ✔ Premisa 8: se despliega hacia arriba */
+                  height: calc(var(--h-footer) + 22px);
+                  box-shadow: 0 -16px 40px rgba(0,0,0,.25);
+                }
+                .footer small{ color: var(--muted); }
+            
+                /* =========================================================
+                   Themes (Dark/Light pairs)
+                   ========================================================= */
+            
+                /* ---- Default LIGHT (rojo) ---- */
+                :root[data-theme="default-light"]{
+                  --bg: #ffffff;
+                  --panel: #f3f4f7;
+                  --text: #0b1220;
+                  --muted: #4b5563;
+                  --line: rgba(0,0,0,.10);
+                  --accent: #ffe6ea;
+                  --accent-net: #e11d48;
+                
+                  --brand-mrk-color: #e11d48;
+                  --brand-mrk-bkgnd: #ffe6ea;
+                
+                  --btn-act-bkgnd: rgba(225,29,72,.12);
+                  --btn-act-brd: rgba(225,29,72,.26);
+                  --btn-brd: rgba(0,0,0,.14);
+                  --btn-bkg: rgba(255,255,255,.92);
+                  --btn-hov-brd: rgba(225,29,72,.55);
+                  --btn-hov-bkg: rgba(225,29,72,.10);
+                  --lnk-brd: rgba(225,29,72,.35);
+                  --lnk-hov: #b31334;
+                }
+            
+                /* ---- Graphite DARK ---- */
+                :root[data-theme="graphite-dark"]{
+                  --bg: #032906;
+                  --panel: #0b1020;
+                  --text: #eef2ff;
+                  --muted: #a1a1aa;
+                  --line: rgba(255,255,255,.10);
+                  --accent: #003012;
+                  --accent-net: #22c55e;
+                
+                  --brand-mrk-color: #005c23;
+                  --brand-mrk-bkgnd: #01200e;
+                
+                  --btn-act-bkgnd: rgba(0, 58, 24, .34);
+                  --btn-act-brd: rgba(0, 88, 37, .65);
+                  --btn-brd: rgba(0, 58, 24, .75);
+                  --btn-bkg: rgba(0, 88, 37, .18);
+                  --btn-hov-brd: rgba(13, 82, 41, .83);
+                  --btn-hov-bkg: rgba(4, 65, 29, .75);
+                  --lnk-brd: #00752b;
+                  --lnk-hov: #00bd45;
+                }
+            
+                /* ---- Graphite LIGHT ---- */
+                :root[data-theme="graphite-light"]{
+                  --bg: #fbfffc;
+                  --panel: #eef7f0;
+                  --text: #07130c;
+                  --muted: #3b5a47;
+                  --line: rgba(7,19,12,.12);
+                  --accent: #e8fff1;
+                  --accent-net: #16a34a;
+                
+                  --brand-mrk-color: #0f7a35;
+                  --brand-mrk-bkgnd: #dff6e7;
+                
+                  --btn-act-bkgnd: rgba(22, 163, 74, .12);
+                  --btn-act-brd: rgba(22, 163, 74, .25);
+                  --btn-brd: rgba(7,19,12,.16);
+                  --btn-bkg: rgba(255,255,255,.92);
+                  --btn-hov-brd: rgba(22, 163, 74, .55);
+                  --btn-hov-bkg: rgba(22, 163, 74, .10);
+                  --lnk-brd: rgba(22, 163, 74, .35);
+                  --lnk-hov: #0f7a35;
+                }
+            
+                /* ---- Solar DARK ---- */
+                :root[data-theme="solar-dark"]{
+                  --bg: #0b0a08;
+                  --panel: #14110d;
+                  --text: #fff2e0;
+                  --muted: #c7b6a3;
+                  --line: rgba(255, 200, 120, .14);
+                
+                  --accent: #ff3b1a;
+                  --accent-net: #ffb020;
+                  --brand-mrk-color: #ffb020;
+                  --brand-mrk-bkgnd: #7a1a0e;
+                
+                  --btn-act-bkgnd: rgba(255, 140, 40, .14);
+                  --btn-act-brd: rgba(255, 140, 40, .38);
+                  --btn-brd: rgba(255, 140, 40, .40);
+                  --btn-bkg: rgba(255, 120, 35, .14);
+                  --btn-hov-brd: rgba(255, 160, 60, .70);
+                  --btn-hov-bkg: rgba(255, 140, 40, .26);
+                
+                  --lnk-brd: rgba(255, 140, 40, .45);
+                  --lnk-hov: #ffd08a;
+                }
+            
+                /* ---- Solar LIGHT ---- */
+                :root[data-theme="solar-light"]{
+                  --bg: #fff8f1;
+                  --panel: #ffe9d6;
+                  --text: #2a120c;
+                  --muted: #6a4a3a;
+                  --line: rgba(42,18,12,.14);
+                
+                  --accent: #ff3b1a;
+                  --accent-net: #ff8a1a;
+                
+                  --brand-mrk-color: #ff3b1a;
+                  --brand-mrk-bkgnd: #ffe2d8;
+                
+                  --btn-act-bkgnd: rgba(255, 138, 26, .14);
+                  --btn-act-brd: rgba(255, 59, 26, .24);
+                  --btn-brd: rgba(42,18,12,.18);
+                  --btn-bkg: rgba(255,255,255,.92);
+                  --btn-hov-brd: rgba(255, 138, 26, .55);
+                  --btn-hov-bkg: rgba(255, 138, 26, .10);
+                
+                  --lnk-brd: rgba(255, 59, 26, .34);
+                  --lnk-hov: #c22a12;
+                }
+            
+                /* ---- Win11 Neutrals DARK ---- */
+                :root[data-theme="win11-neutrals-dark"]{
+                  --bg: #0b0c0e;
+                  --panel: #161922;
+                  --text: #f3f4f7;
+                  --muted: #a1a7bd;
+                  --line: rgba(255,255,255,.10);
+                  --accent: #0b2a44;
+                  --accent-net: #4aa3ff;
+                
+                  --brand-mrk-color: #4aa3ff;
+                  --brand-mrk-bkgnd: #081a2b;
+                
+                  --btn-act-bkgnd: rgba(74, 163, 255, .14);
+                  --btn-act-brd:   rgba(74, 163, 255, .30);
+                  --btn-brd:       rgba(255,255,255,.16);
+                  --btn-bkg:       rgba(255,255,255,.06);
+                  --btn-hov-brd:   rgba(74, 163, 255, .55);
+                  --btn-hov-bkg:   rgba(74, 163, 255, .18);
+                  --lnk-brd: rgba(255,255,255,.18);
+                  --lnk-hov: #bfe3ff;
+                }
+            
+                /* ---- Win11 Neutrals LIGHT ---- */
+                :root[data-theme="win11-neutrals-light"]{
+                  --bg: #ffffff;
+                  --panel: #f3f4f7;
+                  --text: #0b0c0e;
+                  --muted: #4b5563;
+                  --line: rgba(0,0,0,.10);
+                  --accent: #eaf2ff;
+                  --accent-net: #0f6cbd;
+                
+                  --brand-mrk-color: #0f6cbd;
+                  --brand-mrk-bkgnd: #e6f0ff;
+                
+                  --btn-act-bkgnd: rgba(15, 108, 189, .12);
+                  --btn-act-brd:   rgba(15, 108, 189, .28);
+                  --btn-brd: rgba(0,0,0,.14);
+                  --btn-bkg: rgba(255,255,255,.85);
+                  --btn-hov-brd: rgba(15, 108, 189, .55);
+                  --btn-hov-bkg: rgba(15, 108, 189, .10);
+                  --lnk-brd: rgba(15,108,189,.35);
+                  --lnk-hov: #0b5aa0;
+                }
+            
+                /* ---- Deep Navy DARK ---- */
+                :root[data-theme="deepnavy-dark"]{
+                  --bg: #050714;
+                  --panel: #0a1024;
+                  --text: #eaf0ff;
+                  --muted: #a7b3d1;
+                  --line: rgba(120, 160, 255, .14);
+                
+                  --accent: #0b1d4a;
+                  --accent-net: #3b82f6;
+                
+                  --brand-mrk-color: #93c5fd;
+                  --brand-mrk-bkgnd: #071433;
+                
+                  --btn-act-bkgnd: rgba(59, 130, 246, .16);
+                  --btn-act-brd:   rgba(59, 130, 246, .34);
+                  --btn-brd: rgba(234, 240, 255, .14);
+                  --btn-bkg: rgba(234, 240, 255, .06);
+                  --btn-hov-brd: rgba(147, 197, 253, .55);
+                  --btn-hov-bkg: rgba(59, 130, 246, .22);
+                  --lnk-brd: rgba(147, 197, 253, .30);
+                  --lnk-hov: #dbeafe;
+                }
+            
+                /* ---- Deep Navy LIGHT ---- */
+                :root[data-theme="deepnavy-light"]{
+                  --bg: #f7f9ff;
+                  --panel: #eef3ff;
+                  --text: #0b1220;
+                  --muted: #42526b;
+                  --line: rgba(11, 18, 32, .12);
+                
+                  --accent: #dbeafe;
+                  --accent-net: #2563eb;
+                
+                  --brand-mrk-color: #1d4ed8;
+                  --brand-mrk-bkgnd: #e0ecff;
+                
+                  --btn-act-bkgnd: rgba(37, 99, 235, .12);
+                  --btn-act-brd:   rgba(37, 99, 235, .28);
+                  --btn-brd: rgba(11,18,32,.16);
+                  --btn-bkg: rgba(255,255,255,.92);
+                  --btn-hov-brd: rgba(37, 99, 235, .55);
+                  --btn-hov-bkg: rgba(37, 99, 235, .10);
+                  --lnk-brd: rgba(37,99,235,.34);
+                  --lnk-hov: #1d4ed8;
+                }
+            
+                /* ======================================================
+                   Theme variables scoped to .mini-page (preview)
+                   ====================================================== */
+            
+                .mini-page[data-theme="default-dark"]{
+                  --bg: #0b1220;
+                  --panel: #0f172a;
+                  --text: #e5e7eb;
+                  --muted: #a1a1aa;
+                  --line: rgba(255,255,255,.15);
+                  --accent-net: #f43f5e;
+                }
+            
+                .mini-page[data-theme="default-light"]{
+                  --bg: #ffffff;
+                  --panel: #f3f4f7;
+                  --text: #0b1220;
+                  --muted: #4b5563;
+                  --line: rgba(0,0,0,.10);
+                  --accent-net: #e11d48;
+                }
+            
+                /* Graphite */
+                .mini-page[data-theme="graphite-dark"]{
+                  --bg: #032906;
+                  --panel: #0b1020;
+                  --text: #eef2ff;
+                  --muted: #a1a1aa;
+                  --line: rgba(255,255,255,.10);
+                  --accent-net: #22c55e;
+                }
+                .mini-page[data-theme="graphite-light"]{
+                  --bg: #fbfffc;
+                  --panel: #eef7f0;
+                  --text: #07130c;
+                  --muted: #3b5a47;
+                  --line: rgba(7,19,12,.12);
+                  --accent-net: #16a34a;
+                }
+            
+                /* Solar */
+                .mini-page[data-theme="solar-dark"]{
+                  --bg: #0b0a08;
+                  --panel: #14110d;
+                  --text: #fff2e0;
+                  --muted: #c7b6a3;
+                  --line: rgba(255,200,120,.14);
+                  --accent-net: #ffb020;
+                }
+                .mini-page[data-theme="solar-light"]{
+                  --bg: #fff8f1;
+                  --panel: #ffe9d6;
+                  --text: #2a120c;
+                  --muted: #6a4a3a;
+                  --line: rgba(42,18,12,.14);
+                  --accent-net: #ff8a1a;
+                }
+            
+                /* Win11 Neutrals */
+                .mini-page[data-theme="win11-neutrals-dark"]{
+                  --bg: #0b0c0e;
+                  --panel: #161922;
+                  --text: #f3f4f7;
+                  --muted: #a1a7bd;
+                  --line: rgba(255,255,255,.10);
+                  --accent-net: #4aa3ff;
+                }
+                .mini-page[data-theme="win11-neutrals-light"]{
+                  --bg: #ffffff;
+                  --panel: #f3f4f7;
+                  --text: #0b0c0e;
+                  --muted: #4b5563;
+                  --line: rgba(0,0,0,.10);
+                  --accent-net: #0f6cbd;
+                }
+            
+                /* Deep Navy */
+                .mini-page[data-theme="deepnavy-dark"]{
+                  --bg: #050714;
+                  --panel: #0a1024;
+                  --text: #eaf0ff;
+                  --muted: #a7b3d1;
+                  --line: rgba(120,160,255,.14);
+                  --accent-net: #3b82f6;
+                }
+                .mini-page[data-theme="deepnavy-light"]{
+                  --bg: #f7f9ff;
+                  --panel: #eef3ff;
+                  --text: #0b1220;
+                  --muted: #42526b;
+                  --line: rgba(11,18,32,.12);
+                  --accent-net: #2563eb;
+                }
+            
+                /* Allow card glow tracking */
+                .card { --x: 50%; --y: 50%; }
+            
+                /* =========================================================
+                   Theme picker with thumbnails
+                   ========================================================= */
+                .theme-picker{ position: relative; }
+                
+                .picker-btn{
+                  border: 1px solid var(--line);
+                  background: color-mix(in srgb, var(--panel) 90%, transparent);
+                  color: var(--text);
+                  padding: 8px 12px;
+                  border-radius: 10px;
+                  cursor: pointer;
+                }
+            
+                .picker-btn:hover{
+                  border-color: color-mix(in srgb, var(--accent-net) 30%, var(--line));
+                  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-net) 12%, transparent);
+                }
+                .picker-btn .chev{ color: var(--muted); font-size: 12px; margin-left: 2px; }
+            
+                .theme-picker.open{ display: block; }
+            
+                .picker-labels b{ font-size: 13px; display: block; line-height: 1.1; }
+                .picker-labels span{ font-size: 12px; color: var(--muted); }
+            
+                .pair-pill{
+                  font-size: 11px;
+                  padding: 4px 8px;
+                  border-radius: 999px;
+                  border: 1px solid var(--line);
+                  color: var(--muted);
+                }
+            
+                /* ======================================================
+                   Theme Picker Layout
+                   ====================================================== */
+                .theme-picker{
+                  position: relative;
+                }
+            
+                .picker-btn{
+                  border: 1px solid var(--line);
+                  background: color-mix(in srgb, var(--panel) 90%, transparent);
+                  color: var(--text);
+                  padding: 8px 12px;
+                  border-radius: 10px;
+                  cursor: pointer;
+                }
+            
+                /* ===== MENU ===== */
+                .theme-menu{
+                  position: absolute;
+                  top: calc(100% + 8px);
+                  left: 0;
+                  width: 240px;
+                  background: color-mix(in srgb, var(--panel) 96%, var(--bg));
+                  border: 1px solid var(--line);
+                  border-radius: 14px;
+                  box-shadow: 0 18px 60px rgba(0,0,0,.35);
+                  padding: 6px;
+                  display: none;
+                  z-index: 120;
+                }
+            
+                .theme-picker:hover .theme-menu{
+                  display: block;
+                }
+            
+                .theme-picker.open .theme-menu{
+                  display: block;
+                }
+            
+                .theme-option{
+                  padding: 10px 12px;
+                  border-radius: 10px;
+                  cursor: pointer;
+                  display: flex;
+                  flex-direction: column;
+                  gap: 2px;
+                }
+            
+                .theme-option b{
+                  font-size: 13px;
+                }
+                .theme-option span{
+                  font-size: 12px;
+                  color: var(--muted);
+                }
+            
+                .theme-option:hover{
+                  background: color-mix(in srgb, var(--accent-net) 12%, transparent);
+                }
+            
+                /* ===== PREVIEW PANEL ===== */
+                .theme-preview-panel{
+                  position: absolute;
+                  top: calc(100% + 8px);
+                
+                /* 👈 AHORA A LA IZQUIERDA */
+                  right: calc(100% + 12px);
+                  left: auto;
+                
+                  width: 420px;
+                  background: color-mix(in srgb, var(--panel) 96%, var(--bg));
+                  border: 1px solid var(--line);
+                  border-radius: 16px;
+                  box-shadow: 0 24px 80px rgba(0,0,0,.45);
+                  padding: 10px;
+                
+                  opacity: 0;
+                  transform: translateX(6px) scale(.98);
+                  pointer-events: none;
+                  transition: .18s ease;
+                  z-index: 110;
+                }
+            
+                .theme-preview-panel.visible{
+                  opacity: 1;
+                  transform: translateX(0) scale(1);
+                  pointer-events: auto;
+                }
+            
+                /* ======================================================
+                   Mini Page Preview (layout real)
+                   ====================================================== */
+                .mini-page{
+                  background: var(--bg);
+                  border-radius: 14px;
+                  border: 1px solid var(--line);
+                  overflow: hidden;
+                }
+            
+                /* Topbar */
+                .mini-topbar{
+                  height: 28px;
+                  background: var(--panel);
+                }
+            
+                /* Breadcrumb */
+                .mini-crumb{
+                  height: 16px;
+                  background: color-mix(in srgb, var(--panel) 80%, var(--bg));
+                }
+            
+                /* Body */
+                .mini-body{
+                  display: grid;
+                  grid-template-columns: 60px 1fr;
+                  height: 150px;
+                }
+            
+                /* Sidebar */
+                .mini-sidebar{
+                  background: color-mix(in srgb, var(--panel) 85%, var(--bg));
+                }
+            
+                /* Content */
+                .mini-content{
+                  padding: 10px;
+                  display: grid;
+                  gap: 8px;
+                }
+            
+                .mini-card{
+                  height: 32px;
+                  border-radius: 8px;
+                  background: color-mix(in srgb, var(--panel) 90%, var(--bg));
+                }
+            
+                .mini-card.small{
+                  height: 18px;
+                }
+            
+                .mini-button{
+                  width: 72px;
+                  height: 16px;
+                  border-radius: 999px;
+                  background: color-mix(in srgb, var(--accent-net) 70%, transparent);
+                }
+            
+                /* En light theme del documento, ajusta el borde de la thumb */
+                :root[data-theme$="-light"]{
+                  border-color: rgba(0,0,0,.14);
+                }
+            
+              </style>
+            </head>
+            
+            <body>
+              <div class="stage" id="stage">
+                <!-- 2) Top menu -->
+                <header class="topbar">
+                  <div class="brand">
+                    <div class="brand-mark" aria-label="Brand mark">RM</div>
+                    <div class="brand-title">
+                      <b>Rolando Luis Martín</b>
+                      <span id="subtitle">Theme Showroom · Light/Dark Pairs</span>
+                    </div>
+                  </div>
+              
+                  <div class="top-actions">
+                    <!-- 3) Language buttons -->
+                    <div class="pill" role="group" aria-label="Idioma">
+                      <button class="btn small lang active" data-lang="es">ES</button>
+                      <button class="btn small lang" data-lang="en">EN</button>
+                    </div>
+                
+                    <!-- Theme picker (custom dropdown + thumbnails) -->
+                    <div class="theme-picker" id="themePicker">
+                    
+                      <!-- Botón -->
+                      <button class="picker-btn" id="themeBtn" type="button">
+                        Theme ▾
+                      </button>
+                  
+                      <!-- Menú de temas -->
+                      <div class="theme-menu" id="themeMenu">
+                        <div class="theme-option" data-theme="default">
+                          <b>Default</b><span>Red / Brand</span>
+                        </div>
+                        <div class="theme-option" data-theme="graphite">
+                          <b>Graphite</b><span>Enterprise</span>
+                        </div>
+                        <div class="theme-option" data-theme="solar">
+                          <b>Solar</b><span>Warm</span>
+                        </div>
+                        <div class="theme-option" data-theme="win11-neutrals">
+                          <b>Win11 Neutrals</b><span>Fluent</span>
+                        </div>
+                        <div class="theme-option" data-theme="deepnavy">
+                          <b>Deep Navy</b><span>Premium</span>
+                        </div>
+                      </div>
+                  
+                      <!-- ✅ Preview lateral ÚNICO -->
+                      <div class="theme-preview-panel" id="themePreview">
+                        <div class="mini-page">
+                          <div class="mini-topbar"></div>
+                          <div class="mini-crumb"></div>
+                          <div class="mini-body">
+                            <div class="mini-sidebar"></div>
+                            <div class="mini-content">
+                              <div class="mini-card"></div>
+                              <div class="mini-card small"></div>
+                              <div class="mini-button"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                  
+                    </div>
+                    <!-- Light/Dark toggle -->
+                    <div class="toggle" id="modeToggle" role="switch" aria-checked="false" tabindex="0">
+                      <span id="modeLabel" style="font-size:12.5px;color:var(--muted);">Dark</span>
+                      <div class="switch"><div class="knob"></div></div>
+                    </div>
+                  </div>
+                </header>
+            
+                <!-- 4) Breadcrumb ribbon -->
+                <nav class="crumbbar" aria-label="Breadcrumb">
+                  <div class="crumbs" id="crumbs">
+                    <div class="crumb" data-page="home">Home</div>
+                    <div class="crumb" data-page="services">Services</div>
+                    <div class="crumb current" data-page="showroom">Showroom</div>
+                    <div class="crumb" data-page="contact">Contact</div>
+                  </div>
+                </nav>
+            
+                <!-- 5) Hero -->
+                <section class="hero">
+                  <div>
+                    <h1 id="heroTitle">Comparador visual de temas (Light/Dark)</h1>
+                    <p id="heroText">
+                      Este showroom es un ejemplo “sin sentido funcional” para que el cliente evalúe estética, jerarquía, contraste,
+                      estados (hover/active/focus) y coherencia del layout antes de construir contenido real.
+                    </p>
+                  </div>
+                  <div class="hero-cta">
+                    <button class="btn ghost" id="btnPrimary">Acción secundaria</button>
+                    <button class="btn" id="btnAccent">Acción principal</button>
+                  </div>
+                </section>
+            
+                <!-- 6-7) Main split -->
+                <section class="main">
+                  <!-- Sidebar -->
+                  <aside class="sidebar">
+                    <div class="sidebar-header">
+                      <b id="sbTitle">Opciones de estilo (acordeones)</b>
+                      <span id="sbSub">Header sticky · scroll interno</span>
+                    </div>
+                    <div class="sidebar-scroll">
+                      <details open>
+                        <summary>
+                          <span id="acc1">Estilo general</span>
+                          <span class="badge">UI</span>
+                        </summary>
+                        <div class="acc-body">
+                          <div class="opt" data-action="toast">
+                            <span id="opt1">Mostrar notificación</span>
+                            <span class="badge">Toast</span>
+                          </div>
+                          <div class="opt" data-action="modal">
+                            <span id="opt2">Abrir modal</span>
+                            <span class="badge">Dialog</span>
+                          </div>
+                          <div class="opt" data-action="density">
+                            <span id="opt3">Cambiar densidad</span>
+                            <span class="badge">Compact</span>
+                          </div>
+                        </div>
+                      </details>
+                  
+                      <details open>
+                        <summary>
+                          <span id="acc2">Secciones (simulación)</span>
+                          <span class="badge">Nav</span>
+                        </summary>
+                        <div class="acc-body">
+                          <div class="opt" data-nav="home"><span>Home</span><span class="badge">↩</span></div>
+                          <div class="opt" data-nav="services"><span>Services</span><span class="badge">→</span></div>
+                          <div class="opt" data-nav="showroom"><span>Showroom</span><span class="badge">★</span></div>
+                          <div class="opt" data-nav="contact"><span>Contact</span><span class="badge">✉</span></div>
+                        </div>
+                      </details>
+                  
+                      <details>
+                        <summary>
+                          <span id="acc3">Componentes</span>
+                          <span class="badge">Kit</span>
+                        </summary>
+                        <div class="acc-body">
+                          <div class="opt" data-scrollto="cards"><span id="optC1">Cards y botones</span><span class="badge">UI</span></div>
+                          <div class="opt" data-scrollto="forms"><span id="optC2">Inputs y edición</span><span class="badge">Form</span></div>
+                          <div class="opt" data-scrollto="tables"><span id="optC3">Tabla de datos</span><span class="badge">Grid</span></div>
+                        </div>
+                      </details>
+                  
+                      <details>
+                        <summary>
+                          <span id="acc4">Notas</span>
+                          <span class="badge">UX</span>
+                        </summary>
+                        <div class="acc-body">
+                          <div style="font-size:12px;color:var(--muted);line-height:1.35;">
+                            <span id="notes">
+                              Premisa clave: solo el área “content” hace scroll. Menú, migas, hero, sidebar y footer permanecen estables para evaluar enfoque visual.
+                            </span>
+                          </div>
+                        </div>
+                      </details>
+                    </div>
+                  </aside>
+              
+                  <!-- Content -->
+                  <main class="content">
+                    <div class="content-header">
+                      <div class="meta">
+                        <b id="contentTitle">Showroom · Componentes frecuentes</b>
+                        <span id="contentSub">Contenido con header sticky · scroll interno</span>
+                      </div>
+                  
+                      <div class="tabs" aria-label="Tabs">
+                        <div class="tab active" data-tab="ui" id="tabUI">UI</div>
+                        <div class="tab" data-tab="forms" id="tabForms">Forms</div>
+                        <div class="tab" data-tab="data" id="tabData">Data</div>
+                      </div>
+                    </div>
+                
+                    <div class="content-scroll" id="contentScroll">
+                      <div class="alert">
+                        <div>
+                          <b id="alertTitle">Vista previa interactiva</b><br/>
+                          <span id="alertText">Pasa el mouse por cards, botones e inputs. Cambia el tema y conmutador Light/Dark para comparar.</span>
+                        </div>
+                        <button class="btn small" id="btnAlert">Entendido</button>
+                      </div>
+                  
+                      <div class="grid" style="margin-top:12px;">
+                        <!-- Cards -->
+                        <div class="card" id="cards">
+                          <h3 id="card1Title">Card · Jerarquía y contraste</h3>
+                          <p id="card1Text">Esta card está pensada para que el cliente observe fondos, bordes, textos, y el “glow” sutil al mover el mouse.</p>
+                          <div class="row">
+                            <button class="btn" id="btnCardPrimary">Primario</button>
+                            <button class="btn ghost" id="btnCardSecondary">Secundario</button>
+                            <span class="badge">Badge</span>
+                          </div>
+                        </div>
+                    
+                        <div class="card">
+                          <h3 id="card2Title">Card · Estados de interacción</h3>
+                          <p id="card2Text">Hover / Active / Focus deben ser consistentes. El acento se usa para guiar, no para pintar todo.</p>
+                          <div class="row">
+                            <button class="btn" id="btnConfirm">Confirmar</button>
+                            <button class="btn ghost" id="btnCancel">Cancelar</button>
+                            <button class="btn small" id="btnMini">Mini</button>
+                          </div>
+                        </div>
+                    
+                        <!-- Forms -->
+                        <div class="card" id="forms">
+                          <h3 id="formTitle">Edición · Inputs frecuentes</h3>
+                          <p id="formText">Inputs con foco visible. Bordes y sombras deben ser suaves en ambos modos.</p>
+                          <div class="row" style="width:100%;">
+                            <input class="input" id="inp1" placeholder="Nombre / Name" />
+                            <input class="input" id="inp2" placeholder="Email" />
+                            <textarea class="textarea" id="txt1" placeholder="Notas / Notes"></textarea>
+                          </div>
+                          <div class="row">
+                            <button class="btn" id="btnSave">Guardar</button>
+                            <button class="btn ghost" id="btnReset">Reset</button>
+                          </div>
+                        </div>
+                    
+                        <div class="card">
+                          <h3 id="card3Title">Bloques y tipografía</h3>
+                          <p id="card3Text">Muestra de textos: <b>negrita</b>, <span style="color:var(--muted)">muted</span>, y un <span style="color:var(--accent-net)">acento</span> medido.</p>
+                          <div class="row">
+                            <span class="badge">Info</span>
+                            <span class="badge" style="border-color:color-mix(in srgb, var(--line) 80%, transparent); background:color-mix(in srgb, var(--panel) 75%, transparent);">Neutral</span>
+                            
+                            <a href="#" id="lnk" style="color:var(--text);text-decoration:none;border-bottom:1px dashed var(--lnk-brd);">Enlace de ejemplo</a>
+                        
+                          </div>
+                        </div>
+                    
+                        <!-- Table -->
+                        <div class="card" style="grid-column: span 12;" id="tables">
+                          <h3 id="tableTitle">Tabla · Datos</h3>
+                          <p id="tableText">Para verificar legibilidad, alternancia de filas, y líneas sutiles.</p>
+                          <div style="margin-top:10px;">
+                            <table class="table" aria-label="Tabla">
+                              <thead>
+                                <tr>
+                                  <th id="th1">Elemento</th>
+                                  <th id="th2">Estado</th>
+                                  <th id="th3">Prioridad</th>
+                                  <th id="th4">Acción</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td>Card</td><td>OK</td><td>Alta</td><td><button class="btn small">Ver</button></td>
+                                </tr>
+                                <tr>
+                                  <td>Input</td><td>OK</td><td>Media</td><td><button class="btn small ghost">Editar</button></td>
+                                </tr>
+                                <tr>
+                                  <td>Tabla</td><td>OK</td><td>Media</td><td><button class="btn small">Abrir</button></td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                    
+                      </div>
+                  
+                      <div style="height: 18px;"></div>
+                    </div>
+                  </main>
+                </section>
+            
+                <!-- 8) Footer with hover expand -->
+                <footer class="footer">
+                  <div class="footer-panel">
+                    <small id="footLeft">© Showroom · Solo demostración visual</small>
+                    <div style="display:flex; gap:10px; align-items:center;">
+                      <button class="btn small ghost" id="footBtn1">Docs</button>
+                      <button class="btn small" id="footBtn2">Export</button>
+                    </div>
+                  </div>
+                </footer>
+              </div>
+          
+              <script>
+                /* =========================================================
+                   State
+                   ========================================================= */
+                const root = document.documentElement;
+            
+                const THEME_MAP = {
+                  "default":      { light: "default-light",       dark: "default-dark" },
+                  "graphite":     { light: "graphite-light",      dark: "graphite-dark" },
+                  "solar":        { light: "solar-light",         dark: "solar-dark" },
+                  "win11-neutrals": { light: "win11-neutrals-light", dark: "win11-neutrals-dark" },
+                  "deepnavy":     { light: "deepnavy-light",      dark: "deepnavy-dark" }
+                };
+            
+                // default start
+                let baseTheme = "default";
+                let mode = "dark"; // "light" | "dark"
+            
+                // elements
+            
+                const modeToggle = document.getElementById("modeToggle");
+                const modeLabel = document.getElementById("modeLabel");
+                const crumbs = document.getElementById("crumbs");
+                const contentTitle = document.getElementById("contentTitle");
+                const contentSub = document.getElementById("contentSub");
+                const subtitle = document.getElementById("subtitle");
+                const contentScroll = document.getElementById("contentScroll");
+            
+                /* =========================================================
+                   i18n (simple demo)
+                   ========================================================= */
+                const I18N = {
+                  es: {
+                    subtitle: "Theme Showroom · Light/Dark Pairs",
+                    heroTitle: "Comparador visual de temas (Light/Dark)",
+                    heroText: "Este showroom es un ejemplo “sin sentido funcional” para que el cliente evalúe estética, jerarquía, contraste, estados (hover/active/focus) y coherencia del layout antes de construir contenido real.",
+                    btnSecondary: "Acción secundaria",
+                    btnPrimary: "Acción principal",
+                    sbTitle: "Opciones de estilo (acordeones)",
+                    sbSub: "Header sticky · scroll interno",
+                    acc1: "Estilo general",
+                    opt1: "Mostrar notificación",
+                    opt2: "Abrir modal",
+                    opt3: "Cambiar densidad",
+                    acc2: "Secciones (simulación)",
+                    acc3: "Componentes",
+                    optC1: "Cards y botones",
+                    optC2: "Inputs y edición",
+                    optC3: "Tabla de datos",
+                    acc4: "Notas",
+                    notes: "Premisa clave: solo el área “content” hace scroll. Menú, migas, hero, sidebar y footer permanecen estables para evaluar enfoque visual.",
+                    contentTitle: "Showroom · Componentes frecuentes",
+                    contentSub: "Contenido con header sticky · scroll interno",
+                    tabUI: "UI",
+                    tabForms: "Forms",
+                    tabData: "Data",
+                    alertTitle: "Vista previa interactiva",
+                    alertText: "Pasa el mouse por cards, botones e inputs. Cambia el tema y conmutador Light/Dark para comparar.",
+                    card1Title: "Card · Jerarquía y contraste",
+                    card1Text: "Esta card está pensada para que el cliente observe fondos, bordes, textos, y el “glow” sutil al mover el mouse.",
+                    card2Title: "Card · Estados de interacción",
+                    card2Text: "Hover / Active / Focus deben ser consistentes. El acento se usa para guiar, no para pintar todo.",
+                    formTitle: "Edición · Inputs frecuentes",
+                    formText: "Inputs con foco visible. Bordes y sombras deben ser suaves en ambos modos.",
+                    card3Title: "Bloques y tipografía",
+                    card3Text: "Muestra de textos: negrita, muted, y un acento medido.",
+                    tableTitle: "Tabla · Datos",
+                    tableText: "Para verificar legibilidad, alternancia de filas, y líneas sutiles.",
+                    th: ["Elemento", "Estado", "Prioridad", "Acción"],
+                    footLeft: "© Showroom · Solo demostración visual",
+                    docs: "Docs",
+                    export: "Export",
+                    ok: "Entendido",
+                    dark: "Dark",
+                    light: "Light"
+                  },
+                  en: {
+                    subtitle: "Theme Showroom · Light/Dark Pairs",
+                    heroTitle: "Visual theme comparer (Light/Dark)",
+                    heroText: "This showroom is a “functionally meaningless” sample so clients can evaluate aesthetics, hierarchy, contrast, states (hover/active/focus), and layout coherence before real content exists.",
+                    btnSecondary: "Secondary action",
+                    btnPrimary: "Primary action",
+                    sbTitle: "Style options (accordions)",
+                    sbSub: "Sticky header · inner scroll",
+                    acc1: "General style",
+                    opt1: "Show notification",
+                    opt2: "Open modal",
+                    opt3: "Toggle density",
+                    acc2: "Sections (simulation)",
+                    acc3: "Components",
+                    optC1: "Cards & buttons",
+                    optC2: "Inputs & editing",
+                    optC3: "Data table",
+                    acc4: "Notes",
+                    notes: "Key premise: only the “content” area scrolls. Top menu, breadcrumbs, hero, sidebar and footer stay stable to evaluate visual focus.",
+                    contentTitle: "Showroom · Common components",
+                    contentSub: "Content with sticky header · inner scroll",
+                    tabUI: "UI",
+                    tabForms: "Forms",
+                    tabData: "Data",
+                    alertTitle: "Interactive preview",
+                    alertText: "Hover cards, buttons and inputs. Switch theme + Light/Dark to compare.",
+                    card1Title: "Card · Hierarchy & contrast",
+                    card1Text: "This card helps the client assess surfaces, borders, text, and subtle glow tracking.",
+                    card2Title: "Card · Interaction states",
+                    card2Text: "Hover / Active / Focus must feel consistent. Accent guides, not paints everything.",
+                    formTitle: "Editing · Common inputs",
+                    formText: "Inputs with visible focus. Borders and shadows should remain soft in both modes.",
+                    card3Title: "Blocks & typography",
+                    card3Text: "Text demo: bold, muted, and a measured accent.",
+                    tableTitle: "Table · Data",
+                    tableText: "To validate readability, row alternation, and subtle lines.",
+                    th: ["Item", "State", "Priority", "Action"],
+                    footLeft: "© Showroom · Visual-only sample",
+                    docs: "Docs",
+                    export: "Export",
+                    ok: "Got it",
+                    dark: "Dark",
+                    light: "Light"
+                  }
+                };
+            
+                function applyLang(lang){
+                  root.setAttribute("data-lang", lang);
+                  const t = I18N[lang];
+                
+                  // Toggle button styles
+                  document.querySelectorAll(".btn.lang").forEach(b=>{
+                    b.classList.toggle("active", b.dataset.lang === lang);
+                  });
+              
+                  subtitle.textContent = t.subtitle;
+                  document.getElementById("heroTitle").textContent = t.heroTitle;
+                  document.getElementById("heroText").textContent = t.heroText;
+                  document.getElementById("btnPrimary").textContent = t.btnSecondary;
+                  document.getElementById("btnAccent").textContent = t.btnPrimary;
+              
+                  document.getElementById("sbTitle").textContent = t.sbTitle;
+                  document.getElementById("sbSub").textContent = t.sbSub;
+                  document.getElementById("acc1").textContent = t.acc1;
+                  document.getElementById("opt1").textContent = t.opt1;
+                  document.getElementById("opt2").textContent = t.opt2;
+                  document.getElementById("opt3").textContent = t.opt3;
+                  document.getElementById("acc2").textContent = t.acc2;
+                  document.getElementById("acc3").textContent = t.acc3;
+                  document.getElementById("optC1").textContent = t.optC1;
+                  document.getElementById("optC2").textContent = t.optC2;
+                  document.getElementById("optC3").textContent = t.optC3;
+                  document.getElementById("acc4").textContent = t.acc4;
+                  document.getElementById("notes").textContent = t.notes;
+              
+                  contentTitle.textContent = t.contentTitle;
+                  contentSub.textContent = t.contentSub;
+              
+                  document.getElementById("tabUI").textContent = t.tabUI;
+                  document.getElementById("tabForms").textContent = t.tabForms;
+                  document.getElementById("tabData").textContent = t.tabData;
+              
+                  document.getElementById("alertTitle").textContent = t.alertTitle;
+                  document.getElementById("alertText").textContent = t.alertText;
+                  document.getElementById("btnAlert").textContent = t.ok;
+              
+                  document.getElementById("card1Title").textContent = t.card1Title;
+                  document.getElementById("card1Text").textContent = t.card1Text;
+                  document.getElementById("card2Title").textContent = t.card2Title;
+                  document.getElementById("card2Text").textContent = t.card2Text;
+                  document.getElementById("formTitle").textContent = t.formTitle;
+                  document.getElementById("formText").textContent = t.formText;
+                  document.getElementById("card3Title").textContent = t.card3Title;
+              
+                  document.getElementById("tableTitle").textContent = t.tableTitle;
+                  document.getElementById("tableText").textContent = t.tableText;
+                  document.getElementById("th1").textContent = t.th[0];
+                  document.getElementById("th2").textContent = t.th[1];
+                  document.getElementById("th3").textContent = t.th[2];
+                  document.getElementById("th4").textContent = t.th[3];
+              
+                  document.getElementById("footLeft").textContent = t.footLeft;
+                  document.getElementById("footBtn1").textContent = t.docs;
+                  document.getElementById("footBtn2").addEventListener("click", ()=>{
+                    const payload = {
+                      theme: baseTheme,
+                      resolvedTheme: root.getAttribute("data-theme"),
+                      mode,
+                      lang: root.getAttribute("data-lang") || "es",
+                      page: document.querySelector(".crumb.current")?.dataset.page || "showroom",
+                      exportedAt: new Date().toISOString()
+                    };
+                
+                    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+                    const a = document.createElement("a");
+                    a.href = URL.createObjectURL(blob);
+                    a.download = `showroom-selection_${payload.theme}_${payload.mode}.json`;
+                    a.click();
+                    URL.revokeObjectURL(a.href);
+                  });
+              
+                  // Mode label localized
+                  modeLabel.textContent = (mode === "light") ? t.light : t.dark;
+                }
+            
+                /* =========================================================
+                   Theme switching
+                   ========================================================= */
+                function applyTheme(){
+                  const resolved = THEME_MAP[baseTheme][mode];
+                  root.setAttribute("data-theme", resolved);
+                  root.setAttribute("data-mode", mode);
+                  // sync mode label
+                  const lang = root.getAttribute("data-lang") || "es";
+                  modeLabel.textContent = (mode === "light") ? I18N[lang].light : I18N[lang].dark;
+                  modeToggle.setAttribute("aria-checked", mode === "light" ? "true" : "false");
+                }
+            
+                function toggleMode(){
+                  mode = (mode === "dark") ? "light" : "dark";
+                  applyTheme();
+                }
+            
+                modeToggle.addEventListener("click", toggleMode);
+                modeToggle.addEventListener("keydown", (e)=>{
+                  if(e.key === "Enter" || e.key === " "){ e.preventDefault(); toggleMode(); }
+                });
+            
+                /* =========================================================
+                   Breadcrumb navigation simulation
+                   ========================================================= */
+                function setCurrentCrumb(page){
+                  document.querySelectorAll(".crumb").forEach(c=>{
+                    c.classList.toggle("current", c.dataset.page === page);
+                  });
+                  // update content header to reflect "route"
+                  const route = Array.from(document.querySelectorAll(".crumb"))
+                    .slice(0, Array.from(document.querySelectorAll(".crumb")).findIndex(c => c.dataset.page === page) + 1)
+                    .map(c => c.textContent.trim())
+                    .join("  ›  ");
+                  contentSub.textContent = route + " · scroll interno";
+                }
+            
+                crumbs.addEventListener("click", (e)=>{
+                  const el = e.target.closest(".crumb");
+                  if(!el) return;
+                  setCurrentCrumb(el.dataset.page);
+                });
+            
+                /* =========================================================
+                   Sidebar nav / scrollto
+                   ========================================================= */
+                document.querySelectorAll(".opt[data-nav]").forEach(el=>{
+                  el.addEventListener("click", ()=>{
+                    setCurrentCrumb(el.dataset.nav);
+                  });
+                });
+            
+                // New picker elements
+                const themePicker = document.getElementById("themePicker");
+                const themeBtn = document.getElementById("themeBtn");
+                const themeMenu = document.getElementById("themeMenu");
+                
+                let activeIndex = 0;
+            
+                function highlight(i){
+                  const arr = items();
+                  if(!arr.length) return;
+                  activeIndex = Math.max(0, Math.min(i, arr.length - 1));
+                  arr.forEach((el, idx)=> el.classList.toggle("active", idx === activeIndex));
+                  arr[activeIndex].scrollIntoView({ block:"nearest" });
+                }
+            
+                /* ✅ CLICK: abre / cierra el menú */
+                themeBtn.addEventListener("click", (e) => {
+                  e.stopPropagation();
+                  themePicker.classList.toggle("open");
+                });
+            
+                /* ✅ Click fuera: cierra el menú */
+                document.addEventListener("click", () => {
+                  themePicker.classList.remove("open");
+                });
+            
+                themeBtn.addEventListener("keydown", (e)=>{
+                  if(e.key === "ArrowDown"){ e.preventDefault(); highlight(activeIndex+1); }
+                  if(e.key === "ArrowUp"){ e.preventDefault(); highlight(activeIndex-1); }
+                  if(e.key === "Enter"){ 
+                    if(themePicker.classList.contains("open")){
+                      e.preventDefault();
+                      items()[activeIndex]?.click();
+                    }
+                  }
+                });
+            
+                themeMenu.addEventListener("keydown", (e)=>{
+                  if(e.key === "ArrowDown"){ e.preventDefault(); highlight(activeIndex+1); }
+                  if(e.key === "ArrowUp"){ e.preventDefault(); highlight(activeIndex-1); }
+                  if(e.key === "Enter"){ e.preventDefault(); items()[activeIndex]?.click(); }
+                });
+            
+                // Preview colors for thumbnails (Dark + Light per theme)
+                const THEME_PREVIEW = {
+                  "default": {
+                    label: "Default (Red)",
+                    desc: "Base / marca roja",
+                    dark:  { bg:"#0b1220", panel:"#0f172a", accent:"#f43f5e", fg:"#e5e7eb" },
+                    light: { bg:"#ffffff", panel:"#f3f4f7", accent:"#e11d48", fg:"#0b1220"}
+                  },
+                  "graphite": {
+                    label: "Graphite (Green)",
+                    desc: "Sobrio / enterprise",
+                    dark:  { bg:"#032906", panel:"#0b1020", accent:"#22c55e", fg:"#eef2ff" },
+                    light: { bg:"#fbfffc", panel:"#eef7f0", accent:"#16a34a", fg:"#07130c" }
+                  },
+                  "solar": {
+                    label: "Solar (Warm)",
+                    desc: "Cálido / Mars",
+                    dark:  { bg:"#0b0a08", panel:"#14110d", accent:"#ffb020", fg:"#fff2e0" },
+                    light: { bg:"#fff8f1", panel:"#ffe9d6", accent:"#ff8a1a", fg:"#2a120c" }
+                  },
+                  "win11-neutrals": {
+                    label: "Win11 Neutrals (Blue)",
+                    desc: "Neutrales tipo Fluent",
+                    dark:  { bg:"#0b0c0e", panel:"#161922", accent:"#4aa3ff", fg:"#f3f4f7" },
+                    light: { bg:"#ffffff", panel:"#f3f4f7", accent:"#0f6cbd", fg:"#0b0c0e" }
+                  },
+                  "deepnavy": {
+                    label: "Deep Navy (Depth)",
+                    desc: "Negro-azul premium",
+                    dark:  { bg:"#050714", panel:"#0a1024", accent:"#3b82f6", fg:"#eaf0ff" },
+                    light: { bg:"#f7f9ff", panel:"#eef3ff", accent:"#2563eb", fg:"#0b1220" }
+                  }
+                };
+            
+                const preview = document.getElementById("themePreview");
+                const options = document.querySelectorAll(".theme-option");
+                const miniPage = preview.querySelector(".mini-page");
+            
+                options.forEach(opt=>{
+                  opt.addEventListener("mouseenter", ()=>{
+                    const theme = opt.dataset.theme;
+                    // aplica SOLO al preview
+                    miniPage.setAttribute("data-theme", `${theme}-dark`);
+                    preview.classList.add("visible");
+                  });
+              
+                  opt.addEventListener("click", ()=>{
+                    // aquí aplicas el theme REAL
+                    baseTheme = opt.dataset.theme;
+                    applyTheme();
+                  });
+                });
+            
+                /*preview.addEventListener("mouseleave", ()=>{
+                  preview.classList.remove("visible");
+                });*/
+            
+                themePicker.addEventListener("mouseleave", () => {
+                  preview.classList.remove("visible");
+                });
+            
+                function setThumb(el, themeKey){
+                  const p = THEME_PREVIEW[themeKey];
+                  el.style.setProperty("--p-bg-d", p.dark.bg);
+                  el.style.setProperty("--p-panel-d", p.dark.panel);
+                  el.style.setProperty("--p-accent-d", p.dark.accent);
+                  el.style.setProperty("--p-bg-l", p.light.bg);
+                  el.style.setProperty("--p-panel-l", p.light.panel);
+                  el.style.setProperty("--p-accent-l", p.light.accent);      
+                  el.style.setProperty("--p-fg-d", p.dark.fg || "#ffffff");
+                  el.style.setProperty("--p-bg-l", p.light.bg);
+                  el.style.setProperty("--p-panel-l", p.light.panel);
+                  el.style.setProperty("--p-accent-l", p.light.accent);
+                  el.style.setProperty("--p-fg-l", p.light.fg || "#0b1220");
+                
+                }
+            
+                document.querySelectorAll(".opt[data-scrollto]").forEach(el=>{
+                  el.addEventListener("click", ()=>{
+                    const id = el.dataset.scrollto;
+                    const target = document.getElementById(id);
+                    if(target){
+                      const top = target.offsetTop - 10;
+                      contentScroll.scrollTo({ top, behavior: "smooth" });
+                    }
+                  });
+                });
+            
+                /* =========================================================
+                   Card glow tracking
+                   ========================================================= */
+                document.querySelectorAll(".card").forEach(card=>{
+                  card.addEventListener("mousemove", (e)=>{
+                    const r = card.getBoundingClientRect();
+                    const x = ((e.clientX - r.left) / r.width) * 100;
+                    const y = ((e.clientY - r.top) / r.height) * 100;
+                    card.style.setProperty("--x", x + "%");
+                    card.style.setProperty("--y", y + "%");
+                  });
+                });
+            
+                /* =========================================================
+                   Tabs demo
+                   ========================================================= */
+                document.querySelectorAll(".tab").forEach(tab=>{
+                  tab.addEventListener("click", ()=>{
+                    document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+                    tab.classList.add("active");
+                
+                    const key = tab.dataset.tab;
+                    if(key === "ui") contentScroll.scrollTo({ top: 0, behavior: "smooth" });
+                    if(key === "forms") {
+                      const target = document.getElementById("forms");
+                      contentScroll.scrollTo({ top: target.offsetTop - 10, behavior: "smooth" });
+                    }
+                    if(key === "data") {
+                      const target = document.getElementById("tables");
+                      contentScroll.scrollTo({ top: target.offsetTop - 10, behavior: "smooth" });
+                    }
+                  });
+                });
+            
+                /* =========================================================
+                   Language buttons
+                   ========================================================= */
+                document.querySelectorAll(".btn.lang").forEach(b=>{
+                  b.addEventListener("click", ()=> applyLang(b.dataset.lang));
+                });
+            
+                /* =========================================================
+                   Init
+                   ========================================================= */
+                // Set initial theme select
+                applyTheme();
+                applyLang("es");
+                setCurrentCrumb("showroom");
+            
+                
+            
+                function saveState(){
+                  const lang = root.getAttribute("data-lang") || "es";
+                  const current = document.querySelector(".crumb.current")?.dataset.page || "showroom";
+                  const hash = `theme=${encodeURIComponent(baseTheme)}&mode=${encodeURIComponent(mode)}&lang=${encodeURIComponent(lang)}&page=${encodeURIComponent(current)}`;
+                  location.hash = hash;
+                  localStorage.setItem("showroomState", hash);
+                }
+            
+                function loadState(){
+                  const raw = (location.hash || "").replace(/^#/, "") || localStorage.getItem("showroomState") || "";
+                  const params = Object.fromEntries(raw.split("&").filter(Boolean).map(p => p.split("=").map(decodeURIComponent)));
+                  if(params.theme && THEME_MAP[params.theme]) baseTheme = params.theme;
+                  if(params.mode === "light" || params.mode === "dark") mode = params.mode;
+                  if(params.lang === "es" || params.lang === "en") applyLang(params.lang);
+                  applyTheme();
+                  if(params.page) setCurrentCrumb(params.page);
+                }
+            
+                ["click","change","keydown"].forEach(evt=>{
+                  document.addEventListener(evt, (e)=>{
+                    // guarda en interacciones relevantes sin ser pesado
+                    if(e.target.closest?.("#themePicker") || e.target.closest?.("#modeToggle") || e.target.closest?.(".btn.lang") || e.target.closest?.(".crumb") || e.target.closest?.(".opt[data-nav]")){
+                      saveState();
+                    }
+                  }, true);
+                });
+            
+                // Llama al cargar:
+                loadState();
+            
+                // Close alert
+                document.getElementById("btnAlert").addEventListener("click", ()=>{
+                  document.querySelector(".alert").style.display = "none";
+                });
+            
+                // Demo actions
+                document.querySelector('[data-action="toast"]').addEventListener("click", ()=>{
+                  alert((root.getAttribute("data-lang")==="en") ? "Toast demo (placeholder)." : "Demo de notificación (placeholder).");
+                });
+                document.querySelector('[data-action="modal"]').addEventListener("click", ()=>{
+                  alert((root.getAttribute("data-lang")==="en") ? "Modal demo (placeholder)." : "Demo de modal (placeholder).");
+                });
+            
+                document.querySelector('[data-action="density"]').addEventListener("click", ()=>{
+                  // quick density toggle: reduce paddings a bit
+                  const stage = document.getElementById("stage");
+                  const compact = stage.getAttribute("data-density")==="compact";
+                  stage.setAttribute("data-density", compact ? "normal" : "compact");
+                  if(compact){
+                    root.style.setProperty("--gap", "12px");
+                    root.style.setProperty("--pad", "14px");
+                  } else {
+                    root.style.setProperty("--gap", "9px");
+                    root.style.setProperty("--pad", "12px");
+                  }
+                });
+              </script>
+            </body>
+            </html>
+  </main>
+
+</body>
+</html>

@@ -47,18 +47,18 @@ body.lilianne-shell{
 
 .lilianne-layout{
   display:grid;
-  grid-template-columns: 2fr 1fr;
-  height: calc(100vh - 150px);
+  grid-template-columns: 2.2fr 1fr;
+  height: calc(100vh - 160px);
 }
 
 /* ================= TABLE ================= */
 
 .lilianne-table{
-  padding: 14px;
-  display:grid;
-  grid-template-columns: repeat(18, minmax(44px, 1fr));
-  grid-auto-rows: 64px;
-  gap: 6px;
+  padding: 16px;
+  display: grid;
+  grid-template-columns: repeat(18, minmax(48px, 1fr));
+  grid-auto-rows: 72px;
+  gap: 8px;
   overflow: auto;
   align-content: start;
 }
@@ -67,25 +67,28 @@ body.lilianne-shell{
 
 .element{
   position: relative;
-  border-radius: 8px;
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  border: 1px solid rgba(255,255,255,.10);
-  transition: transform .18s ease, opacity .18s ease, outline-color .18s ease;
-  padding: 4px;
+  border: 1px solid rgba(255,255,255,.08);
+  transition: transform .18s ease, opacity .18s ease, box-shadow .18s ease;
+  padding: 6px;
   background: var(--panel);
   color: var(--text);
 }
 
 .element:hover{
-  transform: scale(1.04);
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 6px 18px rgba(0,0,0,.25);
 }
 
 .element.active{
   outline:2px solid #8df7ff;
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 6px 18px rgba(0,0,0,.25);
   z-index: 2;
 }
 
@@ -93,30 +96,11 @@ body.lilianne-shell{
 
 .lilianne-panel{
   border-left:1px solid var(--line);
-  padding:16px;
+  padding:20px;
   overflow:auto;
-}
-
-.panel-header{
   display:flex;
-  gap:12px;
-  align-items:center;
-}
-
-.panel-symbol{
-  font-size:32px;
-  font-weight:bold;
-}
-
-.panel-summary{
-  margin-top:12px;
-  color: var(--muted);
-}
-
-.panel-footer a{
-  display:inline-block;
-  margin-top:14px;
-  color:#8df7ff;
+  flex-direction:column;
+  gap:16px;
 }
 
 .element.is-dimmed{
@@ -129,24 +113,24 @@ body.lilianne-shell{
 
 .el-number{
   position: absolute;
-  top: 4px;
-  left: 6px;
+  top: 6px;
+  left: 8px;
   font-size: 0.65rem;
-  color: var(--muted);
+  opacity: 0.7;
 }
 
 .el-symbol{
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: 700;
   line-height: 1;
 }
 
 .el-name{
   margin-top: 4px;
-  font-size: 0.62rem;
+  font-size: 0.65rem;
   text-align: center;
   line-height: 1.1;
-  color: var(--muted);
+  opacity: 0.7;
 }
 
 /* filtros */
@@ -183,6 +167,77 @@ body.lilianne-shell{
 .category-lantanido{ background: #f4c3ff; color: #44214e; }
 .category-actinido{ background: #ff7f96; color: #4b1020; }
 .category-unknown{ background: #5e6470; color: #ffffff; }
+
+.panel-header{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  border-bottom:1px solid var(--line);
+  padding-bottom:10px;
+}
+
+.panel-header h2{
+  margin:0;
+  font-size:1.4rem;
+}
+
+.panel-header span{
+  font-size:0.8rem;
+  opacity:0.7;
+}
+
+.panel-symbol{
+  font-size:42px;
+  font-weight:700;
+  line-height:1;
+}
+
+.panel-summary{
+  margin-top:12px;
+  color: var(--muted);
+}
+
+.panel-footer a{
+  display:inline-block;
+  margin-top:10px;
+  color:#8df7ff;
+  font-weight:500;
+  text-decoration:none;
+}
+
+.panel-footer a:hover{
+  text-decoration:underline;
+}
+
+/* ========== BODY DEL PANEL =================== */
+
+.panel-body{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  font-size:0.9rem;
+}
+
+.panel-body p{
+  margin:0;
+}
+
+.panel-summary{
+  margin-top:12px;
+  font-size:0.9rem;
+  line-height:1.5;
+  opacity:0.85;
+}
+
+.panel-empty{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height:100%;
+  font-size:0.9rem;
+  opacity:0.6;
+  text-align:center;
+}
 
 /* ================= RESPONSIVE ================= */
 
