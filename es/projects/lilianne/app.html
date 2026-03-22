@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Lilianne</title>
+  <meta name="description" content="Aplicación interactiva para explorar la tabla periódica de los elementos." />
+
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+
+<body class="lilianne-shell">
+
+  <main class="lilianne-app"
+        data-project-demo
+        data-project-title="Lilianne"
+        data-project-type="app"
+        data-project-status="beta"
+        data-project-category="Educational / Interactive UI"
+        data-project-date="2026-03-22"
+        data-project-tags="education,chemistry,interactive,ui"
+        data-project-featured="true"
+        data-project-stack="HTML,CSS,JavaScript,JSON">
+
+    <!-- ================= HEADER ================= -->
+    <header class="lilianne-header">
+      <div class="lilianne-header-inner">
+        <h1 class="lilianne-title">Lilianne</h1>
+        <p class="lilianne-subtitle">
+          Tabla periódica interactiva para exploración y aprendizaje
+        </p>
+      </div>
+    </header>
+
+    <!-- ================= CONTROLS ================= -->
+    <section class="lilianne-controls">
+
+      <!-- búsqueda -->
+      <div class="lilianne-search">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Buscar por nombre, símbolo o número atómico..."
+        />
+      </div>
+
+      <!-- filtros -->
+      <div class="lilianne-filters" id="filtersContainer">
+        <!-- se generan dinámicamente -->
+      </div>
+
+    </section>
+
+    <!-- ================= MAIN LAYOUT ================= -->
+    <section class="lilianne-layout">
+
+      <!-- ===== TABLA ===== -->
+      <div class="lilianne-table" id="periodicTable">
+        <!-- grid generado dinámicamente -->
+      </div>
+
+      <!-- ===== PANEL ===== -->
+      <aside class="lilianne-panel" id="elementPanel">
+
+        <div class="panel-empty" id="panelEmpty">
+          <p>Selecciona un elemento para ver su información</p>
+        </div>
+
+        <div class="panel-content" id="panelContent" hidden>
+
+          <div class="panel-header">
+            <div class="panel-symbol" id="elSymbol">H</div>
+            <div>
+              <h2 id="elName">Hidrógeno</h2>
+              <span id="elNumber">1</span>
+            </div>
+          </div>
+
+          <div class="panel-body">
+            <p><strong>Masa:</strong> <span id="elMass"></span></p>
+            <p><strong>Categoría:</strong> <span id="elCategory"></span></p>
+            <p><strong>Grupo:</strong> <span id="elGroup"></span></p>
+            <p><strong>Periodo:</strong> <span id="elPeriod"></span></p>
+            <p><strong>Estado:</strong> <span id="elState"></span></p>
+
+            <p class="panel-summary" id="elSummary"></p>
+          </div>
+
+          <div class="panel-footer">
+            <a id="elWiki" target="_blank">Ver en Wikipedia</a>
+          </div>
+
+        </div>
+
+      </aside>
+
+    </section>
+
+  </main>
+
+  <script src="./app.js"></script>
+</body>
+</html>

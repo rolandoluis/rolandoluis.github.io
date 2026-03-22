@@ -4,15 +4,19 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Projects · rolandoluis</title>
-  <meta name="description" content="Selected engineering projects and case studies." />
+  <meta name="description" content="Playground técnico, demos web, componentes y proyectos interactivos." />
+
   <link rel="icon" href="/assets/img/brand/favicon.png" />
   <link rel="stylesheet" href="/assets/css/main.css" />
   <link rel="stylesheet" href="/assets/css/components.css" />
+  <link rel="stylesheet" href="/assets/css/projects.css" />
+
   <script defer src="/assets/js/main.js"></script>
   <script defer src="/assets/js/hero-net.js"></script>
+  <script defer src="/assets/js/projects.js"></script>
 </head>
 
-<body>
+<body class="projects-shell">
   <header class="site-header">
     <div class="container header-inner">
       <a class="brand" href="/">
@@ -36,19 +40,20 @@
       </div>
 
       <div class="search">
-        <input id="searchBox" type="search" placeholder="Buscar… / Search…" autocomplete="off"/>
+        <input id="searchBox" type="search" placeholder="Buscar… / Search…" autocomplete="off" />
         <div id="searchResults" class="search-results"></div>
       </div>
 
       <button class="nav-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobileNav">
         <span></span><span></span><span></span>
       </button>
-      
+
       <div class="theme">
         <button class="theme-btn" type="button" data-set-theme="classic" title="Classic">●</button>
         <button class="theme-btn" type="button" data-set-theme="graphite" title="Graphite">●</button>
         <button class="theme-btn" type="button" data-set-theme="solar" title="Solar">●</button>
       </div>
+
       <div id="mobileNav" class="mobile-nav" hidden>
         <div class="mobile-nav-inner">
           <nav class="mobile-nav-links">
@@ -59,63 +64,84 @@
             <a class="nav-link" data-i18n-link="pages/lab.html">Lab</a>
             <a class="nav-link" data-i18n-link="pages/about.html">Sobre mí</a>
           </nav>
-        
-          <div class="mobile-nav-tools">
-            <!-- Puedes mover aquí search/lang/theme para móvil -->
-            <div class="search">
-              <input id="searchBoxMobile" type="search" placeholder="Buscar…" autocomplete="off">
-              <div id="searchResultsMobile" class="search-results"></div>
-            </div>
-          
-            <div class="row">
-              <div class="lang">
-                <button class="lang-btn" type="button" data-set-lang="es">ES</button>
-                <span class="lang-sep">·</span>
-                <button class="lang-btn" type="button" data-set-lang="en">EN</button>
-              </div>  
-            </div>
-          
-            <div class="theme">
-              <button class="theme-btn" type="button" data-set-theme="classic" title="Classic">●</button>
-              <button class="theme-btn" type="button" data-set-theme="graphite" title="Graphite">●</button>
-              <button class="theme-btn" type="button" data-set-theme="solar" title="Solar">●</button>
-            </div>
-          </div>
         </div>
       </div>
     </div>
   </header>
 
   <nav class="breadcrumb" id="breadcrumb"></nav>
-  
-  <main class="container">
-    <section class="hero hero-canvas">
-      <canvas class="hero-net-canvas" aria-hidden="true"></canvas>
-      <h1>Proyectos</h1>
-      <p class="lede">Casos de estudio, herramientas y plataformas. Cada proyecto incluye alcance, arquitectura y resultados.</p>
-      <div class="cta-row">
-        <a class="category-btn" data-i18n-link="projects/edc.html">EDC</a>
-        <a class="category-btn" data-i18n-link="projects/bdc.html">BDC</a>
-        <a class="category-btn" data-i18n-link="projects/ok-eurodat.html">OKEurodat</a>
-      </div>
-    </section>
-    <section class="grid">
-      <article class="card">
-        <h2>EDC</h2>
-        <p>Consola de implementación para aprovisionamiento de Windows y estandarización de perfiles.</p>
-        <a class="link" data-i18n-link="projects/edc.html">Abrir →</a>
-      </article>
-      <article class="card">
-        <h2>BDC</h2>
-        <p>Motor de flujos de trabajo de nueva generación para compilación/implementación, con reportes y políticas por etapa.</p>
-        <a class="link" data-i18n-link="projects/bdc.html">Abrir →</a>
-      </article>
-      <article class="card">
-        <h2>OKEurodat</h2>
-        <p>Plataforma de conocimiento operacional: procedimientos, comandos, decisiones y diagramas.</p>
-        <a class="link" data-i18n-link="projects/ok-eurodat.html">Abrir →</a>
-      </article>
-    </section>
+
+  <main class="container projects-shell-main">
+    <div class="projects-layout is-explore" id="projectsLayout">
+
+      <section class="hero hero-canvas hero-projects" id="projectsHero">
+        <canvas class="hero-net-canvas" aria-hidden="true"></canvas>
+
+        <div class="hero-projects-inner">
+          <h1>Projects</h1>
+          <p class="lede">
+            Demos, componentes, herramientas y experimentos interactivos.
+          </p>
+
+          <div class="projects-toolbar">
+            <div class="projects-filters" id="projectsFilters">
+              <button class="projects-filter is-active" type="button" data-filter="all">Todo</button>
+              <button class="projects-filter" type="button" data-filter="project">Project</button>
+              <button class="projects-filter" type="button" data-filter="demo">Demo</button>
+              <button class="projects-filter" type="button" data-filter="component">Component</button>
+              <button class="projects-filter" type="button" data-filter="experiment">Experiment</button>
+              <button class="projects-filter" type="button" data-filter="tool">Tool</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="projects-explore" id="projectsExplore">
+        <div class="projects-scroll-container">
+          <div class="projects-grid" id="projectsGrid">
+            <!-- Tiles dinámicos -->
+          </div>
+        </div>
+      </section>
+
+      <section class="projects-focus" id="projectsFocus" hidden>
+        <aside class="projects-info-panel">
+          <div class="projects-info-head">
+            <span class="projects-badge" id="projectTypeBadge">demo</span>
+            <span class="projects-status" id="projectStatusBadge">stable</span>
+          </div>
+
+          <h2 class="projects-focus-title" id="projectTitle">Título</h2>
+          <p class="projects-focus-desc" id="projectDescription">Descripción</p>
+
+          <div class="projects-meta" id="projectMeta"></div>
+
+          <div class="projects-tags" id="projectTags"></div>
+
+          <div class="projects-actions">
+            <a class="projects-action-btn" id="projectOpenFull" href="#" target="_blank" rel="noopener">Abrir completo</a>
+            <a class="projects-action-btn" id="projectEngineering" href="#" hidden>Ver ingeniería</a>
+            <a class="projects-action-btn" id="projectRepo" href="#" target="_blank" rel="noopener" hidden>Repositorio</a>
+            <button class="projects-action-btn projects-action-close" id="projectBack" type="button">Volver</button>
+          </div>
+        </aside>
+
+        <section class="projects-demo-panel">
+          <div class="projects-demo-bar">
+            <div class="projects-demo-title" id="projectDemoTitle">Demo</div>
+            <div class="projects-demo-subtitle" id="projectDemoSubtitle">Preview interactiva</div>
+          </div>
+
+          <div class="projects-demo-stage" id="projectsDemoStage">
+            <iframe id="projectsDemoFrame" src="" hidden></iframe>
+            <div class="projects-demo-placeholder" id="projectsDemoPlaceholder">
+              Selecciona un proyecto para cargar su demo.
+            </div>
+          </div>
+        </section>
+      </section>
+
+    </div>
   </main>
 
   <footer class="site-footer">

@@ -1,0 +1,123 @@
+html,
+body{
+  margin:0;
+  padding:0;
+  height:100%;
+}
+
+body.project-demo-shell{
+  background: transparent;
+  color: var(--text);
+  font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+  line-height: 1.5;
+  overflow: auto;
+}
+
+.project-demo{
+  min-height: 100vh;
+  padding: 20px 22px 28px;
+  display: grid;
+  grid-template-rows: auto auto auto;
+  gap: 18px;
+}
+
+.project-demo-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--panel) 88%, transparent);
+  padding: 18px;
+}
+
+.project-demo-headline h1{
+  margin: 0 0 8px;
+  font-size: clamp(1.6rem, 2.5vw, 2.4rem);
+  line-height: 1.15;
+}
+
+.project-demo-lede{
+  margin: 0;
+  color: var(--muted);
+  max-width: 65ch;
+}
+
+.project-demo-badges{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.project-demo-badge{
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: .75rem;
+  color: var(--muted);
+  background: rgba(255,255,255,.04);
+}
+
+.project-demo-stage{
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--panel) 90%, transparent);
+  overflow: hidden;
+  min-height: 380px;
+}
+
+.project-demo-surface{
+  min-height: 380px;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+}
+
+.project-demo-info{
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.project-demo-block{
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--panel) 88%, transparent);
+  padding: 18px;
+}
+
+.project-demo-block h2{
+  margin: 0 0 10px;
+  font-size: 1.05rem;
+}
+
+.project-demo-block p,
+.project-demo-block li{
+  color: var(--muted);
+}
+
+.project-demo-block ul{
+  margin: 0;
+  padding-left: 18px;
+}
+
+@media (max-width: 860px){
+  .project-demo{
+    padding: 16px;
+  }
+
+  .project-demo-header{
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .project-demo-info{
+    grid-template-columns: 1fr;
+  }
+
+  .project-demo-stage,
+  .project-demo-surface{
+    min-height: 260px;
+  }
+}

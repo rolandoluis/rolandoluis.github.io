@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Neural Sphere Core Interface</title>
+  <meta name="description" content="Experimento visual interactivo con esfera 3D, nodos seleccionables y panel contextual de estilo holográfico.">
+
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <link rel="stylesheet" href="/assets/css/project-demo.css">
+
+  <style>
+    .sphere-demo-shell{
+      position: relative;
+      min-height: 520px;
+      border-radius: 16px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at center, rgba(0,247,255,.10) 0%, rgba(0,20,40,.18) 35%, rgba(0,0,0,.55) 100%),
+        linear-gradient(180deg, rgba(0,14,28,.96), rgba(0,4,10,.98));
+      border: 1px solid var(--line);
+    }
+
+    .sphere-demo-canvas{
+      display: block;
+      width: 100%;
+      height: 520px;
+    }
+
+    .sphere-ui-panel{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      width: min(320px, calc(100% - 32px));
+      padding: 18px;
+      border-radius: 16px;
+      background: rgba(4, 20, 40, 0.86);
+      border: 1px solid rgba(0,247,255,.18);
+      backdrop-filter: blur(10px);
+      color: #dffbff;
+      opacity: 0;
+      pointer-events: none;
+      transition: transform .28s ease, opacity .28s ease;
+      z-index: 3;
+      box-shadow: 0 10px 24px rgba(0,0,0,.35);
+    }
+
+    .sphere-ui-panel.is-visible{
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .sphere-ui-panel h2{
+      margin: 0 0 8px;
+      font-size: 1.15rem;
+      color: #8df7ff;
+    }
+
+    .sphere-ui-panel p{
+      margin: 0 0 14px;
+      color: #d7eef7;
+      font-size: .95rem;
+      line-height: 1.45;
+    }
+
+    .sphere-ui-actions{
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .sphere-btn{
+      appearance: none;
+      border: 1px solid rgba(0,247,255,.22);
+      background: rgba(0,247,255,.08);
+      color: #dffbff;
+      border-radius: 10px;
+      padding: 9px 12px;
+      cursor: pointer;
+      text-decoration: none;
+      font-size: .9rem;
+    }
+
+    .sphere-btn:hover{
+      background: rgba(0,247,255,.14);
+      border-color: rgba(0,247,255,.36);
+    }
+
+    .sphere-hud{
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .sphere-hud-chip{
+      border: 1px solid rgba(0,247,255,.15);
+      background: rgba(2, 16, 30, .72);
+      color: #b7eaf1;
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-size: .78rem;
+      backdrop-filter: blur(8px);
+    }
+
+    @media (max-width: 860px){
+      .sphere-demo-canvas{
+        height: 420px;
+      }
+
+      .sphere-demo-shell{
+        min-height: 420px;
+      }
+
+      .sphere-hud{
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body class="project-demo-shell">
+
+  <main class="project-demo"
+        data-project-demo
+        data-project-title="Neural Sphere Core Interface"
+        data-project-type="experiment"
+        data-project-status="concept"
+        data-project-category="Frontend / Visual Interaction"
+        data-project-date="2026-03-22"
+        data-project-tags="canvas,ui,3d,interaction,experimental"
+        data-project-featured="true"
+        data-project-repo=""
+        data-project-engineering=""
+        data-project-stack="HTML,CSS,JavaScript,Canvas">
+
+    <header class="project-demo-header">
+      <div class="project-demo-headline">
+        <h1>Neural Sphere Core Interface</h1>
+        <p class="project-demo-lede">
+          Experimento visual interactivo con esfera 3D, nodos seleccionables y panel contextual de inspiración holográfica.
+        </p>
+      </div>
+
+      <div class="project-demo-badges">
+        <span class="project-demo-badge">experiment</span>
+        <span class="project-demo-badge">concept</span>
+      </div>
+    </header>
+
+    <section class="project-demo-stage">
+      <div class="project-demo-surface sphere-demo-shell">
+
+        <canvas id="sphereCanvas" class="sphere-demo-canvas"></canvas>
+
+        <div class="sphere-ui-panel" id="spherePanel">
+          <h2 id="spherePanelTitle">Nodo seleccionado</h2>
+          <p id="spherePanelText">
+            Esta interfaz presenta una navegación experimental basada en una esfera reactiva con puntos interactivos.
+          </p>
+
+          <div class="sphere-ui-actions">
+            <button class="sphere-btn" id="sphereClose" type="button">Cerrar</button>
+          </div>
+        </div>
+
+        <div class="sphere-hud">
+          <div class="sphere-hud-chip">Drag para rotar</div>
+          <div class="sphere-hud-chip">Hover para detectar nodos</div>
+          <div class="sphere-hud-chip">Click para abrir panel contextual</div>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="project-demo-info">
+      <div class="project-demo-block">
+        <h2>Qué hace</h2>
+        <p>
+          Muestra una interfaz inmersiva de navegación basada en canvas con una esfera reactiva, puntos interactivos
+          y un panel contextual central. Está planteado como experimento de interacción visual más que como producto cerrado.
+        </p>
+      </div>
+
+      <div class="project-demo-block">
+        <h2>Stack</h2>
+        <ul>
+          <li>HTML</li>
+          <li>CSS</li>
+          <li>JavaScript</li>
+          <li>Canvas 2D</li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    (() => {
+      const canvas = document.getElementById("sphereCanvas");
+      const ctx = canvas.getContext("2d");
+
+      const panel = document.getElementById("spherePanel");
+      const panelTitle = document.getElementById("spherePanelTitle");
+      const panelText = document.getElementById("spherePanelText");
+      const closeBtn = document.getElementById("sphereClose");
+
+      let width = 0;
+      let height = 0;
+      let dragging = false;
+      let lastX = 0;
+      let rotationY = 0;
+      let rotationX = 0;
+
+      const radius = 150;
+      const nodes = [
+        { label: "Core", desc: "Núcleo conceptual de la interfaz.", theta: 0.2, phi: 1.2 },
+        { label: "UI", desc: "Zona de interacción y feedback visual.", theta: 1.4, phi: 1.0 },
+        { label: "Data", desc: "Representación conceptual del flujo de datos.", theta: 2.6, phi: 1.4 },
+        { label: "Engine", desc: "Motor de animación y render de la esfera.", theta: 3.8, phi: 1.3 },
+        { label: "Lab", desc: "Espacio de experimentación y prototipado.", theta: 5.1, phi: 1.1 }
+      ];
+
+      function resize() {
+        const rect = canvas.getBoundingClientRect();
+        width = rect.width;
+        height = rect.height;
+
+        const dpr = window.devicePixelRatio || 1;
+        canvas.width = Math.floor(width * dpr);
+        canvas.height = Math.floor(height * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+
+      function projectNode(node) {
+        let x = radius * Math.sin(node.phi) * Math.cos(node.theta + rotationY);
+        let y = radius * Math.cos(node.phi + rotationX);
+        let z = radius * Math.sin(node.phi) * Math.sin(node.theta + rotationY);
+
+        const scale = 0.9 + (z / radius) * 0.25;
+        return {
+          x: width / 2 + x,
+          y: height / 2 + y,
+          z,
+          scale,
+          r: 7 * scale,
+          label: node.label,
+          desc: node.desc
+        };
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, width, height);
+
+        const projected = nodes.map(projectNode).sort((a, b) => a.z - b.z);
+
+        ctx.save();
+        ctx.translate(width / 2, height / 2);
+        ctx.strokeStyle = "rgba(0,247,255,.14)";
+        ctx.lineWidth = 1.2;
+
+        for (let i = 0; i < 16; i++) {
+          const angle = (Math.PI * 2 / 16) * i + rotationY * 0.35;
+          ctx.beginPath();
+          ctx.moveTo(Math.cos(angle) * radius, Math.sin(angle) * radius * 0.22);
+          ctx.lineTo(Math.cos(angle + 0.16) * radius, Math.sin(angle + 0.16) * radius * 0.22);
+          ctx.stroke();
+        }
+
+        ctx.beginPath();
+        ctx.arc(0, 0, radius, 0, Math.PI * 2);
+        ctx.strokeStyle = "rgba(0,247,255,.20)";
+        ctx.stroke();
+        ctx.restore();
+
+        for (const p of projected) {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = "rgba(0,247,255,.82)";
+          ctx.fill();
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r + 5, 0, Math.PI * 2);
+          ctx.strokeStyle = "rgba(0,247,255,.12)";
+          ctx.stroke();
+        }
+
+        rotationY += 0.0025;
+        requestAnimationFrame(draw);
+      }
+
+      function pickNode(mx, my) {
+        const projected = nodes.map(projectNode).sort((a, b) => b.z - a.z);
+
+        for (const p of projected) {
+          const dx = mx - p.x;
+          const dy = my - p.y;
+          if (Math.sqrt(dx * dx + dy * dy) <= p.r + 6) {
+            return p;
+          }
+        }
+        return null;
+      }
+
+      canvas.addEventListener("mousedown", (e) => {
+        dragging = true;
+        lastX = e.clientX;
+      });
+
+      window.addEventListener("mouseup", () => {
+        dragging = false;
+      });
+
+      window.addEventListener("mousemove", (e) => {
+        if (!dragging) return;
+        const dx = e.clientX - lastX;
+        rotationY += dx * 0.01;
+        lastX = e.clientX;
+      });
+
+      canvas.addEventListener("click", (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const mx = e.clientX - rect.left;
+        const my = e.clientY - rect.top;
+
+        const node = pickNode(mx, my);
+        if (!node) return;
+
+        panelTitle.textContent = node.label;
+        panelText.textContent = node.desc;
+        panel.classList.add("is-visible");
+      });
+
+      closeBtn.addEventListener("click", () => {
+        panel.classList.remove("is-visible");
+      });
+
+      resize();
+      window.addEventListener("resize", resize);
+      draw();
+    })();
+  </script>
+</body>
+</html>
