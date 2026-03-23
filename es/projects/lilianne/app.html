@@ -113,5 +113,12 @@
   </main>
 
   <script src="./app.js"></script>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("embed") === "projects") {
+      document.documentElement.classList.add("embed-projects");
+      document.body.classList.add("embed-projects");
+    }
+  </script>
 </body>
 </html>

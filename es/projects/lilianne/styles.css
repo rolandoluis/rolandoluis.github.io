@@ -24,6 +24,12 @@ body.lilianne-shell{
   color: var(--muted);
 }
 
+.lilianne-app{
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 /* ================= CONTROLS ================= */
 
 .lilianne-controls{
@@ -69,6 +75,7 @@ body.lilianne-shell{
   gap: 8px;
   overflow: auto;
   align-content: start;
+  min-width: 0;
   min-height:0;
 }
 
@@ -110,6 +117,8 @@ body.lilianne-shell{
   display:flex;
   flex-direction:column;
   gap:14px;
+  min-width: 0;
+  min-height: 0;
 }
 
 .element.is-dimmed{
@@ -268,5 +277,91 @@ body.lilianne-shell{
   .lilianne-panel{
     border-left:none;
     border-top:1px solid var(--line);
+  }
+}
+
+/* =========================================
+   Modo embebido en Projects
+========================================= */
+
+html.embed-projects,
+body.embed-projects{
+  height: 100%;
+  overflow: hidden;
+}
+
+body.embed-projects .lilianne-app{
+  height: 100vh;
+  min-height: 0;
+}
+
+body.embed-projects .lilianne-layout{
+  grid-template-columns: minmax(0, 2fr) minmax(280px, 0.95fr);
+  height: calc(100vh - 88px);
+  min-height: 0;
+  overflow: hidden;
+}
+
+body.embed-projects .lilianne-table{
+  grid-template-columns: repeat(18, minmax(38px, 1fr));
+  grid-auto-rows: 58px;
+  gap: 6px;
+  min-width: 0;
+  overflow: auto;
+  align-content: start;
+}
+
+body.embed-projects .element{
+  border-radius: 8px;
+  padding: 4px;
+}
+
+body.embed-projects .el-number{
+  font-size: 0.58rem;
+  top: 4px;
+  left: 6px;
+}
+
+body.embed-projects .el-symbol{
+  font-size: 0.95rem;
+}
+
+body.embed-projects .el-name{
+  font-size: 0.55rem;
+  margin-top: 3px;
+}
+
+body.embed-projects .lilianne-panel{
+  padding: 14px;
+  min-width: 0;
+  overflow: auto;
+}
+
+body.embed-projects .lilianne-panel-controls{
+  gap: 10px;
+  padding-bottom: 10px;
+}
+
+body.embed-projects .panel-empty{
+  min-height: 90px;
+}
+
+body.embed-projects .panel-empty p{
+  font-size: 0.92rem;
+}
+
+@media (max-width: 1100px){
+  body.embed-projects .lilianne-layout{
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  body.embed-projects .lilianne-panel{
+    border-left: none;
+    border-top: 1px solid var(--line);
+  }
+
+  body.embed-projects .lilianne-table{
+    max-height: 58vh;
   }
 }

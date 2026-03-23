@@ -23,6 +23,9 @@
   const back = document.getElementById("projectBack");
 
   const filters = document.getElementById("projectsFilters");
+  const url = new URL(project.demoUrl, window.location.origin);
+  url.searchParams.set("embed", "projects");
+  frame.src = url.toString();
 
   if (!layout || !grid) return;
 
@@ -129,7 +132,7 @@
     const frame = document.getElementById("previewFrame");
     
     preview.hidden = false;
-    frame.src = project.demoUrl;
+    frame.src = `${project.demoUrl}?embed=projects`;
     
     document.getElementById("previewTitle").textContent = project.title;
   }
@@ -231,13 +234,13 @@
   });
 
   document.getElementById("previewExpand").addEventListener("click", () => {
-    enterFocusMode(currentProject);
+    openPreview(currentProject);
   });
 
   document.getElementById("previewClose").addEventListener("click", () => {
     const preview = document.getElementById("projectPreview");
     const frame = document.getElementById("previewFrame");
-    
+
     preview.hidden = true;
     frame.src = "";
   });
