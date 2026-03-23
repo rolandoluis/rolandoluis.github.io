@@ -1,5 +1,5 @@
 let elements = [];
-let selected = null;
+let selectedSymbol = null;
 
 async function init() {
   const res = await fetch("./data/elements.es.json");
@@ -41,11 +41,6 @@ function renderTable() {
 
     container.appendChild(cell);
   });
-}
-
-if(project.thumb){
-  tile.style.setProperty("--thumb", `url(${project.thumb})`);
-  tile.classList.add("has-thumb");
 }
 
 function selectElement(symbol) {
