@@ -43,6 +43,11 @@ function renderTable() {
   });
 }
 
+if(project.thumb){
+  tile.style.setProperty("--thumb", `url(${project.thumb})`);
+  tile.classList.add("has-thumb");
+}
+
 function selectElement(symbol) {
   const el = elements.find(e => e.symbol === symbol);
   if (!el) return;
@@ -150,14 +155,28 @@ function renderFilters() {
   if (first) first.classList.add("is-active");
 }
 
-function applyFilter(categoryKey) {
+function applyFilter(type, value){
   document.querySelectorAll(".element").forEach(node => {
-    if (categoryKey === "all") {
+
+    if(type === "all"){
       node.classList.remove("is-dimmed");
       return;
     }
 
-    const match = node.dataset.category === categoryKey;
+    let match = false;
+
+    if(type === "category"){
+      match = node.dataset.category === value;
+    }
+
+    if(type === "group"){
+      match = String(node.dataset.group) === String(value);
+    }
+
+    if(type === "period"){
+      match = String(node.dataset.period) === String(value);
+    }
+
     node.classList.toggle("is-dimmed", !match);
   });
 }

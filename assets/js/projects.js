@@ -124,7 +124,15 @@
     });
   }
 
-  
+  function openPreview(project){
+    const preview = document.getElementById("projectPreview");
+    const frame = document.getElementById("previewFrame");
+    
+    preview.hidden = false;
+    frame.src = project.demoUrl;
+    
+    document.getElementById("previewTitle").textContent = project.title;
+  }
 
   function setFilter(filter) {
     activeFilter = filter;
@@ -220,6 +228,18 @@
     if (!project) return;
 
     enterFocusMode(project);
+  });
+
+  document.getElementById("previewExpand").addEventListener("click", () => {
+    enterFocusMode(currentProject);
+  });
+
+  document.getElementById("previewClose").addEventListener("click", () => {
+    const preview = document.getElementById("projectPreview");
+    const frame = document.getElementById("previewFrame");
+    
+    preview.hidden = true;
+    frame.src = "";
   });
 
   back?.addEventListener("click", () => {
