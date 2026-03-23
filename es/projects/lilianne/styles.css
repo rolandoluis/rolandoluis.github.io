@@ -10,7 +10,7 @@ body.lilianne-shell{
 /* ================= HEADER ================= */
 
 .lilianne-header{
-  padding: 18px 22px;
+  padding: 10px;
   border-bottom: 1px solid var(--line);
 }
 
