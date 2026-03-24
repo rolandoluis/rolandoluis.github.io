@@ -1,4 +1,7 @@
 (() => {
+
+  let currentProject = null;
+  let currentPreviewIndex = 0;
   const layout = document.getElementById("projectsLayout");
   const grid = document.getElementById("projectsGrid");
   const focus = document.getElementById("projectsFocus");
@@ -26,7 +29,12 @@
   const filters = document.getElementById("projectsFilters");
 
   const preview = document.getElementById("projectPreview");
-  const previewFrame = document.getElementById("previewFrame");
+  const previewImage = document.getElementById("previewImage");
+  const previewPlaceholder = document.getElementById("previewPlaceholder");
+  const previewGalleryNav = document.getElementById("previewGalleryNav");
+  const previewPrev = document.getElementById("previewPrev");
+  const previewNext = document.getElementById("previewNext");
+  const previewCounter = document.getElementById("previewCounter");
   const previewTitle = document.getElementById("previewTitle");
   const previewExpand = document.getElementById("previewExpand");
   const previewClose = document.getElementById("previewClose");
@@ -43,7 +51,6 @@
 
   let projects = [];
   let activeFilter = "all";
-  let currentProject = null;
 
   function escapeHtml(value) {
     return String(value ?? "")
@@ -158,22 +165,34 @@
   }
 
   function openPreview(project) {
-    if (!preview || !previewFrame) return;
-
-    const src = previewSrc(project);
-    if (!src) return;
+    if (!preview) return;
 
     currentProject = project;
     preview.hidden = false;
     previewTitle.textContent = project.title;
-    previewFrame.src = withEmbedParam(src);
+
+    renderPreviewImage(project, 0);
   }
 
   function closePreview() {
-    if (!preview || !previewFrame) return;
+    if (!preview) return;
 
     preview.hidden = true;
-    previewFrame.src = "";
+
+    if (previewImage) {
+      previewImage.src = "";
+      previewImage.hidden = true;
+    }
+
+    if (previewPlaceholder) {
+      previewPlaceholder.hidden = false;
+    }
+
+    if (previewGalleryNav) {
+      previewGalleryNav.hidden = true;
+    }
+
+    currentPreviewIndex = 0;
   }
 
   function setFilter(filter) {
@@ -294,6 +313,56 @@
     history.replaceState(null, "", location.pathname);
   }
 
+    function previewImages(project) {
+    if (project.gallery && project.gallery.length) return project.gallery;
+    if (project.thumb) return [project.thumb];
+    return [];
+  }
+
+  function renderPreviewImage(project, index = 0) {
+    const images = previewImages(project);
+
+    if (!images.length) {
+      previewImage.hidden = true;
+      previewImage.src = "";
+      previewPlaceholder.hidden = false;
+      previewGalleryNav.hidden = true;
+      return;
+    }
+
+    currentPreviewIndex = Math.max(0, Math.min(index, images.length - 1));
+
+    previewImage.src = images[currentPreviewIndex];
+    previewImage.alt = `${project.title} · vista previa ${currentPreviewIndex + 1}`;
+    previewImage.hidden = false;
+    previewPlaceholder.hidden = true;
+
+    if (images.length > 1) {
+      previewGalleryNav.hidden = false;
+      previewCounter.textContent = `${currentPreviewIndex + 1} / ${images.length}`;
+    } else {
+      previewGalleryNav.hidden = true;
+    }
+  }
+
+  previewPrev?.addEventListener("click", () => {
+    if (!currentProject) return;
+    const images = previewImages(currentProject);
+    if (!images.length) return;
+    
+    const nextIndex = (currentPreviewIndex - 1 + images.length) % images.length;
+    renderPreviewImage(currentProject, nextIndex);
+  });
+  
+  previewNext?.addEventListener("click", () => {
+    if (!currentProject) return;
+    const images = previewImages(currentProject);
+    if (!images.length) return;
+  
+    const nextIndex = (currentPreviewIndex + 1) % images.length;
+    renderPreviewImage(currentProject, nextIndex);
+  });
+
   document.addEventListener("click", (e) => {
     const tile = e.target.closest("[data-project]");
     if (!tile) return;
@@ -340,5 +409,6 @@
       console.error("[projects.js]", err);
       grid.innerHTML = `<article class="project-tile"><div class="project-tile-link"><h3 class="project-tile-title">Error</h3><p class="project-tile-desc">No se pudieron cargar los proyectos.</p></div></article>`;
     }
+
   })();
 })();
