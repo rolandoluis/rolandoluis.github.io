@@ -44,8 +44,12 @@
     "type": "app",
     "status": "beta",
     "featured": true,
-    "thumb": "",
-    "gallery": [],
+    "thumb": "/assets/projects/theme-showroom/thumb-01.png",
+    "gallery": [
+      "/assets/projects/theme-showroom/thumb-01.png",
+      "/assets/projects/theme-showroom/thumb-02.png",
+      "/assets/projects/theme-showroom/thumb-03.png"
+    ],
     "previewUrl": "",
     "previewMode": "",
     "demoUrl": "/es/projects/theme-showroom/app.html",
