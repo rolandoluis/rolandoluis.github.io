@@ -346,10 +346,10 @@ main.projects-shell-main{
   background: var(--panel);
 }
 
-.project-tile{
+/* .project-tile{
   position:relative;
   overflow:hidden;
-}
+} */
 
 .project-tile::before{
   content:"";
