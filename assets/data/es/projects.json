@@ -1,48 +1,39 @@
 [
   {
-    "title": "HeroNet Engine",
-    "slug": "heronet-engine",
-    "description": "Motor visual de red animada para heroes interactivos y panels.",
-    "category": "Frontend",
-    "type": "component",
-    "status": "stable",
-    "featured": true,
-    "demoMode": "iframe",
-    "demoUrl": "/es/projects/heronet-engine/demo.html",
-    "repoUrl": "https://github.com/rolandoluis/heronet-engine",
-    "engineeringUrl": "/es/engineering/architecture.html",
-    "tags": ["canvas", "ui", "animation"],
-    "stack": ["HTML", "CSS", "JavaScript"]
-  },
-  {
-    "title": "Engineering SPA Reader",
-    "slug": "engineering-spa-reader",
-    "description": "Shell SPA para navegación técnica con TOC externo e iframe controlado.",
-    "category": "Frontend",
-    "type": "demo",
+    "title": "Lilianne",
+    "slug": "lilianne",
+    "description": "Aplicación interactiva para explorar la tabla periódica de los elementos.",
+    "category": "Educational / Interactive UI",
+    "type": "app",
     "status": "beta",
     "featured": true,
+    "thumb": "/assets/projects/lilianne/thumb-01.png",
+    "gallery": [
+      "/assets/projects/lilianne/thumb-01.png",
+      "/assets/projects/lilianne/thumb-01.webp",
+      "/assets/projects/lilianne/thumb-02.png",
+      "/assets/projects/lilianne/thumb-02.webp",
+      "/assets/projects/lilianne/thumb-03.png",
+      "/assets/projects/lilianne/thumb-03.webp"
+    ],
+    "previewUrl": "/es/projects/lilianne/preview.html",
+    "previewMode": "iframe",
+    "demoUrl": "/es/projects/lilianne/app.html",
     "demoMode": "iframe",
-    "demoUrl": "/es/projects/engineering-spa-reader/demo.html",
-    "repoUrl": "",
-    "engineeringUrl": "/es/engineering/architecture.html",
-    "tags": ["spa", "reader", "docs"],
-    "stack": ["HTML", "CSS", "JavaScript"]
-  },
-  {
-    "title": "Neural Sphere Core Interface",
-    "slug": "neural-sphere-core",
-    "description": "Experimento visual interactivo con esfera 3D, nodos seleccionables y panel contextual de estilo holográfico.",
-    "category": "Frontend / Visual Interaction",
-    "type": "experiment",
-    "status": "concept",
-    "featured": true,
-    "demoMode": "iframe",
-    "demoUrl": "/es/projects/neural-sphere-core/demo.html",
     "repoUrl": "",
     "engineeringUrl": "",
-    "tags": ["canvas", "ui", "3d", "interaction", "experimental"],
-    "stack": ["HTML", "CSS", "JavaScript", "Canvas"],
+    "tags": [
+      "education",
+      "chemistry",
+      "interactive",
+      "ui"
+    ],
+    "stack": [
+      "HTML",
+      "CSS",
+      "JavaScript",
+      "JSON"
+    ],
     "date": "2026-03-22"
   },
   {
@@ -53,28 +44,57 @@
     "type": "app",
     "status": "beta",
     "featured": true,
-    "demoMode": "iframe",
+    "thumb": "",
+    "gallery": [],
+    "previewUrl": "",
+    "previewMode": "",
     "demoUrl": "/es/projects/theme-showroom/app.html",
+    "demoMode": "iframe",
     "repoUrl": "",
     "engineeringUrl": "",
-    "tags": ["themes", "ui", "ux", "design-system", "showcase"],
-    "stack": ["HTML", "CSS", "JavaScript"],
+    "tags": [
+      "themes",
+      "ui",
+      "ux",
+      "design-system",
+      "showcase"
+    ],
+    "stack": [
+      "HTML",
+      "CSS",
+      "JavaScript"
+    ],
     "date": "2026-03-22"
   },
   {
-    "title": "Lilianne",
-    "slug": "lilianne",
-    "description": "Aplicación educativa interactiva para explorar la tabla periódica con filtros, búsqueda y panel de detalle propio.",
-    "category": "Educational / Interactive UI",
-    "type": "app",
-    "status": "beta",
+    "title": "Neural Sphere Core Interface",
+    "slug": "neural-sphere-core",
+    "description": "Experimento visual interactivo con esfera 3D, nodos seleccionables y panel contextual de estilo holográfico.",
+    "category": "Frontend / Visual Interaction",
+    "type": "experiment",
+    "status": "concept",
     "featured": true,
+    "thumb": "",
+    "gallery": [],
+    "previewUrl": "",
+    "previewMode": "",
+    "demoUrl": "/es/projects/neural-sphere-core/demo.html",
     "demoMode": "iframe",
-    "demoUrl": "/es/projects/lilianne/app.html",
     "repoUrl": "",
     "engineeringUrl": "",
-    "tags": ["education", "chemistry", "interactive", "ui", "data-visualization"],
-    "stack": ["HTML", "CSS", "JavaScript", "JSON"],
+    "tags": [
+      "canvas",
+      "ui",
+      "3d",
+      "interaction",
+      "experimental"
+    ],
+    "stack": [
+      "HTML",
+      "CSS",
+      "JavaScript",
+      "Canvas"
+    ],
     "date": "2026-03-22"
   }
 ]

@@ -1,0 +1,176 @@
+html,
+body{
+  margin:0;
+  padding:0;
+  height:100%;
+}
+
+body.lilianne-preview-shell{
+  background: transparent;
+  color: var(--text);
+  overflow: hidden;
+}
+
+.lilianne-preview{
+  height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(120,120,120,0.05), transparent 35%),
+    linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+}
+
+.lilianne-preview-header{
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+  background: color-mix(in srgb, var(--panel) 92%, transparent);
+}
+
+.lilianne-preview-title{
+  margin:0;
+  font-size:1.15rem;
+  line-height:1.1;
+}
+
+.lilianne-preview-subtitle{
+  margin:4px 0 0;
+  font-size:.82rem;
+  color:var(--muted);
+}
+
+.lilianne-preview-layout{
+  min-height:0;
+  display:grid;
+  grid-template-columns: minmax(0, 2.1fr) minmax(260px, .95fr);
+  gap: 0;
+}
+
+.lilianne-preview-table{
+  min-width:0;
+  min-height:0;
+  overflow:auto;
+  padding: 14px;
+  display:grid;
+  grid-template-columns: repeat(18, minmax(34px, 1fr));
+  grid-auto-rows: 52px;
+  gap: 6px;
+  align-content: start;
+  border-right: 1px solid var(--line);
+}
+
+.lilianne-preview-panel{
+  min-width:0;
+  min-height:0;
+  overflow:auto;
+  padding:14px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  background: color-mix(in srgb, var(--panel) 90%, transparent);
+}
+
+.preview-panel-header{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  border-bottom:1px solid var(--line);
+  padding-bottom:10px;
+}
+
+.preview-panel-symbol{
+  font-size:2rem;
+  font-weight:700;
+  line-height:1;
+}
+
+.preview-panel-header h2{
+  margin:0;
+  font-size:1.05rem;
+}
+
+.preview-panel-header span{
+  font-size:.78rem;
+  color:var(--muted);
+}
+
+.preview-panel-body{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  font-size:.85rem;
+}
+
+.preview-panel-body p{
+  margin:0;
+}
+
+.preview-panel-summary{
+  margin-top:10px !important;
+  color:var(--muted);
+  line-height:1.45;
+}
+
+.lilianne-preview-table .element{
+  position:relative;
+  border-radius:8px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  padding:4px;
+  border:1px solid rgba(255,255,255,.08);
+  background:var(--panel);
+  color:var(--text);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+
+.lilianne-preview-table .element.active{
+  outline:2px solid #8df7ff;
+  box-shadow:0 0 0 2px rgba(141,247,255,.18);
+  z-index:2;
+}
+
+.lilianne-preview-table .el-number{
+  position:absolute;
+  top:4px;
+  left:6px;
+  font-size:.52rem;
+  opacity:.72;
+}
+
+.lilianne-preview-table .el-symbol{
+  font-size:.9rem;
+  font-weight:700;
+  line-height:1;
+}
+
+.lilianne-preview-table .el-name{
+  margin-top:3px;
+  font-size:.5rem;
+  text-align:center;
+  line-height:1.1;
+  opacity:.76;
+}
+
+/* categorías visuales */
+.category-noMetal{ background: #f4ef8b; color: #1c2140; }
+.category-metalAlcalino{ background: #ffbf3f; color: #312200; }
+.category-alcalinoterreo{ background: #ffe6b8; color: #3a2a00; }
+.category-metalTransicion{ background: #8f8f96; color: #ffffff; }
+.category-postMetal{ background: #b8b8c0; color: #202020; }
+.category-metaloide{ background: #4d4d58; color: #ffffff; }
+.category-halogeno{ background: #b9f286; color: #1a2e12; }
+.category-gasNoble{ background: #73e7ef; color: #00323a; }
+.category-lantanido{ background: #f4c3ff; color: #44214e; }
+.category-actinido{ background: #ff7f96; color: #4b1020; }
+.category-unknown{ background: #5e6470; color: #ffffff; }
+
+@media (max-width: 900px){
+  .lilianne-preview-layout{
+    grid-template-columns: 1fr;
+  }
+
+  .lilianne-preview-panel{
+    border-top:1px solid var(--line);
+  }
+}

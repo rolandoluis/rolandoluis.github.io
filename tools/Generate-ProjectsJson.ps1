@@ -1,12 +1,16 @@
 # ============================================================
 # Generate-ProjectsJson.ps1
 # Genera assets/data/{lang}/projects.json
+# Basado en carpetas de proyecto + contrato app/demo/preview
 # ============================================================
 
 param(
     [string]$Lang = "es",
     [string]$RootPath
 )
+
+Set-StrictMode -Version Latest
+$ErrorActionPreference = "Stop"
 
 if (-not $RootPath) {
     $RootPath = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
@@ -21,6 +25,7 @@ Write-Host "RootPath: $RootPath" -ForegroundColor DarkCyan
 $projectsPath = Join-Path $RootPath "$Lang/projects"
 $outputPath   = Join-Path $RootPath "assets/data/$Lang"
 $outputFile   = Join-Path $outputPath "projects.json"
+$assetsProjectsPath = Join-Path $RootPath "assets/projects"
 
 if (!(Test-Path $projectsPath)) {
     throw "No existe la ruta de proyectos: $projectsPath"
@@ -52,15 +57,20 @@ function Get-AttributeValue {
 function Get-MetaDescription {
     param([string]$Content)
 
-    $pattern = '<meta\s+name\s*=\s*"description"\s+content\s*=\s*"([^"]*)"'
-    $match = [regex]::Match(
-        $Content,
-        $pattern,
-        [System.Text.RegularExpressions.RegexOptions]::IgnoreCase
+    $patterns = @(
+        '<meta\s+name\s*=\s*"description"\s+content\s*=\s*"([^"]*)"',
+        '<meta\s+content\s*=\s*"([^"]*)"\s+name\s*=\s*"description"'
     )
 
-    if ($match.Success) {
-        return $match.Groups[1].Value.Trim()
+    foreach ($pattern in $patterns) {
+        $match = [regex]::Match(
+            $Content,
+            $pattern,
+            [System.Text.RegularExpressions.RegexOptions]::IgnoreCase
+        )
+        if ($match.Success) {
+            return $match.Groups[1].Value.Trim()
+        }
     }
 
     return ""
@@ -79,9 +89,7 @@ function Parse-CsvList {
 function To-Bool {
     param([string]$Value)
 
-    if ([string]::IsNullOrWhiteSpace($Value)) {
-        return $false
-    }
+    if ([string]::IsNullOrWhiteSpace($Value)) { return $false }
 
     return $Value.Trim().ToLower() -in @("true", "1", "yes", "y", "si", "sí")
 }
@@ -91,37 +99,133 @@ function Is-PlaceholderProject {
 
     if ([string]::IsNullOrWhiteSpace($Project.slug)) { return $true }
     if ([string]::IsNullOrWhiteSpace($Project.title)) { return $true }
+    if ($Project.slug -match "^_") { return $true }
     if ($Project.slug -match "base") { return $true }
     if ($Project.title -match "\[.*\]") { return $true }
 
     return $false
 }
 
-function Resolve-DemoUrl {
+function Resolve-ProjectUrl {
     param(
         [string]$FileFullName,
-        [string]$ProjectsPath,
+        [string]$RootPath,
         [string]$Lang
     )
 
-    $relative = $FileFullName.Substring($ProjectsPath.Length).TrimStart("\", "/")
+    $langRoot = Join-Path $RootPath $Lang
+    $relative = $FileFullName.Substring($langRoot.Length).TrimStart("\", "/")
     $relative = $relative -replace "\\", "/"
-    return "/$Lang/projects/$relative"
+    return "/$Lang/$relative"
+}
+
+function Resolve-AssetUrl {
+    param(
+        [string]$FileFullName,
+        [string]$RootPath
+    )
+
+    $assetsRoot = Join-Path $RootPath "assets"
+    $relative = $FileFullName.Substring($assetsRoot.Length).TrimStart("\", "/")
+    $relative = $relative -replace "\\", "/"
+    return "/assets/$relative"
+}
+
+function Get-PreferredProjectEntryFile {
+    param(
+        [string]$ProjectDir
+    )
+
+    $candidates = @("app.html", "demo.html", "index.html")
+
+    foreach ($name in $candidates) {
+        $path = Join-Path $ProjectDir $name
+        if (Test-Path $path) {
+            return $path
+        }
+    }
+
+    return $null
+}
+
+function Get-PreviewFile {
+    param(
+        [string]$ProjectDir
+    )
+
+    $path = Join-Path $ProjectDir "preview.html"
+    if (Test-Path $path) {
+        return $path
+    }
+
+    return $null
+}
+
+function Get-ThumbsAndGallery {
+    param(
+        [string]$Slug,
+        [string]$AssetsProjectsPath,
+        [string]$RootPath
+    )
+
+    $result = [PSCustomObject]@{
+        Thumb   = ""
+        Gallery = @()
+    }
+
+    $projectAssetsDir = Join-Path $AssetsProjectsPath $Slug
+    if (!(Test-Path $projectAssetsDir)) {
+        return $result
+    }
+
+    $images = Get-ChildItem -Path $projectAssetsDir -File |
+        Where-Object { $_.Extension.ToLower() -in @(".webp", ".png", ".jpg", ".jpeg") } |
+        Sort-Object Name
+
+    if (-not $images) {
+        return $result
+    }
+
+    $gallery = @()
+    foreach ($img in $images) {
+        $gallery += (Resolve-AssetUrl -FileFullName $img.FullName -RootPath $RootPath)
+    }
+
+    $result.Thumb = $gallery[0]
+    $result.Gallery = $gallery
+
+    return $result
 }
 
 # ------------------------------------------------------------
-# Descubrimiento de archivos
+# Descubrimiento de proyectos (por carpeta)
 # ------------------------------------------------------------
 $items = @()
 
-Get-ChildItem -Path $projectsPath -Recurse -Filter "*.html" | ForEach-Object {
-    $file = $_
-    $content = Get-Content $file.FullName -Raw
+$projectDirs = Get-ChildItem -Path $projectsPath -Directory | Sort-Object Name
 
-    # Solo proyectos válidos
+foreach ($dir in $projectDirs) {
+    $slug = $dir.Name
+
+    # Ignorar carpetas privadas/base
+    if ($slug -match "^_" -or $slug -match "base") {
+        Write-Host "Omitido (carpeta base/privada): $slug" -ForegroundColor DarkYellow
+        continue
+    }
+
+    $entryFile = Get-PreferredProjectEntryFile -ProjectDir $dir.FullName
+    if (-not $entryFile) {
+        Write-Host "Omitido (sin app/demo/index): $slug" -ForegroundColor DarkYellow
+        continue
+    }
+
+    $previewFile = Get-PreviewFile -ProjectDir $dir.FullName
+
+    $content = Get-Content $entryFile -Raw
+
     if ($content -notmatch "data-project-demo") {
-        Write-Host "Omitido (sin data-project-demo): $($file.FullName)" -ForegroundColor DarkYellow
-        return
+        Write-Host "Omitido (sin data-project-demo): $slug" -ForegroundColor DarkYellow
+        continue
     }
 
     $title       = Get-AttributeValue $content "data-project-title"
@@ -134,9 +238,6 @@ Get-ChildItem -Path $projectsPath -Recurse -Filter "*.html" | ForEach-Object {
     $repoUrl     = Get-AttributeValue $content "data-project-repo"
     $engUrl      = Get-AttributeValue $content "data-project-engineering"
     $stackRaw    = Get-AttributeValue $content "data-project-stack"
-
-    # Slug por carpeta del proyecto, no por nombre de archivo
-    $slug = Split-Path $file.DirectoryName -Leaf
 
     $desc = Get-MetaDescription $content
 
@@ -152,6 +253,15 @@ Get-ChildItem -Path $projectsPath -Recurse -Filter "*.html" | ForEach-Object {
         }
     }
 
+    $demoUrl = Resolve-ProjectUrl -FileFullName $entryFile -RootPath $RootPath -Lang $Lang
+    $previewUrl = ""
+
+    if ($previewFile) {
+        $previewUrl = Resolve-ProjectUrl -FileFullName $previewFile -RootPath $RootPath -Lang $Lang
+    }
+
+    $media = Get-ThumbsAndGallery -Slug $slug -AssetsProjectsPath $AssetsProjectsPath -RootPath $RootPath
+
     $project = [PSCustomObject]@{
         title          = $title
         slug           = $slug
@@ -160,10 +270,19 @@ Get-ChildItem -Path $projectsPath -Recurse -Filter "*.html" | ForEach-Object {
         type           = if ($type) { $type.ToLower() } else { "project" }
         status         = if ($status) { $status.ToLower() } else { "stable" }
         featured       = To-Bool $featuredRaw
+
+        thumb          = $media.Thumb
+        gallery        = $media.Gallery
+
+        previewUrl     = $previewUrl
+        previewMode    = if ($previewUrl) { "iframe" } else { "" }
+
+        demoUrl        = $demoUrl
         demoMode       = "iframe"
-        demoUrl        = Resolve-DemoUrl -FileFullName $file.FullName -ProjectsPath $projectsPath -Lang $Lang
+
         repoUrl        = $repoUrl
         engineeringUrl = $engUrl
+
         tags           = Parse-CsvList $tagsRaw
         stack          = Parse-CsvList $stackRaw
         date           = $date
@@ -171,10 +290,10 @@ Get-ChildItem -Path $projectsPath -Recurse -Filter "*.html" | ForEach-Object {
 
     if (-not (Is-PlaceholderProject $project)) {
         $items += $project
-        Write-Host "OK -> $($project.slug)" -ForegroundColor DarkGray
+        Write-Host "OK -> $slug" -ForegroundColor DarkGray
     }
     else {
-        Write-Host "Omitido (placeholder): $($file.FullName)" -ForegroundColor Yellow
+        Write-Host "Omitido (placeholder): $slug" -ForegroundColor Yellow
     }
 }
 
@@ -206,7 +325,7 @@ $items = $items | Sort-Object `
 # ------------------------------------------------------------
 # Exportar JSON
 # ------------------------------------------------------------
-$json = $items | ConvertTo-Json -Depth 6
+$json = $items | ConvertTo-Json -Depth 8
 $json | Set-Content -Path $outputFile -Encoding UTF8
 
 Write-Host "----------------------------------------" -ForegroundColor DarkCyan

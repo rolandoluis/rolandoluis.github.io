@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Lilianne · Preview</title>
+  <meta name="description" content="Vista previa de Lilianne, aplicación educativa interactiva para explorar la tabla periódica." />
+
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="./styles.css" />
+  <link rel="stylesheet" href="./preview.css" />
+</head>
+
+<body class="lilianne-shell lilianne-preview-shell">
+  <main class="lilianne-preview" data-project-thumb>
+
+    <header class="lilianne-preview-header">
+      <div>
+        <h1 class="lilianne-preview-title">Lilianne</h1>
+        <p class="lilianne-preview-subtitle">
+          Tabla periódica interactiva
+        </p>
+      </div>
+    </header>
+
+    <section class="lilianne-preview-layout">
+      <div class="lilianne-preview-table" id="periodicTable">
+        <!-- grid generado dinámicamente -->
+      </div>
+
+      <aside class="lilianne-preview-panel" id="previewPanel">
+        <div class="preview-panel-header">
+          <div class="preview-panel-symbol" id="elSymbol">O</div>
+          <div>
+            <h2 id="elName">Oxígeno</h2>
+            <span id="elNumber">#8</span>
+          </div>
+        </div>
+
+        <div class="preview-panel-body">
+          <p><strong>Masa:</strong> <span id="elMass"></span></p>
+          <p><strong>Categoría:</strong> <span id="elCategory"></span></p>
+          <p><strong>Grupo:</strong> <span id="elGroup"></span></p>
+          <p><strong>Periodo:</strong> <span id="elPeriod"></span></p>
+          <p><strong>Estado:</strong> <span id="elState"></span></p>
+          <p class="preview-panel-summary" id="elSummary"></p>
+        </div>
+      </aside>
+    </section>
+
+  </main>
+
+  <script src="./preview.js"></script>
+</body>
+</html>

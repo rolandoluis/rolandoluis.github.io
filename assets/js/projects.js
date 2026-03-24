@@ -11,6 +11,7 @@
   const desc = document.getElementById("projectDescription");
   const meta = document.getElementById("projectMeta");
   const tags = document.getElementById("projectTags");
+  const gallery = document.getElementById("projectGallery");
   const demoTitle = document.getElementById("projectDemoTitle");
   const demoSubtitle = document.getElementById("projectDemoSubtitle");
 
@@ -23,7 +24,12 @@
   const back = document.getElementById("projectBack");
 
   const filters = document.getElementById("projectsFilters");
-  
+
+  const preview = document.getElementById("projectPreview");
+  const previewFrame = document.getElementById("previewFrame");
+  const previewTitle = document.getElementById("previewTitle");
+  const previewExpand = document.getElementById("previewExpand");
+  const previewClose = document.getElementById("previewClose");
 
   if (!layout || !grid) return;
 
@@ -34,6 +40,7 @@
   };
 
   const lang = window.siteLang || getLangFromPath(location.pathname);
+
   let projects = [];
   let activeFilter = "all";
   let currentProject = null;
@@ -45,6 +52,21 @@
       .replaceAll(">", "&gt;")
       .replaceAll('"', "&quot;")
       .replaceAll("'", "&#039;");
+  }
+
+  function withEmbedParam(urlValue) {
+    if (!urlValue) return "";
+    const url = new URL(urlValue, window.location.origin);
+    url.searchParams.set("embed", "projects");
+    return url.toString();
+  }
+
+  function previewSrc(project) {
+    return project.previewUrl || project.demoUrl || "";
+  }
+
+  function fullSrc(project) {
+    return project.demoUrl || "";
   }
 
   async function loadProjectsJson() {
@@ -67,6 +89,10 @@
       featured: !!p.featured,
       demoMode: clean(p.demoMode || "iframe"),
       demoUrl: clean(p.demoUrl),
+      previewUrl: clean(p.previewUrl),
+      previewMode: clean(p.previewMode || "iframe"),
+      thumb: clean(p.thumb),
+      gallery: Array.isArray(p.gallery) ? p.gallery.filter(Boolean) : [],
       repoUrl: clean(p.repoUrl),
       engineeringUrl: clean(p.engineeringUrl),
       tags: Array.isArray(p.tags) ? p.tags.filter(Boolean) : [],
@@ -101,11 +127,16 @@
       tile.className = "project-tile";
       tile.dataset.type = p.type;
 
+      if (p.thumb) {
+        tile.classList.add("has-thumb");
+        tile.style.setProperty("--thumb", `url(${p.thumb})`);
+      }
+
       tile.innerHTML = `
         <a href="#${escapeHtml(p.slug)}" class="project-tile-link" data-project="${escapeHtml(p.slug)}">
           <div>
             <div class="project-tile-top">
-              <span class="project-tile-type">${escapeHtml(p.type)}</span>
+              <span class="project-tile-type">${escapeHtml(p.type === "app" ? "APP" : p.type)}</span>
               <span class="project-tile-status">${escapeHtml(p.status)}</span>
             </div>
 
@@ -117,7 +148,7 @@
             <div class="project-tile-tags">
               ${p.tags.slice(0, 3).map(tag => `<span class="project-tile-tag">#${escapeHtml(tag)}</span>`).join("")}
             </div>
-            <span class="project-tile-cta">Abrir →</span>
+            <span class="project-tile-cta">${p.type === "app" ? "Abrir aplicación →" : "Abrir →"}</span>
           </div>
         </a>
       `;
@@ -126,14 +157,23 @@
     });
   }
 
-  function openPreview(project){
-    const preview = document.getElementById("projectPreview");
-    const frame = document.getElementById("previewFrame");
-    
+  function openPreview(project) {
+    if (!preview || !previewFrame) return;
+
+    const src = previewSrc(project);
+    if (!src) return;
+
+    currentProject = project;
     preview.hidden = false;
-    frame.src = `${project.demoUrl}?embed=projects`;
-    
-    document.getElementById("previewTitle").textContent = project.title;
+    previewTitle.textContent = project.title;
+    previewFrame.src = withEmbedParam(src);
+  }
+
+  function closePreview() {
+    if (!preview || !previewFrame) return;
+
+    preview.hidden = true;
+    previewFrame.src = "";
   }
 
   function setFilter(filter) {
@@ -142,21 +182,48 @@
       btn.classList.toggle("is-active", btn.dataset.filter === filter);
     });
     renderTiles();
+    closePreview();
+  }
+
+  function renderGallery(project) {
+    if (!gallery) return;
+
+    gallery.innerHTML = "";
+
+    if (!project.gallery || !project.gallery.length) {
+      gallery.hidden = true;
+      return;
+    }
+
+    project.gallery.forEach((src, index) => {
+      const item = document.createElement("div");
+      item.className = "projects-gallery-item";
+      item.innerHTML = `<img src="${escapeHtml(src)}" alt="${escapeHtml(project.title)} · captura ${index + 1}">`;
+      gallery.appendChild(item);
+    });
+
+    gallery.hidden = false;
   }
 
   function enterFocusMode(project) {
+    currentProject = project;
+
     layout.classList.remove("is-explore");
     layout.classList.add("is-focus");
-    currentProject = project;
+
     explore.hidden = true;
     focus.hidden = false;
+    closePreview();
 
     title.textContent = project.title;
     desc.textContent = project.description || "";
     demoTitle.textContent = project.title;
-    demoSubtitle.textContent = project.category || "Preview interactiva";
+    demoSubtitle.textContent =
+      project.type === "app"
+        ? "Aplicación interactiva completa"
+        : (project.category || "Preview interactiva");
 
-    typeBadge.textContent = project.type;
+    typeBadge.textContent = project.type === "app" ? "application" : project.type;
     statusBadge.textContent = project.status;
 
     meta.innerHTML = "";
@@ -182,6 +249,8 @@
       tags.appendChild(span);
     });
 
+    renderGallery(project);
+
     openFull.hidden = !project.demoUrl;
     openFull.href = project.demoUrl || "#";
 
@@ -194,9 +263,7 @@
     if (project.demoMode === "iframe" && project.demoUrl) {
       placeholder.hidden = true;
       frame.hidden = false;
-      const url = new URL(project.demoUrl, window.location.origin);
-      url.searchParams.set("embed", "projects");
-      frame.src = url.toString();
+      frame.src = withEmbedParam(fullSrc(project));
     } else {
       frame.hidden = true;
       frame.src = "";
@@ -219,6 +286,11 @@
     placeholder.hidden = false;
     placeholder.textContent = "Selecciona un proyecto para cargar su demo.";
 
+    if (gallery) {
+      gallery.innerHTML = "";
+      gallery.hidden = true;
+    }
+
     history.replaceState(null, "", location.pathname);
   }
 
@@ -231,19 +303,16 @@
     const project = projects.find(p => p.slug === slug);
     if (!project) return;
 
-    enterFocusMode(project);
+    openPreview(project);
   });
 
-  document.getElementById("previewExpand").addEventListener("click", () => {
-    openPreview(currentProject);
+  previewExpand?.addEventListener("click", () => {
+    if (!currentProject) return;
+    enterFocusMode(currentProject);
   });
 
-  document.getElementById("previewClose").addEventListener("click", () => {
-    const preview = document.getElementById("projectPreview");
-    const frame = document.getElementById("previewFrame");
-
-    preview.hidden = true;
-    frame.src = "";
+  previewClose?.addEventListener("click", () => {
+    closePreview();
   });
 
   back?.addEventListener("click", () => {
