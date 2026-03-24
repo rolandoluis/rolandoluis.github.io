@@ -23,9 +23,7 @@
   const back = document.getElementById("projectBack");
 
   const filters = document.getElementById("projectsFilters");
-  const url = new URL(project.demoUrl, window.location.origin);
-  url.searchParams.set("embed", "projects");
-  frame.src = url.toString();
+  
 
   if (!layout || !grid) return;
 
@@ -38,6 +36,7 @@
   const lang = window.siteLang || getLangFromPath(location.pathname);
   let projects = [];
   let activeFilter = "all";
+  let currentProject = null;
 
   function escapeHtml(value) {
     return String(value ?? "")
@@ -148,7 +147,7 @@
   function enterFocusMode(project) {
     layout.classList.remove("is-explore");
     layout.classList.add("is-focus");
-
+    currentProject = project;
     explore.hidden = true;
     focus.hidden = false;
 
@@ -195,7 +194,9 @@
     if (project.demoMode === "iframe" && project.demoUrl) {
       placeholder.hidden = true;
       frame.hidden = false;
-      frame.src = project.demoUrl;
+      const url = new URL(project.demoUrl, window.location.origin);
+      url.searchParams.set("embed", "projects");
+      frame.src = url.toString();
     } else {
       frame.hidden = true;
       frame.src = "";
