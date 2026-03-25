@@ -126,21 +126,21 @@
 
       if (p.thumb) {
         tile.classList.add("has-thumb");
-        tile.style.setProperty("--thumb", `url(${p.thumb})`);
+        /* tile.style.setProperty("--thumb", `url(${p.thumb})`); */
       }
 
       tile.innerHTML = `
         <button type="button" class="project-tile-link" data-project="${escapeHtml(p.slug)}">
-          
+
           <div class="project-row-thumb">
             ${p.thumb ? `<img src="${escapeHtml(p.thumb)}" alt="${escapeHtml(p.title)}" loading="lazy">` : ""}
           </div>
-          
+
           <div class="project-row-main">
             <h3 class="project-tile-title">${escapeHtml(p.title)}</h3>
             <p class="project-tile-desc">${escapeHtml(p.description)}</p>
           </div>
-          
+
           <div class="project-row-side">
             <div class="project-row-badges">
               <span class="project-tile-type" data-type="${escapeHtml(p.type)}">
@@ -150,7 +150,7 @@
                 ${escapeHtml(p.status)}
               </span>
             </div>
-          
+
             <div class="project-tile-tags">
               ${p.tags
                 .slice(0, 3)
