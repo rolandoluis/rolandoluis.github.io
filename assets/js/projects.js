@@ -1,20 +1,15 @@
 (() => {
-
-  let currentProject = null;
-  let currentPreviewIndex = 0;
   const layout = document.getElementById("projectsLayout");
   const grid = document.getElementById("projectsGrid");
   const focus = document.getElementById("projectsFocus");
   const explore = document.getElementById("projectsExplore");
-
-  const frame = document.getElementById("projectsDemoFrame");
-  const placeholder = document.getElementById("projectsDemoPlaceholder");
 
   const title = document.getElementById("projectTitle");
   const desc = document.getElementById("projectDescription");
   const meta = document.getElementById("projectMeta");
   const tags = document.getElementById("projectTags");
   const gallery = document.getElementById("projectGallery");
+
   const demoTitle = document.getElementById("projectDemoTitle");
   const demoSubtitle = document.getElementById("projectDemoSubtitle");
 
@@ -28,16 +23,12 @@
 
   const filters = document.getElementById("projectsFilters");
 
-  const preview = document.getElementById("projectPreview");
-  const previewImage = document.getElementById("previewImage");
-  const previewPlaceholder = document.getElementById("previewPlaceholder");
-  const previewGalleryNav = document.getElementById("previewGalleryNav");
-  const previewPrev = document.getElementById("previewPrev");
-  const previewNext = document.getElementById("previewNext");
-  const previewCounter = document.getElementById("previewCounter");
-  const previewTitle = document.getElementById("previewTitle");
-  const previewExpand = document.getElementById("previewExpand");
-  const previewClose = document.getElementById("previewClose");
+  const mediaImage = document.getElementById("projectsMediaImage");
+  const mediaPrev = document.getElementById("projectMediaPrev");
+  const mediaNext = document.getElementById("projectMediaNext");
+  const mediaFooter = document.getElementById("projectsMediaFooter");
+  const mediaCounter = document.getElementById("projectsMediaCounter");
+  const placeholder = document.getElementById("projectsDemoPlaceholder");
 
   if (!layout || !grid) return;
 
@@ -51,6 +42,8 @@
 
   let projects = [];
   let activeFilter = "all";
+  let currentProject = null;
+  let currentMediaIndex = 0;
 
   function escapeHtml(value) {
     return String(value ?? "")
@@ -59,21 +52,6 @@
       .replaceAll(">", "&gt;")
       .replaceAll('"', "&quot;")
       .replaceAll("'", "&#039;");
-  }
-
-  function withEmbedParam(urlValue) {
-    if (!urlValue) return "";
-    const url = new URL(urlValue, window.location.origin);
-    url.searchParams.set("embed", "projects");
-    return url.toString();
-  }
-
-  function previewSrc(project) {
-    return project.previewUrl || project.demoUrl || "";
-  }
-
-  function fullSrc(project) {
-    return project.demoUrl || "";
   }
 
   async function loadProjectsJson() {
@@ -94,14 +72,19 @@
       type: clean(p.type || "project").toLowerCase(),
       status: clean(p.status || "stable").toLowerCase(),
       featured: !!p.featured,
-      demoMode: clean(p.demoMode || "iframe"),
-      demoUrl: clean(p.demoUrl),
-      previewUrl: clean(p.previewUrl),
-      previewMode: clean(p.previewMode || "iframe"),
+
       thumb: clean(p.thumb),
       gallery: Array.isArray(p.gallery) ? p.gallery.filter(Boolean) : [],
+
+      previewUrl: clean(p.previewUrl),
+      previewMode: clean(p.previewMode || "iframe"),
+
+      demoUrl: clean(p.demoUrl),
+      demoMode: clean(p.demoMode || "iframe"),
+
       repoUrl: clean(p.repoUrl),
       engineeringUrl: clean(p.engineeringUrl),
+
       tags: Array.isArray(p.tags) ? p.tags.filter(Boolean) : [],
       stack: Array.isArray(p.stack) ? p.stack.filter(Boolean) : []
     };
@@ -125,7 +108,14 @@
     const items = filteredProjects();
 
     if (!items.length) {
-      grid.innerHTML = `<article class="project-tile"><div class="project-tile-link"><h3 class="project-tile-title">Sin resultados</h3><p class="project-tile-desc">No hay proyectos para este filtro.</p></div></article>`;
+      grid.innerHTML = `
+        <article class="project-tile">
+          <div class="project-tile-link">
+            <h3 class="project-tile-title">Sin resultados</h3>
+            <p class="project-tile-desc">No hay proyectos para este filtro.</p>
+          </div>
+        </article>
+      `;
       return;
     }
 
@@ -153,7 +143,10 @@
 
           <div class="project-tile-bottom">
             <div class="project-tile-tags">
-              ${p.tags.slice(0, 3).map(tag => `<span class="project-tile-tag">#${escapeHtml(tag)}</span>`).join("")}
+              ${p.tags
+                .slice(0, 3)
+                .map(tag => `<span class="project-tile-tag">#${escapeHtml(tag)}</span>`)
+                .join("")}
             </div>
             <span class="project-tile-cta">${p.type === "app" ? "Abrir aplicación →" : "Abrir →"}</span>
           </div>
@@ -164,35 +157,73 @@
     });
   }
 
-  function openPreview(project) {
-    if (!preview) return;
-
-    currentProject = project;
-    preview.hidden = false;
-    previewTitle.textContent = project.title;
-
-    renderPreviewImage(project, 0);
+  function projectImages(project) {
+    if (project.gallery && project.gallery.length) return project.gallery;
+    if (project.thumb) return [project.thumb];
+    return [];
   }
 
-  function closePreview() {
-    if (!preview) return;
+  function renderProjectMedia(project, index = 0) {
+    const images = projectImages(project);
 
-    preview.hidden = true;
-
-    if (previewImage) {
-      previewImage.src = "";
-      previewImage.hidden = true;
+    if (!images.length) {
+      mediaImage.hidden = true;
+      mediaImage.src = "";
+      placeholder.hidden = false;
+      mediaPrev.hidden = true;
+      mediaNext.hidden = true;
+      mediaFooter.hidden = true;
+      return;
     }
 
-    if (previewPlaceholder) {
-      previewPlaceholder.hidden = false;
+    currentMediaIndex = Math.max(0, Math.min(index, images.length - 1));
+
+    mediaImage.src = images[currentMediaIndex];
+    mediaImage.alt = `${project.title} · captura ${currentMediaIndex + 1}`;
+    mediaImage.hidden = false;
+    placeholder.hidden = true;
+
+    if (images.length > 1) {
+      mediaPrev.hidden = false;
+      mediaNext.hidden = false;
+      mediaFooter.hidden = false;
+      mediaCounter.textContent = `${currentMediaIndex + 1} / ${images.length}`;
+    } else {
+      mediaPrev.hidden = true;
+      mediaNext.hidden = true;
+      mediaFooter.hidden = true;
+    }
+  }
+
+  function renderGallery(project) {
+    if (!gallery) return;
+
+    gallery.innerHTML = "";
+
+    const images = projectImages(project);
+    if (!images.length) {
+      gallery.hidden = true;
+      return;
     }
 
-    if (previewGalleryNav) {
-      previewGalleryNav.hidden = true;
-    }
+    images.forEach((src, index) => {
+      const item = document.createElement("button");
+      item.type = "button";
+      item.className = "projects-gallery-item";
+      item.setAttribute("aria-label", `Mostrar captura ${index + 1}`);
 
-    currentPreviewIndex = 0;
+      item.innerHTML = `
+        <img src="${escapeHtml(src)}" alt="${escapeHtml(project.title)} · miniatura ${index + 1}">
+      `;
+
+      item.addEventListener("click", () => {
+        renderProjectMedia(project, index);
+      });
+
+      gallery.appendChild(item);
+    });
+
+    gallery.hidden = false;
   }
 
   function setFilter(filter) {
@@ -201,27 +232,6 @@
       btn.classList.toggle("is-active", btn.dataset.filter === filter);
     });
     renderTiles();
-    closePreview();
-  }
-
-  function renderGallery(project) {
-    if (!gallery) return;
-
-    gallery.innerHTML = "";
-
-    if (!project.gallery || !project.gallery.length) {
-      gallery.hidden = true;
-      return;
-    }
-
-    project.gallery.forEach((src, index) => {
-      const item = document.createElement("div");
-      item.className = "projects-gallery-item";
-      item.innerHTML = `<img src="${escapeHtml(src)}" alt="${escapeHtml(project.title)} · captura ${index + 1}">`;
-      gallery.appendChild(item);
-    });
-
-    gallery.hidden = false;
   }
 
   function enterFocusMode(project) {
@@ -232,15 +242,11 @@
 
     explore.hidden = true;
     focus.hidden = false;
-    closePreview();
 
     title.textContent = project.title;
     desc.textContent = project.description || "";
     demoTitle.textContent = project.title;
-    demoSubtitle.textContent =
-      project.type === "app"
-        ? "Aplicación interactiva completa"
-        : (project.category || "Preview interactiva");
+    demoSubtitle.textContent = "Vista representativa del proyecto";
 
     typeBadge.textContent = project.type === "app" ? "application" : project.type;
     statusBadge.textContent = project.status;
@@ -269,6 +275,7 @@
     });
 
     renderGallery(project);
+    renderProjectMedia(project, 0);
 
     openFull.hidden = !project.demoUrl;
     openFull.href = project.demoUrl || "#";
@@ -278,17 +285,6 @@
 
     repo.hidden = !project.repoUrl;
     repo.href = project.repoUrl || "#";
-
-    if (project.demoMode === "iframe" && project.demoUrl) {
-      placeholder.hidden = true;
-      frame.hidden = false;
-      frame.src = withEmbedParam(fullSrc(project));
-    } else {
-      frame.hidden = true;
-      frame.src = "";
-      placeholder.hidden = false;
-      placeholder.textContent = "Este proyecto no tiene demo embebida disponible en este momento.";
-    }
 
     history.replaceState(null, "", `#${project.slug}`);
   }
@@ -300,68 +296,23 @@
     focus.hidden = true;
     explore.hidden = false;
 
-    frame.src = "";
-    frame.hidden = true;
-    placeholder.hidden = false;
-    placeholder.textContent = "Selecciona un proyecto para cargar su demo.";
+    currentProject = null;
+    currentMediaIndex = 0;
 
     if (gallery) {
       gallery.innerHTML = "";
       gallery.hidden = true;
     }
 
+    mediaImage.src = "";
+    mediaImage.hidden = true;
+    placeholder.hidden = false;
+    mediaPrev.hidden = true;
+    mediaNext.hidden = true;
+    mediaFooter.hidden = true;
+
     history.replaceState(null, "", location.pathname);
   }
-
-    function previewImages(project) {
-    if (project.gallery && project.gallery.length) return project.gallery;
-    if (project.thumb) return [project.thumb];
-    return [];
-  }
-
-  function renderPreviewImage(project, index = 0) {
-    const images = previewImages(project);
-
-    if (!images.length) {
-      previewImage.hidden = true;
-      previewImage.src = "";
-      previewPlaceholder.hidden = false;
-      previewGalleryNav.hidden = true;
-      return;
-    }
-
-    currentPreviewIndex = Math.max(0, Math.min(index, images.length - 1));
-
-    previewImage.src = images[currentPreviewIndex];
-    previewImage.alt = `${project.title} · vista previa ${currentPreviewIndex + 1}`;
-    previewImage.hidden = false;
-    previewPlaceholder.hidden = true;
-
-    if (images.length > 1) {
-      previewGalleryNav.hidden = false;
-      previewCounter.textContent = `${currentPreviewIndex + 1} / ${images.length}`;
-    } else {
-      previewGalleryNav.hidden = true;
-    }
-  }
-
-  previewPrev?.addEventListener("click", () => {
-    if (!currentProject) return;
-    const images = previewImages(currentProject);
-    if (!images.length) return;
-    
-    const nextIndex = (currentPreviewIndex - 1 + images.length) % images.length;
-    renderPreviewImage(currentProject, nextIndex);
-  });
-  
-  previewNext?.addEventListener("click", () => {
-    if (!currentProject) return;
-    const images = previewImages(currentProject);
-    if (!images.length) return;
-  
-    const nextIndex = (currentPreviewIndex + 1) % images.length;
-    renderPreviewImage(currentProject, nextIndex);
-  });
 
   document.addEventListener("click", (e) => {
     const tile = e.target.closest("[data-project]");
@@ -372,16 +323,27 @@
     const project = projects.find(p => p.slug === slug);
     if (!project) return;
 
-    openPreview(project);
+    enterFocusMode(project);
   });
 
-  previewExpand?.addEventListener("click", () => {
+  mediaPrev?.addEventListener("click", () => {
     if (!currentProject) return;
-    enterFocusMode(currentProject);
+
+    const images = projectImages(currentProject);
+    if (!images.length) return;
+
+    const nextIndex = (currentMediaIndex - 1 + images.length) % images.length;
+    renderProjectMedia(currentProject, nextIndex);
   });
 
-  previewClose?.addEventListener("click", () => {
-    closePreview();
+  mediaNext?.addEventListener("click", () => {
+    if (!currentProject) return;
+
+    const images = projectImages(currentProject);
+    if (!images.length) return;
+
+    const nextIndex = (currentMediaIndex + 1) % images.length;
+    renderProjectMedia(currentProject, nextIndex);
   });
 
   back?.addEventListener("click", () => {
@@ -404,11 +366,16 @@
 
       if (project) enterFocusMode(project);
       else exitFocusMode();
-
     } catch (err) {
       console.error("[projects.js]", err);
-      grid.innerHTML = `<article class="project-tile"><div class="project-tile-link"><h3 class="project-tile-title">Error</h3><p class="project-tile-desc">No se pudieron cargar los proyectos.</p></div></article>`;
+      grid.innerHTML = `
+        <article class="project-tile">
+          <div class="project-tile-link">
+            <h3 class="project-tile-title">Error</h3>
+            <p class="project-tile-desc">No se pudieron cargar los proyectos.</p>
+          </div>
+        </article>
+      `;
     }
-
   })();
 })();

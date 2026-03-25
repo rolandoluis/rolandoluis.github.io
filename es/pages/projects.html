@@ -130,41 +130,26 @@
 
         <section class="projects-demo-panel">
           <div class="projects-demo-bar">
-            <div class="projects-demo-title" id="projectDemoTitle">Demo</div>
-            <div class="projects-demo-subtitle" id="projectDemoSubtitle">Preview interactiva</div>
+            <div class="projects-demo-title" id="projectDemoTitle">Preview visual</div>
+            <div class="projects-demo-subtitle" id="projectDemoSubtitle">Captura representativa del proyecto</div>
           </div>
-
-          <div class="projects-demo-stage" id="projectsDemoStage">
-            <iframe id="projectsDemoFrame" src="" hidden></iframe>
+        
+          <div class="projects-demo-stage projects-media-stage" id="projectsDemoStage">
+            <button class="projects-media-nav projects-media-prev" id="projectMediaPrev" type="button" aria-label="Imagen anterior">‹</button>
+          
+            <img id="projectsMediaImage" class="projects-media-image" alt="" hidden>
+          
             <div class="projects-demo-placeholder" id="projectsDemoPlaceholder">
-              Selecciona un proyecto para cargar su demo.
+              Selecciona un proyecto para cargar su vista.
             </div>
+          
+            <button class="projects-media-nav projects-media-next" id="projectMediaNext" type="button" aria-label="Imagen siguiente">›</button>
+          </div>
+        
+          <div class="projects-media-footer" id="projectsMediaFooter" hidden>
+            <span id="projectsMediaCounter">1 / 1</span>
           </div>
         </section>
-      </section>
-
-      <section id="projectPreview" class="project-preview" hidden>
-        <div class="preview-header">
-          <span id="previewTitle"></span>
-          <div class="preview-actions">
-            <button id="previewExpand">Expandir</button>
-            <button id="previewClose">Cerrar</button>
-          </div>
-        </div>
-      
-        <div class="preview-stage">
-          <img id="previewImage" alt="" hidden>
-          <div class="preview-placeholder" id="previewPlaceholder">
-            Sin vista previa disponible.
-          </div>
-        </div>
-        
-        <div class="preview-gallery-nav" id="previewGalleryNav" hidden>
-          <button id="previewPrev" type="button">◀</button>
-          <span id="previewCounter">1 / 1</span>
-          <button id="previewNext" type="button">▶</button>
-        </div>
-      </section>
 
     </div>
   </main>
