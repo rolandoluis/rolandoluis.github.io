@@ -111,6 +111,7 @@ main.projects-shell-main{
   border:1px solid var(--line);
   border-radius:16px;
   overflow:hidden;
+  width: 100%;
   background:
     linear-gradient(180deg, rgba(255,255,255,.028), rgba(255,255,255,.012)),
     color-mix(in srgb, var(--panel) 88%, transparent);
@@ -529,9 +530,9 @@ main.projects-shell-main{
     overflow:visible;
   }
 
-  .projects-grid{
+  /* .projects-grid{
     grid-template-columns:1fr;
-  }
+  } */
 
   .projects-layout.is-focus .projects-focus{
     display:block;
@@ -551,9 +552,9 @@ main.projects-shell-main{
     flex-direction:column;
   }
 
-  .project-tile[data-type="app"]{
+  /* .project-tile[data-type="app"]{
     grid-column: span 1;
-  }
+  } */
 
 
 }
