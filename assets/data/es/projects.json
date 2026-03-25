@@ -79,7 +79,9 @@
     "status": "concept",
     "featured": true,
     "thumb": "",
-    "gallery": [],
+    "gallery": [
+      "/assets/projects/neural-sphere-core/thumb-01.png"
+    ],
     "previewUrl": "",
     "previewMode": "",
     "demoUrl": "/es/projects/neural-sphere-core/demo.html",
@@ -111,9 +113,9 @@
     "featured": false,
     "thumb": "/assets/projects/responsive-multi-layout-lab/thumb-01.webp",
     "gallery": [
-      "/assets/projects/responsive-multi-layout-lab/thumb-01.webp",
-      "/assets/projects/responsive-multi-layout-lab/thumb-02.webp",
-      "/assets/projects/responsive-multi-layout-lab/thumb-03.webp"
+      "/assets/projects/responsive-multi-layout-lab/thumb-01.png",
+      "/assets/projects/responsive-multi-layout-lab/thumb-02.png",
+      "/assets/projects/responsive-multi-layout-lab/thumb-03.png"
     ],
     "previewUrl": "/es/projects/responsive-multi-layout-lab/preview.html",
     "previewMode": "iframe",
