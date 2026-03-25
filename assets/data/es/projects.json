@@ -100,5 +100,35 @@
       "Canvas"
     ],
     "date": "2026-03-22"
+  },
+  {
+    "title": "Responsive Multi-Layout Lab",
+    "slug": "responsive-multi-layout-lab",
+    "description": "Demo interactiva de cambio de layout y temática visual con adaptación responsive para desktop y móvil.",
+    "category": "Responsive / Layout Systems",
+    "type": "demo",
+    "status": "beta",
+    "featured": false,
+    "thumb": "/assets/projects/responsive-multi-layout-lab/thumb-01.webp",
+    "gallery": [
+      "/assets/projects/responsive-multi-layout-lab/thumb-01.webp",
+      "/assets/projects/responsive-multi-layout-lab/thumb-02.webp",
+      "/assets/projects/responsive-multi-layout-lab/thumb-03.webp"
+    ],
+    "previewUrl": "/es/projects/responsive-multi-layout-lab/preview.html",
+    "previewMode": "iframe",
+    "demoUrl": "/es/projects/responsive-multi-layout-lab/demo.html",
+    "demoMode": "iframe",
+    "repoUrl": "",
+    "engineeringUrl": "",
+    "tags": ["responsive", 
+             "layout", 
+             "css-grid", 
+             "ui", 
+             "theming"],
+    "stack": ["HTML", 
+              "CSS", 
+              "JavaScript"],
+    "date": "2026-03-22"
   }
 ]

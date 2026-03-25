@@ -130,27 +130,38 @@
       }
 
       tile.innerHTML = `
-        <a href="#${escapeHtml(p.slug)}" class="project-tile-link" data-project="${escapeHtml(p.slug)}">
-          <div>
-            <div class="project-tile-top">
-              <span class="project-tile-type">${escapeHtml(p.type === "app" ? "APP" : p.type)}</span>
-              <span class="project-tile-status">${escapeHtml(p.status)}</span>
-            </div>
-
+        <button type="button" class="project-tile-link" data-project="${escapeHtml(p.slug)}">
+          
+          <div class="project-row-thumb">
+            ${p.thumb ? `<img src="${escapeHtml(p.thumb)}" alt="${escapeHtml(p.title)}" loading="lazy">` : ""}
+          </div>
+          
+          <div class="project-row-main">
             <h3 class="project-tile-title">${escapeHtml(p.title)}</h3>
             <p class="project-tile-desc">${escapeHtml(p.description)}</p>
           </div>
-
-          <div class="project-tile-bottom">
+          
+          <div class="project-row-side">
+            <div class="project-row-badges">
+              <span class="project-tile-type" data-type="${escapeHtml(p.type)}">
+                ${escapeHtml(p.type === "app" ? "APP" : p.type.toUpperCase())}
+              </span>
+              <span class="project-tile-status">
+                ${escapeHtml(p.status)}
+              </span>
+            </div>
+          
             <div class="project-tile-tags">
               ${p.tags
                 .slice(0, 3)
                 .map(tag => `<span class="project-tile-tag">#${escapeHtml(tag)}</span>`)
                 .join("")}
             </div>
-            <span class="project-tile-cta">${p.type === "app" ? "Abrir aplicación →" : "Abrir →"}</span>
           </div>
-        </a>
+              
+          <div class="project-row-arrow" aria-hidden="true">›</div>
+              
+        </button>
       `;
 
       grid.appendChild(tile);
