@@ -112,7 +112,7 @@
 
   .item {
     background: var(--card-bg);
-    padding: 25px;
+    padding: 8px 25px;
     border-radius: 16px;
     border: 1px solid rgba(255, 255, 255, 0.06);
     transition: var(--transition);
@@ -191,7 +191,7 @@
       overflow: hidden;
       border-radius: 20px;
       border: 1px solid rgba(255, 255, 255, 0.09);
-      border-top: 1px solid rgba(255, 255, 255, 0.14);
+      border-top: 1px solid rgba(255, 255, 255, 0.34);
       background:
         linear-gradient(180deg, rgba(24, 36, 62, 0.40), rgba(10, 16, 28, 0.72)),
         radial-gradient(circle at top right, rgba(141, 20, 56, 0.10), transparent 28%);
@@ -200,7 +200,7 @@
         inset 0 1px 0 rgba(255, 255, 255, 0.06);
       backdrop-filter: blur(16px) saturate(120%);
       -webkit-backdrop-filter: blur(16px) saturate(120%);
-      padding: 28px 30px;
+      padding: 8px 30px;
     }
 
     .layout-minimal .item::before {
