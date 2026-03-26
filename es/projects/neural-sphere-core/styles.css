@@ -101,7 +101,7 @@
     body { margin: 0; background: #010808; overflow: hidden; font-family: 'Segoe UI', sans-serif; }
         #canvas-container { 
             position: relative; 
-            width: 100vw; height: 100vh; 
+            width: 75vw; height: 75vh; 
         }
         
         canvas { display: block; }
