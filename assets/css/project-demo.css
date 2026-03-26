@@ -2,7 +2,11 @@ html,
 body{
   margin:0;
   padding:0;
-  height:100%;
+  height:100vh; /* Altura total de la ventana */
+  overflow: hidden; /* Prohibido el scroll global */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 body.project-demo-shell{
@@ -14,10 +18,13 @@ body.project-demo-shell{
 }
 
 .project-demo{
-  min-height: 100vh;
+  /* min-height: 100vh; */
+  width: 80vw;
+  height: 90vh; /* Dejamos un pequeño margen visual arriba/abajo */
   padding: 20px 22px 28px;
   display: grid;
-  grid-template-rows: auto auto auto;
+  /* grid-template-rows: auto auto auto; */
+  grid-template-rows: auto 1fr auto; /* Header, Contenido, Controles */
   gap: 18px;
 }
 
@@ -63,8 +70,13 @@ body.project-demo-shell{
   border: 1px solid var(--line);
   border-radius: 14px;
   background: color-mix(in srgb, var(--panel) 90%, transparent);
-  overflow: hidden;
-  min-height: 380px;
+  flex: 1;
+  overflow-y: auto; /* Solo aquí se permite scroll si el contenido crece mucho */
+  scrollbar-width: thin; /* Para navegadores modernos */
+  display: flex;
+  align-items: center; /* Centra el grid verticalmente si hay espacio */
+  /* overflow: hidden; */
+  /* min-height: 380px; */
 }
 
 .project-demo-surface{
