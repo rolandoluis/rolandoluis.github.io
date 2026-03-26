@@ -7,9 +7,12 @@
   <title>Responsive Multi-Layout Lab</title>
   <meta name="description" content="Demo de sistema responsive multi-layout con conmutación temática" />
 
-  <link rel="stylesheet" href="/assets/css/main.css" />
-  <link rel="stylesheet" href="/assets/css/components.css" />
-  <link rel="stylesheet" href="/assets/css/project-demo.css" />
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <link rel="stylesheet" href="/assets/css/project-demo.css">
+  <link rel="stylesheet" href="./styles.css" />
+  <script defer src="./demo.js"></script>
+
 </head>
 
 <body class="project-demo-shell">
@@ -25,13 +28,13 @@
       data-project-featured="false"
       data-project-repo=""
       data-project-engineering=""
-      data-project-stack="HTML,CSS,JavaScript">
+      data-project-stack="HTML,CSS,JavaScript,SPA">
 
     <header class="project-demo-header">
       <div class="project-demo-headline">
-        <h1>[Título del Proyecto]</h1>
+        <h1>Maquetado Múltiple de Interfaz Adaptable</h1>
         <p class="project-demo-lede">
-          [Descripción breve y clara de qué hace este proyecto.]
+          Demo multi-layout responsive con conmutación temática, para Sistemas SPA.
         </p>
       </div>
 
@@ -43,6 +46,19 @@
 
     <section class="project-demo-stage">
       <!-- Aquí vive la demo real -->
+       <div class="controls">
+           <button onclick="change('bento', 'bento')">Bento Grid</button>
+           <button onclick="change('split', 'split')">Split View</button>
+           <button onclick="change('minimal', 'minimal')">Minimalist</button>
+       </div>
+     
+       <div id="main-grid" class="container layout-bento">
+           <div class="item"><h1>Enfoque 2025</h1><p>Estructuras líquidas que se adaptan al usuario.</p></div>
+           <div class="item"><h2>Estrategia</h2><p>Contenido modular y escalable.</p></div>
+           <div class="item"><h2>Tecnología</h2><p>CSS Grid + Variables nativas.</p></div>
+           <div class="item"><h2>Creatividad</h2><p>Diseño sin límites visuales.</p></div>
+           <div class="item"><h2>Contacto</h2><p>¿Empezamos tu proyecto?</p></div>
+       </div>
       <div class="project-demo-surface">
         <p>Zona de demo</p>
       </div>
@@ -52,7 +68,7 @@
       <div class="project-demo-block">
         <h2>Qué hace</h2>
         <p>
-          Explica brevemente el propósito del proyecto y qué puede probar el usuario.
+          ¿Es posible que un mismo contenido adopte múltiples formas?, ¡Interactúa y ya me dirás!.
         </p>
       </div>
 
@@ -67,7 +83,18 @@
     </section>
 
   </main>
-
+  <script>
+    function change(theme, layout) {
+        const grid = document.getElementById('main-grid');
+        grid.style.opacity = '0';
+        
+        setTimeout(() => {
+            document.body.className = 'theme-' + theme;
+            grid.className = 'container layout-' + layout;
+            grid.style.opacity = '1';
+        }, 300);
+    }
+  </script>
 </body>
 </html>
 
