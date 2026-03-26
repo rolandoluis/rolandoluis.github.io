@@ -78,9 +78,10 @@
     "type": "experiment",
     "status": "concept",
     "featured": true,
-    "thumb": "",
+    "thumb": "/assets/projects/neural-sphere-core/thumb-01.png",
     "gallery": [
-      "/assets/projects/neural-sphere-core/thumb-01.png"
+      "/assets/projects/neural-sphere-core/thumb-01.png",
+      "/assets/projects/neural-sphere-core/thumb-02.png"
     ],
     "previewUrl": "",
     "previewMode": "",
