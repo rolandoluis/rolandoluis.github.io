@@ -18,7 +18,7 @@ body.project-demo-shell{
   padding: 20px 22px 28px;
   display: grid;
   grid-template-rows: auto auto auto;
-  gap: 18px;
+  gap: 12px;
 }
 
 .project-demo-header{
@@ -78,6 +78,7 @@ body.project-demo-shell{
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
+  grid-template-rows: 130px;
 }
 
 .project-demo-block{

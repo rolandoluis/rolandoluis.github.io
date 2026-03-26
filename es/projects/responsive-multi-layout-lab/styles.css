@@ -50,16 +50,17 @@ body {
 ============================== */
 .controls {
   position: fixed;
-  bottom: 20px;
-  left: 50%;
+  top: 20px;
+  left: 93%;
   transform: translateX(-50%);
   z-index: 100;
   background: rgba(8, 12, 18, 0.76);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   padding: 6px;
-  border-radius: 999px;
+  border-radius: 19px;
   display: flex;
+  flex-direction: column;
   gap: 6px;
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.28);
@@ -104,6 +105,7 @@ body.theme-split button:hover {
   transition: var(--transition);
   color: var(--text-main);
   box-sizing: border-box;
+  height: 90px;
 }
 .item h1,
 .item h2,
