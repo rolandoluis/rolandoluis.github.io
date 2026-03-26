@@ -21,7 +21,7 @@ body.theme-split {
     linear-gradient(180deg, #f7f8fc 0%, #eef2f9 100%);
   --accent: #6366f1;
   --card-bg: #f8fafc;
-  --text-main: #1e293b;
+  --text-main: #77a4ef;
   --text-soft: rgba(30, 41, 59, 0.72);
   color: var(--text-main);
 }

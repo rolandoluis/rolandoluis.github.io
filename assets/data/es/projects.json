@@ -11,6 +11,7 @@
     "gallery": [
       "/assets/projects/lilianne/thumb-01.png",
       "/assets/projects/lilianne/thumb-01.webp",
+      "/assets/projects/lilianne/thumb-01222.png",
       "/assets/projects/lilianne/thumb-02.png",
       "/assets/projects/lilianne/thumb-02.webp",
       "/assets/projects/lilianne/thumb-03.png",
@@ -48,7 +49,9 @@
     "gallery": [
       "/assets/projects/theme-showroom/thumb-01.png",
       "/assets/projects/theme-showroom/thumb-02.png",
-      "/assets/projects/theme-showroom/thumb-03.png"
+      "/assets/projects/theme-showroom/thumb-03.png",
+      "/assets/projects/theme-showroom/thumb-04.png",
+      "/assets/projects/theme-showroom/thumb-05.png"
     ],
     "previewUrl": "",
     "previewMode": "",
@@ -107,7 +110,7 @@
   {
     "title": "Responsive Multi-Layout Lab",
     "slug": "responsive-multi-layout-lab",
-    "description": "Demo interactiva de cambio de layout y temática visual con adaptación responsive para desktop y móvil.",
+    "description": "Demo de sistema responsive multi-layout con conmutación temática",
     "category": "Responsive / Layout Systems",
     "type": "demo",
     "status": "beta",
@@ -124,14 +127,54 @@
     "demoMode": "iframe",
     "repoUrl": "",
     "engineeringUrl": "",
-    "tags": ["responsive", 
-             "layout", 
-             "css-grid", 
-             "ui", 
-             "theming"],
-    "stack": ["HTML", 
-              "CSS", 
-              "JavaScript"],
+    "tags": [
+      "responsive",
+      "layout",
+      "css-grid",
+      "ui",
+      "theming"
+    ],
+    "stack": [
+      "HTML",
+      "CSS",
+      "JavaScript",
+      "SPA"
+    ],
+    "date": "2026-03-22"
+  },
+  {
+    "title": "Structured Sidebar Navigation",
+    "slug": "vertical-navigation",
+    "description": "Exploración hacia una línea válida de navegación conceptual.",
+    "category": "Layout Systems",
+    "type": "demo",
+    "status": "stable",
+    "featured": false,
+    "thumb": "/assets/projects/vertical-navigation/thumb-01.png",
+    "gallery": [
+      "/assets/projects/vertical-navigation/thumb-01.png",
+      "/assets/projects/vertical-navigation/thumb-02.png"
+    ],
+    "previewUrl": "",
+    "previewMode": "",
+    "demoUrl": "/es/projects/vertical-navigation/demo.html",
+    "demoMode": "iframe",
+    "repoUrl": "https://github.com/rolandoluis/...",
+    "engineeringUrl": "/es/engineering/architecture.html",
+    "tags": [
+      "demo",
+      "ui",
+      "interactive",
+      "layout",
+      "css-grid",
+      "ui",
+      "theming"
+    ],
+    "stack": [
+      "HTML",
+      "CSS",
+      "JavaScript"
+    ],
     "date": "2026-03-22"
   }
 ]
