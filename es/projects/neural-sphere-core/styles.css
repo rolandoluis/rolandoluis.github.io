@@ -99,45 +99,42 @@
     }
 
     body { margin: 0; background: #010808; overflow: hidden; font-family: 'Segoe UI', sans-serif; }
-        #canvas-container { 
-            position: relative; 
-            width: 75vw; height: 75vh; 
-        }
-        
-        canvas { display: block; }
-
-        .menu-item {
-            position: absolute;
-            /* Importante: Centrado inicial */
-            top: 50%;
-            left: 50%;
-            padding: 8px 16px;
-            color: #00ffcc;
-            border: 1px solid rgba(0, 255, 204, 0.6);
-            background: rgba(0, 15, 15, 0.85);
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 12px;
-            white-space: nowrap;
-            text-shadow: 0 0 8px #00ffcc;
-            /* Transición suave para la explosión y el regreso */
-            transition: transform 0.1s linear, opacity 0.3s, background 0.3s, box-shadow 0.3s;
-            pointer-events: auto;
-            user-select: none;
-            transform-origin: center;
-        }
-
-        .menu-item:hover { 
-            background: #00ffcc; 
-            color: #010808; 
-            box-shadow: 0 0 20px #00ffcc; 
-        }
-
-        /* Clase para el estado de explosión/menú centrado */
-        .menu-centered {
-            transition: all 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-        }
+    #canvas-container { 
+        position: relative; 
+        width: 100vw; height: 100vh; 
+    }
+    
+    canvas { display: block; }
+    .menu-item {
+        position: absolute;
+        /* Importante: Centrado inicial */
+        top: 50%;
+        left: 50%;
+        padding: 8px 16px;
+        color: #00ffcc;
+        border: 1px solid rgba(0, 255, 204, 0.6);
+        background: rgba(0, 15, 15, 0.85);
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 12px;
+        white-space: nowrap;
+        text-shadow: 0 0 8px #00ffcc;
+        /* Transición suave para la explosión y el regreso */
+        transition: transform 0.1s linear, opacity 0.3s, background 0.3s, box-shadow 0.3s;
+        pointer-events: auto;
+        user-select: none;
+        transform-origin: center;
+    }
+    .menu-item:hover { 
+        background: #00ffcc; 
+        color: #010808; 
+        box-shadow: 0 0 20px #00ffcc; 
+    }
+    /* Clase para el estado de explosión/menú centrado */
+    .menu-centered {
+        transition: all 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    }
 
     @media (max-width: 860px){
       .sphere-demo-canvas{
