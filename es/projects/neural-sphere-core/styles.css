@@ -1,0 +1,155 @@
+    .sphere-demo-shell{
+      position: relative;
+      min-height: 520px;
+      border-radius: 16px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at center, rgba(0,247,255,.10) 0%, rgba(0,20,40,.18) 35%, rgba(0,0,0,.55) 100%),
+        linear-gradient(180deg, rgba(0,14,28,.96), rgba(0,4,10,.98));
+      border: 1px solid var(--line);
+    }
+
+    .sphere-demo-canvas{
+      display: block;
+      width: 100%;
+      height: 520px;
+    }
+
+    .sphere-ui-panel{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      width: min(320px, calc(100% - 32px));
+      padding: 18px;
+      border-radius: 16px;
+      background: rgba(4, 20, 40, 0.86);
+      border: 1px solid rgba(0,247,255,.18);
+      backdrop-filter: blur(10px);
+      color: #dffbff;
+      opacity: 0;
+      pointer-events: none;
+      transition: transform .28s ease, opacity .28s ease;
+      z-index: 3;
+      box-shadow: 0 10px 24px rgba(0,0,0,.35);
+    }
+
+    .sphere-ui-panel.is-visible{
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .sphere-ui-panel h2{
+      margin: 0 0 8px;
+      font-size: 1.15rem;
+      color: #8df7ff;
+    }
+
+    .sphere-ui-panel p{
+      margin: 0 0 14px;
+      color: #d7eef7;
+      font-size: .95rem;
+      line-height: 1.45;
+    }
+
+    .sphere-ui-actions{
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .sphere-btn{
+      appearance: none;
+      border: 1px solid rgba(0,247,255,.22);
+      background: rgba(0,247,255,.08);
+      color: #dffbff;
+      border-radius: 10px;
+      padding: 9px 12px;
+      cursor: pointer;
+      text-decoration: none;
+      font-size: .9rem;
+    }
+
+    .sphere-btn:hover{
+      background: rgba(0,247,255,.14);
+      border-color: rgba(0,247,255,.36);
+    }
+
+    .sphere-hud{
+      position: absolute;
+      left: 16px;
+      right: 16px;
+      bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .sphere-hud-chip{
+      border: 1px solid rgba(0,247,255,.15);
+      background: rgba(2, 16, 30, .72);
+      color: #b7eaf1;
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-size: .78rem;
+      backdrop-filter: blur(8px);
+    }
+
+    body { margin: 0; background: #010808; overflow: hidden; font-family: 'Segoe UI', sans-serif; }
+        #canvas-container { 
+            position: relative; 
+            width: 100vw; height: 100vh; 
+        }
+        
+        canvas { display: block; }
+
+        .menu-item {
+            position: absolute;
+            /* Importante: Centrado inicial */
+            top: 50%;
+            left: 50%;
+            padding: 8px 16px;
+            color: #00ffcc;
+            border: 1px solid rgba(0, 255, 204, 0.6);
+            background: rgba(0, 15, 15, 0.85);
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 12px;
+            white-space: nowrap;
+            text-shadow: 0 0 8px #00ffcc;
+            /* Transición suave para la explosión y el regreso */
+            transition: transform 0.1s linear, opacity 0.3s, background 0.3s, box-shadow 0.3s;
+            pointer-events: auto;
+            user-select: none;
+            transform-origin: center;
+        }
+
+        .menu-item:hover { 
+            background: #00ffcc; 
+            color: #010808; 
+            box-shadow: 0 0 20px #00ffcc; 
+        }
+
+        /* Clase para el estado de explosión/menú centrado */
+        .menu-centered {
+            transition: all 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+        }
+
+    @media (max-width: 860px){
+      .sphere-demo-canvas{
+        height: 420px;
+      }
+
+      .sphere-demo-shell{
+        min-height: 420px;
+      }
+
+      .sphere-hud{
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
