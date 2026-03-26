@@ -10,15 +10,18 @@ body.project-demo-shell{
   color: var(--text);
   font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
   line-height: 1.5;
-  overflow: auto;
+  overflow: hidden;
 }
 
 .project-demo{
-  min-height: 100vh;
-  padding: 20px 22px 28px;
+  min-height: 100dvh;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 16px 18px;
   display: grid;
-  grid-template-rows: auto auto auto;
-  gap: 18px;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 14px;
+  box-sizing: border-box;
 }
 
 .project-demo-header{
@@ -29,19 +32,19 @@ body.project-demo-shell{
   border: 1px solid var(--line);
   border-radius: 14px;
   background: color-mix(in srgb, var(--panel) 88%, transparent);
-  padding: 18px;
+  padding: 16px 18px;
 }
 
 .project-demo-headline h1{
   margin: 0 0 8px;
-  font-size: clamp(1.6rem, 2.5vw, 2.4rem);
-  line-height: 1.15;
+  font-size: clamp(1.4rem, 2.2vw, 2.1rem);
+  line-height: 1.12;
 }
 
 .project-demo-lede{
   margin: 0;
   color: var(--muted);
-  max-width: 65ch;
+  max-width: 70ch;
 }
 
 .project-demo-badges{
@@ -60,27 +63,38 @@ body.project-demo-shell{
 }
 
 .project-demo-stage{
+  min-height: 0;
+  height: 100%;
   border: 1px solid var(--line);
   border-radius: 14px;
   background: color-mix(in srgb, var(--panel) 90%, transparent);
   overflow: hidden;
-  min-height: 380px;
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  box-sizing: border-box;
 }
 
-.project-demo-surface{
+/* .project-demo-surface{
   min-height: 380px;
   display: grid;
   place-items: center;
   padding: 18px;
-}
+} */
 
-.project-demo-info{
+/* .project-demo-info{
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
+} */
+
+/* ocultamos la info para este modo centrado */
+.project-demo-info{
+  display: none;
 }
 
-.project-demo-block{
+/* .project-demo-block{
   border: 1px solid var(--line);
   border-radius: 14px;
   background: color-mix(in srgb, var(--panel) 88%, transparent);
@@ -100,11 +114,17 @@ body.project-demo-shell{
 .project-demo-block ul{
   margin: 0;
   padding-left: 18px;
-}
+} */
 
 @media (max-width: 860px){
+  body.project-demo-shell{
+    overflow: auto;
+  }
   .project-demo{
-    padding: 16px;
+    height: auto;
+    min-height: 100dvh;
+    grid-template-rows: auto auto;
+    /* padding: 16px; */
   }
 
   .project-demo-header{
@@ -112,12 +132,16 @@ body.project-demo-shell{
     align-items: stretch;
   }
 
-  .project-demo-info{
+  /* .project-demo-info{
     grid-template-columns: 1fr;
-  }
+  } */
 
-  .project-demo-stage,
+  /* .project-demo-stage,
   .project-demo-surface{
     min-height: 260px;
+  } */
+
+  .project-demo-stage {
+    min-height: 420px;
   }
 }
