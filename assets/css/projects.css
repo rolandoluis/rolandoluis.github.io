@@ -193,11 +193,13 @@ main.projects-shell-main{
   font-size:34px;
   line-height:1;
   transition:color .18s ease, transform .18s ease;
+  opacity:.6;
 }
 
 .project-tile:hover .project-row-arrow{
   color:rgba(255,255,255,.92);
-  transform:translateX(2px);
+  opacity:1;
+  transform:translateX(4px);
 }
 
 /* .project-tile-top{
@@ -260,6 +262,7 @@ main.projects-shell-main{
   color:var(--muted);
   border:1px solid rgba(255,255,255,.10);
   background:rgba(255,255,255,.03);
+  opacity:.75;
 }
 
 /* .project-tile-cta{
@@ -619,6 +622,11 @@ main.projects-shell-main{
 .project-tile[data-type="app"] .project-tile-cta{
   font-weight: 600;
   color: #8df7ff;
+}
+
+.project-tile[data-featured="true"]{
+  border-color:rgba(0,247,255,.25);
+  opacity:.32;
 }
 
 .project-tile.has-thumb::before{
