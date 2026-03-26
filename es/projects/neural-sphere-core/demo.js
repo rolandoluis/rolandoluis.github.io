@@ -9,21 +9,21 @@ let rotationSpeed = 0.005; // Velocidad base
 let targetSpeed = 0.005;   // Velocidad a la que queremos llegar
 let isHover = false;
 const nodeCount = 110;
-const radius = 180;
+let currentRadius = 180;
 
 class Node {
     constructor(i) {
         this.phi = Math.acos(-1 + (2 * i) / nodeCount);
         this.theta = Math.sqrt(nodeCount * Math.PI) * this.phi;
-        this.baseX = radius * Math.sin(this.phi) * Math.cos(this.theta);
-        this.baseY = radius * Math.sin(this.phi) * Math.sin(this.theta);
-        this.baseZ = radius * Math.cos(this.phi);
+        this.baseX = currentRadius * Math.sin(this.phi) * Math.cos(this.theta);
+        this.baseY = currentRadius * Math.sin(this.phi) * Math.sin(this.theta);
+        this.baseZ = currentRadius * Math.cos(this.phi);
         this.ex = this.baseX; this.ey = this.baseY; this.ez = this.baseZ;
     }
 
     update() {
         const limit = Math.min(width, height) * 0.42;
-        const targetFactor = isHover ? (limit / radius) : 1;
+        const targetFactor = isHover ? (limit / currentRadius) : 1;
         // Interpolación para movimiento orgánico de expansión
         this.ex += (this.baseX * targetFactor - this.ex) * 0.1;
         this.ey += (this.baseY * targetFactor - this.ey) * 0.1;
@@ -40,7 +40,7 @@ class Node {
         const x2d = rx * scale + width / 2;
         const y2d = this.ey * scale + height / 2;
         
-        ctx.fillStyle = `rgba(0, 255, 204, ${isHover ? 0.1 : (rz + radius)/(radius*2) + 0.15})`;
+        ctx.fillStyle = `rgba(0, 255, 204, ${isHover ? 0.1 : (rz + currentRadius)/(currentRadius*2) + 0.15})`;
         ctx.beginPath();
         ctx.arc(x2d, y2d, 1.8 * scale, 0, Math.PI * 2);
         ctx.fill();
@@ -67,6 +67,11 @@ function init() {
 function resize() {
     width = container.clientWidth;
     height = container.clientHeight;
+    
+    // 2. Cálculo dinámico: el radio será el 35% del lado más corto
+    // Así siempre queda aire alrededor de la esfera.
+    currentRadius = Math.min(width, height) * 0.35;
+
     const dpr = window.devicePixelRatio || 1;
     canvas.width = width * dpr;
     canvas.height = height * dpr;
@@ -88,17 +93,17 @@ function animate() {
         if (!isHover) {
             item.classList.remove('menu-centered');
             const angle = rotation + (index * (Math.PI * 2 / menuItems.length));
-            const mx = Math.sin(angle) * (radius + 30);
-            const mz = Math.cos(angle) * (radius + 30);
+            const mx = Math.sin(angle) * (currentRadius + 30);
+            const mz = Math.cos(angle) * (currentRadius + 30);
             const mScale = 600 / (600 - mz);
             
             // Profundidad visual: Desenfocar si está atrás (mz negativo)
             const blur = Math.max(0, -mz / 40);
             
             item.style.transform = `translate(-50%, -50%) translate(${mx * mScale}px, 0px) scale(${mScale})`;
-            item.style.opacity = (mz + radius) / (radius * 2) + 0.2; 
+            item.style.opacity = (mz + currentRadius) / (currentRadius * 2) + 0.2; 
             item.style.filter = `blur(${blur}px)`;
-            item.style.zIndex = Math.round(mz + radius);
+            item.style.zIndex = Math.round(mz + currentRadius);
         } else {
             item.classList.add('menu-centered');
             item.style.filter = `blur(0px)`;
