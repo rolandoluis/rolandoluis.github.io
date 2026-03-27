@@ -373,6 +373,7 @@ main.projects-shell-main{
   padding:10px 14px;
   cursor:pointer;
   text-decoration:none;
+  min-height: 36px;
 }
 
 .projects-action-btn--primary{
