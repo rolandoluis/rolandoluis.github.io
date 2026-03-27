@@ -12,11 +12,9 @@ async function init() {
   renderFilters();
   renderTable();
   bindSearch();
-  const silicon = elements.find(e => e.symbol === "Si");
-  if (silicon) {
-    document.getElementById("emptyAtomName").textContent = silicon.name;
-    document.getElementById("emptyAtomNumber").textContent = `Z = ${silicon.number}`;
-    renderAtomSVG("emptyAtomVisual", "emptyShellList", "emptyElectronConfig", silicon);
+  const initial = elements.find(e => e.symbol === "Si") || elements[0];
+  if (initial) {
+    selectElement(initial.symbol);
   }
 }
 
@@ -60,10 +58,6 @@ function selectElement(symbol) {
   document.querySelectorAll(".element").forEach(node => {
     node.classList.toggle("active", node.dataset.symbol === symbol);
   });
-
-  document.getElementById("panelEmpty").hidden = true;
-  document.getElementById("panelContent").hidden = false;
-
   document.getElementById("elSymbol").textContent = el.symbol;
   document.getElementById("elName").textContent = el.name;
   document.getElementById("elNumber").textContent = `#${el.number}`;
