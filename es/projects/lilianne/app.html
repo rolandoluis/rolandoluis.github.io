@@ -77,8 +77,23 @@
             <!-- se generan dinámicamente -->
           </div>
         </section>
-      
-        <div class="panel-empty" id="panelEmpty">
+        <section class="panel-education">
+            <h3>Estructura electrónica</h3>
+
+            <div class="edu-atom-card">
+              <div class="edu-atom-visual" id="elAtomVisual"></div>
+            
+              <div class="edu-atom-info">
+                <div class="edu-shell-list" id="elShellList"></div>
+              
+                <div class="edu-config-block">
+                  <span class="edu-config-label">Configuración electrónica</span>
+                  <code id="elElectronConfig"></code>
+                </div>
+              </div>
+            </div>
+          </section>
+        <!-- <div class="panel-empty" id="panelEmpty">
           <div class="edu-preview">
             <div class="edu-preview-head">
               <h3>Exploración guiada</h3>
@@ -106,7 +121,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
       
         <div class="panel-content" id="panelContent" hidden>
           <div class="panel-header">
@@ -126,23 +141,8 @@
           
             <p class="panel-summary" id="elSummary"></p>
           </div>
-          <section class="panel-education">
-            <h3>Estructura electrónica</h3>
-
-            <div class="edu-atom-card">
-              <div class="edu-atom-visual" id="elAtomVisual"></div>
-            
-              <div class="edu-atom-info">
-                <div class="edu-shell-list" id="elShellList"></div>
-              
-                <div class="edu-config-block">
-                  <span class="edu-config-label">Configuración electrónica</span>
-                  <code id="elElectronConfig"></code>
-                </div>
-              </div>
-            </div>
-          </section>
           
+
           <div class="panel-footer">
             <a id="elWiki" target="_blank" rel="noopener">Ver en Wikipedia</a>
           </div>
