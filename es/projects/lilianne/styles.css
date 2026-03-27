@@ -303,7 +303,7 @@ body.lilianne-shell{
 .edu-atom-visual{
   display:grid;
   place-items:center;
-  min-height:220px;
+  min-height:240px;
 }
 
 .atom-svg{
@@ -319,14 +319,15 @@ body.lilianne-shell{
 
 .atom-nucleus-symbol{
   fill:var(--text);
-  font-size:14px;
-  font-weight:700;
+  font-size:15px;
+  font-weight:800;
 }
 
 .atom-nucleus-number{
   fill:var(--muted);
-  font-size:10px;
-  font-weight:600;
+  font-size:11px;
+  /* font-weight:600; */
+  opacity:.8;
 }
 
 .atom-orbit{
@@ -339,6 +340,10 @@ body.lilianne-shell{
 .atom-electron{
   fill:#8df7ff;
   filter:drop-shadow(0 0 6px rgba(141,247,255,.45));
+  transition:
+    cx .4s ease,
+    cy .4s ease,
+    opacity .25s ease;
 }
 
 .edu-atom-info{
@@ -360,12 +365,18 @@ body.lilianne-shell{
 .edu-shell-item{
   display:flex;
   justify-content:space-between;
+  align-items:center;
   gap:12px;
-  padding:8px 10px;
+  padding:10px 12px;
   border:1px solid rgba(255,255,255,.08);
-  border-radius:10px;
+  border-radius:12px;
   background:rgba(255,255,255,.03);
   font-size:.9rem;
+}
+
+.edu-shell-item strong{
+  font-size:.85rem;
+  letter-spacing:.03em;
 }
 
 .edu-config-block{
@@ -387,6 +398,8 @@ body.lilianne-shell{
   font-family:ui-monospace, SFMono-Regular, Consolas, monospace;
   word-break:break-word;
   line-height:1.45;
+  font-size:.9rem;
+  letter-spacing:.02em;
 }
 
 .atom-empty{

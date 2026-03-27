@@ -111,6 +111,45 @@ function bindSearch() {
   });
 }
 
+function createBaseSVG(container){
+  const size = 240;
+  const center = size / 2;
+  const ns = "http://www.w3.org/2000/svg";
+
+  const svg = document.createElementNS(ns, "svg");
+  svg.setAttribute("viewBox", `0 0 ${size} ${size}`);
+  svg.setAttribute("width", size);
+  svg.setAttribute("height", size);
+  svg.classList.add("atom-svg");
+
+  // núcleo
+  const nucleus = document.createElementNS(ns, "circle");
+  nucleus.setAttribute("cx", center);
+  nucleus.setAttribute("cy", center);
+  nucleus.setAttribute("r", 18);
+  nucleus.setAttribute("class", "atom-nucleus-circle");
+  svg.appendChild(nucleus);
+
+  const nucleusSymbol = document.createElementNS(ns, "text");
+  nucleusSymbol.setAttribute("x", center);
+  nucleusSymbol.setAttribute("y", center - 2);
+  nucleusSymbol.setAttribute("text-anchor", "middle");
+  nucleusSymbol.setAttribute("class", "atom-nucleus-symbol");
+  nucleusSymbol.setAttribute("id", "atomSymbol");
+  svg.appendChild(nucleusSymbol);
+
+  const nucleusNumber = document.createElementNS(ns, "text");
+  nucleusNumber.setAttribute("x", center);
+  nucleusNumber.setAttribute("y", center + 11);
+  nucleusNumber.setAttribute("text-anchor", "middle");
+  nucleusNumber.setAttribute("class", "atom-nucleus-number");
+  nucleusNumber.setAttribute("id", "atomNumber");
+  svg.appendChild(nucleusNumber);
+
+  container.appendChild(svg);
+  return svg;
+}
+
 function renderAtomSVG(containerId, shellListId, configId, element) {
   const container = document.getElementById(containerId);
   const shellList = document.getElementById(shellListId);
@@ -121,31 +160,26 @@ function renderAtomSVG(containerId, shellListId, configId, element) {
   const shells = Array.isArray(element.shells) ? element.shells : [];
   const config = element.electronConfig || "Configuración no disponible";
 
-  container.innerHTML = "";
+  /* container.innerHTML = ""; */
   shellList.innerHTML = "";
   configHost.textContent = config;
+  let svg = container.querySelector("svg");
+
+  if(!svg){
+    svg = createBaseSVG(container);
+  }
+
+  svg.querySelector("#atomSymbol").textContent = element.symbol;
+  svg.querySelector("#atomNumber").textContent = element.number;
 
   if (!shells.length) {
     container.innerHTML = `<div class="atom-empty">Sin datos de niveles</div>`;
     return;
   }
 
-  const size = 220;
+  const size = 240;
   const center = size / 2;
   const ns = "http://www.w3.org/2000/svg";
-
-  const svg = document.createElementNS(ns, "svg");
-  svg.setAttribute("viewBox", `0 0 ${size} ${size}`);
-  svg.setAttribute("width", size);
-  svg.setAttribute("height", size);
-  svg.classList.add("atom-svg");
-
-  const nucleus = document.createElementNS(ns, "circle");
-  nucleus.setAttribute("cx", center);
-  nucleus.setAttribute("cy", center);
-  nucleus.setAttribute("r", 18);
-  nucleus.setAttribute("class", "atom-nucleus-circle");
-  svg.appendChild(nucleus);
 
   const nucleusText = document.createElementNS(ns, "text");
   nucleusText.setAttribute("x", center);
@@ -196,8 +230,65 @@ function renderAtomSVG(containerId, shellListId, configId, element) {
     `;
     shellList.appendChild(item);
   });
+  // limpiar órbitas anteriores
+  svg.querySelectorAll(".atom-orbit").forEach(o => o.remove());
 
-  container.appendChild(svg);
+  element.shells.forEach((_, index) => {
+    const radius = 34 + index * 24;
+
+    const orbit = document.createElementNS(svg.namespaceURI, "circle");
+    orbit.setAttribute("cx", center);
+    orbit.setAttribute("cy", center);
+    orbit.setAttribute("r", radius);
+    orbit.setAttribute("class", "atom-orbit");
+
+    svg.appendChild(orbit);
+  });
+  updateElectrons(svg, element.shells, center);
+}
+
+function updateElectrons(svg, shells, center){
+
+  let electronIndex = 0;
+
+  shells.forEach((count, shellIndex) => {
+    const radius = 34 + shellIndex * 24;
+
+    for(let i = 0; i < count; i++){
+      const angle = (Math.PI * 2 / count) * i - Math.PI / 2;
+
+      const x = center + radius * Math.cos(angle);
+      const y = center + radius * Math.sin(angle);
+
+      let electron = svg.querySelector(`[data-e="${electronIndex}"]`);
+
+      if(!electron){
+        electron = document.createElementNS(svg.namespaceURI, "circle");
+        electron.setAttribute("r", 3.2);
+        electron.setAttribute("class", "atom-electron");
+        electron.dataset.e = electronIndex;
+        svg.appendChild(electron);
+
+        electron.setAttribute("opacity", "0");
+        requestAnimationFrame(() => {
+          electron.setAttribute("opacity", "1");
+        });
+      }
+
+      electron.setAttribute("cx", x);
+      electron.setAttribute("cy", y);
+
+      electronIndex++;
+    }
+  });
+
+  // eliminar sobrantes
+  svg.querySelectorAll(".atom-electron").forEach(el => {
+    if(el.dataset.e >= electronIndex){
+      el.setAttribute("opacity", "0");
+      setTimeout(() => el.remove(), 250);
+    }
+  });
 }
 
 function renderFilters() {
