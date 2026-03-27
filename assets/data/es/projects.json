@@ -159,8 +159,8 @@
     "previewMode": "",
     "demoUrl": "/es/projects/vertical-navigation/demo.html",
     "demoMode": "iframe",
-    "repoUrl": "https://github.com/rolandoluis/...",
-    "engineeringUrl": "/es/engineering/architecture.html",
+    "repoUrl": "",
+    "engineeringUrl": "",
     "tags": [
       "demo",
       "ui",
