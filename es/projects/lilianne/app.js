@@ -24,6 +24,8 @@ function renderTable() {
     cell.className = `element category-${el.categoryKey}`;
     cell.dataset.symbol = el.symbol;
     cell.dataset.category = el.categoryKey;
+    cell.dataset.group = el.group ?? "";
+    cell.dataset.period = el.period ?? "";
 
     // Posición real en la tabla
     cell.style.gridColumn = el.x;
@@ -140,7 +142,11 @@ function renderFilters() {
         b.classList.toggle("is-active", b === btn);
       });
 
-      applyFilter(cat.key);
+      if (cat.key === "all") {
+        applyFilter("all");
+      } else {
+        applyFilter("category", cat.key);
+      }
     });
 
     host.appendChild(btn);
