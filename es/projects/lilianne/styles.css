@@ -257,6 +257,136 @@ body.lilianne-shell{
   text-align:center;
 }
 
+.edu-preview,
+.panel-education{
+  display:grid;
+  gap:16px;
+}
+
+.edu-preview-head h3,
+.panel-education h3{
+  margin:0 0 6px;
+  font-size:1rem;
+}
+
+.edu-preview-head p{
+  margin:0;
+  color:var(--muted);
+  font-size:.92rem;
+  line-height:1.45;
+}
+
+.edu-atom-card{
+  display:grid;
+  grid-template-columns:minmax(180px, 220px) 1fr;
+  gap:18px;
+  align-items:center;
+}
+
+.edu-atom-visual{
+  display:grid;
+  place-items:center;
+  min-height:220px;
+}
+
+.atom-svg{
+  max-width:100%;
+  height:auto;
+}
+
+.atom-nucleus-circle{
+  fill:rgba(255,255,255,.12);
+  stroke:rgba(255,255,255,.14);
+  stroke-width:1;
+}
+
+.atom-nucleus-symbol{
+  fill:var(--text);
+  font-size:14px;
+  font-weight:700;
+}
+
+.atom-nucleus-number{
+  fill:var(--muted);
+  font-size:10px;
+  font-weight:600;
+}
+
+.atom-orbit{
+  fill:none;
+  stroke:rgba(255,255,255,.18);
+  stroke-width:1;
+  stroke-dasharray:3 4;
+}
+
+.atom-electron{
+  fill:#8df7ff;
+  filter:drop-shadow(0 0 6px rgba(141,247,255,.45));
+}
+
+.edu-atom-info{
+  display:grid;
+  gap:12px;
+}
+
+.edu-atom-meta{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+
+.edu-shell-list{
+  display:grid;
+  gap:8px;
+}
+
+.edu-shell-item{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  padding:8px 10px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:10px;
+  background:rgba(255,255,255,.03);
+  font-size:.9rem;
+}
+
+.edu-config-block{
+  display:grid;
+  gap:6px;
+}
+
+.edu-config-label{
+  font-size:.82rem;
+  color:var(--muted);
+}
+
+.edu-config-block code{
+  display:block;
+  padding:10px 12px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.03);
+  font-family:ui-monospace, SFMono-Regular, Consolas, monospace;
+  word-break:break-word;
+  line-height:1.45;
+}
+
+.atom-empty{
+  color:var(--muted);
+  font-size:.9rem;
+}
+
+@media (max-width: 900px){
+  .edu-atom-card{
+    grid-template-columns:1fr;
+  }
+
+  .edu-atom-visual{
+    min-height:180px;
+  }
+}
+
 .panel-empty p{
   margin:0;
   font-size:1rem;

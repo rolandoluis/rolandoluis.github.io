@@ -79,7 +79,33 @@
         </section>
       
         <div class="panel-empty" id="panelEmpty">
-          <p>Selecciona un elemento o utiliza la búsqueda y los filtros.</p>
+          <div class="edu-preview">
+            <div class="edu-preview-head">
+              <h3>Exploración guiada</h3>
+              <p>
+                Selecciona un elemento para ver su estructura electrónica,
+                sus electrones por nivel de energía y su configuración SPDF.
+              </p>
+            </div>
+          
+            <div class="edu-atom-card">
+              <div class="edu-atom-visual" id="emptyAtomVisual"></div>
+            
+              <div class="edu-atom-info">
+                <div class="edu-atom-meta">
+                  <strong id="emptyAtomName">Silicio</strong>
+                  <span id="emptyAtomNumber">Z = 14</span>
+                </div>
+              
+                <div class="edu-shell-list" id="emptyShellList"></div>
+              
+                <div class="edu-config-block">
+                  <span class="edu-config-label">Configuración electrónica</span>
+                  <code id="emptyElectronConfig">1s2 2s2 2p6 3s2 3p2</code>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       
         <div class="panel-content" id="panelContent" hidden>
@@ -100,7 +126,23 @@
           
             <p class="panel-summary" id="elSummary"></p>
           </div>
-      
+          <section class="panel-education">
+            <h3>Estructura electrónica</h3>
+
+            <div class="edu-atom-card">
+              <div class="edu-atom-visual" id="elAtomVisual"></div>
+            
+              <div class="edu-atom-info">
+                <div class="edu-shell-list" id="elShellList"></div>
+              
+                <div class="edu-config-block">
+                  <span class="edu-config-label">Configuración electrónica</span>
+                  <code id="elElectronConfig"></code>
+                </div>
+              </div>
+            </div>
+          </section>
+          
           <div class="panel-footer">
             <a id="elWiki" target="_blank" rel="noopener">Ver en Wikipedia</a>
           </div>

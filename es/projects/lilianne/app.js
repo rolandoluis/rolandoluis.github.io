@@ -12,6 +12,12 @@ async function init() {
   renderFilters();
   renderTable();
   bindSearch();
+  const silicon = elements.find(e => e.symbol === "Si");
+  if (silicon) {
+    document.getElementById("emptyAtomName").textContent = silicon.name;
+    document.getElementById("emptyAtomNumber").textContent = `Z = ${silicon.number}`;
+    renderAtomSVG("emptyAtomVisual", "emptyShellList", "emptyElectronConfig", silicon);
+  }
 }
 
 function renderTable() {
@@ -68,6 +74,7 @@ function selectElement(symbol) {
   document.getElementById("elState").textContent = el.stateLabel ?? "—";
   document.getElementById("elSummary").textContent = el.summary || "Sin resumen disponible.";
   document.getElementById("elWiki").href = el.wiki || "#";
+  renderAtomSVG("elAtomVisual", "elShellList", "elElectronConfig", el);
   document.getElementById("elementPanel").scrollTop = 0;
 }
 
@@ -108,6 +115,95 @@ function bindSearch() {
       selectElement(firstMatch);
     }
   });
+}
+
+function renderAtomSVG(containerId, shellListId, configId, element) {
+  const container = document.getElementById(containerId);
+  const shellList = document.getElementById(shellListId);
+  const configHost = document.getElementById(configId);
+
+  if (!container || !shellList || !configHost || !element) return;
+
+  const shells = Array.isArray(element.shells) ? element.shells : [];
+  const config = element.electronConfig || "Configuración no disponible";
+
+  container.innerHTML = "";
+  shellList.innerHTML = "";
+  configHost.textContent = config;
+
+  if (!shells.length) {
+    container.innerHTML = `<div class="atom-empty">Sin datos de niveles</div>`;
+    return;
+  }
+
+  const size = 220;
+  const center = size / 2;
+  const ns = "http://www.w3.org/2000/svg";
+
+  const svg = document.createElementNS(ns, "svg");
+  svg.setAttribute("viewBox", `0 0 ${size} ${size}`);
+  svg.setAttribute("width", size);
+  svg.setAttribute("height", size);
+  svg.classList.add("atom-svg");
+
+  const nucleus = document.createElementNS(ns, "circle");
+  nucleus.setAttribute("cx", center);
+  nucleus.setAttribute("cy", center);
+  nucleus.setAttribute("r", 18);
+  nucleus.setAttribute("class", "atom-nucleus-circle");
+  svg.appendChild(nucleus);
+
+  const nucleusText = document.createElementNS(ns, "text");
+  nucleusText.setAttribute("x", center);
+  nucleusText.setAttribute("y", center - 2);
+  nucleusText.setAttribute("text-anchor", "middle");
+  nucleusText.setAttribute("class", "atom-nucleus-symbol");
+  nucleusText.textContent = element.symbol;
+  svg.appendChild(nucleusText);
+
+  const numberText = document.createElementNS(ns, "text");
+  numberText.setAttribute("x", center);
+  numberText.setAttribute("y", center + 11);
+  numberText.setAttribute("text-anchor", "middle");
+  numberText.setAttribute("class", "atom-nucleus-number");
+  numberText.textContent = element.number;
+  svg.appendChild(numberText);
+
+  const shellNames = ["K", "L", "M", "N", "O", "P", "Q"];
+
+  shells.forEach((count, index) => {
+    const radius = 34 + index * 24;
+
+    const orbit = document.createElementNS(ns, "circle");
+    orbit.setAttribute("cx", center);
+    orbit.setAttribute("cy", center);
+    orbit.setAttribute("r", radius);
+    orbit.setAttribute("class", "atom-orbit");
+    svg.appendChild(orbit);
+
+    for (let i = 0; i < count; i++) {
+      const angle = (Math.PI * 2 / count) * i - Math.PI / 2;
+      const x = center + radius * Math.cos(angle);
+      const y = center + radius * Math.sin(angle);
+
+      const electron = document.createElementNS(ns, "circle");
+      electron.setAttribute("cx", x);
+      electron.setAttribute("cy", y);
+      electron.setAttribute("r", 3.2);
+      electron.setAttribute("class", "atom-electron");
+      svg.appendChild(electron);
+    }
+
+    const item = document.createElement("div");
+    item.className = "edu-shell-item";
+    item.innerHTML = `
+      <strong>${shellNames[index] ?? `Nivel ${index + 1}`}</strong>
+      <span>${count} electrones</span>
+    `;
+    shellList.appendChild(item);
+  });
+
+  container.appendChild(svg);
 }
 
 function renderFilters() {
