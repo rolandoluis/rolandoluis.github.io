@@ -362,6 +362,9 @@ main.projects-shell-main{
 }
 
 .projects-action-btn{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   appearance:none;
   border:1px solid var(--btn-brd);
   background:var(--btn-bkg);
