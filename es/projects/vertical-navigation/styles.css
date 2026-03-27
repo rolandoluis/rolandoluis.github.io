@@ -41,7 +41,8 @@ body {
 .layout {
   position: relative;
   z-index: 1;
-  width: 100vw;
+  margin: auto;
+  width: 70vw;
   height: 100vh;
   display: grid;
   grid-template-columns: var(--sidebar-width) 1fr;
