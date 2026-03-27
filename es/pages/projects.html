@@ -121,19 +121,39 @@
           <div class="projects-gallery" id="projectGallery" hidden></div>
 
           <div class="projects-actions">
-            <a class="projects-action-btn" id="projectOpenFull" href="#" target="_blank" rel="noopener">Abrir completo</a>
             <a class="projects-action-btn" id="projectEngineering" href="#" hidden>Ver ingeniería</a>
             <a class="projects-action-btn" id="projectRepo" href="#" target="_blank" rel="noopener" hidden>Repositorio</a>
-            <button class="projects-action-btn projects-action-close" id="projectBack" type="button">Volver</button>
           </div>
         </aside>
 
         <section class="projects-demo-panel">
           <div class="projects-demo-bar">
-            <div class="projects-demo-title" id="projectDemoTitle">Preview visual</div>
-            <div class="projects-demo-subtitle" id="projectDemoSubtitle">Captura representativa del proyecto</div>
+            <div class="projects-demo-bar-main">
+              <div class="projects-demo-title" id="projectDemoTitle">Preview visual</div>
+              <div class="projects-demo-subtitle" id="projectDemoSubtitle">Captura representativa del proyecto</div>
+            </div>
+          
+            <div class="projects-demo-bar-actions">
+              <a class="projects-action-btn projects-action-btn--primary"
+                 id="projectOpenFull"
+                 href="#"
+                 target="_blank"
+                 rel="noopener">
+                Abrir completo
+              </a>
+            
+              <button class="projects-action-btn projects-action-btn--ghost"
+                      id="projectBack"
+                      type="button">
+                Volver
+              </button>
+            </div>
           </div>
         
+          <a class="projects-action-btn" id="projectOpenFull" href="#" target="_blank" rel="noopener">Abrir completo</a>
+          <button class="projects-action-btn projects-action-close" id="projectBack" type="button">Volver</button>
+
+
           <div class="projects-demo-stage projects-media-stage" id="projectsDemoStage">
             <button class="projects-media-nav projects-media-prev" id="projectMediaPrev" type="button" aria-label="Imagen anterior">‹</button>
           

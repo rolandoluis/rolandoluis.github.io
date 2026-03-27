@@ -95,6 +95,7 @@ body {
   font-size: 0.82rem;
   color: var(--muted);
   line-height: 1.4;
+  text-align: center;
 }
 .menu-item {
   position: relative;
@@ -222,6 +223,7 @@ body {
   background: rgba(8, 18, 31, 0.64);
   backdrop-filter: blur(8px);
   box-shadow: 0 30px 60px rgba(0, 0, 0, 0.24);
+  z-index: -1;
 }
 .hero-card .eyebrow {
   display: inline-block;
