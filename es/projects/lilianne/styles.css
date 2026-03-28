@@ -190,7 +190,8 @@ body.lilianne-shell{
   display:flex;
   align-items:center;
   gap:14px;
-  border-bottom:1px solid var(--line);
+  /* border-bottom:1px solid var(--line); */
+  border:1px solid rgba(255,255,255,.08);
   padding-bottom:10px;
 }
 
@@ -374,7 +375,7 @@ body.lilianne-shell{
 
 .edu-shell-list{
   display:grid;
-  gap:8px;
+  gap:3px;
 }
 
 .edu-shell-item{
@@ -387,6 +388,7 @@ body.lilianne-shell{
   border-radius:12px;
   background:rgba(255,255,255,.03);
   font-size:.9rem;
+  height: 40px;
 }
 
 .edu-shell-item strong{
