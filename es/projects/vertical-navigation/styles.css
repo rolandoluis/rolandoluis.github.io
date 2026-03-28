@@ -132,6 +132,7 @@ body {
   border: 1px solid rgba(255,255,255,0.06);
   flex: 0 0 auto;
   transition: background 0.22s ease, border-color 0.22s ease;
+  filter: invert(27%) sepia(51%) saturate(2878%) hue-rotate(189deg) brightness(91%) contrast(92%);
 }
 .menu-item:hover .menu-icon {
   background: var(--accent-soft);
