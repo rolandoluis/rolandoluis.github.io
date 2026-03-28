@@ -282,16 +282,15 @@ function renderAtomSVG(containerId, shellListId, configId, element) {
     `;
     item.dataset.shell = index;
     shellList.appendChild(item);
-  });
 
-  item.addEventListener("mouseenter", () => {
+    item.addEventListener("mouseenter", () => {
     highlightShell(svg, index);
-  });
+    });
 
-  item.addEventListener("mouseleave", () => {
-    highlightShell(svg, -1);
+    item.addEventListener("mouseleave", () => {
+      highlightShell(svg, -1);
+    });
   });
-
 }
 
 /**
@@ -317,7 +316,6 @@ function updateElectrons(svg, shells, center) {
         electron.setAttribute("class", "atom-electron");
         electron.dataset.e = String(electronIndex);
         electron.setAttribute("opacity", "0");
-        electron.dataset.shell = shellIndex;
         svg.appendChild(electron);
 
         requestAnimationFrame(() => {
@@ -325,6 +323,7 @@ function updateElectrons(svg, shells, center) {
         });
       }
 
+      electron.dataset.shell = shellIndex;
       electron.setAttribute("cx", x);
       electron.setAttribute("cy", y);
       
