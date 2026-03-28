@@ -9,7 +9,7 @@
   --muted: #9fb3cc;
   --accent: #64d8ff;
   --accent-soft: rgba(100, 216, 255, 0.14);
-  --sidebar-width: 232px;
+  --sidebar-width: 292px;
   --item-height: 76px;
   --submenu-width: 272px;
   --shadow: 0 24px 44px rgba(0, 0, 0, 0.28);
@@ -42,7 +42,7 @@ body {
   position: relative;
   z-index: 1;
   margin: auto;
-  width: 70vw;
+  width: 75vw;
   height: 100vh;
   display: grid;
   grid-template-columns: var(--sidebar-width) 1fr;
