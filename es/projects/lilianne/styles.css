@@ -359,18 +359,31 @@ body.lilianne-shell{
 
 .atom-orbit{
   fill:none;
-  stroke:rgba(255,255,255,.18);
+  stroke:rgba(255,255,255,.15);
   stroke-width:1;
   stroke-dasharray:3 4;
+  transition: all .25s ease;
+}
+
+.atom-orbit.is-active {
+  stroke: #8df7ff;
+  stroke-width: 1.5;
+  filter: drop-shadow(0 0 6px rgba(141,247,255,.4));
 }
 
 .atom-electron{
-  fill:#8df7ff;
+  fill:rgba(141,247,255,.6);
   filter:drop-shadow(0 0 6px rgba(141,247,255,.45));
   transition:
     cx .4s ease,
     cy .4s ease,
     opacity .25s ease;
+}
+
+.atom-electron.is-active {
+  fill: #8df7ff;
+  r: 4;
+  filter: drop-shadow(0 0 6px rgba(141,247,255,.6));
 }
 
 .edu-atom-info{

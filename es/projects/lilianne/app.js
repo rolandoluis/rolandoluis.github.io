@@ -203,6 +203,16 @@ function createBaseSVG(container) {
   return svg;
 }
 
+function highlightShell(svg, shellIndex) {
+  svg.querySelectorAll(".atom-orbit").forEach(o => {
+    o.classList.toggle("is-active", Number(o.dataset.shell) === shellIndex);
+  });
+
+  svg.querySelectorAll(".atom-electron").forEach(e => {
+    e.classList.toggle("is-active", Number(e.dataset.shell) === shellIndex);
+  });
+}
+
 /**
  * Renderiza el átomo del elemento:
  * - actualiza núcleo
@@ -255,6 +265,7 @@ function renderAtomSVG(containerId, shellListId, configId, element) {
     orbit.setAttribute("cy", center);
     orbit.setAttribute("r", radius);
     orbit.setAttribute("class", "atom-orbit");
+    orbit.dataset.shell = index;
     svg.appendChild(orbit);
   });
 
@@ -269,8 +280,18 @@ function renderAtomSVG(containerId, shellListId, configId, element) {
       <strong>${shellNames[index] ?? `Nivel ${index + 1}`}</strong>
       <span>${count} electrones</span>
     `;
+    item.dataset.shell = index;
     shellList.appendChild(item);
   });
+
+  item.addEventListener("mouseenter", () => {
+    highlightShell(svg, index);
+  });
+
+  item.addEventListener("mouseleave", () => {
+    highlightShell(svg, -1);
+  });
+
 }
 
 /**
@@ -296,6 +317,7 @@ function updateElectrons(svg, shells, center) {
         electron.setAttribute("class", "atom-electron");
         electron.dataset.e = String(electronIndex);
         electron.setAttribute("opacity", "0");
+        electron.dataset.shell = shellIndex;
         svg.appendChild(electron);
 
         requestAnimationFrame(() => {
@@ -305,7 +327,7 @@ function updateElectrons(svg, shells, center) {
 
       electron.setAttribute("cx", x);
       electron.setAttribute("cy", y);
-
+      
       electronIndex++;
     }
   });
@@ -398,6 +420,8 @@ function applyFilter(type, value) {
     node.classList.toggle("is-dimmed", !match);
   });
 }
+// Lógica de Highlight
+
 
 // Arranque de la aplicación
 init().catch(err => {
