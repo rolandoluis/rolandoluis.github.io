@@ -255,10 +255,13 @@ body.lilianne-shell{
 
 .panel-body {
     display: grid;
-    /* Crea dos columnas de igual tamaño */
-    grid-template-columns: 1fr 1fr; 
+    /* Crea dos columnas de igual tamaño 
+    grid-template-columns: 1fr 1fr; */
+    grid-template-columns: max-content 1fr;
     gap: 6px;
-    font-size: 0.9rem;
+    font-size: 0.6rem;
+    padding-left: 8px;
+    border-left: 1px solid var(--line);
 }
 
 

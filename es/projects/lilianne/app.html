@@ -34,25 +34,6 @@
       </div>
     </header>
 
-    <!-- ================= CONTROLS ================= -->
-    <!-- <section class="lilianne-controls"> -->
-
-      <!-- búsqueda -->
-      <!-- div class="lilianne-search">
-        <input
-          type="text"
-          id="searchInput"
-          placeholder="Buscar por nombre, símbolo o número atómico..."
-        />
-      </div> -->
-
-      <!-- filtros -->
-      <!-- <div class="lilianne-filters" id="filtersContainer"> -->
-        <!-- se generan dinámicamente -->
-      <!-- </div> -->
-
-    <!-- </section> -->
-
     <!-- ================= MAIN LAYOUT ================= -->
     <section class="lilianne-layout">
 
@@ -78,35 +59,21 @@
           </div>
         </section>
       
-        <!-- <div class="panel-empty" id="panelEmpty">
-          <div class="edu-preview">
-            <div class="edu-preview-head">
-              <h3>Exploración guiada</h3>
-              <p>
-                Selecciona un elemento para ver su estructura electrónica,
-                sus electrones por nivel de energía y su configuración SPDF.
-              </p>
-            </div>
-          
-            <div class="edu-atom-card">
-              <div class="edu-atom-visual" id="emptyAtomVisual"></div>
-            
-              <div class="edu-atom-info">
-                <div class="edu-atom-meta">
-                  <strong id="emptyAtomName">Silicio</strong>
-                  <span id="emptyAtomNumber">Z = 14</span>
-                </div>
-              
-                <div class="edu-shell-list" id="emptyShellList"></div>
-              
-                <div class="edu-config-block">
-                  <span class="edu-config-label">Configuración electrónica</span>
-                  <code id="emptyElectronConfig">1s2 2s2 2p6 3s2 3p2</code>
-                </div>
-              </div>
-            </div>
+        <div class="panel-header">
+          <div class="panel-symbol" id="elSymbol">Si</div>
+          <div>
+            <h2 id="elName">Silicio</h2>
+            <span id="elNumber">14</span>
           </div>
-        </div> -->
+          <div class="panel-body">
+              <p><strong>Masa:</strong> <span id="elMass"></span></p>
+              <p><strong>Categoría:</strong> <span id="elCategory"></span></p>
+              <p><strong>Grupo:</strong> <span id="elGroup"></span></p>
+              <p><strong>Periodo:</strong> <span id="elPeriod"></span></p>
+              <p><strong>Estado:</strong> <span id="elState"></span></p>
+          </div>
+        </div>
+        
         <section class="panel-education">
           <h3>Estructura electrónica</h3>
         
@@ -116,34 +83,18 @@
             <div class="edu-atom-info">
               <div class="edu-shell-list" id="elShellList"></div>
             
-              <div class="edu-config-block">
-                <span class="edu-config-label">Configuración electrónica</span>
-                <code id="elElectronConfig"></code>
-              </div>
+              
             </div>
           </div>
         </section>
-        <div class="panel-content" id="panelContent">
-          
-          <div class="panel-header">
-            <div class="panel-symbol" id="elSymbol">Si</div>
-            <div>
-              <h2 id="elName">Silicio</h2>
-              <span id="elNumber">14</span>
-            </div>
-          </div>
-        
+        <div class="edu-config-block">
+          <span class="edu-config-label"><strong>Configuración electrónica</strong></span>
+          <code id="elElectronConfig"></code>
+        </div>
+        <div class="panel-content" id="panelContent">        
           <div class="panel-scroll">
-            <div class="panel-body">
-              <p><strong>Masa:</strong> <span id="elMass"></span></p>
-              <p><strong>Categoría:</strong> <span id="elCategory"></span></p>
-              <p><strong>Grupo:</strong> <span id="elGroup"></span></p>
-              <p><strong>Periodo:</strong> <span id="elPeriod"></span></p>
-              <p><strong>Estado:</strong> <span id="elState"></span></p>
             
-              <p class="panel-summary" id="elSummary"></p>
-            </div>
-          
+            <p class="panel-summary" id="elSummary"></p>
             <div class="panel-footer">
               <a id="elWiki" target="_blank" rel="noopener">Ver en Wikipedia</a>
             </div>
