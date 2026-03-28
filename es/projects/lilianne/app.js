@@ -1,10 +1,23 @@
+/**
+ * =========================
+ * ESTADO GLOBAL
+ * =========================
+ */
 let elements = [];
 let selectedSymbol = null;
 
+
+/**
+ * =========================
+ * INIT
+ * =========================
+ * Carga datos y arranca la app
+ */
 async function init() {
   const res = await fetch("./data/elements.es.json");
+
   if (!res.ok) {
-    throw new Error(`HTTP ${res.status} cargando elements.es.json`);
+    throw new Error(`HTTP ${res.status}`);
   }
 
   elements = await res.json();
@@ -12,52 +25,64 @@ async function init() {
   renderFilters();
   renderTable();
   bindSearch();
+
+  // Selección inicial
   const initial = elements.find(e => e.symbol === "Si") || elements[0];
-  if (initial) {
-    selectElement(initial.symbol);
-  }
+  if (initial) selectElement(initial.symbol);
 }
 
+
+/**
+ * =========================
+ * TABLA PERIÓDICA
+ * =========================
+ */
 function renderTable() {
   const container = document.getElementById("periodicTable");
   container.innerHTML = "";
 
   elements.forEach(el => {
     const cell = document.createElement("button");
-    cell.type = "button";
+
     cell.className = `element category-${el.categoryKey}`;
     cell.dataset.symbol = el.symbol;
     cell.dataset.category = el.categoryKey;
     cell.dataset.group = el.group ?? "";
     cell.dataset.period = el.period ?? "";
 
-    // Posición real en la tabla
     cell.style.gridColumn = el.x;
     cell.style.gridRow = el.y;
 
     cell.innerHTML = `
-      <span class="el-number">${el.number}</span>
-      <span class="el-symbol">${el.symbol}</span>
-      <span class="el-name">${el.name}</span>
+      <span>${el.number}</span>
+      <span>${el.symbol}</span>
+      <span>${el.name}</span>
     `;
 
-    cell.addEventListener("click", () => {
-      selectElement(el.symbol);
-    });
+    cell.addEventListener("click", () => selectElement(el.symbol));
 
     container.appendChild(cell);
   });
 }
 
+
+/**
+ * =========================
+ * SELECCIÓN DE ELEMENTO
+ * =========================
+ */
 function selectElement(symbol) {
   const el = elements.find(e => e.symbol === symbol);
   if (!el) return;
 
   selectedSymbol = symbol;
 
+  // Marcar activo
   document.querySelectorAll(".element").forEach(node => {
     node.classList.toggle("active", node.dataset.symbol === symbol);
   });
+
+  // Panel
   document.getElementById("elSymbol").textContent = el.symbol;
   document.getElementById("elName").textContent = el.name;
   document.getElementById("elNumber").textContent = `#${el.number}`;
@@ -66,303 +91,209 @@ function selectElement(symbol) {
   document.getElementById("elGroup").textContent = el.group ?? "—";
   document.getElementById("elPeriod").textContent = el.period ?? "—";
   document.getElementById("elState").textContent = el.stateLabel ?? "—";
-  document.getElementById("elSummary").textContent = el.summary || "Sin resumen disponible.";
-  document.getElementById("elWiki").href = el.wiki || "#";
+  document.getElementById("elSummary").textContent = el.summary || "";
+
+  // Render educativo
   renderAtomSVG("elAtomVisual", "elShellList", "elElectronConfig", el);
-  document.getElementById("elementPanel").scrollTop = 0;
 }
 
-function bindSearch() {
-  const input = document.getElementById("searchInput");
-  if (!input) return;
 
-  input.addEventListener("input", () => {
-    const q = input.value.trim().toLowerCase();
-
-    if (!q) {
-      document.querySelectorAll(".element").forEach(node => {
-        node.classList.remove("is-dimmed", "is-match");
-      });
-      return;
-    }
-
-    let firstMatch = null;
-
-    document.querySelectorAll(".element").forEach(node => {
-      const el = elements.find(e => e.symbol === node.dataset.symbol);
-      if (!el) return;
-
-      const match =
-        String(el.symbol).toLowerCase().includes(q) ||
-        String(el.name).toLowerCase().includes(q) ||
-        String(el.number).toLowerCase() === q;
-
-      node.classList.toggle("is-match", match);
-      node.classList.toggle("is-dimmed", !match);
-
-      if (match && !firstMatch) {
-        firstMatch = el.symbol;
-      }
-    });
-
-    if (firstMatch) {
-      selectElement(firstMatch);
-    }
-  });
-}
-
-function createBaseSVG(container){
+/**
+ * =========================
+ * SVG BASE (núcleo)
+ * =========================
+ */
+function createBaseSVG(container) {
   const size = 240;
   const center = size / 2;
   const ns = "http://www.w3.org/2000/svg";
 
+  container.innerHTML = "";
+
   const svg = document.createElementNS(ns, "svg");
   svg.setAttribute("viewBox", `0 0 ${size} ${size}`);
-  svg.setAttribute("width", size);
-  svg.setAttribute("height", size);
-  svg.classList.add("atom-svg");
 
   // núcleo
   const nucleus = document.createElementNS(ns, "circle");
   nucleus.setAttribute("cx", center);
   nucleus.setAttribute("cy", center);
   nucleus.setAttribute("r", 18);
-  nucleus.setAttribute("class", "atom-nucleus-circle");
   svg.appendChild(nucleus);
 
-  const nucleusSymbol = document.createElementNS(ns, "text");
-  nucleusSymbol.setAttribute("x", center);
-  nucleusSymbol.setAttribute("y", center - 2);
-  nucleusSymbol.setAttribute("text-anchor", "middle");
-  nucleusSymbol.setAttribute("class", "atom-nucleus-symbol");
-  nucleusSymbol.setAttribute("id", "atomSymbol");
-  svg.appendChild(nucleusSymbol);
+  // símbolo
+  const symbol = document.createElementNS(ns, "text");
+  symbol.setAttribute("id", "atomSymbol");
+  symbol.setAttribute("x", center);
+  symbol.setAttribute("y", center);
+  symbol.setAttribute("text-anchor", "middle");
+  svg.appendChild(symbol);
 
-  const nucleusNumber = document.createElementNS(ns, "text");
-  nucleusNumber.setAttribute("x", center);
-  nucleusNumber.setAttribute("y", center + 11);
-  nucleusNumber.setAttribute("text-anchor", "middle");
-  nucleusNumber.setAttribute("class", "atom-nucleus-number");
-  nucleusNumber.setAttribute("id", "atomNumber");
-  svg.appendChild(nucleusNumber);
+  // número
+  const number = document.createElementNS(ns, "text");
+  number.setAttribute("id", "atomNumber");
+  number.setAttribute("x", center);
+  number.setAttribute("y", center + 12);
+  number.setAttribute("text-anchor", "middle");
+  svg.appendChild(number);
 
   container.appendChild(svg);
+
   return svg;
 }
 
+
+/**
+ * =========================
+ * RENDER ÁTOMO
+ * =========================
+ */
 function renderAtomSVG(containerId, shellListId, configId, element) {
+
   const container = document.getElementById(containerId);
   const shellList = document.getElementById(shellListId);
   const configHost = document.getElementById(configId);
 
-  if (!container || !shellList || !configHost || !element) return;
+  const shells = element.shells || [];
+  const center = 120;
 
-  const shells = Array.isArray(element.shells) ? element.shells : [];
-  const config = element.electronConfig || "Configuración no disponible";
-
-  /* container.innerHTML = ""; */
   shellList.innerHTML = "";
-  configHost.textContent = config;
+  configHost.textContent = element.electronConfig || "";
+
   let svg = container.querySelector("svg");
 
-  if(!svg){
+  if (!svg) {
     svg = createBaseSVG(container);
   }
 
+  // actualizar núcleo
   svg.querySelector("#atomSymbol").textContent = element.symbol;
   svg.querySelector("#atomNumber").textContent = element.number;
 
-  if (!shells.length) {
-    container.innerHTML = `<div class="atom-empty">Sin datos de niveles</div>`;
-    return;
-  }
-
-  const size = 240;
-  const center = size / 2;
-  const ns = "http://www.w3.org/2000/svg";
-
-  const nucleusText = document.createElementNS(ns, "text");
-  nucleusText.setAttribute("x", center);
-  nucleusText.setAttribute("y", center - 2);
-  nucleusText.setAttribute("text-anchor", "middle");
-  nucleusText.setAttribute("class", "atom-nucleus-symbol");
-  nucleusText.textContent = element.symbol;
-  svg.appendChild(nucleusText);
-
-  const numberText = document.createElementNS(ns, "text");
-  numberText.setAttribute("x", center);
-  numberText.setAttribute("y", center + 11);
-  numberText.setAttribute("text-anchor", "middle");
-  numberText.setAttribute("class", "atom-nucleus-number");
-  numberText.textContent = element.number;
-  svg.appendChild(numberText);
-
-  const shellNames = ["K", "L", "M", "N", "O", "P", "Q"];
-
-  shells.forEach((count, index) => {
-    const radius = 34 + index * 24;
-
-    const orbit = document.createElementNS(ns, "circle");
-    orbit.setAttribute("cx", center);
-    orbit.setAttribute("cy", center);
-    orbit.setAttribute("r", radius);
-    orbit.setAttribute("class", "atom-orbit");
-    svg.appendChild(orbit);
-
-    for (let i = 0; i < count; i++) {
-      const angle = (Math.PI * 2 / count) * i - Math.PI / 2;
-      const x = center + radius * Math.cos(angle);
-      const y = center + radius * Math.sin(angle);
-
-      const electron = document.createElementNS(ns, "circle");
-      electron.setAttribute("cx", x);
-      electron.setAttribute("cy", y);
-      electron.setAttribute("r", 3.2);
-      electron.setAttribute("class", "atom-electron");
-      svg.appendChild(electron);
-    }
-
-    const item = document.createElement("div");
-    item.className = "edu-shell-item";
-    item.innerHTML = `
-      <strong>${shellNames[index] ?? `Nivel ${index + 1}`}</strong>
-      <span>${count} electrones</span>
-    `;
-    shellList.appendChild(item);
-  });
-  // limpiar órbitas anteriores
+  // limpiar órbitas
   svg.querySelectorAll(".atom-orbit").forEach(o => o.remove());
 
-  element.shells.forEach((_, index) => {
-    const radius = 34 + index * 24;
-
+  // crear órbitas
+  shells.forEach((_, i) => {
     const orbit = document.createElementNS(svg.namespaceURI, "circle");
     orbit.setAttribute("cx", center);
     orbit.setAttribute("cy", center);
-    orbit.setAttribute("r", radius);
+    orbit.setAttribute("r", 34 + i * 24);
     orbit.setAttribute("class", "atom-orbit");
-
     svg.appendChild(orbit);
   });
-  updateElectrons(svg, element.shells, center);
+
+  // electrones dinámicos
+  updateElectrons(svg, shells, center);
+
+  // lista
+  shells.forEach((n, i) => {
+    const item = document.createElement("div");
+    item.textContent = `${["K","L","M","N","O","P","Q"][i]}: ${n}`;
+    shellList.appendChild(item);
+  });
 }
 
-function updateElectrons(svg, shells, center){
 
-  let electronIndex = 0;
+/**
+ * =========================
+ * ELECTRONES DINÁMICOS
+ * =========================
+ */
+function updateElectrons(svg, shells, center) {
+  let index = 0;
 
   shells.forEach((count, shellIndex) => {
     const radius = 34 + shellIndex * 24;
 
-    for(let i = 0; i < count; i++){
-      const angle = (Math.PI * 2 / count) * i - Math.PI / 2;
+    for (let i = 0; i < count; i++) {
 
+      const angle = (Math.PI * 2 / count) * i;
       const x = center + radius * Math.cos(angle);
       const y = center + radius * Math.sin(angle);
 
-      let electron = svg.querySelector(`[data-e="${electronIndex}"]`);
+      let e = svg.querySelector(`[data-e="${index}"]`);
 
-      if(!electron){
-        electron = document.createElementNS(svg.namespaceURI, "circle");
-        electron.setAttribute("r", 3.2);
-        electron.setAttribute("class", "atom-electron");
-        electron.dataset.e = electronIndex;
-        svg.appendChild(electron);
-
-        electron.setAttribute("opacity", "0");
-        requestAnimationFrame(() => {
-          electron.setAttribute("opacity", "1");
-        });
+      if (!e) {
+        e = document.createElementNS(svg.namespaceURI, "circle");
+        e.setAttribute("r", 3);
+        e.dataset.e = index;
+        svg.appendChild(e);
       }
 
-      electron.setAttribute("cx", x);
-      electron.setAttribute("cy", y);
+      e.setAttribute("cx", x);
+      e.setAttribute("cy", y);
 
-      electronIndex++;
+      index++;
     }
   });
 
   // eliminar sobrantes
-  svg.querySelectorAll(".atom-electron").forEach(el => {
-    if(el.dataset.e >= electronIndex){
-      el.setAttribute("opacity", "0");
-      setTimeout(() => el.remove(), 250);
-    }
+  svg.querySelectorAll("circle[data-e]").forEach(el => {
+    if (Number(el.dataset.e) >= index) el.remove();
   });
 }
 
+
+/**
+ * =========================
+ * FILTROS
+ * =========================
+ */
 function renderFilters() {
   const host = document.getElementById("filtersContainer");
-  if (!host) return;
 
   const categories = [
-    { key: "all", label: "Todos" },
-    { key: "noMetal", label: "No metales" },
-    { key: "metalAlcalino", label: "Alcalinos" },
-    { key: "alcalinoterreo", label: "Alcalinotérreos" },
-    { key: "metalTransicion", label: "Transición" },
-    { key: "postMetal", label: "Post-transición" },
-    { key: "metaloide", label: "Metaloides" },
-    { key: "halogeno", label: "Halógenos" },
-    { key: "gasNoble", label: "Gases nobles" },
-    { key: "lantanido", label: "Lantánidos" },
-    { key: "actinido", label: "Actínidos" }
+    "all","noMetal","metalAlcalino","alcalinoterreo",
+    "metalTransicion","postMetal","metaloide",
+    "halogeno","gasNoble"
   ];
-
-  host.innerHTML = "";
 
   categories.forEach(cat => {
     const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "filter-btn";
-    btn.textContent = cat.label;
-    btn.dataset.filter = cat.key;
+    btn.textContent = cat;
 
-    btn.addEventListener("click", () => {
-      document.querySelectorAll(".filter-btn").forEach(b => {
-        b.classList.toggle("is-active", b === btn);
-      });
-
-      if (cat.key === "all") {
-        applyFilter("all");
-      } else {
-        applyFilter("category", cat.key);
-      }
-    });
+    btn.addEventListener("click", () => applyFilter(cat));
 
     host.appendChild(btn);
   });
-
-  const first = host.querySelector(".filter-btn[data-filter='all']");
-  if (first) first.classList.add("is-active");
 }
 
-function applyFilter(type, value){
+
+/**
+ * Aplica filtro visual
+ */
+function applyFilter(value) {
   document.querySelectorAll(".element").forEach(node => {
-
-    if(type === "all"){
-      node.classList.remove("is-dimmed");
-      return;
-    }
-
-    let match = false;
-
-    if(type === "category"){
-      match = node.dataset.category === value;
-    }
-
-    if(type === "group"){
-      match = String(node.dataset.group) === String(value);
-    }
-
-    if(type === "period"){
-      match = String(node.dataset.period) === String(value);
-    }
-
-    node.classList.toggle("is-dimmed", !match);
+    node.classList.toggle("is-dimmed",
+      value !== "all" && node.dataset.category !== value
+    );
   });
 }
 
-init().catch(err => {
-  console.error("[Lilianne]", err);
-});
+
+/**
+ * =========================
+ * BUSCADOR
+ * =========================
+ */
+function bindSearch() {
+  const input = document.getElementById("searchInput");
+
+  input.addEventListener("input", () => {
+    const q = input.value.toLowerCase();
+
+    document.querySelectorAll(".element").forEach(node => {
+      const el = elements.find(e => e.symbol === node.dataset.symbol);
+
+      const match =
+        el.symbol.toLowerCase().includes(q) ||
+        el.name.toLowerCase().includes(q);
+
+      node.classList.toggle("is-dimmed", !match);
+    });
+  });
+}
+
+
+// START
+init();
