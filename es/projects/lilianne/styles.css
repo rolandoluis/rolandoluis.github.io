@@ -246,19 +246,34 @@ body.lilianne-shell{
 
 /* ========== BODY DEL PANEL =================== */
 
-.panel-body{
+/* .panel-body{
   display:flex;
   flex-direction:column;
   gap:6px;
   font-size:0.9rem;
+} */
+
+.panel-body {
+    display: grid;
+    /* Crea dos columnas de igual tamaño */
+    grid-template-columns: 1fr 1fr; 
+    gap: 6px;
+    font-size: 0.9rem;
 }
+
+
 
 .panel-body p{
   margin:0;
 }
 
+.panel-body .panel-summary {
+    grid-column: span 2;
+    margin-top: 10px; /* Opcional: espacio extra para separar del grid */
+}
+
 .panel-summary{
-  margin-top:12px;
+ /*  margin-top:12px; */
   font-size:0.9rem;
   line-height:1.5;
   opacity:0.85;
