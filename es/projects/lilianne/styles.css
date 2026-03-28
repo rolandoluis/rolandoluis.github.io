@@ -190,8 +190,7 @@ body.lilianne-shell{
   display:flex;
   align-items:center;
   gap:14px;
-  /* border-bottom:1px solid var(--line); */
-  border:1px solid rgba(255,255,255,.08);
+  border-bottom:1px solid var(--line);
   padding-bottom:10px;
 }
 
@@ -294,12 +293,14 @@ body.lilianne-shell{
 .panel-education{
   display:grid;
   gap:16px;
+  
 }
 
 .edu-preview-head h3,
 .panel-education h3{
   margin:0 0 6px;
   font-size:1rem;
+  border-bottom: 1px solid var(--line);
 }
 
 .edu-preview-head p{
@@ -311,7 +312,7 @@ body.lilianne-shell{
 
 .edu-atom-card{
   display:grid;
-  grid-template-columns:minmax(180px, 220px) 1fr;
+  grid-template-columns:minmax(180px, 320px) 1fr;
   gap:18px;
   align-items:center;
 }
@@ -385,7 +386,7 @@ body.lilianne-shell{
   gap:12px;
   padding:10px 12px;
   border:1px solid rgba(255,255,255,.08);
-  border-radius:12px;
+  border-radius:8px;
   background:rgba(255,255,255,.03);
   font-size:.9rem;
   height: 40px;
