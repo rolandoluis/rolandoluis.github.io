@@ -27,25 +27,21 @@ const toggleLoginPassword = document.getElementById('toggleLoginPass');
 sideRegisterBtn.addEventListener('click', () => container.classList.add("active"));
 sideLoginBtn.addEventListener('click', () => container.classList.remove("active"));
 
-// Cerrar modales genérico
 const closeModals = () => {
-    document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none');
+    modal2FA.style.display = 'none';
+    modalPass.style.display = 'none';
+    modalConfirmReg.style.display = 'none';
 };
 
 // --- Lógica del "Ojo" (Ver/Ocultar) ---
-const setupToggle = (buttonId, inputId) => {
-    const btn = document.getElementById(buttonId);
-    const input = document.getElementById(inputId);
-    btn.addEventListener('click', () => {
-        const isPass = input.type === 'password';
-        input.type = isPass ? 'text' : 'password';
-        btn.classList.toggle('fa-eye');
-        btn.classList.toggle('fa-eye-slash');
-    });
-};
-
-setupToggle('toggleRegPass', 'reg-pass');
-setupToggle('toggleLoginPass', 'login-pass');
+document.getElementById('toggleRegPass').addEventListener('click', function() {
+    const isPassword = regPassInput.getAttribute('type') === 'password';
+    regPassInput.setAttribute('type', isPassword ? 'text' : 'password');
+    
+    // Cambiar icono
+    this.classList.toggle('fa-eye');
+    this.classList.toggle('fa-eye-slash');
+});
 
 // --- Medidor de Fuerza en Tiempo Real ---
 regPassInput.addEventListener('input', () => {
@@ -64,51 +60,81 @@ regPassInput.addEventListener('input', () => {
 });
 
 // --- Validación de Registro ---
-const showError = (input, msg) => {
+const showError = (input, message) => {
     const group = input.closest('.input-group');
+    const errorDisplay = group.querySelector('.error-msg');
+    // Quitamos y ponemos la clase para reiniciar la animación de vibración
+    input.classList.remove('invalid');
+    void input.offsetWidth; // Truco para forzar el reinicio de la animación en el navegador
     input.classList.add('invalid');
-    group.querySelector('.error-msg').innerText = msg;
-    group.querySelector('.error-msg').style.visibility = 'visible';
+    errorDisplay.innerText = message;
+    errorDisplay.style.visibility = 'visible';
 };
 
 const clearError = (input) => {
     const group = input.closest('.input-group');
+    const errorDisplay = group.querySelector('.error-msg');
     input.classList.remove('invalid');
-    group.querySelector('.error-msg').style.visibility = 'hidden';
+    errorDisplay.style.visibility = 'hidden';
 };
 
-// --- LÓGICA DE REGISTRO ---
-document.getElementById('btn-submit-register').addEventListener('click', () => {
+btnSubmitRegister.addEventListener('click', (e) => {
+    e.stopPropagation(); 
+    let isFormValid = true;
+
     const name = document.getElementById('reg-name');
     const email = document.getElementById('reg-email');
-    const pass = document.getElementById('reg-pass');
-    let valid = true;
 
-    if (name.value.length < 2) { showError(name, "Nombre demasiado corto"); valid = false; }
-    else clearError(name);
+    if (name.value.trim().length < 2) {
+        showError(name, "El nombre es obligatorio");
+        isFormValid = false;
+    } else { clearError(name); }
 
-    if (!emailRegex.test(email.value)) { showError(email, "Email no válido"); valid = false; }
-    else clearError(email);
+    if (!emailRegex.test(email.value)) {
+        showError(email, "Email no válido (ej@mail.com)");
+        isFormValid = false;
+    } else { clearError(email); }
 
-    if (!passComplexRegex.test(pass.value)) { showError(pass, "No cumple complejidad"); valid = false; }
-    else clearError(pass);
+    if (!passComplexRegex.test(regPassInput.value)) {
+        showError(regPassInput, "Mín. 8 car., Mayús, Núm y Símbolo (*/+@#%&)");
+        isFormValid = false;
+    } else { clearError(regPassInput); }
 
-    if (valid) document.getElementById('modal-confirm-reg').style.display = 'flex';
+    if (isFormValid) {
+        modalConfirmReg.style.display = 'flex';
+    }
 });
 
-// --- LÓGICA DE LOGIN ---
-document.getElementById('btn-submit-login').addEventListener('click', () => {
-    const email = document.getElementById('login-email');
-    const pass = document.getElementById('login-pass');
-    let valid = true;
+btnSubmitLogin.addEventListener('click', (e) => {
+    e.stopPropagation();
+    let isLoginValid = true;
 
-    if (!emailRegex.test(email.value)) { showError(email, "Email no válido"); valid = false; }
-    else clearError(email);
+    const emailInput = document.getElementById('login-email');
+    const passInput = document.getElementById('login-pass');
 
-    if (pass.value.length < 1) { showError(pass, "Contraseña obligatoria"); valid = false; }
-    else clearError(pass);
+    // 1. Validar Email
+    if (!emailInput.value.trim()) {
+        showError(emailInput, "El correo es obligatorio");
+        isLoginValid = false;
+    } else if (!emailRegex.test(emailInput.value)) {
+        showError(emailInput, "Formato: usuario@dominio.com");
+        isLoginValid = false;
+    } else { 
+        clearError(emailInput); 
+    }
 
-    if (valid) document.getElementById('modal-2fa').style.display = 'flex';
+    // 2. Validar Contraseña (solo presencia para login)
+    if (!passInput.value.trim()) {
+        showError(passInput, "La contraseña es obligatoria");
+        isLoginValid = false;
+    } else { 
+        clearError(passInput); 
+    }
+
+    // 3. Si todo es correcto, disparamos el 2FA
+    if (isLoginValid) {
+        modal2FA.style.display = 'flex';
+    }
 });
 
 forgotPassLink.addEventListener('click', (e) => {
@@ -134,4 +160,3 @@ document.querySelectorAll('.input-group input').forEach(input => {
         }
     });
 });
-

@@ -7,6 +7,98 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <title>Página Moderna de Log-In | Registro</title>
+    <style>
+        /* VARIABLES EXTRAÍDAS DEL TEMA DEEP NAVY DEL SHOWROOM */
+        :root {
+            --bg: #050714;
+            --panel: #0a1024;
+            --text: #eaf0ff;
+            --muted: #a7b3d1;
+            --line: rgba(120, 160, 255, .14);
+            --accent-net: #3b82f6;
+            --btn-hov-bkg: rgba(59, 130, 246, .22);
+        }
+    
+        /* APLICACIÓN DEL ESTILO ELEGANTE */
+        body {
+            background: radial-gradient(circle at center, #0a1b3d 0%, var(--bg) 100%) !important;
+            color: var(--text);
+        }
+    
+        .container {
+            background-color: var(--panel) !important;
+            border: 1px solid var(--line);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6) !important;
+        }
+    
+        /* Formularios y Paneles */
+        .container form {
+            background-color: var(--panel) !important;
+        }
+    
+        h1 { color: var(--text); }
+        span, p { color: var(--muted); }
+    
+        /* Inputs estilo Navy */
+        .container input {
+            background-color: rgba(255, 255, 255, 0.04) !important;
+            border: 1px solid var(--line) !important;
+            color: var(--text) !important;
+            transition: all 0.3s ease;
+        }
+    
+        .container input:focus {
+            border-color: var(--accent-net) !important;
+            background-color: rgba(59, 130, 246, 0.05) !important;
+        }
+    
+        /* Botones Principales */
+        .container button {
+            background-color: var(--accent-net) !important;
+            color: #ffffff !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            font-weight: 700 !important;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+    
+        .container button:hover {
+            background-color: #2563eb !important; /* Un azul un poco más oscuro */
+            transform: translateY(-1px);
+        }
+    
+        /* Botón "Hidden" del panel lateral */
+        .container button.hidden {
+            background-color: transparent !important;
+            border: 1px solid #ffffff !important;
+        }
+    
+        /* Panel Lateral (Toggle) */
+        .toggle-container {
+            background: linear-gradient(135deg, #1d4ed8, #0a1024) !important;
+        }
+    
+        .toggle-panel {
+            background: transparent !important;
+            color: #ffffff !important;
+        }
+    
+        /* Iconos sociales */
+        .social-icons a {
+            border: 1px solid var(--line) !important;
+            color: var(--text) !important;
+            background: rgba(255, 255, 255, 0.02);
+        }
+    
+        .social-icons a:hover {
+            background: var(--btn-hov-bkg) !important;
+            border-color: var(--accent-net) !important;
+        }
+    
+        /* Estilo para el ojo de la contraseña */
+        .toggle-password {
+            color: var(--muted) !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -88,27 +180,21 @@
     <div id="modal-2fa" class="modal-overlay" style="display:none;">
         <div class="modal-content">
             <h2>Verificación 2FA</h2>
-            <p>Introduce el código enviado a tu móvil/email</p>
+            <p>Introduce el código enviado a tu móvil</p>
             <input type="text" placeholder="0 0 0 0 0 0" maxlength="6" class="code-input">
-            <div class="modal-btns">
-                <button class="btn-primary">Verificar</button>
-                <button class="btn-secondary" onclick="closeModals()">Cancelar</button>
-            </div>
-            
+            <button class="btn-primary">Verificar</button>
+            <button class="btn-secondary" onclick="closeModals()">Cancelar</button>
         </div>
     </div>
 
     <div id="modal-password" class="modal-overlay" style="display:none;">
         <div class="modal-content">
             <h2>Cambiar Contraseña</h2>
-            <input type="password" id="old-pass" placeholder="Contraseña Actual">
+            <input type="password" placeholder="Contraseña Actual">
             <input type="password" id="new-pass" placeholder="Nueva Contraseña">
             <input type="password" id="confirm-pass" placeholder="Confirmar Nueva Contraseña">
-            <div class="modal-btns">
-                <button class="btn-primary" id="save-password">Actualizar</button>
-                <button class="btn-secondary" onclick="closeModals()">Cancelar</button>
-            </div>
-            
+            <button class="btn-primary" id="save-password">Actualizar</button>
+            <button class="btn-secondary" onclick="closeModals()">Cancelar</button>
         </div>
     </div>
 
@@ -117,11 +203,8 @@
             <h2>Confirmar Registro</h2>
             <p>Por seguridad, repita su contraseña:</p>
             <input type="password" id="reg-confirm-pass" placeholder="Confirmar Contraseña">
-            <div class="modal-btns">
-                <button class="btn-primary" id="btn-final-register">Finalizar Registro</button>
-                <button class="btn-secondary" onclick="closeModals()">Cancelar</button>
-            </div>
-            
+            <button class="btn-primary" id="btn-final-register">Finalizar Registro</button>
+            <button class="btn-secondary" onclick="closeModals()">Cancelar</button>
         </div>
     </div>
     <script src="script.js"></script>

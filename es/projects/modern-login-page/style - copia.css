@@ -1,47 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
-
 :root {
-    /* --- PALETA DE COLORES --- */
-    --bg-body: #050714;
-    --bg-gradient: linear-gradient(to right, #e2e2e2, #c9d6ff);
-    --bg-gradient-body: radial-gradient(circle at center, #0a1b3d 0%, #050714 100%);
-    --accent-color: #512da8;
-    --accent-blue: #3b82f6;
-    --accent-gradient: linear-gradient(to right, #5c6bc0, #512da8);
-    --accent-blue-gradient: linear-gradient(135deg, #1d4ed8, #0a1024);
-    
-    /* --- SUPERFICIES --- */
-    --panel-bg: #ffffff;
-    --panel-color: #0a1024;
-    --text-main: #222222;
-    --text-muted: #979797;
-    --text-main-invert: #eaf0ff;
-    --text-muted-invert: #a7b3d1;
-
-    /* Estados y Bordes */
-    --line-color: rgba(120, 160, 255, .14);
-    --btn-hover: #2563eb;
-    --btn-hover-bg: rgba(59, 130, 246, .22);
+    /* Colores principales */
+    --primary-color: #512da8;
+    --primary-gradient: linear-gradient(to right, #5c6bc0, #512da8);
     --error-color: #ff4b2b;
     --success-color: #4caf50;
     
-    /* --- ESTADOS --- */
-    --error: #ff4b2b;
-    --success: #4caf50;
-    --warning: #ffa500;
-    
-    /* --- COMPONENTES --- */
-    --modal-overlay: rgba(0, 0, 0, 0.7);
-    --border-radius: 30px;
-    --input-radius: 8px;
-    --shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
-    --input-border: #4f97ff6e;
-
-    /* Medidas y Sombras */
-    --radius-container: 30px;
-    --radius-elements: 8px;
-    --shadow-main: 0 20px 50px rgba(0, 0, 0, 0.6);
+    /* Estilos de Modales */
+    --modal-bg: #ffffff;
+    --modal-radius: 20px;
+    --modal-shadow: 0 15px 30px rgba(0,0,0,0.3);
+    --overlay-bg: rgba(0, 0, 0, 0.6);
 }
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
 
 *{
     margin: 0;
@@ -51,20 +22,19 @@
 }
 
 body{
-    background: var(--bg-gradient-body);
-    color: var(--text-main);
-    display: flex; 
-    align-items: center; 
+    background-color: #c9d6ff;
+    background: linear-gradient(to right, #e2e2e2, #c9d6ff);
+    display: flex;
+    align-items: center;
     justify-content: center;
+    flex-direction: column;
     height: 100vh;
 }
 
-.container {
-    background-color: var(--panel-color) !important;
-    border: 1px solid var(--line-color);
-    color: var(--text-main-invert);
-    border-radius: var(--radius-container);
-    box-shadow: var(--shadow-main) !important;
+.container{
+    background-color: #fff;
+    border-radius: 30px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
     position: relative;
     overflow: hidden;
     width: 768px;
@@ -72,18 +42,11 @@ body{
     min-height: 480px;
 }
 
-h1 { 
-    color: var(--text-main-invert); 
-    margin-bottom: 10px; 
-}
-span, p { color: var(--text-muted-invert); font-size: 13px; }
-
 .container p{
     font-size: 14px;
     line-height: 20px;
     letter-spacing: 0.3px;
     margin: 20px 0;
-    color: var(--text-main);
 }
 
 .container span{
@@ -91,7 +54,7 @@ span, p { color: var(--text-muted-invert); font-size: 13px; }
 }
 
 .container a{
-    color: var(--text-muted-invert);
+    color: #333;
     font-size: 13px;
     text-decoration: none;
     margin: 15px 0 10px;
@@ -117,7 +80,7 @@ span, p { color: var(--text-muted-invert); font-size: 13px; }
 }
 
 .container form{
-    background-color: var(--panel-color) !important;
+    background-color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -127,17 +90,14 @@ span, p { color: var(--text-muted-invert); font-size: 13px; }
 }
 
 .container input{
-    /* background-color: #eee; */
-    /* border: none; */
+    background-color: #eee;
+    border: none;
     margin: 8px 0;
     padding: 10px 15px;
     font-size: 13px;
     border-radius: 8px;
     width: 100%;
     outline: none;
-    background-color: rgba(255, 255, 255, 0.05) !important;
-    color: var(--text-muted-invert);
-    border: 1px solid rgba(120, 160, 255, 0.14) !important;
 }
 
 .form-container{
@@ -197,9 +157,8 @@ span, p { color: var(--text-muted-invert); font-size: 13px; }
     height: 40px;
 }
 
-.toggle-container {
+.toggle-container{
     position: absolute;
-    background: var(--accent-gradient) !important;
     top: 0;
     left: 50%;
     width: 50%;
@@ -210,12 +169,12 @@ span, p { color: var(--text-muted-invert); font-size: 13px; }
     z-index: 1000;
 }
 
-.container.active .toggle-container {
+.container.active .toggle-container{
     transform: translateX(-100%);
     border-radius: 0 150px 100px 0;
 }
 
-.toggle {
+.toggle{
     background-color: #512da8;
     height: 100%;
     background: linear-gradient(to right, #5c6bc0, #512da8);
@@ -228,11 +187,11 @@ span, p { color: var(--text-muted-invert); font-size: 13px; }
     transition: all 0.6s ease-in-out;
 }
 
-.container.active .toggle {
+.container.active .toggle{
     transform: translateX(50%);
 }
 
-.toggle-panel {
+.toggle-panel{
     position: absolute;
     width: 50%;
     height: 100%;
@@ -242,7 +201,6 @@ span, p { color: var(--text-muted-invert); font-size: 13px; }
     flex-direction: column;
     padding: 0 30px;
     text-align: center;
-    color: #ffffff !important;
     top: 0;
     transform: translateX(0);
     transition: all 0.6s ease-in-out;
@@ -265,45 +223,27 @@ span, p { color: var(--text-muted-invert); font-size: 13px; }
     transform: translateX(200%);
 }
 
-/* --- ESTILOS PROPAGADOS A MODALES --- */
 .modal-overlay {
-    background-color: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(4px);
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    display: flex; justify-content: center; align-items: center; z-index: 2000;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
 }
 
 .modal-content {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
     display: flex;
     flex-direction: column;
-    gap: 3px;
-    background-color: var(--panel-color);
-    border: 1px solid var(--line-color);
-    border-radius: 20px;
-    padding: 40px;
-    width: 380px;
-    text-align: center;
-    box-shadow: var(--shadow-main);
+    gap: 15px;
+    width: 350px;
 }
-
-.modal-content h2 {
-    color: var(--text-main-invert);
-    margin-bottom: 15px;
-}
-
-.modal-content input {
-    border: 1px solid var(--input-border);
-    padding: 10px;
-    background-color: var(--panel-bg);
-}
-
-
-
-.modal-btns .btn-primary {
-    background: none;
-    background-color: #3b82f6;
-}
-
 
 .code-input {
     letter-spacing: 10px;
@@ -312,42 +252,27 @@ span, p { color: var(--text-muted-invert); font-size: 13px; }
 }
 
 .btn-primary {
-    background: var(--accent-gradient);
-    color: white; border: none; padding: 12px;
-    border-radius: var(--input-radius); cursor: pointer; font-weight: 600;
+    background-color: #512da8;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
 }
 
-button.btn-secondary {
-    background: transparent !important;
-    color: var(--accent-color);
-    border: 1px solid var(--accent-color);
-    padding: 10px; border-radius: var(--input-radius);
-    margin-top: 10px; cursor: pointer;
+.btn-secondary {
+    background-color: transparent;
+    color: #512da8;
+    border: 1px solid #512da8;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: -5px; /* Ajuste visual */
 }
 
-button.btn-secondary:hover {
-    background-color: #f0f0f0 !important;
-}
-
-input {
-    background-color: rgba(255, 255, 255, 0.04) !important;
-    border: 1px solid var(--line-color) !important; 
-    color: var(--text-main) !important;
-    width: 100%;
-    padding: 12px 15px; 
-    border-radius: var(--radius-elements);
-    outline: none; 
-    transition: all 0.3s ease;
-}
-
-input:focus {
-    border-color: var(--accent-blue) !important;
-    background-color: rgba(59, 130, 246, 0.05) !important;
-}
-
-input.invalid {
-    border-color: var(--error-color) !important;
-    animation: shake 0.3s ease-in-out;
+.btn-secondary:hover {
+    background-color: #f0f0f0;
 }
 
 .input-error {
@@ -355,47 +280,26 @@ input.invalid {
     animation: shake 0.2s ease-in-out 0s 2;
 }
 
-/* 5. BOTONES */
-button {
-    background-color: var(--accent-blue) !important;
-    color: #ffffff !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    border-radius: var(--radius-elements);
-    padding: 10px 45px;
-    font-weight: 700 !important;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-top: 10px;
-}
-
-button:hover {
-    background-color: var(--btn-hover) !important;
-    transform: translateY(-1px);
-}
-
-button.hidden {
-    background-color: transparent !important;
-    border: 1px solid #ffffff !important;
-}
-
 @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    75% { transform: translateX(5px); }
+    0% { margin-left: 0rem; }
+    25% { margin-left: 0.5rem; }
+    75% { margin-left: -0.5rem; }
+    100% { margin-left: 0rem; }
 }
 
-/* --- INPUTS Y VALIDACIÓN --- */
-.input-group { width: 100%; margin: 8px 0; position: relative; }
+.input-group {
+    width: 100%;
+    margin: 4px 0;
+    text-align: left;
+}
 
 .error-msg {
-    color: var(--error-color);
-    font-size: 11px; 
-    height: 12px;
-    display: block; 
-    visibility: hidden; 
-    text-align: left;
-    margin-top: 2px;
+    color: #ff4b2b;
+    font-size: 10px;
+    display: block;
+    margin-bottom: 4px;
+    height: 12px; /* Evita que el formulario "salte" al aparecer el texto */
+    visibility: hidden;
 }
 
 .input-group input.invalid {
@@ -413,13 +317,10 @@ button.hidden {
     right: 15px;
     top: 50%;
     transform: translateY(-50%);
-    color: var(--text-muted) !important;
     cursor: pointer;
+    color: #512da8;
     font-size: 14px;
 }
-
-
-
 
 /* Barra de fuerza de contraseña */
 .strength-meter {
@@ -459,7 +360,11 @@ body {
     background: radial-gradient(circle at center, #0a1b3d 0%, #050714 100%) !important; /* Estilo Deep Navy */
 }
 
-
+/* 2. Cambiar el contenedor principal */
+.container {
+    background-color: #0a1024 !important; /* Panel oscuro */
+    color: #eaf0ff; /* Texto claro */
+}
 
 /* 3. ELIMINAR EL VIOLETA (#512da8) DEL TOGGLE */
 .toggle {
@@ -482,3 +387,17 @@ body {
     color: #3b82f6 !important;
 }
 
+.btn-secondary {
+    border-color: #3b82f6 !important;
+}
+
+/* 6. Ajustar los formularios para que no sean blancos */
+.container form {
+    background-color: #0a1024 !important;
+}
+
+.container input {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    color: #eaf0ff !important;
+    border: 1px solid rgba(120, 160, 255, 0.14) !important;
+}
