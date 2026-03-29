@@ -74,6 +74,41 @@
     "date": "2026-03-22"
   },
   {
+    "title": "Sistema de Autenticación con UX Avanzada",
+    "slug": "modern-login-page",
+    "description": "Acceso dual [Log In/Register] con UX avanzado, validaciones dinámicas y feedback visual",
+    "category": "Interfaz de Usuario / Seguridad",
+    "type": "demo",
+    "status": "stable",
+    "featured": true,
+    "thumb": "/assets/projects/modern-login-page/thumb-01.png",
+    "gallery": [
+      "/assets/projects/modern-login-page/thumb-01.png",
+      "/assets/projects/modern-login-page/thumb-02.png",
+      "/assets/projects/modern-login-page/thumb-03.png",
+      "/assets/projects/modern-login-page/thumb-04.png"
+    ],
+    "previewUrl": "",
+    "previewMode": "",
+    "demoUrl": "/es/projects/modern-login-page/demo.html",
+    "demoMode": "iframe",
+    "repoUrl": "https://github.com/tu-usuario/auth-pro-system",
+    "engineeringUrl": "/es/engineering/auth-logic.html",
+    "tags": [
+      "auth",
+      "ui",
+      "ux",
+      "validation",
+      "interactive"
+    ],
+    "stack": [
+      "HTML5",
+      "CSS3",
+      "JavaScript (Vanilla)"
+    ],
+    "date": "2024-05-24"
+  },
+  {
     "title": "Neural Sphere Core Interface",
     "slug": "neural-sphere-core",
     "description": "Experimento visual interactivo con esfera 3D, nodos seleccionables y panel contextual de estilo holográfico.",
@@ -159,8 +194,8 @@
     "previewMode": "",
     "demoUrl": "/es/projects/vertical-navigation/demo.html",
     "demoMode": "iframe",
-    "repoUrl": "",
-    "engineeringUrl": "",
+    "repoUrl": "https://github.com/rolandoluis/...",
+    "engineeringUrl": "/es/engineering/architecture.html",
     "tags": [
       "demo",
       "ui",

@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Interfaz de Autenticación con UX Avanzada</title>
+  <meta name="description" content="Acceso dual [Log In/Register] con UX avanzado, validaciones dinámicas y feedback visual" />
+
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/components.css" />
+  <link rel="stylesheet" href="/assets/css/project-demo.css" />
+  <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body class="project-demo-shell">
+
+  <main class="project-demo"
+          data-project-demo
+          data-project-title="Sistema de Autenticación con UX Avanzada"
+          data-project-type="demo"
+          data-project-status="stable"
+          data-project-category="Interfaz de Usuario / Seguridad"
+          data-project-date="2024-05-24"
+          data-project-tags="auth, ui, ux, validation, interactive"
+          data-project-featured="true"
+          data-project-repo="https://github.com/tu-usuario/auth-pro-system"
+          data-project-engineering="/es/engineering/auth-logic.html"
+          data-project-stack="HTML5, CSS3, JavaScript (Vanilla)">
+
+      <header class="project-demo-header">
+        <div class="project-demo-headline">
+          <h1>Sistema de Autenticación con UX Avanzada</h1>
+          <p class="project-demo-lede">
+            Una interfaz de acceso dual (Login/Registro) que prioriza la experiencia del usuario y la seguridad mediante validaciones dinámicas y feedback visual inmediato.
+          </p>
+        </div>
+
+        <div class="project-demo-badges">
+          <span class="project-demo-badge">demo</span>
+          <span class="project-demo-badge">stable</span>
+          <span class="project-demo-badge">pro-ux</span>
+        </div>
+      </header>
+
+      <section class="project-demo-stage">
+        <div class="project-demo-surface">
+          <div class="container" id="container">
+            <div class="form-container sign-up">
+                <form id="form-register">
+                    <h1>Crear una Cuenta</h1>
+                    <span>... puede utilizar su correo para registrarse</span>
+                
+                    <div class="input-group">
+                        <input type="text" id="reg-name" placeholder="Nombre">
+                        <small class="error-msg"></small>
+                    </div>
+                    <div class="input-group">
+                        <input type="email" id="reg-email" placeholder="Correo Electrónico">
+                        <small class="error-msg"></small>
+                    </div>
+
+                    <div class="input-group">
+                        <div class="password-wrapper">
+                            <input type="password" id="reg-pass" placeholder="Contraseña">
+                            <i class="fa-solid fa-eye toggle-password" id="toggleRegPass"></i>
+                        </div>
+                        <div class="strength-meter">
+                            <div class="strength-bar" id="strength-bar"></div>
+                        </div>
+                        <small class="error-msg"></small>
+                    </div>
+                    <button type="button" id="btn-submit-register">Registrar</button>
+                </form>
+            </div>
+
+            <div class="form-container sign-in">
+                <form id="form-login">
+                    <h1>Iniciar Sesión</h1>
+                    <div class="social-icons">
+                        <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
+                        <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="icon"><i class="fa-brands fa-github"></i></a>
+                        <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
+                    </div>
+                    <span>... o su email y contraseña</span>
+
+                    <div class="input-group">
+                        <input type="email" id="login-email" placeholder="Email">
+                        <small class="error-msg"></small>
+                    </div>
+
+                    <div class="input-group">
+                        <div class="password-wrapper">
+                            <input type="password" id="login-pass" placeholder="Contraseña">
+                            <i class="fa-solid fa-eye toggle-password" id="toggleLoginPass"></i>
+                        </div>
+                        <small class="error-msg"></small>
+                    </div>
+                  
+                    <a href="#" id="forgot-password">¿Olvidó su Contraseña?</a>
+                    <button type="button" id="btn-submit-login">Entrar</button>
+                </form>
+            </div>
+
+            <div class="toggle-container">
+                <div class="toggle">
+                    <div class="toggle-panel toggle-left">
+                        <h1>¡Bienvenido!</h1>
+                        <p>Accede para disfrutar de nuestro contenido</p>
+                        <button class="hidden" id="login">Inciar Sesión</button>
+                    </div>
+                    <div class="toggle-panel toggle-right">
+                        <h1>¡Hola, Bienvenido Amigo!</h1>
+                        <p>Regístrate si te interesa nuestro contenido</p>
+                        <button class="hidden" id="register">Registro</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-2fa" class="modal-overlay" style="display:none;">
+            <div class="modal-content">
+                <h2>Verificación 2FA</h2>
+                <p>Introduce el código enviado a tu móvil</p>
+                <input type="text" placeholder="0 0 0 0 0 0" maxlength="6" class="code-input">
+                <button class="btn-primary">Verificar</button>
+                <button class="btn-secondary" onclick="closeModals()">Cancelar</button>
+            </div>
+        </div>
+
+        <div id="modal-password" class="modal-overlay" style="display:none;">
+            <div class="modal-content">
+                <h2>Cambiar Contraseña</h2>
+                <input type="password" placeholder="Contraseña Actual">
+                <input type="password" id="new-pass" placeholder="Nueva Contraseña">
+                <input type="password" id="confirm-pass" placeholder="Confirmar Nueva Contraseña">
+                <button class="btn-primary" id="save-password">Actualizar</button>
+                <button class="btn-secondary" onclick="closeModals()">Cancelar</button>
+            </div>
+        </div>
+
+        <div id="modal-confirm-reg" class="modal-overlay" style="display:none;">
+            <div class="modal-content">
+                <h2>Confirmar Registro</h2>
+                <p>Por seguridad, repita su contraseña:</p>
+                <input type="password" id="reg-confirm-pass" placeholder="Confirmar Contraseña">
+                <button class="btn-primary" id="btn-final-register">Finalizar Registro</button>
+                <button class="btn-secondary" onclick="closeModals()">Cancelar</button>
+            </div>
+        </div>
+        </div>
+      </section>
+
+      <section class="project-demo-info">
+        <div class="project-demo-block">
+          <h2>Qué hace</h2>
+          <p>
+            Este proyecto implementa un flujo completo de autenticación que incluye:
+          </p>
+          <ul>
+              <li><strong>Panel Deslizante:</strong> Transición suave entre inicio de sesión y registro.</li>
+              <li><strong>Validación con "Aviso":</strong> Los campos fallidos vibran (shake) y muestran mensajes de error específicos.</li>
+              <li><strong>Medidor de Fortaleza:</strong> Análisis en tiempo real de la complejidad de la contraseña (colores dinámicos).</li>
+              <li><strong>Seguridad Visual:</strong> Control de visibilidad de contraseña (icono de ojo) y simulación de 2FA.</li>
+              <li><strong>Modales Personalizados:</strong> Flujos de confirmación y recuperación de clave integrados.</li>
+          </ul>
+        </div>
+
+        <div class="project-demo-block">
+          <h2>Ingeniería aplicada</h2>
+          <p>
+            Se ha optimizado la manipulación del DOM para evitar recargas de página mediante el uso de eventos de tipo <code>button</code> y la detención de la propagación, garantizando una Single Page Experience (SPE) fluida.
+          </p>
+        </div>
+      </section>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
+
+<!-- Para proyectos visuales -->
+<!-- <!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HeroNet Engine</title>
+
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/components.css" />
+  <link rel="stylesheet" href="/assets/css/project-demo.css" />
+</head>
+<body class="project-demo-shell">
+
+  <main class="project-demo">
+    <section class="project-demo-stage">
+      <div class="project-demo-surface">
+        -- demo full focus --
+      </div>
+    </section>
+  </main>
+
+</body>
+</html> -->
