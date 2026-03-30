@@ -1,0 +1,294 @@
+Listado de rutas de carpetas para el volumen Marlin
+El número de serie del volumen es A602-0948
+D:.
+¦   404.html
+¦   index.html
+¦   robots.txt
+¦   sitemap.xml
+¦   tree.txt
+¦   
++---articles
+¦   ¦   index.html
+¦   ¦   
+¦   +---2026
++---assets
+¦   +---css
+¦   ¦       article.css
+¦   ¦       articles.css
+¦   ¦       components.css
+¦   ¦       cv.css
+¦   ¦       engineering-doc.css
+¦   ¦       engineering.css
+¦   ¦       main.css
+¦   ¦       project-demo.css
+¦   ¦       projects.css
+¦   ¦       
+¦   +---data
+¦   ¦   ¦   search.json
+¦   ¦   ¦   
+¦   ¦   +---en
+¦   ¦   ¦       articles.json
+¦   ¦   ¦       
+¦   ¦   +---es
+¦   ¦           articles.json
+¦   ¦           engineering.json
+¦   ¦           projects.json
+¦   ¦           
+¦   +---fonts
+¦   +---img
+¦   ¦   +---articles
+¦   ¦   ¦   +---arista-subsede-openvpn
+¦   ¦   ¦   ¦       apps-install.png
+¦   ¦   ¦   ¦       arch-Empresarial.png
+¦   ¦   ¦   ¦       dashboard-config-network.png
+¦   ¦   ¦   ¦       install-iso.png
+¦   ¦   ¦   ¦       offline-wizard-access.png
+¦   ¦   ¦   ¦       sede-exported-networks.png
+¦   ¦   ¦   ¦       subsede-upload-client.png
+¦   ¦   ¦   ¦       update-automatic.png
+¦   ¦   ¦   ¦       wizard-step1.png
+¦   ¦   ¦   ¦       wizard-step11.png
+¦   ¦   ¦   ¦       wizard-step2-nics.png
+¦   ¦   ¦   ¦       wizard-step3-wan.png
+¦   ¦   ¦   ¦       wizard-step4-lan.png
+¦   ¦   ¦   ¦       
+¦   ¦   ¦   +---atajos_teclado_windows
+¦   ¦   ¦   ¦       teclado.png
+¦   ¦   ¦   ¦       
+¦   ¦   ¦   +---clonacion_hdd-nvme
+¦   ¦   ¦   ¦       hdd_nvme.png
+¦   ¦   ¦   ¦       
+¦   ¦   ¦   +---controlar_visitas-cookies
+¦   ¦   ¦   +---dominio_nas_gpo
+¦   ¦   ¦   +---efecto_parallax
+¦   ¦   ¦   ¦       fondo-parallax.png
+¦   ¦   ¦   ¦       fondo-parallax.psd
+¦   ¦   ¦   ¦       front-parallax.png
+¦   ¦   ¦   ¦       front-parallax.psd
+¦   ¦   ¦   ¦       media-parallax.png
+¦   ¦   ¦   ¦       media-parallax.psd
+¦   ¦   ¦   ¦       
+¦   ¦   ¦   +---mpf_en_red
+¦   ¦   ¦   +---openvpn-tunnel
+¦   ¦   ¦   ¦       arquitectura-vpn.png
+¦   ¦   ¦   ¦       escenario-general.png
+¦   ¦   ¦   ¦       escenario-general1.png
+¦   ¦   ¦   ¦       flujo-paquete.png
+¦   ¦   ¦   ¦       
+¦   ¦   ¦   +---optimice-outlook
+¦   ¦   ¦   +---outlook_firmas
+¦   ¦   ¦   +---parallax_en_web
+¦   ¦   ¦   +---programacion1
+¦   ¦   ¦   +---reconf_prnt_puente
+¦   ¦   ¦   +---unir_pc_activedir
+¦   ¦   ¦   +---unir_pc_dominio
+¦   ¦   +---brand
+¦   ¦   ¦       1-favicon.png
+¦   ¦   ¦       favicon.png
+¦   ¦   ¦       
+¦   ¦   +---engineering
+¦   ¦   ¦       Desplazó HERO.png
+¦   ¦   ¦       Que arreglar.png
+¦   ¦   ¦       
+¦   ¦   +---posts
+¦   ¦   +---projects
+¦   ¦       +---vertical-navigation
+¦   ¦               articulo.png
+¦   ¦               ingenieria.png
+¦   ¦               ingenieria2.png
+¦   ¦               novedades.png
+¦   ¦               proyectos.png
+¦   ¦               tecnologia.png
+¦   ¦               tips.png
+¦   ¦               
+¦   +---js
+¦   ¦       article-code.js
+¦   ¦       article-figures.js
+¦   ¦       articles.js
+¦   ¦       engineering-new.js
+¦   ¦       engineering.js
+¦   ¦       hero-net.js
+¦   ¦       main.js
+¦   ¦       projects.js
+¦   ¦       search.js
+¦   ¦       
+¦   +---projects
+¦       +---lilianne
+¦       ¦       thumb-01.png
+¦       ¦       thumb-01.webp
+¦       ¦       thumb-01222.png
+¦       ¦       thumb-02.png
+¦       ¦       thumb-02.webp
+¦       ¦       thumb-03.png
+¦       ¦       thumb-03.webp
+¦       ¦       
+¦       +---modern-login-page
+¦       ¦       thumb-01.png
+¦       ¦       thumb-02.png
+¦       ¦       thumb-03.png
+¦       ¦       thumb-04.png
+¦       ¦       
+¦       +---neural-sphere-core
+¦       ¦       thumb-01.png
+¦       ¦       thumb-02.png
+¦       ¦       
+¦       +---responsive-multi-layout-lab
+¦       ¦       thumb-01.png
+¦       ¦       thumb-02.png
+¦       ¦       thumb-03.png
+¦       ¦       
+¦       +---theme-showroom
+¦       ¦       thumb-01.png
+¦       ¦       thumb-02.png
+¦       ¦       thumb-03.png
+¦       ¦       thumb-04.png
+¦       ¦       thumb-05.png
+¦       ¦       
+¦       +---vertical-navigation
+¦               thumb-01.png
+¦               thumb-02.png
+¦               
++---en
+¦   ¦   index.html
+¦   ¦   
+¦   +---articles
+¦   ¦       article_base_en.html
+¦   ¦       
+¦   +---lab
+¦   +---pages
+¦   ¦       about.html
+¦   ¦       articles.html
+¦   ¦       engineering.html
+¦   ¦       lab.html
+¦   ¦       projects.html
+¦   ¦       search.html
+¦   ¦       
+¦   +---projects
+¦           bdc.html
+¦           edc.html
+¦           ok-eurodat.html
+¦           
++---es
+¦   ¦   index.html
+¦   ¦   
+¦   +---articles
+¦   ¦   ¦   arista-subsede-openvpn.html
+¦   ¦   ¦   arquitectura_sistema.html
+¦   ¦   ¦   atajos_teclado_windows.html
+¦   ¦   ¦   clonacion_hdd-nvme.html
+¦   ¦   ¦   controlar_visitas-cookies.html
+¦   ¦   ¦   dominio_nas_gpo.html
+¦   ¦   ¦   mpf_en_red.html
+¦   ¦   ¦   openvpn-tunnel.html
+¦   ¦   ¦   optimice-outlook.html
+¦   ¦   ¦   outlook_firmas.html
+¦   ¦   ¦   parallax_en_web.html
+¦   ¦   ¦   programacion1.html
+¦   ¦   ¦   reconf_prnt_puente.html
+¦   ¦   ¦   unir_pc_activedir.html
+¦   ¦   ¦   unir_pc_dominio.html
+¦   ¦   ¦   
+¦   ¦   +---articles_model
+¦   ¦           article_base.html
+¦   ¦           
+¦   +---engineering
+¦   ¦   ¦   architecture-edc.html
+¦   ¦   ¦   architecture.html
+¦   ¦   ¦   converter.html
+¦   ¦   ¦   lilianne-architecture.html
+¦   ¦   ¦   
+¦   ¦   +---anexos
+¦   ¦   ¦       diagramflujo.html
+¦   ¦   ¦       diagramgral.html
+¦   ¦   ¦       diagrammap.html
+¦   ¦   ¦       diagrammodc.html
+¦   ¦   ¦       diagramrepo.html
+¦   ¦   ¦       
+¦   ¦   +---engineering-model
+¦   ¦           engineering-doc-base.html
+¦   ¦           
+¦   +---lab
+¦   +---pages
+¦   ¦       about.html
+¦   ¦       articles.html
+¦   ¦       cv.html
+¦   ¦       engineering copy.html
+¦   ¦       engineering.html
+¦   ¦       lab.html
+¦   ¦       projects.html
+¦   ¦       search.html
+¦   ¦       
+¦   +---projects
+¦       ¦   bdc.html
+¦       ¦   edc.html
+¦       ¦   ok-eurodat.html
+¦       ¦   
+¦       +---lilianne
+¦       ¦   ¦   app.html
+¦       ¦   ¦   app.js
+¦       ¦   ¦   preview.css
+¦       ¦   ¦   preview.html
+¦       ¦   ¦   preview.js
+¦       ¦   ¦   styles.css
+¦       ¦   ¦   
+¦       ¦   +---data
+¦       ¦           elements.es.json
+¦       ¦           
+¦       +---modern-login-page
+¦       ¦       demo-full - copia.html
+¦       ¦       demo-full.html
+¦       ¦       demo.html
+¦       ¦       script - copia.js
+¦       ¦       script.js
+¦       ¦       style - copia.css
+¦       ¦       style.css
+¦       ¦       
+¦       +---neural-sphere-core
+¦       ¦       demo copy.html
+¦       ¦       demo.html
+¦       ¦       demo.js
+¦       ¦       styles.css
+¦       ¦       
+¦       +---projects-model
+¦       ¦       project-base.html
+¦       ¦       
+¦       +---responsive-multi-layout-lab
+¦       ¦       demo.html
+¦       ¦       demo.js
+¦       ¦       preview.html
+¦       ¦       styles.css
+¦       ¦       
+¦       +---theme-showroom
+¦       ¦       app.html
+¦       ¦       
+¦       +---vertical-navigation
+¦               demo.html
+¦               demo.js
+¦               styles.css
+¦               
++---lab
+¦   ¦   index.html
+¦   ¦   
+¦   +---scripts
++---pages
+¦       about.html
+¦       articles.html
+¦       engineering.html
+¦       lab.html
+¦       projects.html
+¦       
++---projects
+¦       bdc.html
+¦       edc.html
+¦       ok-eurodat.html
+¦       
++---tools
+        Build-ArticlesIndex.ps1
+        Build-DocsEngineer.ps1
+        build-search-index.ps1
+        Generate-LilianneData.ps1
+        Generate-ProjectsJson.ps1
+        Inser_Img.html
+        Nuevo Documento de texto.txt
+        periodic-table-lookup.json
+        

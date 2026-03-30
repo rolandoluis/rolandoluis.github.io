@@ -8,8 +8,11 @@
   <link rel="icon" href="/assets/img/brand/favicon.png" />
   <link rel="stylesheet" href="/assets/css/main.css" />
   <link rel="stylesheet" href="/assets/css/components.css" />
+  <link rel="stylesheet" href="/assets/css/lab.css" />
+
   <script defer src="/assets/js/main.js"></script>
   <script defer src="/assets/js/hero-net.js"></script>
+  <script defer src="/assets/js/lab.js"></script>
 </head>
 <body>
   <header class="site-header">
@@ -87,32 +90,230 @@
 
   <nav class="breadcrumb" id="breadcrumb"></nav>
   
-  <main class="container">
-    <section class="hero hero-canvas">
+  <main class="container lab-page">
+    <section class="hero hero-canvas lab-hero">
       <canvas class="hero-net-canvas" aria-hidden="true"></canvas>
-      <h1>Laboratorio</h1>
-      <p class="lede">Experimentos prácticos, scripts y prototipos.</p>
-      <div class="cta-row">
-        <a class="category-btn" href="/lab/index.html">Abrir índice del laboratorio</a>
+
+      <div class="lab-hero__content">
+        <p class="section-kicker">Technical Exploration</p>
+        <h1>Lab</h1>
+        <p class="lede">
+          Espacio de exploración técnica para prototipos, sistemas en evolución,
+          pruebas visuales, utilidades y notas de campo.
+        </p>
+        <p class="lab-hero__text">
+          A diferencia de <strong>Projects</strong>, donde viven las piezas consolidadas,
+          aquí se documenta el proceso activo: ideas en validación, patrones de interfaz,
+          experimentos funcionales y soluciones aún en maduración.
+        </p>
+      </div>
+
+      <div class="lab-hero__metrics" aria-label="Resumen operativo del laboratorio">
+        <article class="lab-metric">
+          <span class="lab-metric__value" data-lab-metric="active">0</span>
+          <span class="lab-metric__label">Activos</span>
+        </article>
+
+        <article class="lab-metric">
+          <span class="lab-metric__value" data-lab-metric="prototype">0</span>
+          <span class="lab-metric__label">Prototipos</span>
+        </article>
+
+        <article class="lab-metric">
+          <span class="lab-metric__value" data-lab-metric="visual">0</span>
+          <span class="lab-metric__label">Visuales</span>
+        </article>
+
+        <article class="lab-metric">
+          <span class="lab-metric__value" data-lab-metric="archived">0</span>
+          <span class="lab-metric__label">Archivados</span>
+        </article>
       </div>
     </section>
 
-    <section class="grid">
-      <article class="card">
-        <h2>Scripts</h2>
-        <p>Pequeñas utilidades, auditorías, asistentes y componentes base.</p>
-        <a class="link" href="/lab/index.html">Explorar →</a>
-      </article>
-      <article class="card">
-        <h2>Prototypes</h2>
-        <p>Motores de flujo de trabajo, generación de reportes, patrones de interfaz y máquinas de estados.</p>
-        <a class="link" href="/lab/index.html">Explorar →</a>
-      </article>
-      <article class="card">
-        <h2>Notes</h2>
-        <p>Notas de campo de implementaciones, incidencias y correcciones.</p>
-        <a class="link" href="/lab/index.html">Explorar →</a>
-      </article>
+    <section class="lab-overview">
+      <div class="section-heading">
+        <p class="section-kicker">Overview</p>
+        <h2>Panorama del laboratorio</h2>
+        <p>
+          El laboratorio reúne exploraciones curadas: no es un cajón de pruebas,
+          sino un entorno técnico donde las ideas se validan antes de convertirse
+          en proyectos formales.
+        </p>
+      </div>
+
+      <div class="lab-overview__grid">
+        <article class="card lab-overview-card">
+          <h3>Exploración activa</h3>
+          <p>
+            Experimentos en curso, validaciones funcionales y prototipos con
+            desarrollo vivo.
+          </p>
+        </article>
+
+        <article class="card lab-overview-card">
+          <h3>Interacción y sistema</h3>
+          <p>
+            Estudios de comportamiento, composición visual, estados UI, flujo y
+            estructura modular.
+          </p>
+        </article>
+
+        <article class="card lab-overview-card">
+          <h3>Memoria técnica</h3>
+          <p>
+            Notas, direcciones retenidas y piezas archivadas que conservan valor
+            como referencia o base futura.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="lab-controls" aria-label="Controles del laboratorio">
+      <div class="section-heading">
+        <p class="section-kicker">Filters</p>
+        <h2>Explorar por categoría y estado</h2>
+      </div>
+
+      <div class="lab-controls__bar">
+        <div class="lab-controls__group">
+          <span class="lab-controls__label">Categorías</span>
+          <div class="lab-filter-set" data-lab-categories>
+            <!-- JS -->
+          </div>
+        </div>
+
+        <div class="lab-controls__group">
+          <span class="lab-controls__label">Estado</span>
+          <div class="lab-filter-set" data-lab-statuses>
+            <!-- JS -->
+          </div>
+        </div>
+
+        <div class="lab-controls__tools">
+          <label class="lab-control">
+            <span>Orden</span>
+            <select data-lab-sort>
+              <option value="recent">Más recientes</option>
+              <option value="title">Título</option>
+              <option value="maturity">Madurez</option>
+            </select>
+          </label>
+
+          <label class="lab-control lab-control--search">
+            <span class="sr-only">Buscar en laboratorio</span>
+            <input type="search" placeholder="Buscar experimento..." data-lab-search />
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <section class="lab-matrix">
+      <div class="section-heading">
+        <p class="section-kicker">Exploration Matrix</p>
+        <h2>Piezas activas del laboratorio</h2>
+        <p>
+          Vista principal de experimentos, prototipos y estudios técnicos en curso.
+        </p>
+      </div>
+
+      <div class="lab-matrix__grid" data-lab-matrix>
+        <!-- JS renderiza tiles -->
+      </div>
+    </section>
+
+    <section class="lab-stream">
+      <div class="section-heading">
+        <p class="section-kicker">Experiment Stream</p>
+        <h2>Registro técnico detallado</h2>
+        <p>
+          Objetivo, estado, stack y dirección actual de cada entrada activa.
+        </p>
+      </div>
+
+      <div class="lab-stream__list" data-lab-stream>
+        <!-- JS renderiza entradas -->
+      </div>
+    </section>
+
+    <section class="lab-insights">
+      <div class="lab-insights__grid">
+        <article class="card lab-panel">
+          <div class="section-heading section-heading--compact">
+            <p class="section-kicker">Method</p>
+            <h2>Ciclo de vida del Lab</h2>
+          </div>
+
+          <div class="lab-state-list">
+            <div class="lab-state-row">
+              <span class="lab-badge is-concept">Concept</span>
+              <p>Dirección inicial, hipótesis o idea en estudio.</p>
+            </div>
+
+            <div class="lab-state-row">
+              <span class="lab-badge is-prototype">Prototype</span>
+              <p>Estructura funcional inicial sometida a validación.</p>
+            </div>
+
+            <div class="lab-state-row">
+              <span class="lab-badge is-testing">Testing</span>
+              <p>Prueba activa de interacción, lógica o composición.</p>
+            </div>
+
+            <div class="lab-state-row">
+              <span class="lab-badge is-refined">Refined</span>
+              <p>Pieza estable con coherencia creciente y valor potencial.</p>
+            </div>
+
+            <div class="lab-state-row">
+              <span class="lab-badge is-archived">Archived</span>
+              <p>Exploración retenida como memoria técnica o referencia.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="card lab-panel">
+          <div class="section-heading section-heading--compact">
+            <p class="section-kicker">Pipeline</p>
+            <h2>De Lab a Projects</h2>
+          </div>
+
+          <div class="lab-pipeline" aria-label="Pipeline de promoción">
+            <span class="lab-pipeline__step">Concept</span>
+            <span class="lab-pipeline__arrow">→</span>
+            <span class="lab-pipeline__step">Prototype</span>
+            <span class="lab-pipeline__arrow">→</span>
+            <span class="lab-pipeline__step">Testing</span>
+            <span class="lab-pipeline__arrow">→</span>
+            <span class="lab-pipeline__step">Refined</span>
+            <span class="lab-pipeline__arrow">→</span>
+            <span class="lab-pipeline__step lab-pipeline__step--accent">Projects</span>
+          </div>
+
+          <p class="lab-panel__text">
+            Cuando una pieza alcanza coherencia funcional, claridad estructural y
+            valor sostenido, puede promocionarse a la sección de proyectos.
+          </p>
+
+          <div class="lab-candidates" data-lab-candidates>
+            <!-- JS -->
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="lab-archive">
+      <div class="section-heading">
+        <p class="section-kicker">Archive</p>
+        <h2>Conceptos retenidos</h2>
+        <p>
+          Exploraciones pausadas, líneas archivadas y memoria de iteraciones previas.
+        </p>
+      </div>
+
+      <div class="lab-archive__grid" data-lab-archive>
+        <!-- JS renderiza archivados -->
+      </div>
     </section>
   </main>
 
