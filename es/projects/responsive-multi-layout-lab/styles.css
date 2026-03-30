@@ -38,7 +38,7 @@ body.theme-minimal {
   color: var(--text-main);
 }
 body {
-  background: var(--bg);
+  background: var(--bg) !important;
   transition: background 0.5s ease, color 0.35s ease;
   margin: 0;
   font-family: "Segoe UI", system-ui, sans-serif;
