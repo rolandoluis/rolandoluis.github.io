@@ -20,7 +20,7 @@
         overflow: hidden;      /* Mantenemos el recorte de bordes redondeados */
         background:
           radial-gradient(circle at center, rgba(0,247,255,.10) 0%, rgba(0,20,40,.18) 35%, rgba(0,0,0,.55) 100%),
-          linear-gradient(180deg, rgba(0,14,28,.96), rgba(0,4,10,.98));
+          linear-gradient(180deg, rgba(0,14,28,.96), rgba(0,4,10,.98)) !important;
         box-shadow: 0 0 100px rgba(0, 247, 255, 0.05), 
                 inset 0 0 40px rgba(0, 247, 255, 0.02);
         border: 1px solid rgba(0, 247, 255, 0.2);
