@@ -172,6 +172,20 @@
     "featured": true
   },
   {
+    "title": "Gestion Nativa de Archivos Eliminados en Unidades de Red",
+    "category": "Sistemas Operativos",
+    "slug": "recicled-bin-netshare",
+    "description": "¿Por qué los archivos eliminados en unidades de red, no van a la Papelera de reciclaje?",
+    "date": "2026-03-31",
+    "updated": "2026-03-31",
+    "tags": [
+      "recicledbin",
+      "deleted files",
+      "unidades de red"
+    ],
+    "featured": false
+  },
+  {
     "title": "Atajos de Teclado para Windows 11",
     "category": "Sistemas Operativos",
     "slug": "atajos_teclado_windows",
@@ -198,6 +212,20 @@
       "impresoras",
       "ipaddress",
       "ipscanner"
+    ],
+    "featured": false
+  },
+  {
+    "title": "Especificación de Arquitectura del Sistema",
+    "category": "[Categoría]",
+    "slug": "arquitectura_sistema",
+    "description": "[Descripción corta del artículo]",
+    "date": "2026-03-05",
+    "updated": "2026-03-05",
+    "tags": [
+      "tag1",
+      "tag2",
+      "tag3"
     ],
     "featured": false
   },

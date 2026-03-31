@@ -1,0 +1,102 @@
+<article class="lab-entry lab-entry--tip">
+  <header class="lab-entry__hero">
+    <div class="lab-entry__hero-main">
+      <p class="lab-entry__eyebrow">Tip</p>
+      <h1 class="lab-entry__title">Sticky section header</h1>
+      <p class="lab-entry__lede">
+        Solución breve para fijar un encabezado durante el scroll manteniendo limpieza visual.
+      </p>
+    </div>
+
+    <aside class="lab-entry__hero-aside">
+      <div class="lab-badge-group">
+        <span class="lab-badge lab-badge--type">Tip</span>
+        <span class="lab-badge is-refined">Refined</span>
+      </div>
+
+      <dl class="lab-entry__meta-list">
+        <div>
+          <dt>Categoría</dt>
+          <dd>ui</dd>
+        </div>
+        <div>
+          <dt>Stack</dt>
+          <dd>CSS</dd>
+        </div>
+        <div>
+          <dt>Dificultad</dt>
+          <dd>Baja</dd>
+        </div>
+        <div>
+          <dt>Uso</dt>
+          <dd>Reusable</dd>
+        </div>
+      </dl>
+    </aside>
+  </header>
+
+  <section class="lab-entry__summary">
+    <div class="section-heading section-heading--compact">
+      <p class="section-kicker">Problem</p>
+      <h2>Qué resuelve</h2>
+    </div>
+
+    <p>
+      Este tip permite mantener visible un encabezado o barra interna mientras el usuario
+      recorre una sección larga.
+    </p>
+  </section>
+
+  <section class="lab-entry__main">
+    <div class="section-heading section-heading--compact">
+      <p class="section-kicker">Snippet</p>
+      <h2>Código</h2>
+    </div>
+
+    <pre><code class="language-css">
+.section-title {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(10, 15, 25, 0.85);
+  backdrop-filter: blur(8px);
+}
+    </code></pre>
+  </section>
+
+  <section class="lab-entry__support">
+    <div class="lab-entry__support-grid">
+      <article class="card">
+        <h3>Cómo usarlo</h3>
+        <p>
+          Aplícalo a un bloque con fondo definido para evitar transparencias confusas.
+        </p>
+      </article>
+
+      <article class="card">
+        <h3>Notas</h3>
+        <p>
+          Si el header global ya es sticky, ajusta <code>top</code> al alto real del menú.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <section class="lab-entry__outcome">
+    <div class="section-heading section-heading--compact">
+      <p class="section-kicker">Takeaway</p>
+      <h2>Resultado</h2>
+    </div>
+
+    <p>
+      Solución pequeña, directa y reutilizable para mejorar lectura y orientación en páginas largas.
+    </p>
+  </section>
+
+  <footer class="lab-entry__related">
+    <div class="lab-entry__related-links">
+      <a class="link" href="#">Ver más tips UI</a>
+      <a class="link" href="#">Volver a Lab</a>
+    </div>
+  </footer>
+</article>

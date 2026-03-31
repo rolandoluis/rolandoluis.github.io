@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Circular Loading Indicator | Lab | rolandoluis</title>
+  <meta
+    name="description"
+    content="Patrón visual de feedback para estados de carga mediante rotación circular y control dinámico de velocidad."
+  />
+
+  <link rel="icon" href="/assets/img/brand/favicon.png" />
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/components.css" />
+  <link rel="stylesheet" href="/assets/css/lab.css" />
+  <link rel="stylesheet" href="/assets/css/code-engine.css" />
+
+  <script defer src="/assets/js/main.js"></script>
+  <script defer src="/assets/js/code-engine.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="/">
+        <span class="brand-mark">RM</span>
+        <span class="brand-text">rolandoluis</span>
+      </a>
+
+      <nav class="nav">
+        <a class="nav-link" data-i18n-link="">Home</a>
+        <a class="nav-link" data-i18n-link="pages/engineering.html">Ingeniería</a>
+        <a class="nav-link" data-i18n-link="pages/projects.html">Proyectos</a>
+        <a class="nav-link" data-i18n-link="pages/articles.html">Artículos</a>
+        <a class="nav-link" data-i18n-link="pages/lab.html">Lab</a>
+        <a class="nav-link" data-i18n-link="pages/about.html">Sobre mí</a>
+      </nav>
+
+      <div class="lang">
+        <button class="lang-btn" type="button" data-set-lang="es">ES</button>
+        <span class="lang-sep">·</span>
+        <button class="lang-btn" type="button" data-set-lang="en">EN</button>
+      </div>
+
+      <div class="search">
+        <input id="searchBox" type="search" placeholder="Buscar… / Search…" autocomplete="off" />
+        <div id="searchResults" class="search-results"></div>
+      </div>
+
+      <button class="nav-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobileNav">
+        <span></span><span></span><span></span>
+      </button>
+
+      <div class="theme">
+        <button class="theme-btn" type="button" data-set-theme="classic" title="Classic">●</button>
+        <button class="theme-btn" type="button" data-set-theme="graphite" title="Graphite">●</button>
+        <button class="theme-btn" type="button" data-set-theme="solar" title="Solar">●</button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="breadcrumb" id="breadcrumb"></nav>
+
+  <main class="container lab-page">
+    <article class="lab-entry lab-entry--pattern">
+      <header class="lab-entry__hero">
+        <div class="lab-entry__hero-main">
+          <p class="lab-entry__eyebrow">Pattern</p>
+          <h1 class="lab-entry__title">Circular Loading Indicator</h1>
+          <p class="lab-entry__lede">
+            Patrón visual de feedback para estados de carga con animación circular y ajuste dinámico de velocidad.
+          </p>
+        </div>
+
+        <aside class="lab-entry__hero-aside">
+          <div class="lab-badge-group">
+            <span class="lab-badge lab-badge--type">Pattern</span>
+            <span class="lab-badge is-archived">Archived</span>
+          </div>
+
+          <dl class="lab-entry__meta-list">
+            <div>
+              <dt>Categoría</dt>
+              <dd>visual</dd>
+            </div>
+            <div>
+              <dt>Versión</dt>
+              <dd>v0.2.0</dd>
+            </div>
+            <div>
+              <dt>Stack</dt>
+              <dd>HTML · CSS · JS</dd>
+            </div>
+            <div>
+              <dt>Uso</dt>
+              <dd>Reference</dd>
+            </div>
+          </dl>
+        </aside>
+      </header>
+
+      <section class="lab-entry__summary">
+        <div class="section-heading section-heading--compact">
+          <p class="section-kicker">Role</p>
+          <h2>Qué representa</h2>
+        </div>
+
+        <p>
+          Esta pieza explora un patrón visual para comunicar actividad del sistema mientras una interfaz
+          carga o prepara contenido. No busca medir progreso real, sino ofrecer una señal clara de espera.
+        </p>
+      </section>
+
+      <section class="lab-entry__main">
+        <div class="section-heading section-heading--compact">
+          <p class="section-kicker">Preview</p>
+          <h2>Vista previa</h2>
+        </div>
+
+        <div class="card lab-pattern__preview">
+          <div class="loader-demo">
+            <h3>Progreso de la carga</h3>
+            <div id="loaderPreviewCircle" class="loader-demo__circle" aria-hidden="true"></div>
+            <p>Cargando...</p>
+
+            <div class="loader-demo__controls">
+              <label for="loaderSpeed">Velocidad</label>
+              <input type="range" min="1" max="100" value="10" id="loaderSpeed" />
+              <span id="loaderSpeedValue">10 %</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="lab-entry__support">
+        <div class="lab-entry__support-grid">
+          <article class="card">
+            <h3>Contexto</h3>
+            <p>
+              Los estados de carga suelen necesitar una pista visual que reduzca incertidumbre. Este patrón
+              propone una solución simple basada en un círculo con rotación continua.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>Cuándo usarlo</h3>
+            <p>
+              En cargas breves o estados de espera sin porcentaje real disponible, donde un indicador de actividad
+              resulta más adecuado que una barra de progreso.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="lab-entry__support">
+        <div class="section-heading section-heading--compact">
+          <p class="section-kicker">Source</p>
+          <h2>Código</h2>
+        </div>
+
+        <pre><code class="language-html">
+<div class="loader-demo">
+  <h3>Progreso de la carga</h3>
+  <div id="circle" class="circle"></div>
+  <p>Cargando...</p>
+
+  <label for="veloz">Velocidad:</label>
+  <input type="range" min="1" max="100" value="10" id="speed">
+  <span id="numVel">10 %</span>
+</div>
+        </code></pre>
+
+        <pre><code class="language-css">
+.loader-demo {
+  background: #0f141d;
+  border: 1px solid #2a2f3a;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+  color: #c7d0da;
+  max-width: 320px;
+  margin: 0 auto;
+  padding: 1.25rem;
+  text-align: center;
+}
+
+.loader-demo__circle {
+  width: 100px;
+  height: 100px;
+  margin: 1rem auto;
+  border-radius: 50%;
+  border: 8px solid #1c2340;
+  border-top-color: #6e79ff;
+  box-shadow:
+    0 0 18px rgba(110,121,255,0.35),
+    inset 0 0 18px rgba(110,121,255,0.25);
+  animation: spin 6s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+        </code></pre>
+
+        <pre><code class="language-js">
+const ring = document.getElementById("loaderPreviewCircle");
+const speed = document.getElementById("loaderSpeed");
+const label = document.getElementById("loaderSpeedValue");
+
+function updateLoaderSpeed() {
+  label.textContent = speed.value + " %";
+  ring.style.animationDuration = (60 / speed.value) + "s";
+}
+
+speed.addEventListener("input", updateLoaderSpeed);
+updateLoaderSpeed();
+        </code></pre>
+      </section>
+
+      <section class="lab-entry__support">
+        <div class="section-heading section-heading--compact">
+          <p class="section-kicker">Notes</p>
+          <h2>Observaciones</h2>
+        </div>
+
+        <div class="lab-entry__support-grid">
+          <article class="card">
+            <h3>Valor técnico</h3>
+            <p>
+              Sirve como patrón base de feedback visual y como referencia para componentes de carga simples.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>Limitaciones</h3>
+            <p>
+              No comunica progreso real. Es un indicador de actividad, no una métrica de avance.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>Lectura actual</h3>
+            <p>
+              Más útil como referencia de biblioteca visual que como pieza central del sistema actual.
+            </p>
+          </article>
+
+          <article class="card">
+            <h3>Evolución posible</h3>
+            <p>
+              Podría derivar hacia loaders más integrados, skeleton states o variantes de feedback contextual.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="lab-entry__outcome">
+        <div class="section-heading section-heading--compact">
+          <p class="section-kicker">Assessment</p>
+          <h2>Evaluación</h2>
+        </div>
+
+        <p>
+          Patrón válido como memoria técnica y referencia visual. Conserva valor dentro del laboratorio
+          como pieza archivada de exploración frontend.
+        </p>
+      </section>
+
+      <footer class="lab-entry__related">
+        <div class="section-heading section-heading--compact">
+          <p class="section-kicker">Related</p>
+          <h2>Conexiones</h2>
+        </div>
+
+        <div class="lab-entry__related-links">
+          <a class="link" href="/es/pages/lab.html">Volver a Lab</a>
+          <a class="link" href="/es/pages/projects.html">Ir a Projects</a>
+        </div>
+      </footer>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <small>© <span id="year"></span> rolandoluis</small>
+      <div class="footer-links">
+        <a class="link" href="https://github.com/rolandoluis" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const ring = document.getElementById("loaderPreviewCircle");
+      const speed = document.getElementById("loaderSpeed");
+      const label = document.getElementById("loaderSpeedValue");
+
+      if (!ring || !speed || !label) return;
+
+      function updateLoaderSpeed() {
+        label.textContent = speed.value + " %";
+        ring.style.animationDuration = (60 / speed.value) + "s";
+      }
+
+      speed.addEventListener("input", updateLoaderSpeed);
+      updateLoaderSpeed();
+    });
+  </script>
+</body>
+</html>

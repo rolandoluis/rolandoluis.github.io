@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <title>Gestión de Eliminación de Archivos en Unidades de Red en Windows Server</title>
+    <meta name="description"
+        content="¿Por qué los archivos eliminados en unidades de red, no van a la Papelera de reciclaje?">
+
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/components.css">
+    <link rel="stylesheet" href="/assets/css/articles.css">
+    <link rel="stylesheet" href="/assets/css/article.css">
+    <script defer src="/assets/js/article-code.js"></script>
+    <script defer src="/assets/js/article-figures.js"></script>
+
+    <!-- Los enlaces del artículo navegan fuera del iframe -->
+    <base target="_parent">
+
+    <script defer>
+        // ===== Article Enhancements (TOC + Anchors) =====
+        document.addEventListener("DOMContentLoaded", () => {
+            const article = document.querySelector("[data-article]");
+            if (!article) return;
+
+            const toc = article.querySelector("[data-toc]");
+            const headings = article.querySelectorAll("h2, h3");
+
+            const slugify = (s) =>
+                s.toLowerCase()
+                    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                    .replace(/[^a-z0-9\s-]/g, "")
+                    .trim()
+                    .replace(/\s+/g, "-")
+                    .replace(/-+/g, "-");
+
+            if (!toc || headings.length === 0) {
+                const tocWrap = article.querySelector(".article-toc");
+                if (tocWrap) tocWrap.hidden = true;
+                return;
+            }
+
+            const used = new Set();
+            const items = [];
+
+            headings.forEach(h => {
+                let id = h.id ? h.id : slugify(h.textContent || "");
+                if (!id) return;
+
+                let base = id, i = 2;
+                while (used.has(id)) id = `${base}-${i++}`;
+                used.add(id);
+                h.id = id;
+
+                if (!h.querySelector(".h-anchor")) {
+                    const a = document.createElement("a");
+                    a.className = "h-anchor";
+                    a.href = `#${id}`;
+                    a.setAttribute("aria-label", "Enlace directo a esta sección");
+                    a.textContent = "¶";
+                    h.appendChild(a);
+                }
+
+                const level = h.tagName.toLowerCase(); // h2/h3
+                items.push({ id, text: h.textContent.replace("¶", "").trim(), level });
+            });
+
+            toc.innerHTML = items.map(it => {
+                const cls = it.level === "h3" ? "toc-item toc-h3" : "toc-item";
+                return `<a class="${cls}" href="#${it.id}">${it.text}</a>`;
+            }).join("");
+
+            // Si llegas con hash, posiciona
+            const hash = (location.hash || "").slice(1);
+            if (hash) {
+                const target = document.getElementById(hash);
+                if (target) target.scrollIntoView({ block: "start" });
+            }
+        });
+    </script>
+</head>
+
+<body class="article-shell">
+
+    <main class="container article-container" data-article
+        data-article-title="Gestion Nativa de Archivos Eliminados en Unidades de Red"
+        data-article-category="Sistemas Operativos" data-article-date="2026-03-31" data-article-updated="2026-03-31"
+        data-article-tags="recicledbin,deleted files,unidades de red" data-article-featured="false"
+        data-article-draft="true">
+
+        <header class="article-header" id="top">
+            <h1>Gestión de lo Archivos Eliminados desde Unidades de Red</h1>
+
+            <p class="article-meta">
+                <span class="meta-item">Rolando Luis Martín</span>
+                <span class="meta-sep">·</span>
+                <time class="meta-item" datetime="2026-03-31">31 Mar 2026</time>
+                <span class="meta-sep">·</span>
+                <span class="meta-item">Sistemas Operativos</span>
+                <span class="meta-sep">·</span>
+                <span class="meta-item">Nivel: Intermedio</span>
+            </p>
+
+            <p class="lede">Las carpetas compartidas y unidades de red en Windows <strong>no cuentan con Papelera de
+                    reciclaje</strong>,
+                por lo que eliminar un archivo en ellos, equivale a un borrado definitivo. ¿Cómo recuperarlos?.</p>
+        </header>
+
+        <div class="article-layout">
+            <!-- TOC -->
+            <aside class="article-toc" aria-label="Tabla de contenidos">
+                <div class="toc-title">Contenido</div>
+                <nav data-toc class="toc-nav"></nav>
+                <div class="figs-title">Figuras</div>
+                <nav data-figures class="figs-nav"></nav>
+            </aside>
+
+            <!-- Body -->
+            <article class="article-body">
+
+                <div class="callout callout-note">
+                    <div class="callout-title">Nota</div>
+                    <div class="callout-body">
+                        <p>La Papelera de reciclaje en Windows, permite recuperar archivos eliminados desde unidades
+                            locales del equipo. Pero... ¿Y en la unidades de red?</p>
+                    </div>
+                </div>
+
+                <h1>Documento Técnico: Gestión de Eliminación de Archivos en Unidades de Red en Windows Server</h1>
+                <h2>1. Introducción</h2>
+                <p>
+                    En entornos empresariales basados en Microsoft Windows Server, es común que los usuarios
+                    trabajen con recursos compartidos
+                    a través de <strong>carpetas distribuidas</strong> o <strong>unidades de red mapeadas</strong>.
+                    Un aspecto crítico en estos escenarios es entender qué sucede cuando un archivo se elimina desde
+                    una de estas ubicaciones y por qué
+                    <strong>no existe una Papelera de reciclaje asociada a los recursos compartidos</strong>.
+                </p>
+                <p>
+                    Este documento describe en detalle el funcionamiento, limitaciones y alternativas recomendadas.
+                </p>
+                <hr class="article-divider">
+                <h2>2. Comportamiento de la Papelera de reciclaje en Windows</h2>
+                <p>
+                    La Papelera de reciclaje es una característica del sistema operativo Windows que permite
+                    <strong>recuperar archivos eliminados desde unidades locales</strong> del equipo.
+                </p>
+                <h3>2.1 Unidad local vs. unidad de red</h3>
+                <ul>
+                    <li><strong>Unidades locales</strong> (C:, D:, discos físicos o USB)<br>
+                        → Los archivos eliminados se mueven a la Papelera de reciclaje.</li>
+                    <li><strong>Unidades de red</strong> (\\servidor\recurso)<br>
+                        → Los archivos se <strong>eliminan permanentemente</strong>.</li>
+                </ul>
+                <hr class="article-divider">
+                <h2>3. ¿Por qué las unidades de red no tienen Papelera de reciclaje?</h2>
+                <p>Windows <strong>no implementa una Papelera de reciclaje para recursos compartidos</strong> por
+                    varias razones técnicas:</p>
+                <h3>3.1 Diseño del protocolo SMB</h3>
+                <p>
+                    El protocolo SMB, utilizado para el acceso a archivos en red, <strong>no contempla un mecanismo
+                        de eliminación lógica</strong>
+                    (mover a contenedor temporal).
+                    Cuando un cliente ejecuta un “delete”, el servidor procesa la eliminación directamente sobre el
+                    volumen.
+                </p>
+                <h3>3.2 Aislamiento entre cliente y servidor</h3>
+                <p>
+                    La Papelera de reciclaje es <strong>local</strong> al sistema operativo, no al volumen remoto.
+                    El servidor carece de un componente que administre “papeleras por usuario” para carpetas
+                    compartidas.
+                </p>
+                <h3>3.3 Seguridad y eficiencia</h3>
+                <ul>
+                    <li>Permitir una Papelera de red implicaría duplicar potencialmente grandes cantidades de datos
+                        en el servidor.</li>
+                    <li>Manejar permisos NTFS dentro de una papelera multiusuario sería complejo y costoso.</li>
+                </ul>
+                <hr class="article-divider">
+                <h2>4. Consecuencias operativas</h2>
+                <p>
+                    Cuando un usuario elimina un archivo en una unidad de red:
+                </p>
+                <ul>
+                    <li>El archivo <strong>no pasa por la Papelera del cliente</strong>.</li>
+                    <li>El archivo <strong>no pasa por la Papelera del servidor</strong>.</li>
+                    <li>El archivo se elimina <strong>de forma inmediata y definitiva</strong>.</li>
+                </ul>
+                <p>
+                    Esto puede generar riesgos de pérdida de información si no existen mecanismos alternativos de
+                    protección.
+                </p>
+                <hr class="article-divider">
+                <h2>5. Alternativas recomendadas para recuperación de archivos</h2>
+                <h3>5.1 Shadow Copies (Versiones anteriores)</h3>
+                <p>
+                    La opción más eficaz y nativa en Windows Server.
+                </p>
+                <ul>
+                    <li>Se habilita en el <strong>volumen del servidor</strong>, no en la carpeta.</li>
+                    <li>Permite restaurar archivos borrados o modificados.</li>
+                    <li>El usuario puede ver versiones anteriores directamente desde el Explorador de archivos.</li>
+                </ul>
+                <p><strong>Ventajas:</strong></p>
+                <ul>
+                    <li>✔ Nativa</li>
+                    <li>✔ Fácil para el usuario</li>
+                    <li>✔ Bajo impacto</li>
+                </ul>
+                <h3>5.2 Copias de seguridad (Backups)</h3>
+                <p>Soluciones como:</p>
+                <ul>
+                    <li>Windows Server Backup</li>
+                    <li>Veeam Backup & Replication</li>
+                    <li>Acronis</li>
+                    <li>Otros sistemas de backup empresariales</li>
+                </ul>
+                <p>Permiten restauración granular de archivos eliminados.</p>
+                <h3>5.3 Funcionalidad de “Papelera” en NAS</h3>
+                <p>
+                    Dispositivos NAS como <strong>Synology, QNAP, NetApp</strong> ofrecen:
+                </p>
+                <ul>
+                    <li>Papelera de reciclaje por recurso compartido</li>
+                    <li>Retención configurable</li>
+                    <li>Restauración por usuario o administrador</li>
+                </ul>
+                <p>Esta capacidad <strong>no existe de forma nativa en Windows Server</strong>.</p>
+                <h3>5.4 Implementación manual con FSRM (opcional)</h3>
+                <p>
+                    Mediante <strong>File Server Resource Manager</strong> se puede configurar una regla que:
+                </p>
+                <ul>
+                    <li>Intercepte operaciones de eliminación</li>
+                    <li>Redirija los archivos a una carpeta de “cuarentena”</li>
+                    <li>Registre eventos o notifique a administradores</li>
+                </ul>
+                <p>Es una solución avanzada y no siempre adecuada.</p>
+                <hr class="article-divider">
+                <h2>6. Recomendaciones de mejores prácticas</h2>
+                <h3>6.1 Activar Shadow Copies en todos los volúmenes con datos críticos</h3>
+                <p>Configurar un intervalo de snapshots adecuado (por ejemplo, cada 4 horas).</p>
+                <h3>6.2 Mantener un esquema de backup sólido</h3>
+                <p>Idealmente:</p>
+                <ul>
+                    <li>Copias diarias</li>
+                    <li>Al menos una retención de 30 días</li>
+                    <li>Copias fuera del sitio (off-site) o en la nube</li>
+                </ul>
+                <h3>6.3 Informar a los usuarios</h3>
+                <p>
+                    Documentar claramente que:
+                </p>
+                <ul>
+                    <li>Los archivos eliminados en unidades de red <strong>no van a la Papelera</strong></li>
+                    <li>Deben acudir a versiones anteriores o solicitar restauración</li>
+                </ul>
+                <h3>6.4 Supervisar los recursos compartidos</h3>
+                <p>
+                    Implementar auditorías NTFS para registrar eliminaciones si el escenario lo exige.
+                </p>
+                <hr class="article-divider">
+                <h2>7. Conclusión</h2>
+                <p>
+                    Las carpetas compartidas y unidades de red en Windows <strong>no cuentan con Papelera de
+                        reciclaje</strong>, y esto es un comportamiento
+                    nativo e intencional del sistema operativo.
+                    Para mitigar riesgos, se recomienda implementar tecnologías de recuperación como <strong>Shadow
+                        Copies</strong> y sistemas de backup.
+                </p>
+                <p>
+                    Este conocimiento es fundamental para cualquier administrador de sistemas o responsable de
+                    infraestructura en entornos con Windows Server.
+                </p>
+
+                <hr class="article-divider">
+
+                <footer class="article-footer">
+                    <div class="article-tags">
+                        <span class="tag">#tag1</span>
+                        <span class="tag">#tag2</span>
+                        <span class="tag">#tag3</span>
+                    </div>
+
+                    <div class="article-actions">
+                        <a class="btn-link" href="#top">Volver arriba</a>
+                    </div>
+                </footer>
+
+            </article>
+        </div>
+
+    </main>
+
+    <script>
+        (() => {
+            let lastHeight = 0;
+            let rafId = 0;
+
+            function measureAndPost() {
+                cancelAnimationFrame(rafId);
+
+                rafId = requestAnimationFrame(() => {
+                    const body = document.body;
+                    const html = document.documentElement;
+
+                    const h = Math.max(
+                        body.scrollHeight,
+                        body.offsetHeight,
+                        html.scrollHeight,
+                        html.offsetHeight
+                    );
+
+                    // evita spam si no cambió realmente
+                    if (Math.abs(h - lastHeight) < 2) return;
+
+                    lastHeight = h;
+                    parent.postMessage({ type: "articleHeight", height: h }, "*");
+                });
+            }
+
+            window.addEventListener("load", measureAndPost);
+            document.addEventListener("DOMContentLoaded", measureAndPost);
+
+            // Observa cambios reales en el contenido, no resize del viewport
+            const ro = new ResizeObserver(() => measureAndPost());
+            ro.observe(document.body);
+        })();
+    </script>
+
+</body>
+
+</html>
